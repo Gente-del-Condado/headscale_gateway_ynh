@@ -86,7 +86,7 @@ public final class GatewayService extends Service {
     @Override public void onDestroy() {
         synchronized(this) { stopping=true; if(engine!=null) engine.destroy(); }
         if(networks!=null) { try { getSystemService(ConnectivityManager.class).unregisterNetworkCallback(networks); } catch(Exception ignored) {} }
-        worker.shutdown(); running=false; stopForeground(true); super.onDestroy();
+        worker.shutdown(); running=false; stopForeground(STOP_FOREGROUND_REMOVE); super.onDestroy();
     }
     @Override public IBinder onBind(Intent intent) { return null; }
 }

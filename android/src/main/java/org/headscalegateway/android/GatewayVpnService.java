@@ -53,6 +53,6 @@ public final class GatewayVpnService extends VpnService {
             if(device!=null) { stopTunnel(); try { device.close(); } catch(Exception ignored) {} }
             android.os.Process.killProcess(android.os.Process.myPid());
         },"cerrar-vpn").start();
-        active=false; worker.shutdown(); stopForeground(true); super.onDestroy();
+        active=false; worker.shutdown(); stopForeground(STOP_FOREGROUND_REMOVE); super.onDestroy();
     }
 }

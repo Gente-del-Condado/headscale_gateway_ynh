@@ -47,8 +47,17 @@ corrigen CXX5106 y las advertencias de asignación Groovy. El aviso de caché
 
 La ficha localizada está en `android/fastlane/metadata/android/`. Quedan la
 evaluación de madurez y las capturas de teléfono para la revisión de inclusión.
-Las API Android obsoletas utilizadas para compatibilidad requieren una revisión
-separada antes de cambiar el código publicado. No se declara reproducibilidad
+El `prebuild` sustituye también `stopForeground(true)` por
+`stopForeground(STOP_FOREGROUND_REMOVE)` en ambos servicios. Es la operación
+equivalente disponible desde API 24, el mínimo del proyecto, y corrige esas dos
+llamadas obsoletas sin modificar los APK ni las etiquetas ya publicados.
+El compilador todavía avisa de otras API de compatibilidad de la ventana,
+notificaciones, navegación y consulta de redes. La salida detallada se obtiene
+con `-Xlint:deprecation`; no se suprimen esas advertencias ni se cambia el ciclo
+de vida de la red para silenciarlas. Android Lint sigue sin errores; sus avisos
+de compatibilidad, recursos y recomendaciones requieren su revisión específica.
+
+No se declara reproducibilidad
 binaria frente a la APK directa: difieren cuatro bibliotecas JNI/HEV. F-Droid
 firmará su canal con otra identidad; migrar desde la APK directa exige exportar,
 reinstalar e importar. Las actualizaciones automáticas de la receta permanecen
