@@ -64,7 +64,7 @@ nav:
       - Continuar con otra IA: CONTINUIDAD.md
       - Publicar en F-Droid: ANDROID_FDROID.md
       - Preparar Google Play: ANDROID_PLAY.md
-      - Catálogo YunoHost: CATALOGO_YUNOHOST.md
+      - Mantenimiento YunoHost: CATALOGO_YUNOHOST.md
       - Editar y publicar el manual: MANUAL_WEB.md
       - Git y entregas: MIGRACION_REPOSITORIO.md
       - Pruebas: PRUEBAS.md

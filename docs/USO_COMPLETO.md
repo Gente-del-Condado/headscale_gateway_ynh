@@ -445,9 +445,9 @@ Forgejo, cuya réplica actualiza después Mis-app en GitHub.
 El repositorio público de instalación es
 [headscale_gateway_ynh](https://github.com/Gente-del-Condado/headscale_gateway_ynh).
 Consulta la [guía de YunoHost](../packaging/yunohost/doc/ADMIN.md) para instalarlo y
-actualizarlo mediante su URL. El paquete sigue siendo experimental hasta
-completar la aceptación en una máquina virtual real; publicarlo no lo incorpora
-al catálogo oficial de YunoHost.
+actualizarlo mediante su URL. Es un paquete independiente, validado en una
+máquina virtual aislada según los resultados de cada revisión. No se solicitará
+su incorporación al catálogo oficial de YunoHost.
 
 La cadena de publicación es:
 

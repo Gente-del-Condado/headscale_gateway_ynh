@@ -65,9 +65,9 @@ con la versión, documentación administrativa completa y pruebas de raíz/subru
 con sesión SSO administradora. El linter oficial ya no registra errores de
 empaquetado; señala que la aplicación todavía no está incorporada al catálogo,
 ni tiene estado y categoría asignados allí. La
-[solicitud y sus evidencias](../packaging/yunohost/doc/CATALOGO.md) distinguen
+[guía de mantenimiento y sus evidencias](../packaging/yunohost/doc/CATALOGO.md) distinguen
 estos avisos de los fallos funcionales. Los resultados de `package_check` se
-adjuntan al material de solicitud; no se asigna un nivel oficial localmente.
+conservan con cada entrega; no se asigna un nivel oficial localmente.
 
 El 13 de noviembre de 2026, `package_check` completó las siete comprobaciones
 en 28 minutos y 36 segundos sobre YunoHost 12.1.41.2, amd64: linter,
@@ -83,7 +83,7 @@ El resultado global local del comprobador es `0 (Broken)`: el linter marca
 error al no existir todavía la entrada oficial. El aviso
 `AppCatalog.has_category` tiene la misma causa. Se conservan esos resultados
 sin alterar el catálogo para obtener una calificación. Las siete pruebas
-correctas y estos avisos se presentan por separado para la revisión oficial.
+correctas y estos avisos se presentan por separado como evidencias del mantenimiento independiente.
 
 El manual se compila en modo estricto y se revisan sus enlaces locales. Las dos
 webs de GitHub Pages se publican desde las mismas fuentes. Una compilación del

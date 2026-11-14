@@ -44,8 +44,8 @@ def validate_archive(data, stage):
 def validate_package(stage, version):
     required = ('LICENSE', 'README.md', 'manifest.toml', 'tests.toml', 'build-manifest.json',
                 'scripts/install', 'scripts/upgrade', 'scripts/backup', 'scripts/restore',
-                'conf/hgw_bootstrap.py', 'doc/logo.png', 'payload/SHA256SUMS', 'payload/notices/LICENSE',
-                'payload/notices/NOTICE', 'payload/notices/third_party/inventory.json',
+                'conf/hgw_bootstrap.py', 'doc/logo.png', 'payload/SHA256SUMS', 'doc/third_party/LICENSE',
+                'doc/third_party/NOTICE', 'doc/third_party/third_party/inventory.json',
                 'payload/source.tar.gz')
     for relative in required:
         if not (stage / relative).is_file() or not (stage / relative).stat().st_size:
@@ -82,6 +82,13 @@ def validate_package(stage, version):
             raise ValueError('El binario no coincide con su suma: ' + name)
         if not binary.stat().st_mode & 0o111:
             raise ValueError('El binario no tiene permiso de ejecución: ' + name)
+    resources = manifest.get('resources', {}).get('sources', {})
+    for arch in ('amd64', 'arm64'):
+        if resources.get('main', {}).get(arch, {}).get('sha256') != expected['headscale-gateway-linux-' + arch]:
+            raise ValueError('El recurso de descarga no corresponde al binario: ' + arch)
+    source_digest = hashlib.file_digest((stage/'payload/source.tar.gz').open('rb'), 'sha256').hexdigest()
+    if resources.get('build_sources', {}).get('sha256') != source_digest:
+        raise ValueError('El recurso de fuentes no corresponde a las fuentes de compilación.')
 
 
 def publish(source, destination):
@@ -96,6 +103,10 @@ def publish(source, destination):
         stage = Path(temporary)
         validate_archive(data, stage)
         validate_package(stage, version)
+        # Los recursos se publican y verifican antes de llegar aquí. El paquete
+        # público conserva solo scripts, metadatos, documentación y licencias.
+        shutil.rmtree(stage / 'payload')
+        (stage / 'go.mod').unlink(missing_ok=True)
         # Todas las validaciones terminan antes de sustituir ningún archivo.
         for name in MANAGED:
             target = destination / name

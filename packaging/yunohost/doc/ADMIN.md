@@ -19,20 +19,22 @@ Las actualizaciones deben conservar la carpeta de datos de cada instancia.
 ## Instalar desde el repositorio público
 
 El [repositorio del paquete](https://github.com/Gente-del-Condado/headscale_gateway_ynh)
-contiene el manifiesto en la raíz y los binarios para ambas arquitecturas.
+contiene el manifiesto en la raíz y descarga recursos para ambas arquitecturas
+desde una release pública, con SHA-256 fijado por versión.
 No necesitas acceso al repositorio privado del motor:
 
 ```bash
 sudo yunohost app install https://github.com/Gente-del-Condado/headscale_gateway_ynh
 ```
 
-Es una instalación desde una URL personalizada, no una incorporación al catálogo
-oficial de YunoHost. Consulta el estado de validación al final de este documento.
+Es un paquete independiente mantenido para su uso desde esta URL. No se solicitará
+su inclusión en el catálogo oficial. Consulta el estado de validación al final.
 
 ## Alternativa de desarrollo desde el repositorio privado
 
 Clona el proyecto desde Forgejo e instala la carpeta `yunohost/`, que ya incluye
-los binarios y sus sumas SHA-256 para ambas arquitecturas:
+los binarios y sus sumas SHA-256 para ambas arquitecturas. El instalador utiliza
+igualmente los recursos públicos declarados en el manifiesto:
 
 La dirección SSH del ejemplo es ficticia: sustitúyela por la URL SSH de tu
 repositorio, con su usuario SSH, servidor, puerto y propietario reales.
@@ -143,7 +145,9 @@ Los datos persistentes están en `$data_dir/gateway/`. El directorio padre
 permanece escribible para poder sustituir la subcarpeta durante una restauración
 completa. Las copias detienen el servicio para conservar juntos SQLite,
 `master.key`, certificados e identidad tsnet. También incluyen la configuración
-privada de nginx y el secreto de arranque que le corresponde.
+privada de nginx y el secreto de arranque que le corresponde. La captura con el
+servicio detenido es específica del Gateway: las declaraciones `ynh_backup`
+se ejecutan después del script y por sí solas no congelan SQLite mientras está parado.
 
 Protege las copias, porque contienen credenciales. No ejecutes una identidad
 restaurada al mismo tiempo que el nodo original. La desinstalación conserva
@@ -170,10 +174,11 @@ No abras la misma base de datos con dos procesos a la vez.
 
 ## Estado de validación
 
-El empaquetado sigue siendo experimental hasta completar `package_check` y
-las pruebas de instalación, actualización, cambio de URL y restauración en una
-máquina virtual real de YunoHost. Las pruebas aisladas usan nginx y NSS reales
-con una sesión de portal simulada; no equivalen a esa aceptación completa.
+Se utilizan el linter y `package_check` oficiales en una VM desechable amd64.
+El historial y los resultados por revisión están en
+[mantenimiento y validación](CATALOGO.md). Las pruebas SSO verifican la API
+protegida además del HTML. No se atribuye una prueba real arm64 a la compilación
+de su binario. El nivel del catálogo no certifica este paquete independiente.
 Se conservan la licencia del proyecto y los avisos legales originales de terceros.
 
 ## Diagnóstico rápido
@@ -200,6 +205,7 @@ Comparte solo el fragmento relevante del error, revisado para excluir secretos.
 
 El código propio es software libre bajo **AGPL-3.0-only**. La revisión
 `1.4.6~ynh3` incorpora esta licencia y las fuentes del motor en
-`payload/source.tar.gz`, con `SOURCE.md` e instrucciones de compilación.
+`sources/source.tar.gz` del directorio instalado, con `SOURCE.md` e instrucciones
+de compilación. Se conservan también en la release pública del motor.
 `build-manifest.json` registra las sumas de cada archivo. Las licencias de
-terceros se conservan en `payload/notices/`; no cambian con esta publicación.
+terceros se conservan en `doc/third_party/` del repositorio y `notices/` de la instalación.

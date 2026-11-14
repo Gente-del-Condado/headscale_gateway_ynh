@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Genera paquetes completos de Home Assistant y YunoHost con binarios recién compilados."""
 import argparse
-import gzip
 import hashlib
 import json
 import os
@@ -77,20 +76,25 @@ def export(output, archives=True):
         sources.extend((path, 'vendor/' + path.relative_to(vendor).as_posix())
                        for path in sorted(vendor.rglob('*')) if path.is_file())
         # Produce los mismos bytes entre clones y compilaciones de las mismas fuentes.
-        with (addon / 'source.tar.gz').open('wb') as stream:
-            with gzip.GzipFile(fileobj=stream, mode='wb', filename='', mtime=0) as compressed:
-                with tarfile.open(fileobj=compressed, mode='w') as archive:
-                    for path, relative in sources:
-                        info = archive.gettarinfo(str(path), arcname=relative)
-                        info.uid = info.gid = info.mtime = 0
-                        info.uname = info.gname = ''
-                        info.mode = 0o644
-                        with path.open('rb') as source:
-                            archive.addfile(info, source)
-                        source_hashes[relative] = hashlib.sha256(path.read_bytes()).hexdigest()
+        source_tar = stage / 'source.tar'
+        with tarfile.open(source_tar, mode='w') as archive:
+            for path, relative in sources:
+                info = archive.gettarinfo(str(path), arcname=relative)
+                info.uid = info.gid = info.mtime = 0
+                info.uname = info.gname = ''
+                info.mode = 0o644
+                with path.open('rb') as source:
+                    archive.addfile(info, source)
+                source_hashes[relative] = hashlib.sha256(path.read_bytes()).hexdigest()
+        subprocess.run(['go', 'run', str(ROOT/'tools/deterministic_gzip.go'),
+                        str(source_tar), str(addon/'source.tar.gz')],
+                       cwd=ROOT/'src', check=True)
         add_notices(addon / 'notices')
         ynh = stage / 'yunohost'
         copy_tree(ROOT / 'packaging/yunohost', ynh)
+        # El flujo del repositorio público se publica por separado; no forma
+        # parte de los scripts que YunoHost instala o restaura.
+        shutil.rmtree(ynh / '.github', ignore_errors=True)
         # El icono cuadrado existente sirve también para las fichas de YunoHost.
         shutil.copy2(ROOT / 'packaging/homeassistant/icon.png', ynh / 'doc/logo.png')
         shutil.copy2(ROOT / 'packaging/common/hgw_bootstrap.py', ynh / 'conf/hgw_bootstrap.py')
@@ -110,6 +114,20 @@ def export(output, archives=True):
             binary.chmod(0o755)
             binaries[binary.name] = hashlib.sha256(binary.read_bytes()).hexdigest()
         (payload / 'SHA256SUMS').write_text(''.join(f'{digest}  {name}\n' for name, digest in binaries.items()))
+        # Los repositorios públicos descargan recursos verificados, sin llevar
+        # ejecutables en su rama principal. El árbol privado conserva el payload.
+        source_digest = hashlib.sha256((payload / 'source.tar.gz').read_bytes()).hexdigest()
+        manifest_path = ynh / 'manifest.toml'
+        resource_text = '\n[resources.sources]\n\n[resources.sources.main]\n'
+        resource_text += 'format = "file"\nextract = false\nrename = "headscale-gateway"\n'
+        base_url = f'https://github.com/Gente-del-Condado/headscale_gateway_ynh/releases/download/server-v{VERSION}/'
+        for arch in ('amd64', 'arm64'):
+            name = 'headscale-gateway-linux-' + arch
+            resource_text += f'{arch}.url = "{base_url}{name}"\n{arch}.sha256 = "{binaries[name]}"\n'
+        resource_text += ('\n[resources.sources.build_sources]\nformat = "tar.gz"\nextract = false\n'
+                          f'rename = "source.tar.gz"\nurl = "{base_url}source.tar.gz"\nsha256 = "{source_digest}"\n')
+        manifest_path.write_text(manifest_path.read_text() + resource_text)
+        shutil.move(str(payload / 'notices'), ynh / 'doc/third_party')
         for script in (ynh / 'scripts').iterdir():
             script.chmod(0o755)
         repositories = ['homeassistant', 'yunohost']

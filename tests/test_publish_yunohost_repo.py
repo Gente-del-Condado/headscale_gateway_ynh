@@ -29,8 +29,8 @@ class PublishYunoHostTest(unittest.TestCase):
         for relative in ('LICENSE', 'README.md', 'tests.toml', 'go.mod', 'doc/ADMIN.md', 'doc/logo.png',
                          'scripts/install', 'scripts/upgrade', 'scripts/backup',
                          'scripts/restore', 'conf/hgw_bootstrap.py',
-                         'payload/notices/LICENSE', 'payload/notices/NOTICE',
-                         'payload/notices/third_party/inventory.json'):
+                         'doc/third_party/LICENSE', 'doc/third_party/NOTICE',
+                         'doc/third_party/third_party/inventory.json'):
             self.write(relative, 'Contenido de prueba\n')
         sums = {}
         for name in publisher.BINARIES:
@@ -44,6 +44,12 @@ class PublishYunoHostTest(unittest.TestCase):
             member = tarfile.TarInfo('main.go')
             member.size = len(sources)
             archive.addfile(member, io.BytesIO(sources))
+        manifest = 'id = "headscale_gateway"\nversion = "1.4.6~ynh1"\n[resources.sources.main]\n'
+        for arch in ('amd64', 'arm64'):
+            manifest += arch+'.sha256 = "'+sums['headscale-gateway-linux-'+arch]+'"\n'
+        source_digest = hashlib.sha256((self.package/'payload/source.tar.gz').read_bytes()).hexdigest()
+        manifest += '[resources.sources.build_sources]\nsha256 = "'+source_digest+'"\n'
+        self.write('manifest.toml', manifest)
         self.write('build-manifest.json', json.dumps({'version': '1.4.6', 'commercial': False,
                    'binaries': sums, 'sources': {'main.go': hashlib.sha256(sources).hexdigest()}}))
         (self.source / 'VERSION').write_text('1.4.6\n')
@@ -76,6 +82,9 @@ class PublishYunoHostTest(unittest.TestCase):
         self.assertFalse((self.destination / 'private-source.go').exists())
         self.assertFalse((self.destination / 'yunohost').exists())
         self.assertFalse(stale.exists())
+        self.assertFalse((self.destination/'payload').exists())
+        self.assertFalse((self.destination/'go.mod').exists())
+        self.assertTrue((self.destination/'doc/third_party/NOTICE').is_file())
         self.assertEqual((self.destination / 'README.md').read_text(), 'Contenido de prueba\n')
         self.assertEqual(marker.read_text(), 'Conservar\n')
         self.assertTrue((self.destination / 'scripts/install').stat().st_mode & 0o111)

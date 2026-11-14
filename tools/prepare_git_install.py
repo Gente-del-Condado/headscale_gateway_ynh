@@ -32,7 +32,8 @@ def input_hashes(root):
                  'packaging/common', 'src/third_party/go', 'src/third_party/go-toolchain'):
         files.extend(p for p in files_under(root / name) if not p.name.endswith(('_test.go', '.test.cjs', '.pyc')))
     files.extend(root / name for name in ('VERSION', 'src/go.mod', 'src/go.sum', 'src/VERSION', 'LICENSE', 'NOTICE',
-                 'src/third_party/inventory.json', 'tools/package_platforms.py', 'tools/prepare_git_install.py'))
+                 'src/third_party/inventory.json', 'tools/package_platforms.py', 'tools/prepare_git_install.py',
+                 'tools/deterministic_gzip.go'))
     def source_digest(path):
         data = path.read_bytes()
         # El repositorio normaliza el texto mediante .gitattributes.
