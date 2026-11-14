@@ -243,6 +243,18 @@ Con <code>--arch arm64-v8a</code> se limita al teléfono; con <code>--arch x86_6
 Las compilaciones de pruebas usan el identificador
 <code>org.headscalegateway.android.dev</code> para coexistir con una futura entrega estable.
 No se añaden las carpetas de compilación ni las claves a Git.</p>
+<h2 id="revisiones-y-actualización">Revisiones y actualización</h2>
+<p>La entrega <code>1.4.7-android.5</code> conserva el motor <code>1.4.7</code> y corrige los enlaces
+al manual y a privacidad tras renombrar el repositorio YunoHost. Android usa
+<code>versionCode</code> <code>10040075</code>, superior al <code>10040074</code> de la entrega <code>1.4.7</code>.
+Se instala encima de la APK directa anterior, con la misma firma, sin
+borrar datos ni desinstalar. No cambies a una APK de depuración o de otra tienda.</p>
+<p><code>android/release.properties</code> controla la revisión (0..9) de la adaptación;
+<code>VERSION</code> sigue siendo la versión común del motor y los paquetes. Desde la
+revisión 5, el nombre visible añade <code>-android.N</code>. Tras la revisión 9 se debe
+aumentar la versión común para conservar un código creciente. La etiqueta
+<code>android-v1.4.7-android.5</code> identifica esta entrega Android por separado de <code>v1.4.7</code>.
+Los fuentes públicos correspondientes usan <code>source-android-v1.4.7-android.5</code>.</p>
 <h2 id="firma-estable-y-tiendas">Firma estable y tiendas</h2>
 <p>Crea una identidad una sola vez, fuera del repositorio:</p>
 <pre tabindex="0"><code class="language-sh">python3 tools/android_signing.py init &quot;$HOME/.local/share/headscale-gateway-signing/android&quot;
@@ -299,6 +311,8 @@ suspensión, IPv6 y proveedores DNS/ACME reales.</p>
           <li><a href="#configuración-servicios-y-copias">Configuración, servicios y copias</a></li>
         
           <li><a href="#compilar">Compilar</a></li>
+        
+          <li><a href="#revisiones-y-actualización">Revisiones y actualización</a></li>
         
           <li><a href="#firma-estable-y-tiendas">Firma estable y tiendas</a></li>
         
