@@ -13,8 +13,9 @@ sistema pueda consultar ese grupo mediante NSS. El instalador comprueba ambos
 requisitos.
 
 El código propio es software libre bajo AGPL-3.0-only. El paquete incluye sus
-fuentes completos, dependencias y avisos de terceros.
+fuentes completos, dependencias y avisos de terceros. La instalación descarga
+los recursos públicos del motor desde GitHub y comprueba sus sumas SHA-256.
 
-La incorporación al catálogo oficial requiere revisión y pruebas de YunoHost.
+Se mantiene como paquete independiente instalado desde su URL, fuera del catálogo.
 Si vas a actualizar una instancia,
 conserva la copia de seguridad de YunoHost y los datos del Gateway.

@@ -26,3 +26,6 @@ status.logged_on_sso = true
 status.logged_as_admin = true
 status.expect_return_code = 200
 status.expect_content = '"version"\s*:'
+
+[default.test_upgrade_from."31e05554ede6e86f5b87dc7f54a56e58e48a2c66"]
+name = "1.4.7~ynh1"

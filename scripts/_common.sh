@@ -10,13 +10,17 @@ hgw_check_sso() {
 }
 
 hgw_install_binary() {
-    local architecture
-    architecture="$(dpkg --print-architecture)"
-    case "$architecture" in amd64|arm64) ;; *) ynh_die "Arquitectura no compatible" ;; esac
-    (cd ../payload && sha256sum --check SHA256SUMS)
-    install -m 0755 "../payload/headscale-gateway-linux-$architecture" "$install_dir/headscale-gateway.next"
-    mv -f "$install_dir/headscale-gateway.next" "$install_dir/headscale-gateway"
-    cp -a ../payload/notices "$install_dir/"
+    # El recurso oficial selecciona la arquitectura y comprueba SHA-256.
+    # La configuración privada se conserva también al sustituir el ejecutable.
+    if [[ -e "$install_dir/startup.json" || -L "$install_dir/startup.json" ]]; then
+        hgw_restore_startup_permissions
+    fi
+    ynh_setup_source --dest_dir="$install_dir" --full_replace --keep="startup.json"
+    ynh_setup_source --dest_dir="$install_dir/sources" --source_id=build_sources
+    chmod 0750 "$install_dir/headscale-gateway"
+    cp -a ../doc/third_party "$install_dir/notices"
+    chown -R "$app:$app" "$install_dir"
+    if [[ -f "$install_dir/startup.json" ]]; then hgw_restore_startup_permissions; fi
 }
 
 hgw_configure() {

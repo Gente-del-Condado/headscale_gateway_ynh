@@ -1,9 +1,10 @@
+#:schema https://raw.githubusercontent.com/YunoHost/apps/main/schemas/manifest.v2.schema.json
 packaging_format = 2
 id = "headscale_gateway"
 name = "Headscale Gateway"
 description.en = "Private HTTPS access to services through Headscale, with DNS and certificate management"
 description.es = "Gateway HTTPS privado con tsnet, DNS, certificados y administración"
-version = "1.4.7~ynh1"
+version = "1.4.7~ynh2"
 maintainers = ["Gente-del-Condado"]
 
 [upstream]
@@ -51,3 +52,21 @@ lan.default = 18443
 
 [resources.apt]
 packages = ["ca-certificates", "python3", "libc-bin"]
+
+[resources.sources]
+
+[resources.sources.main]
+format = "file"
+extract = false
+rename = "headscale-gateway"
+amd64.url = "https://github.com/Gente-del-Condado/headscale_gateway_ynh/releases/download/server-v1.4.7/headscale-gateway-linux-amd64"
+amd64.sha256 = "7e5db76c9cb4c19eb0dc6cd57690198f16319ff9760bad30d02d8e81f156bf0c"
+arm64.url = "https://github.com/Gente-del-Condado/headscale_gateway_ynh/releases/download/server-v1.4.7/headscale-gateway-linux-arm64"
+arm64.sha256 = "ee2ac23550eebca08b1e83c204744d364b904160067a4af76139d1606539a596"
+
+[resources.sources.build_sources]
+format = "tar.gz"
+extract = false
+rename = "source.tar.gz"
+url = "https://github.com/Gente-del-Condado/headscale_gateway_ynh/releases/download/server-v1.4.7/source.tar.gz"
+sha256 = "8abdc423c466de44859521702737d256691017ac840022412c623f8db138bdc2"
