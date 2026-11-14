@@ -138,9 +138,15 @@
     <main id="contenido" tabindex="-1">
       <p class="breadcrumb"><a href="index.html">Manual</a><span aria-hidden="true"> / </span>Publicar en F-Droid</p>
       <article class="prose"><h1 id="solicitud-para-f-droid">Solicitud para F-Droid</h1>
-<p>Esta carpeta prepara la receta; todavía no representa aceptación en F-Droid.
-Los fuentes completos deben publicarse en la rama <code>upstream-source</code> del
-repositorio público indicado en los metadatos, con la etiqueta <code>source-v1.4.7</code>.
+<p>La solicitud <a href="https://gitlab.com/fdroid/fdroiddata/-/merge_requests/57374">!57374</a>
+propuso <code>1.4.7-android.5</code> (<code>10040075</code>). F-Droid la cerró el 14 de noviembre de
+2026 porque exige más de tres meses de mantenimiento. No está aceptada ni
+publicada en su catálogo. Esta receta conserva las correcciones para repetir
+la validación y preparar una futura solicitud cuando se cumpla esa política.
+La receta propone solo la versión actual y fija el commit público completo
+<code>b14a986ae84047b5d407ecc1866bb0ae4b711ca1</code>, identificado también por la etiqueta
+inmutable <code>source-android-v1.4.7-android.5</code>. Los fuentes completos están en
+<code>upstream-source</code> del repositorio público indicado en los metadatos.
 No basta con el manifiesto y los binarios del paquete YunoHost de <code>main</code>.</p>
 <p>El script compila Go desde los fuentes comunes; no descarga APK, AAR ni motores
 precompilados del proyecto. El toolchain Go oficial se verifica por SHA-256.
@@ -148,20 +154,36 @@ Gradle construye JNI desde los fuentes HEV incluidos con sus licencias. La
 variante F-Droid elimina la firma del titular. El wrapper Gradle conserva los
 avisos y una suma de distribución fija. Los fuentes Go se descargan según
 <code>go.mod</code>/<code>go.sum</code>, sin cambiar versiones.</p>
-<p>La receta 1.4.7 pasa localmente <code>fdroid readmeta</code> y <code>fdroid lint</code> con
-fdroidserver 2.4.5 y las categorías oficiales. Antes de enviar la receta, ejecuta en el entorno oficial de fdroidserver:</p>
+<p>La receta pasa localmente <code>fdroid readmeta</code>, <code>rewritemeta</code>, <code>lint</code> y la
+compilación con escaneo binario de fdroidserver 2.4.5. Los nueve trabajos del
+<a href="https://gitlab.com/Gente-del-Condado/fdroiddata/-/pipelines/3068810522">primer pipeline</a>
+también pasaron. Para repetir la validación:</p>
 <pre tabindex="0"><code class="language-sh">fdroid readmeta
+fdroid rewritemeta org.headscalegateway.android
 fdroid lint org.headscalegateway.android
-fdroid build --server org.headscalegateway.android:10040074
+fdroid build --test --stop --scan-binary org.headscalegateway.android:10040075
 </code></pre>
-<p>La compilación local de la variante sin firma no equivale a esta validación del
-servidor oficial. Revisa los resultados del escáner, sin ignorar carpetas enteras
+<p>La compilación local y el CI de la solicitud no equivalen a aceptación ni a una
+compilación de distribución en el servidor oficial. Para esta última se utiliza
+<code>fdroid build --server org.headscalegateway.android:10040075</code> en su entorno.
+Revisa los resultados del escáner, sin ignorar carpetas enteras
 ni añadir excepciones genéricas para binarios. Los módulos Go pueden incorporar
 recursos generados por terceros; conserva sus licencias y resuelve cualquier
 objeción del revisor aportando los fuentes o desactivando el recurso afectado.</p>
-<p>La ficha localizada está en <code>android/fastlane/metadata/android/</code>. Faltan capturas
-de un teléfono físico y la revisión de inclusión. Envía la receta únicamente
-cuando el repositorio y la etiqueta públicos existan.</p>
+<p>El <code>prebuild</code> elimina únicamente <code>ndk.dir</code> del archivo local generado por
+fdroidserver: Gradle selecciona el mismo NDK mediante <code>ndkVersion</code>. También
+convierte las asignaciones antiguas de <code>namespace</code> y <code>ndkVersion</code> a la sintaxis
+explícita, sin cambiar sus valores ni modificar la etiqueta pública. Así se
+corrigen CXX5106 y las advertencias de asignación Groovy. El aviso de caché
+<code>.gradle</code> procede del CI general de fdroiddata y no se modifica desde esta receta.</p>
+<p>La ficha localizada está en <code>android/fastlane/metadata/android/</code>. Quedan la
+evaluación de madurez y las capturas de teléfono para la revisión de inclusión.
+Las API Android obsoletas utilizadas para compatibilidad requieren una revisión
+separada antes de cambiar el código publicado. No se declara reproducibilidad
+binaria frente a la APK directa: difieren cuatro bibliotecas JNI/HEV. F-Droid
+firmará su canal con otra identidad; migrar desde la APK directa exige exportar,
+reinstalar e importar. Las actualizaciones automáticas de la receta permanecen
+desactivadas hasta validar su regla. Google Play sigue solo preparado.</p>
 <p>Referencias: <a href="https://f-droid.org/docs/Inclusion_Policy/">inclusión</a>,
 <a href="https://f-droid.org/docs/Build_Metadata_Reference/">metadatos</a> y
 <a href="https://f-droid.org/docs/Submitting_to_F-Droid_Quick_Start_Guide/">solicitud</a>.</p></article>
