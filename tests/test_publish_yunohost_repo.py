@@ -102,6 +102,16 @@ class PublishYunoHostTest(unittest.TestCase):
             publisher.publish(self.source, self.destination)
         self.assertEqual(marker.read_text(), 'Versión publicada\n')
 
+    def test_download_metadata_cannot_reference_a_different_binary(self):
+        manifest = self.package/'manifest.toml'
+        manifest.write_text(manifest.read_text().replace('amd64.sha256 = "', 'amd64.sha256 = "0'))
+        self.commit()
+        marker = self.destination/'README.md'
+        marker.write_text('Versión publicada\n')
+        with self.assertRaisesRegex(ValueError, 'recurso de descarga'):
+            publisher.publish(self.source, self.destination)
+        self.assertEqual(marker.read_text(), 'Versión publicada\n')
+
     def test_corrupt_sources_are_rejected_before_changing_destination(self):
         with tarfile.open(self.package / 'payload/source.tar.gz', 'w:gz') as archive:
             content = b'fuentes de otra compilacion'

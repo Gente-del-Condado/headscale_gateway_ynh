@@ -1,18 +1,44 @@
 """Contrato del árbol limpio: fuentes Android completas y cachés excluidas."""
 from pathlib import Path
+import json
+import os
 import shutil
 import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'tools'))
 from check_repository import check
 from repository_archive import source_files
+import repository_archive
 
 
 class CleanLayoutTest(unittest.TestCase):
+    def test_archive_does_not_traverse_builds_or_dependency_caches(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root/'git-install-manifest.json').write_text(json.dumps({'outputs': {}}))
+            (root/'src/desktop/node_modules').mkdir(parents=True)
+            (root/'builds').mkdir()
+            (root/'src/main.go').write_text('package main\n')
+            (root/'builds/private.key').write_text('No leer\n')
+            (root/'src/desktop/node_modules/private.key').write_text('No leer\n')
+            original_scandir = os.scandir
+
+            def guarded_scandir(path):
+                current = Path(path)
+                if current == root/'builds' or current == root/'src/desktop/node_modules':
+                    self.fail('El exportador ha recorrido un árbol descartado')
+                return original_scandir(path)
+
+            with patch.object(repository_archive, 'ROOT', root), patch('os.scandir', guarded_scandir):
+                files = {p.relative_to(root).as_posix() for p in source_files()}
+            self.assertIn('src/main.go', files)
+            self.assertFalse(any(name.endswith('private.key') for name in files))
+
     def test_translation_check_leaves_generated_files_untouched(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

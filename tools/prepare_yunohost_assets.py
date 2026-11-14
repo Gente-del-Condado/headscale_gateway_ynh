@@ -19,24 +19,53 @@ def digest(path):
         return hashlib.file_digest(stream, 'sha256').hexdigest()
 
 
+def remote_target(repository, reference):
+    """Resuelve también etiquetas anotadas, sin mover referencias publicadas."""
+    output = subprocess.check_output(['git', '-C', str(repository), 'ls-remote',
+                                      'origin', reference, reference+'^{}'], text=True)
+    references = {ref: commit for commit, ref in (line.split() for line in output.splitlines())}
+    return references.get(reference+'^{}') or references.get(reference)
+
+
 def request(repository):
     """La rama pública ya debe contener las fuentes aprobadas por la revisión."""
-    public = subprocess.check_output(['git', '-C', str(repository), 'ls-remote',
-                                     'origin', 'refs/heads/upstream-source'], text=True).split()[0]
+    version = (ROOT/'VERSION').read_text().strip()
+    public = (remote_target(repository, 'refs/tags/server-v'+version)
+              or remote_target(repository, 'refs/heads/upstream-source'))
+    if not public:
+        raise ValueError('Faltan los fuentes públicos del motor')
     payload = ROOT/'yunohost/payload'
     names = ('headscale-gateway-linux-amd64', 'headscale-gateway-linux-arm64', 'source.tar.gz')
-    return {'format': 1, 'version': (ROOT/'VERSION').read_text().strip(),
+    return {'format': 1, 'version': version,
             'source_commit': public,
             'sha256': {name: digest(payload/name)
                        for name in names}}
 
 
+def ensure_server_tag(repository, data):
+    """Forgejo debe conservar la etiqueta antes de crear una release en su réplica."""
+    reference = 'refs/tags/server-v'+data['version']
+    existing = remote_target(repository, reference)
+    if existing:
+        if existing != data['source_commit']:
+            raise ValueError('La etiqueta del motor ha cambiado durante la publicación')
+        return
+    subprocess.run(['git', '-C', str(repository), 'fetch', '--no-tags', 'origin',
+                    'refs/heads/upstream-source'], check=True)
+    fetched = subprocess.check_output(['git', '-C', str(repository), 'rev-parse', 'FETCH_HEAD'], text=True).strip()
+    if fetched != data['source_commit']:
+        raise ValueError('Los fuentes públicos han cambiado durante la publicación')
+    subprocess.run(['git', '-C', str(repository), 'push', 'origin',
+                    data['source_commit']+':'+reference], check=True)
+
+
 def prepare(repository):
     repository = Path(repository).resolve()
+    data = request(repository)
+    ensure_server_tag(repository, data)
     target = repository/WORKFLOW
     target.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(ROOT/'packaging/yunohost'/WORKFLOW, target)
-    data = request(repository)
     (repository/'release-request.json').write_text(json.dumps(data, indent=2, sort_keys=True)+'\n')
     return data
 

@@ -28,10 +28,14 @@ se mantienen porque son contratos del Gateway, no funciones inventadas de YunoHo
 Forgejo es el origen del proyecto; GitHub lo replica. Tras la revisión y la
 seguridad obligatoria, el flujo publica los fuentes completos en `upstream-source`
 y prepara una petición con sus sumas. El repositorio público construye recursos
-para amd64 y arm64 desde ese commit. Sus sumas deben coincidir con las de los
+para amd64 y arm64 desde ese commit. La etiqueta `server-vX.Y.Z` se crea primero
+en Forgejo: así su espejo conserva la release de GitHub y no la devuelve a borrador
+al retirar una etiqueta que solo existiera en la réplica.
+Sus sumas deben coincidir con las de los
 binarios y fuentes previamente comprobados. Una release existente se verifica
 sin reemplazar sus archivos. Solo después de descargar y verificar los tres
 recursos se publica la revisión instalable, por Forgejo y su réplica GitHub.
+La descarga se comprueba sin credenciales: un borrador no es un recurso público.
 Un fallo deja publicada la revisión anterior del instalador.
 
 Los cambios de paquete aumentan `~ynhN`, manteniendo la versión del motor.
@@ -54,10 +58,19 @@ paquete como aprobado por YunoHost.
 ## Comprobaciones
 
 Se ejecutan el linter y `package_check` oficiales en una VM desechable con
-YunoHost 12.1.41.2, amd64. La revisión anterior `1.4.7~ynh1` pasó las siete
-operaciones el 13 de noviembre de 2026: raíz, subruta, multiinstancia,
-copia/restauración, actualización, cambio de URL y linter. La revisión actual
-requiere repetirlas y probar la migración desde `~ynh1` conservando datos y secretos.
-Los resultados reales se registran con la entrega, sin asignar un nivel oficial.
+YunoHost 12.1.41.2, amd64. La batería incluye raíz, subruta, multiinstancia,
+copia/restauración, actualización desde la misma revisión, migración desde
+`1.4.7~ynh1`, cambio de URL y linter. Los resultados reales se registran con
+la entrega, sin asignar un nivel oficial.
+
+El 14 de noviembre de 2026 se comprobó además una actualización real de
+`1.4.7~ynh1` a `1.4.7~ynh2` en ese laboratorio: se conservaron el contenido
+SQLite de prueba, la clave maestra, las credenciales y el secreto del proxy.
+El servicio quedó activo y los archivos privados conservaron sus permisos.
+La sesión SSO de un administrador respondió 200, con TLS verificado. La API
+del motor rechazó con 403 los accesos anónimos y las cabeceras de identidad
+falsificadas, incluso por loopback. Si el permiso principal de YunoHost se
+limita a administradores, SSOwat redirige antes al SSO (302) a quien no tiene sesión.
+
 No estar en el catálogo genera avisos de catálogo; no se manipulan para obtener
 una puntuación. Compilar arm64 no acredita instalarlo en un dispositivo arm64.

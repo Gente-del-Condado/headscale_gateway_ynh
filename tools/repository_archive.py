@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 import re
 import zipfile
@@ -23,7 +24,24 @@ SECRET = re.compile(rb'hskey-(?:auth|api)-[A-Za-z0-9_-]{20,}|-----BEGIN (?:RSA |
 def source_files(include_releases=False):
     manifest = json.loads((ROOT / 'git-install-manifest.json').read_text())
     generated = set(manifest['outputs'])
-    for p in sorted(ROOT.rglob('*')):
+    # No acumular los resultados de builds/, máquinas virtuales ni node_modules
+    # para descartarlos después: pueden ocupar millones de entradas en memoria.
+    candidates = [ROOT / name for name in ROOT_FILES if (ROOT / name).is_file()]
+    for name in sorted(DIRECTORIES):
+        if (ROOT / name).is_symlink():
+            raise ValueError('No se exportan directorios enlazados: ' + name)
+        for directory, folders, filenames in os.walk(ROOT / name):
+            current = Path(directory)
+            folders[:] = sorted(folder for folder in folders if folder not in CACHE
+                                and (current / folder).relative_to(ROOT).as_posix()
+                                not in ('android/build', 'src/desktop/dist'))
+            candidates.extend(current / filename for filename in filenames)
+    if (ROOT / 'releases/README.md').is_file():
+        candidates.append(ROOT / 'releases/README.md')
+    if include_releases:
+        candidates.extend(ROOT / 'releases/android' / name for name in RELEASE_FILES
+                          if (ROOT / 'releases/android' / name).is_file())
+    for p in sorted(candidates):
         rel = p.relative_to(ROOT)
         if not p.is_file():
             continue

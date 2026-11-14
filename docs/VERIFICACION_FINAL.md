@@ -63,11 +63,33 @@ terminó con cero errores y 23 avisos pendientes de mantenimiento.
 El paquete YunoHost incorpora descripción en inglés y español, README generado
 con la versión, documentación administrativa completa y pruebas de raíz/subruta
 con sesión SSO administradora. El linter oficial ya no registra errores de
-empaquetado; señala que la aplicación todavía no está incorporada al catálogo,
+empaquetado; señala que la aplicación se mantiene fuera del catálogo,
 ni tiene estado y categoría asignados allí. La
 [guía de mantenimiento y sus evidencias](../packaging/yunohost/doc/CATALOGO.md) distinguen
 estos avisos de los fallos funcionales. Los resultados de `package_check` se
 conservan con cada entrega; no se asigna un nivel oficial localmente.
+
+El 14 de noviembre de 2026 se validó `1.4.7~ynh2` en una VM limitada a 2 GiB.
+La batería completa duró 34 minutos y 29 segundos: siete operaciones correctas
+y un fallo de descarga durante la actualización sobre la misma revisión. La
+réplica eliminaba una etiqueta creada únicamente en GitHub y devolvía la release
+a borrador. Se corrigió creando primero `server-v1.4.7` en Forgejo, sin mover su
+commit. La repetición oficial selectiva de instalación raíz y actualización
+terminó correctamente en 9 minutos y 23 segundos. En conjunto quedaron correctas
+las ocho operaciones, incluida la migración desde `1.4.7~ynh1`; se conservan
+ambos informes originales, incluido el fallo anterior.
+
+La actualización aislada conservó los datos SQLite de prueba, clave maestra,
+credenciales y secreto de proxy, con permisos privados. Una segunda prueba
+comparó la configuración, servicios, plantillas y autenticación persistidos y
+descifró correctamente una clave API ficticia sembrada antes de actualizar.
+La sesión SSO administradora respondió 200; SSOwat redirigió al SSO (302) los
+accesos sin sesión y la API del motor rechazó con 403 tanto las peticiones
+anónimas como las cabeceras de identidad falsificadas por loopback.
+Los 13 archivos de ejecución y configuración del paquete final
+coinciden por SHA-256 con los probados. Los 54 contratos Python terminaron
+correctamente con un pico de unos 106 MiB. El exportador de fuentes evita
+recorrer compilaciones, máquinas virtuales y dependencias antes de filtrarlas.
 
 El 13 de noviembre de 2026, `package_check` completó las siete comprobaciones
 en 28 minutos y 36 segundos sobre YunoHost 12.1.41.2, amd64: linter,
@@ -80,7 +102,7 @@ versión anterior.
 
 El resultado global local del comprobador es `0 (Broken)`: el linter marca
 `AppCatalog.is_in_catalog` como crítico y `AppCatalog.state_is_working` como
-error al no existir todavía la entrada oficial. El aviso
+error al no existir una entrada oficial. El aviso
 `AppCatalog.has_category` tiene la misma causa. Se conservan esos resultados
 sin alterar el catálogo para obtener una calificación. Las siete pruebas
 correctas y estos avisos se presentan por separado como evidencias del mantenimiento independiente.

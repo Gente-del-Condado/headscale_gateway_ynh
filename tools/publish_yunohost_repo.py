@@ -86,7 +86,8 @@ def validate_package(stage, version):
     for arch in ('amd64', 'arm64'):
         if resources.get('main', {}).get(arch, {}).get('sha256') != expected['headscale-gateway-linux-' + arch]:
             raise ValueError('El recurso de descarga no corresponde al binario: ' + arch)
-    source_digest = hashlib.file_digest((stage/'payload/source.tar.gz').open('rb'), 'sha256').hexdigest()
+    with (stage/'payload/source.tar.gz').open('rb') as stream:
+        source_digest = hashlib.file_digest(stream, 'sha256').hexdigest()
     if resources.get('build_sources', {}).get('sha256') != source_digest:
         raise ValueError('El recurso de fuentes no corresponde a las fuentes de compilación.')
 
@@ -103,6 +104,7 @@ def publish(source, destination):
         stage = Path(temporary)
         validate_archive(data, stage)
         validate_package(stage, version)
+        package_version = tomllib.loads((stage/'manifest.toml').read_text())['version']
         # Los recursos se publican y verifican antes de llegar aquí. El paquete
         # público conserva solo scripts, metadatos, documentación y licencias.
         shutil.rmtree(stage / 'payload')
@@ -124,7 +126,7 @@ def publish(source, destination):
             elif origin.is_file():
                 shutil.copy2(origin, target)
     # Archivos ajenos (por ejemplo .github/) y .git quedan fuera del ámbito gestionado.
-    print('Paquete YunoHost ' + version + ' preparado desde ' + git(source, 'rev-parse', 'HEAD').decode().strip())
+    print('Paquete YunoHost ' + package_version + ' preparado desde ' + git(source, 'rev-parse', 'HEAD').decode().strip())
 
 
 def main():
