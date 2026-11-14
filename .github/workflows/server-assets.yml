@@ -76,4 +76,19 @@ jobs:
               files.append(str(path))
           tag = 'server-v'+r['version']
           subprocess.run(['gh','release','create',tag,*files,'--target',r['source_commit'],'--title','Motor '+r['version'],'--notes','Motor Linux amd64/arm64 y fuentes completos correspondientes con dependencias y licencias. Recursos verificados por el paquete YunoHost mediante SHA-256.'],check=True)
+          # Una release en borrador no permite instalar desde una URL pública.
+          subprocess.run(['gh','release','edit',tag,'--draft=false'],check=True)
+          release = json.loads(subprocess.check_output(['gh','api',f'repos/{os.environ["GITHUB_REPOSITORY"]}/releases/tags/{tag}'],text=True))
+          assert not release['draft'] and not release['prerelease']
+          PY
+      - name: Comprobar las descargas públicas sin autenticación
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, os, urllib.request
+          from pathlib import Path
+          r = json.loads(Path('release-request.json').read_text())
+          base = f'https://github.com/{os.environ["GITHUB_REPOSITORY"]}/releases/download/server-v{r["version"]}/'
+          for name, expected in r['sha256'].items():
+              with urllib.request.urlopen(base+name, timeout=120) as response:
+                  assert hashlib.file_digest(response,'sha256').hexdigest() == expected, name
           PY
