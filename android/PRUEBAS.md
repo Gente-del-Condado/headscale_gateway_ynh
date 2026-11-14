@@ -122,3 +122,33 @@ El ejecutor cierra su nodo auxiliar y elimina el resultado remoto; no administra
 el ciclo de vida del servidor. No borres los datos de la APK habitual.
 
 El estado y las validaciones pendientes están en [docs/ANDROID.md](../docs/ANDROID.md).
+
+## Actualización de la APK directa 1.4.7
+
+La sonda `src/upgradeTest/` se empaqueta aparte y no entra en ninguna APK de
+distribución. Requiere una instalación release de laboratorio vacía: el
+identificador `org.headscalegateway.android` debe estar ausente inicialmente.
+No ejecutes esta prueba sobre tu instalación habitual ni uses datos reales.
+La sonda se firma con la misma identidad privada sin incluirla en los fuentes.
+
+```sh
+python3 tools/test_android_upgrade.py --sdk "$ANDROID_HOME" \
+  --java-home "$JAVA_HOME" --signing-config "$SIGNING_PROFILE"
+adb -s "$ANDROID_SERIAL" install --no-incremental /ruta/a/la/APK-directa-1.4.7.apk
+adb -s "$ANDROID_SERIAL" install --no-incremental builds/android-upgrade-probe/probe.apk
+adb -s "$ANDROID_SERIAL" shell am instrument -w -e phase seed \
+  org.headscalegateway.upgradetest/org.headscalegateway.upgradetest.UpgradeProbe
+adb -s "$ANDROID_SERIAL" install --no-incremental -r builds/android/headscale-gateway-release.apk
+adb -s "$ANDROID_SERIAL" shell am instrument -w -e phase verify \
+  org.headscalegateway.upgradetest/org.headscalegateway.upgradetest.UpgradeProbe
+adb -s "$ANDROID_SERIAL" shell am start -W -n org.headscalegateway.android/.MainActivity
+```
+
+Ambas fases deben devolver `result=OK`. La fase final comprueba un archivo
+privado, una SQLite ficticia, preferencias y el descifrado del mismo secreto
+con Android Keystore. El comando final comprueba el arranque de la actividad
+release por separado, sin bloquear el final de la instrumentación. Compara
+también el certificado SHA-256 de ambas APK con `apksigner verify --print-certs`.
+Esto no sustituye una prueba de reconexión VPN ni una restauración real.
+Al acabar retira únicamente los paquetes release y sonda que instaló esta prueba;
+no elimines `.dev`, `.lab` ni los datos de otras aplicaciones.

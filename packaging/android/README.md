@@ -1,7 +1,9 @@
 # Canales de Android
 
 La fuente de todas las variantes es `android/` más el motor Go de `src/`.
-La versión se toma de `VERSION`; no hay un motor distinto para cada tienda.
+La versión del motor se toma de `VERSION`; las revisiones exclusivas de Android
+se identifican mediante `android/release.properties` y el sufijo `-android.N`.
+No hay un motor distinto para cada tienda.
 
 | Canal | Salida | Firma | Publicación |
 | --- | --- | --- | --- |

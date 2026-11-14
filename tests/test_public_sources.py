@@ -25,17 +25,21 @@ class PublicSourcesTest(unittest.TestCase):
             version.write_text('1.4.7\n')
             program = source / 'program.go'
             program.write_text('package main\n')
+            (source / 'android').mkdir()
+            (source / 'android/release.properties').write_text('revision=5\n')
             (source / 'addons').mkdir()
             excluded = source / 'addons' / 'private-installer'
             excluded.write_text('not part of the public source snapshot')
             with patch.object(publish_public_sources, 'ROOT', source), patch.object(
                     publish_public_sources, 'source_files', return_value=[version, program, excluded]):
                 publish_public_sources.publish(package, tag=True)
+                android_tag = git(package, 'ls-remote', '--tags', 'origin', 'refs/tags/source-android-v1.4.7-android.5').split()[0]
                 original = git(package, 'ls-remote', '--tags', 'origin', 'refs/tags/source-v1.4.7').split()[0]
                 program.write_text('package updated\n')
                 publish_public_sources.publish(package, tag=True)
                 current = git(package, 'ls-remote', '--tags', 'origin', 'refs/tags/source-v1.4.7').split()[0]
             self.assertEqual(original, current)
+            self.assertEqual(android_tag, git(package, 'ls-remote', '--tags', 'origin', 'refs/tags/source-android-v1.4.7-android.5').split()[0])
             git(package, 'fetch', 'origin', 'upstream-source')
             self.assertEqual(git(package, 'rev-list', '--count', 'FETCH_HEAD'), '2')
             names = git(package, 'ls-tree', '-r', '--name-only', 'FETCH_HEAD').splitlines()

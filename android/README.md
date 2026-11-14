@@ -124,6 +124,21 @@ Las compilaciones de pruebas usan el identificador
 `org.headscalegateway.android.dev` para coexistir con una futura entrega estable.
 No se añaden las carpetas de compilación ni las claves a Git.
 
+## Revisiones y actualización
+
+La entrega `1.4.7-android.5` conserva el motor `1.4.7` y corrige los enlaces
+al manual y a privacidad tras renombrar el repositorio YunoHost. Android usa
+`versionCode` `10040075`, superior al `10040074` de la entrega `1.4.7`.
+Se instala encima de la APK directa anterior, con la misma firma, sin
+borrar datos ni desinstalar. No cambies a una APK de depuración o de otra tienda.
+
+`android/release.properties` controla la revisión (0..9) de la adaptación;
+`VERSION` sigue siendo la versión común del motor y los paquetes. Desde la
+revisión 5, el nombre visible añade `-android.N`. Tras la revisión 9 se debe
+aumentar la versión común para conservar un código creciente. La etiqueta
+`android-v1.4.7-android.5` identifica esta entrega Android por separado de `v1.4.7`.
+Los fuentes públicos correspondientes usan `source-android-v1.4.7-android.5`.
+
 ## Firma estable y tiendas
 
 Crea una identidad una sola vez, fuera del repositorio:

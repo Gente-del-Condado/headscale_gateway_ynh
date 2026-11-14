@@ -9,6 +9,7 @@ import subprocess
 import tempfile
 
 from repository_archive import ROOT, source_files
+from android_version import release_version
 
 EXCLUDED = {'addons', 'yunohost', '.github', '.forgejo'}
 
@@ -67,11 +68,16 @@ def publish(repository, tag=False):
             git('commit', '-m', 'Publicar fuentes completos ' + version)
             git('push', 'origin', 'HEAD:refs/heads/upstream-source')
         if tag:
-            name = 'source-v' + (ROOT / 'VERSION').read_text().strip()
+            names = ['source-v' + (ROOT / 'VERSION').read_text().strip()]
+            if (ROOT / 'android/release.properties').is_file():
+                android_version, _ = release_version(ROOT)
+                if '-android.' in android_version:
+                    names.append('source-android-v' + android_version)
             # Las etiquetas publicadas nunca se mueven al cambiar documentación.
-            if not source_git('ls-remote', '--tags', 'origin', 'refs/tags/' + name):
-                git('tag', name)
-                git('push', 'origin', 'refs/tags/' + name)
+            for name in names:
+                if not source_git('ls-remote', '--tags', 'origin', 'refs/tags/' + name):
+                    git('tag', name)
+                    git('push', 'origin', 'refs/tags/' + name)
 
 
 def main():

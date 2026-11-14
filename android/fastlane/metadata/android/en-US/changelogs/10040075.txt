@@ -1,0 +1,1 @@
+Fix manual and privacy links. Updates the direct 1.4.7 APK with the same signing key, without uninstalling.

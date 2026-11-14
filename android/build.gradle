@@ -1,7 +1,13 @@
 plugins { id 'com.android.application' version '8.13.0' }
 def gatewayVersion = file('../VERSION').text.trim()
 def versionParts = gatewayVersion.tokenize('.').collect { it.toInteger() }
-def androidRevision = 4
+def releaseProperties = new Properties()
+file('release.properties').withInputStream { releaseProperties.load(it) }
+def androidRevision = releaseProperties.getProperty('revision').toInteger()
+if (androidRevision < 0 || androidRevision > 9) {
+    throw new GradleException('La revisión Android debe estar entre 0 y 9; después aumenta VERSION')
+}
+def androidVersionName = androidRevision > 4 ? gatewayVersion + '-android.' + androidRevision : gatewayVersion
 if (versionParts.size() != 3 || versionParts.any { it < 0 } || versionParts[1] > 999 || versionParts[2] > 999) {
     throw new GradleException('La versión común no cabe en el versionCode Android')
 }
@@ -18,7 +24,7 @@ android {
         minSdk 24
         targetSdk 36
         versionCode androidVersionCode.intValue()
-        versionName gatewayVersion
+        versionName androidVersionName
         testInstrumentationRunner 'org.headscalegateway.android.SmokeInstrumentation'
         ndk { abiFilters.addAll((project.findProperty('targetAbis') ?: 'arm64-v8a,x86_64').split(',')) }
         externalNativeBuild { ndkBuild { arguments 'NDK_APPLICATION_MK:=src/main/jni/Application.mk'; targets 'gateway-tunnel' } }

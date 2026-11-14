@@ -11,6 +11,7 @@ import subprocess
 import tempfile
 import xml.etree.ElementTree as ET
 import zipfile
+from android_version import release_version
 
 
 def verify(artifact, sdk, ndk, java_home, abis, release=False, unsigned=False, bundletool=None):
@@ -62,9 +63,7 @@ def verify(artifact, sdk, ndk, java_home, abis, release=False, unsigned=False, b
     if release and (info['debuggable'] or info['package'] != 'org.headscalegateway.android' or info['target_sdk'] < 36):
         raise ValueError('Identidad, depuración o target SDK no válidos para la entrega Android')
     if release:
-        version = (Path(__file__).resolve().parents[1] / 'VERSION').read_text().strip()
-        major, minor, patch = map(int, version.split('.'))
-        expected_code = (major * 1000000 + minor * 1000 + patch) * 10 + 4
+        version, expected_code = release_version(Path(__file__).resolve().parents[1])
         if info['version'] != version or info['version_code'] != expected_code:
             raise ValueError('Artefacto Android de otra versión: recompila antes de distribuir')
     readelf = next((ndk / 'toolchains/llvm/prebuilt').glob('*/bin/llvm-readelf'))

@@ -1,0 +1,1 @@
+Corrige los enlaces al manual y a privacidad. Actualizable desde 1.4.7 con la misma firma, sin desinstalar.
