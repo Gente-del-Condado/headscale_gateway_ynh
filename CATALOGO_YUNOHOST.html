@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Manual de instalación, administración y desarrollo de Headscale Gateway.">
-  <title>Catálogo YunoHost · Headscale Gateway</title>
+  <title>Mantenimiento YunoHost · Headscale Gateway</title>
   <link rel="stylesheet" href="assets/manual.css">
   <script src="assets/search-data.js" defer></script>
   <script src="assets/manual.js" defer></script>
@@ -93,7 +93,7 @@
               
                 <li><a href="ANDROID_PLAY.html" >Preparar Google Play</a></li>
               
-                <li><a href="CATALOGO_YUNOHOST.html" aria-current="page">Catálogo YunoHost</a></li>
+                <li><a href="CATALOGO_YUNOHOST.html" aria-current="page">Mantenimiento YunoHost</a></li>
               
                 <li><a href="MANUAL_WEB.html" >Editar y publicar el manual</a></li>
               
@@ -136,67 +136,69 @@
       </details>
     </aside>
     <main id="contenido" tabindex="-1">
-      <p class="breadcrumb"><a href="index.html">Manual</a><span aria-hidden="true"> / </span>Catálogo YunoHost</p>
-      <article class="prose"><h1 id="preparar-la-solicitud-al-catálogo-oficial">Preparar la solicitud al catálogo oficial</h1>
-<p>Identificador: <code>headscale_gateway</code>. Repositorio de paquete:
-https://github.com/Gente-del-Condado/headscale_gateway_ynh (rama <code>main</code>).
-Licencia del código propio: AGPL-3.0-only; los avisos y licencias de terceros se
-conservan. El paquete incluye los fuentes correspondientes del servidor en
-<code>payload/source.tar.gz</code>, sus instrucciones, sumas y avisos.</p>
-<h2 id="qué-se-entrega">Qué se entrega</h2>
-<p>Gateway de servicios privados para un Headscale existente: nodo tsnet, proxy
-HTTPS, DNS, certificados, administración, perfiles y copias cifradas.
-Complementa al paquete <code>headscale_ynh</code>; no instala otro servidor de coordinación
-ni exige sustituir el que ya utiliza el administrador.</p>
-<p>El paquete usa formato 2, helpers 2.1, puertos asignados por YunoHost, usuario y
-directorios propios, permisos SSO iniciales para administradores, nginx y
-servicio systemd. Admite amd64/arm64, subruta, raíz y varias instancias con datos
-separados. Incluye operaciones de actualización, copia, restauración y cambio
-de URL; deben pasar las pruebas de integración antes de declararlas aceptadas.
-La actualización conserva las claves, la identidad VPN y los datos persistentes.</p>
-<p>La aceptación aislada detectó y corrigió el nombre inicial inválido de la
-segunda instancia. Los sufijos de instancia se convierten en un nombre de nodo
-normalizado antes de arrancar el motor. Las pruebas SSO comprueban también la
-API protegida; recibir el HTML del panel no acredita una sesión. La auditoría
-adicional verifica el rol administrador y el rechazo de cabeceras falsificadas
-sin guardar el token CSRF de la respuesta.</p>
-<p>También se repone el modo privado y el propietario de <code>startup.json</code> después
-de restaurar el directorio instalado: el motor rechaza un archivo con permisos
-abiertos. La reparación conserva el contenido y rechaza enlaces simbólicos.
-La ejecución aislada del 13 de noviembre de 2026 pasó las siete comprobaciones
-en amd64 con YunoHost 12.1.41.2: linter, raíz, subruta, multiinstancia,
-copia/restauración, actualización desde la misma versión y cambio de URL.
-No se atribuyen a esta ejecución pruebas en arm64 o desde versiones anteriores.</p>
-<h2 id="evidencias-y-solicitud">Evidencias y solicitud</h2>
-<ol>
-<li>Regenerar con <code>python3 tools/prepare_git_install.py</code> y ejecutar la verificación
-   del proyecto y el linter oficial contra <code>yunohost/</code>.</li>
-<li>Ejecutar <code>package_check</code> oficial en una VM desechable. Guardar resultados de
-   instalación raíz/subruta, permisos, reinstalación, multiinstancia, actualización,
-   copia/restauración y cambio de URL. La instalación personal no los sustituye.</li>
-<li>Comprobar acceso público a los fuentes, al manual, a la licencia y a las URL
-   del paquete. Revisar las dependencias con los controles de seguridad.</li>
-<li>Preparar un fork de <code>YunoHost/apps</code>, añadir la entrada alfabética y
-   <code>logos/headscale_gateway.png</code>, usando el logo existente. No asignar <code>level</code>:
-   lo calcula la infraestructura oficial. Categoría <code>system_tools</code>, subtag
-   <code>network</code>.</li>
-<li>Adjuntar las limitaciones y los registros reales al cuerpo de la solicitud.
-   La incorporación al catálogo y la calificación solo corresponden a YunoHost.</li>
-</ol>
-<p>Los avisos del linter por no estar aún en el catálogo, no tener categoría en él
-o no figurar como <code>working</code> son esperables antes de la incorporación; no prueban
-un defecto del instalador ni deben ocultarse simulando una entrada oficial.
-En esta ejecución generan un nivel global local <code>0 (Broken)</code>, aunque las siete
-comprobaciones figuren correctas: el crítico es
-<code>AppCatalog.is_in_catalog</code> y el error es <code>AppCatalog.state_is_working</code>.
-No se presenta ese nivel como una calificación oficial de la aplicación.</p>
-<p>El material revisable de esta entrega se genera en
-<code>builds/production-1.4.7/yunohost-catalog/</code>. No se envía una solicitud upstream
-automáticamente y no se instala nada en el YunoHost personal durante estas
-comprobaciones.</p>
-<p>Referencias oficiales: <a href="https://doc.yunohost.org/en/dev/packaging/policy/">política</a>,
-<a href="https://doc.yunohost.org/en/dev/packaging/test/">pruebas</a> y
-<a href="https://doc.yunohost.org/en/dev/packaging/publish/">publicación</a>.</p></article>
+      <p class="breadcrumb"><a href="index.html">Manual</a><span aria-hidden="true"> / </span>Mantenimiento YunoHost</p>
+      <article class="prose"><h1 id="mantenimiento-del-paquete-independiente">Mantenimiento del paquete independiente</h1>
+<p>Headscale Gateway se mantiene para instalarlo y actualizarlo desde
+<a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh">su repositorio</a>.
+No está en el catálogo oficial y no se solicitará su incorporación.</p>
+<h2 id="normas-utilizadas">Normas utilizadas</h2>
+<p>Se toman como referencia <a href="https://github.com/YunoHost/example_ynh">example_ynh</a>,
+<a href="https://doc.yunohost.org/en/dev/packaging/manifest/">el formato 2</a>,
+<a href="https://doc.yunohost.org/en/dev/packaging/resources/">los recursos</a> y
+<a href="https://doc.yunohost.org/dev/packaging/scripts/helpers_v2.1/">los helpers 2.1</a>.
+Los recursos de usuario, directorios, permisos, puertos y dependencias los
+provisiona YunoHost. El instalador usa <code>ynh_setup_source</code> con la arquitectura y
+SHA-256 declarados; los ejecutables y fuentes se descargan de una release pública.
+La rama principal del paquete público no incluye binarios ni archivos de fuentes.
+El logo existente y todos los avisos de terceros se conservan.</p>
+<p>La configuración del motor y el secreto entre nginx y el Gateway requieren un
+helper específico. El motor verifica NSS y el grupo <code>admins</code>, el secreto del
+proxy y CSRF: una cabecera o una conexión loopback no acredita un administrador.
+La captura de SQLite, secretos e identidad VPN se hace con el servicio detenido,
+antes de que el sistema de copias copie el archivo de datos. Estas adaptaciones
+se mantienen porque son contratos del Gateway, no funciones inventadas de YunoHost.</p>
+<h2 id="publicación-automática">Publicación automática</h2>
+<p>Forgejo es el origen del proyecto; GitHub lo replica. Tras la revisión y la
+seguridad obligatoria, el flujo publica los fuentes completos en <code>upstream-source</code>
+y prepara una petición con sus sumas. El repositorio público construye recursos
+para amd64 y arm64 desde ese commit. La etiqueta <code>server-vX.Y.Z</code> se crea primero
+en Forgejo: así su espejo conserva la release de GitHub y no la devuelve a borrador
+al retirar una etiqueta que solo existiera en la réplica.
+Sus sumas deben coincidir con las de los
+binarios y fuentes previamente comprobados. Una release existente se verifica
+sin reemplazar sus archivos. Solo después de descargar y verificar los tres
+recursos se publica la revisión instalable, por Forgejo y su réplica GitHub.
+La descarga se comprueba sin credenciales: un borrador no es un recurso público.
+Un fallo deja publicada la revisión anterior del instalador.</p>
+<p>Los cambios de paquete aumentan <code>~ynhN</code>, manteniendo la versión del motor.
+Las instalaciones se actualizan explícitamente desde su URL: publicar el
+repositorio no cambia el servidor del usuario.</p>
+<h2 id="rechazo-anterior-y-límites">Rechazo anterior y límites</h2>
+<p>La solicitud <a href="https://github.com/YunoHost/apps/pull/3722">3722</a> se cerró el
+14 de noviembre de 2026. El revisor indicó falta de adecuación a los estándares
+y generación con IA, sin enumerar fallos concretos. Por ello no se atribuyen
+motivos específicos adicionales al revisor. La revisión técnica de este paquete
+corrige diferencias contrastables: recursos de descarga estándar, separación de
+binarios y repositorio instalable y documentación de mantenimiento independiente.</p>
+<p>La documentación oficial exige seguir la plantilla y comprender y mantener el
+código, también cuando se usa IA. No se oculta esa asistencia ni se presenta el
+paquete como aprobado por YunoHost.</p>
+<h2 id="comprobaciones">Comprobaciones</h2>
+<p>Se ejecutan el linter y <code>package_check</code> oficiales en una VM desechable con
+YunoHost 12.1.41.2, amd64. La batería incluye raíz, subruta, multiinstancia,
+copia/restauración, actualización desde la misma revisión, migración desde
+<code>1.4.7~ynh1</code>, cambio de URL y linter. Los resultados reales se registran con
+la entrega, sin asignar un nivel oficial.</p>
+<p>El 14 de noviembre de 2026 se comprobó además una actualización real de
+<code>1.4.7~ynh1</code> a <code>1.4.7~ynh2</code> en ese laboratorio: se conservaron el contenido
+SQLite de prueba, la clave maestra, las credenciales y el secreto del proxy.
+El servicio quedó activo y los archivos privados conservaron sus permisos.
+La sesión SSO de un administrador respondió 200, con TLS verificado. La API
+del motor rechazó con 403 los accesos anónimos y las cabeceras de identidad
+falsificadas, incluso por loopback. Si el permiso principal de YunoHost se
+limita a administradores, SSOwat redirige antes al SSO (302) a quien no tiene sesión.</p>
+<p>No estar en el catálogo genera avisos de catálogo; no se manipulan para obtener
+una puntuación. Compilar arm64 no acredita instalarlo en un dispositivo arm64.</p></article>
       <footer class="page-footer">
         <p>Headscale Gateway · Documentación en español</p>
         <a href="MANUAL_WEB.html">Cómo editar este manual</a>
@@ -205,9 +207,13 @@ comprobaciones.</p>
     <aside class="page-toc">
       <nav aria-label="En esta página"><p>En esta página</p><ul>
         
-          <li><a href="#qué-se-entrega">Qué se entrega</a></li>
+          <li><a href="#normas-utilizadas">Normas utilizadas</a></li>
         
-          <li><a href="#evidencias-y-solicitud">Evidencias y solicitud</a></li>
+          <li><a href="#publicación-automática">Publicación automática</a></li>
+        
+          <li><a href="#rechazo-anterior-y-límites">Rechazo anterior y límites</a></li>
+        
+          <li><a href="#comprobaciones">Comprobaciones</a></li>
         
       </ul></nav>
     </aside>

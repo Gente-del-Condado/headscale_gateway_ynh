@@ -93,7 +93,7 @@
               
                 <li><a href="ANDROID_PLAY.html" >Preparar Google Play</a></li>
               
-                <li><a href="CATALOGO_YUNOHOST.html" >Catálogo YunoHost</a></li>
+                <li><a href="CATALOGO_YUNOHOST.html" >Mantenimiento YunoHost</a></li>
               
                 <li><a href="MANUAL_WEB.html" >Editar y publicar el manual</a></li>
               
@@ -152,15 +152,17 @@ las plantillas que edita el desarrollador y <code>yunohost/</code> es el paquete
 Las actualizaciones deben conservar la carpeta de datos de cada instancia.</p>
 <h2 id="instalar-desde-el-repositorio-público">Instalar desde el repositorio público</h2>
 <p>El <a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh">repositorio del paquete</a>
-contiene el manifiesto en la raíz y los binarios para ambas arquitecturas.
+contiene el manifiesto en la raíz y descarga recursos para ambas arquitecturas
+desde una release pública, con SHA-256 fijado por versión.
 No necesitas acceso al repositorio privado del motor:</p>
 <pre tabindex="0"><code class="language-bash">sudo yunohost app install https://github.com/Gente-del-Condado/headscale_gateway_ynh
 </code></pre>
-<p>Es una instalación desde una URL personalizada, no una incorporación al catálogo
-oficial de YunoHost. Consulta el estado de validación al final de este documento.</p>
+<p>Es un paquete independiente mantenido para su uso desde esta URL. No se solicitará
+su inclusión en el catálogo oficial. Consulta el estado de validación al final.</p>
 <h2 id="alternativa-de-desarrollo-desde-el-repositorio-privado">Alternativa de desarrollo desde el repositorio privado</h2>
 <p>Clona el proyecto desde Forgejo e instala la carpeta <code>yunohost/</code>, que ya incluye
-los binarios y sus sumas SHA-256 para ambas arquitecturas:</p>
+los binarios y sus sumas SHA-256 para ambas arquitecturas. El instalador utiliza
+igualmente los recursos públicos declarados en el manifiesto:</p>
 <p>La dirección SSH del ejemplo es ficticia: sustitúyela por la URL SSH de tu
 repositorio, con su usuario SSH, servidor, puerto y propietario reales.</p>
 <pre tabindex="0"><code class="language-bash">git clone ssh://git@forgejo.example.net:2222/usuario/headscale-gateway.git &quot;$HOME/headscale-gateway-src&quot;
@@ -244,7 +246,9 @@ son ajustes independientes.</p>
 permanece escribible para poder sustituir la subcarpeta durante una restauración
 completa. Las copias detienen el servicio para conservar juntos SQLite,
 <code>master.key</code>, certificados e identidad tsnet. También incluyen la configuración
-privada de nginx y el secreto de arranque que le corresponde.</p>
+privada de nginx y el secreto de arranque que le corresponde. La captura con el
+servicio detenido es específica del Gateway: las declaraciones <code>ynh_backup</code>
+se ejecutan después del script y por sí solas no congelan SQLite mientras está parado.</p>
 <p>Protege las copias, porque contienen credenciales. No ejecutes una identidad
 restaurada al mismo tiempo que el nodo original. La desinstalación conserva
 los datos salvo que solicites su eliminación mediante la opción de purga.</p>
@@ -263,10 +267,11 @@ Vuelve a iniciarlo en una terminal interactiva para obtener el código de un
 solo uso, completa la recuperación y arranca otra vez el servicio normal.
 No abras la misma base de datos con dos procesos a la vez.</p>
 <h2 id="estado-de-validación">Estado de validación</h2>
-<p>El empaquetado sigue siendo experimental hasta completar <code>package_check</code> y
-las pruebas de instalación, actualización, cambio de URL y restauración en una
-máquina virtual real de YunoHost. Las pruebas aisladas usan nginx y NSS reales
-con una sesión de portal simulada; no equivalen a esa aceptación completa.
+<p>Se utilizan el linter y <code>package_check</code> oficiales en una VM desechable amd64.
+El historial y los resultados por revisión están en
+<a href="CATALOGO_YUNOHOST.html">mantenimiento y validación</a>. Las pruebas SSO verifican la API
+protegida además del HTML. No se atribuye una prueba real arm64 a la compilación
+de su binario. El nivel del catálogo no certifica este paquete independiente.
 Se conservan la licencia del proyecto y los avisos legales originales de terceros.</p>
 <h2 id="diagnóstico-rápido">Diagnóstico rápido</h2>
 <table>
@@ -308,9 +313,10 @@ Comparte solo el fragmento relevante del error, revisado para excluir secretos.<
 <h2 id="licencia-y-fuentes">Licencia y fuentes</h2>
 <p>El código propio es software libre bajo <strong>AGPL-3.0-only</strong>. La revisión
 <code>1.4.6~ynh3</code> incorpora esta licencia y las fuentes del motor en
-<code>payload/source.tar.gz</code>, con <code>SOURCE.md</code> e instrucciones de compilación.
+<code>sources/source.tar.gz</code> del directorio instalado, con <code>SOURCE.md</code> e instrucciones
+de compilación. Se conservan también en la release pública del motor.
 <code>build-manifest.json</code> registra las sumas de cada archivo. Las licencias de
-terceros se conservan en <code>payload/notices/</code>; no cambian con esta publicación.</p></article>
+terceros se conservan en <code>doc/third_party/</code> del repositorio y <code>notices/</code> de la instalación.</p></article>
       <footer class="page-footer">
         <p>Headscale Gateway · Documentación en español</p>
         <a href="MANUAL_WEB.html">Cómo editar este manual</a>
