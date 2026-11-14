@@ -60,8 +60,8 @@ Las capturas se mantienen según [CAPTURAS.md](CAPTURAS.md).
 
 El manual común se publica en los dos repositorios públicos de distribución:
 
-- [Manual de YunoHost](https://gente-del-condado.github.io/headscale-gateway_ynh/),
-  con su [capítulo de instalación](https://gente-del-condado.github.io/headscale-gateway_ynh/YUNOHOST.html).
+- [Manual de YunoHost](https://gente-del-condado.github.io/headscale_gateway_ynh/),
+  con su [capítulo de instalación](https://gente-del-condado.github.io/headscale_gateway_ynh/YUNOHOST.html).
 - [Manual de Home Assistant](https://gente-del-condado.github.io/headscale-gateway-ha/),
   con los capítulos del [complemento](https://gente-del-condado.github.io/headscale-gateway-ha/HOME_ASSISTANT.html)
   y de la [integración de entidades](https://gente-del-condado.github.io/headscale-gateway-ha/INTEGRACION_HA.html).

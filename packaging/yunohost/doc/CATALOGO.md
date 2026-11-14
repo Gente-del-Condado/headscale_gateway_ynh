@@ -1,7 +1,7 @@
 # Preparar la solicitud al catálogo oficial
 
 Identificador: `headscale_gateway`. Repositorio de paquete:
-https://github.com/Gente-del-Condado/headscale-gateway_ynh (rama `main`).
+https://github.com/Gente-del-Condado/headscale_gateway_ynh (rama `main`).
 Licencia del código propio: AGPL-3.0-only; los avisos y licencias de terceros se
 conservan. El paquete incluye los fuentes correspondientes del servidor en
 `payload/source.tar.gz`, sus instrucciones, sumas y avisos.

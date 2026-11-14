@@ -52,7 +52,7 @@ nodo en Headscale: elimínalos en sus destinos si también quieres retirarlos.
 ## Contacto y cambios
 
 Para consultas de privacidad utiliza las
-[incidencias del proyecto](https://github.com/Gente-del-Condado/headscale-gateway_ynh/issues).
+[incidencias del proyecto](https://github.com/Gente-del-Condado/headscale_gateway_ynh/issues).
 No publiques contraseñas, claves, copias ni información de tu red en una
 incidencia pública. Los cambios de tratamiento se documentarán aquí y, cuando
 corresponda, requerirán un nuevo consentimiento en la aplicación.

@@ -2,9 +2,9 @@ Categories:
   - Connectivity
 License: AGPL-3.0-only
 AuthorName: Gente del Condado
-WebSite: https://gente-del-condado.github.io/headscale-gateway_ynh/
-SourceCode: https://github.com/Gente-del-Condado/headscale-gateway_ynh/tree/upstream-source
-IssueTracker: https://github.com/Gente-del-Condado/headscale-gateway_ynh/issues
+WebSite: https://gente-del-condado.github.io/headscale_gateway_ynh/
+SourceCode: https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source
+IssueTracker: https://github.com/Gente-del-Condado/headscale_gateway_ynh/issues
 
 Name: Headscale Gateway
 Summary: Private Headscale services and an optional phone VPN
@@ -15,7 +15,7 @@ Description: |-
   Requires a Headscale server. Does not provide a commercial VPN service.
 
 RepoType: git
-Repo: https://github.com/Gente-del-Condado/headscale-gateway_ynh.git
+Repo: https://github.com/Gente-del-Condado/headscale_gateway_ynh.git
 
 Builds:
   - versionName: 1.4.7

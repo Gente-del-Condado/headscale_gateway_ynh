@@ -30,15 +30,15 @@ The catalog request is being prepared. Installation from a custom URL does not
 mean the package has been accepted into the official catalog.
 
 ```bash
-sudo yunohost app install https://github.com/Gente-del-Condado/headscale-gateway_ynh
-sudo yunohost app upgrade headscale_gateway --url https://github.com/Gente-del-Condado/headscale-gateway_ynh
+sudo yunohost app install https://github.com/Gente-del-Condado/headscale_gateway_ynh
+sudo yunohost app upgrade headscale_gateway --url https://github.com/Gente-del-Condado/headscale_gateway_ynh
 ```
 
 ## Documentation and support
 
 - [Installation, SSO, upgrade, backup and restoration](doc/ADMIN.md)
-- [Complete web manual](https://gente-del-condado.github.io/headscale-gateway_ynh/)
-- [Package issues](https://github.com/Gente-del-Condado/headscale-gateway_ynh/issues)
+- [Complete web manual](https://gente-del-condado.github.io/headscale_gateway_ynh/)
+- [Package issues](https://github.com/Gente-del-Condado/headscale_gateway_ynh/issues)
 - [Catalog entry, available after approval](https://apps.yunohost.org/app/headscale_gateway)
 
 The full server build sources are in `payload/source.tar.gz`, including Go
@@ -48,4 +48,4 @@ dependencies, build instructions and checksums. Third-party notices are in
 ## En español
 
 Gateway HTTPS privado con tsnet, DNS, certificados y administración. Consulta [la guía de administración](doc/ADMIN.md)
-y el [manual web](https://gente-del-condado.github.io/headscale-gateway_ynh/).
+y el [manual web](https://gente-del-condado.github.io/headscale_gateway_ynh/).

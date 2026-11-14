@@ -4,10 +4,10 @@ site_name: Headscale Gateway
 # Pages proporciona su URL real; en local todos los enlaces siguen siendo relativos.
 site_url: !ENV [HGW_DOCS_URL, ""]
 site_description: Manual de instalación, administración y desarrollo de Headscale Gateway.
-repo_url: https://github.com/Gente-del-Condado/headscale-gateway_ynh/tree/upstream-source
+repo_url: https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source
 repo_name: Fuentes públicos
 extra:
-  source_browser: https://github.com/Gente-del-Condado/headscale-gateway_ynh/blob/upstream-source/
+  source_browser: https://github.com/Gente-del-Condado/headscale_gateway_ynh/blob/upstream-source/
 edit_uri: ''
 docs_dir: docs
 site_dir: builds/manual

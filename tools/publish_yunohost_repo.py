@@ -118,7 +118,7 @@ def publish(source, destination):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('destination', type=Path, help='Checkout de headscale-gateway_ynh')
+    parser.add_argument('destination', type=Path, help='Checkout de headscale_gateway_ynh')
     args = parser.parse_args()
     try:
         publish(ROOT, args.destination)

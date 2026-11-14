@@ -7,7 +7,7 @@ Windows, macOS, Home Assistant, YunoHost y Android.
 
 ## Leer el manual
 
-Manual web público: [YunoHost](https://gente-del-condado.github.io/headscale-gateway_ynh/)
+Manual web público: [YunoHost](https://gente-del-condado.github.io/headscale_gateway_ynh/)
 y [Home Assistant](https://gente-del-condado.github.io/headscale-gateway-ha/).
 Ambas webs muestran el mismo manual, generado desde las fuentes del proyecto.
 

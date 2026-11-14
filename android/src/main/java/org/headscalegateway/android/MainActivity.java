@@ -158,7 +158,7 @@ public final class MainActivity extends Activity {
         LinearLayout about=card(content);heading(about,"Headscale Gateway");
         String version="";try {version=getPackageManager().getPackageInfo(getPackageName(),0).versionName;}catch(Exception ignored){}
         about.addView(text("Versión "+version+"\nMotor Go compartido · AGPL-3.0-only",14,MUTED));
-        button(about,"Privacidad y datos",false,()->startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse("https://gente-del-condado.github.io/headscale-gateway_ynh/PRIVACIDAD_ANDROID.html"))));
+        button(about,"Privacidad y datos",false,()->startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse("https://gente-del-condado.github.io/headscale_gateway_ynh/PRIVACIDAD_ANDROID.html"))));
         button(about,getString(R.string.licenses),false,()-> {
             try {new AlertDialog.Builder(this).setTitle(R.string.licenses).setMessage(RuntimeState.read(getAssets().open("avisos.txt"))).setPositiveButton(R.string.accept,null).show();}
             catch(Exception e) {showError(e);}

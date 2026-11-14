@@ -27,7 +27,7 @@ a licenciar las aportaciones originales incorporadas.
 
 ## Fuentes públicas del motor
 
-El [paquete público YunoHost](https://github.com/Gente-del-Condado/headscale-gateway_ynh)
+El [paquete público YunoHost](https://github.com/Gente-del-Condado/headscale_gateway_ynh)
 incluye `payload/source.tar.gz`, con las mismas fuentes de compilación que
 `source.tar.gz` del complemento Home Assistant. Ambos incluyen `LICENSE`,
 `NOTICE`, `VERSION`, `go.mod`, `go.sum` y `SOURCE.md`, con las órdenes Go para

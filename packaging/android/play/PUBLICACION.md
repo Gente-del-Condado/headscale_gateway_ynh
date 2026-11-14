@@ -7,7 +7,7 @@ La revisión de Google y las pruebas exigidas a la cuenta son pasos externos.
 - Versión: `1.4.7`; versionCode: `10040074`; min SDK 24; target SDK 36.
 - Arquitecturas: arm64-v8a y x86_64; bibliotecas alineadas a 16 KiB.
 - AAB: `builds/android/headscale-gateway-play.aab`.
-- Privacidad pública: https://gente-del-condado.github.io/headscale-gateway_ynh/PRIVACIDAD_ANDROID.html
+- Privacidad pública: https://gente-del-condado.github.io/headscale_gateway_ynh/PRIVACIDAD_ANDROID.html
 - Categoría propuesta: Herramientas. Sin anuncios, compras ni suscripción obligatoria.
 
 ## Firma y acceso

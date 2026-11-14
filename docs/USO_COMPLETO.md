@@ -443,7 +443,7 @@ Forgejo, cuya réplica actualiza después Mis-app en GitHub.
 ## Publicar el paquete YunoHost
 
 El repositorio público de instalación es
-[headscale-gateway_ynh](https://github.com/Gente-del-Condado/headscale-gateway_ynh).
+[headscale_gateway_ynh](https://github.com/Gente-del-Condado/headscale_gateway_ynh).
 Consulta la [guía de YunoHost](../packaging/yunohost/doc/ADMIN.md) para instalarlo y
 actualizarlo mediante su URL. El paquete sigue siendo experimental hasta
 completar la aceptación en una máquina virtual real; publicarlo no lo incorpora
@@ -457,9 +457,9 @@ La cadena de publicación es:
 3. El flujo **Publicar el paquete YunoHost** audita Go y npm con las mismas
    comprobaciones anteriores y valida `git-install-manifest.json`. Solo entonces
    obtiene la clave y publica por SSH en
-   `wolfbelmi88/headscale-gateway_ynh` de Forgejo.
+   `wolfbelmi88/headscale_gateway_ynh` de Forgejo.
 4. El espejo de salida de ese repositorio actualiza el repositorio público
-   `Gente-del-Condado/headscale-gateway_ynh` de GitHub.
+   `Gente-del-Condado/headscale_gateway_ynh` de GitHub.
 
 El flujo se activa al cambiar `yunohost/`, las dependencias auditadas o el propio
 publicador en `main`. Usa el último `main`, serializa las publicaciones y no
@@ -474,11 +474,11 @@ ajenos del destino, las licencias y los avisos; no copia el historial privado,
 `src/`, el complemento Home Assistant ni los datos de instalaciones.
 
 Para configurar las credenciales, registra una clave de despliegue dedicada
-con escritura solo en **headscale-gateway_ynh de Forgejo** y guarda su parte
+con escritura solo en **headscale_gateway_ynh de Forgejo** y guarda su parte
 privada como secreto `YNH_FORGEJO_DEPLOY_KEY` en **headscale-gateway → Settings →
 Secrets and variables → Actions** de GitHub. Configura en el repositorio de
 paquete de Forgejo un espejo SSH hacia
-`git@github.com:Gente-del-Condado/headscale-gateway_ynh.git`, sincronización al
+`git@github.com:Gente-del-Condado/headscale_gateway_ynh.git`, sincronización al
 recibir commits e intervalo de respaldo. Registra la clave pública de ese espejo
 como clave de despliegue con escritura exclusivamente en el paquete de GitHub.
 Son dos claves distintas; ninguna necesita escritura en el proyecto principal.

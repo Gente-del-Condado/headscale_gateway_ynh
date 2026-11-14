@@ -58,7 +58,7 @@ def main():
         'Headscale Gateway para Android\n\n'
         'Motor común del proyecto y adaptación Android propia.\n'
         'Código propio bajo AGPL-3.0-only. Fuentes y manual: '
-        'https://gente-del-condado.github.io/headscale-gateway_ynh/ANDROID_USO.html\n'
+        'https://gente-del-condado.github.io/headscale_gateway_ynh/ANDROID_USO.html\n'
         'La arquitectura móvil se ha contrastado con TailSocks. Se reutiliza su copia de HEV, '
         'con las licencias originales de todas las bibliotecas incluidas.\n'
         'Los avisos completos del motor Go y de las bibliotecas nativas están en assets/licenses/ dentro de esta APK.\n\n'
