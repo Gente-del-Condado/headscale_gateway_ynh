@@ -9,7 +9,7 @@ y el dominio privado del Gateway son ajustes independientes.
 
 El panel administrativo está en la subruta `/admin/` de la aplicación.
 Para actualizar desde el repositorio público utiliza
-`yunohost app upgrade headscale_gateway --url https://github.com/Gente-del-Condado/headscale-gateway_ynh`.
+`yunohost app upgrade headscale_gateway --url https://github.com/Gente-del-Condado/headscale_gateway_ynh`.
 Sustituye el identificador si hay varias instancias.
 
 Comprueba el estado de la VPN antes de añadir tu primer servicio. Utiliza un
