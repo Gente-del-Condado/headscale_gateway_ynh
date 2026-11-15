@@ -4,7 +4,7 @@ id = "headscale_gateway"
 name = "Headscale Gateway"
 description.en = "Private HTTPS access to services through Headscale, with DNS and certificate management"
 description.es = "Gateway HTTPS privado con tsnet, DNS, certificados y administración"
-version = "1.4.9~ynh1"
+version = "1.4.12~ynh1"
 maintainers = ["Gente-del-Condado"]
 
 [upstream]
@@ -59,14 +59,14 @@ packages = ["ca-certificates", "python3", "libc-bin"]
 format = "file"
 extract = false
 rename = "headscale-gateway"
-amd64.url = "https://github.com/Gente-del-Condado/headscale_gateway_ynh/releases/download/server-v1.4.9/headscale-gateway-linux-amd64"
-amd64.sha256 = "418a9eb73d994ab732699653142a2fc1534240eb150d84102624f40da5a111cf"
-arm64.url = "https://github.com/Gente-del-Condado/headscale_gateway_ynh/releases/download/server-v1.4.9/headscale-gateway-linux-arm64"
-arm64.sha256 = "e290bc6b460d4c9d9288ca6479ac52db03f9cc21b4a07c311d3f5579bd3fdefb"
+amd64.url = "https://github.com/Gente-del-Condado/headscale_gateway_ynh/releases/download/server-v1.4.12/headscale-gateway-linux-amd64"
+amd64.sha256 = "5c061f2912cae402566cee4097f38daad000e98e51058802ead89cd87fee6c70"
+arm64.url = "https://github.com/Gente-del-Condado/headscale_gateway_ynh/releases/download/server-v1.4.12/headscale-gateway-linux-arm64"
+arm64.sha256 = "db575d15359c7254279dc345eff71fcfcc4235ec61800e847c5b760d287ab39c"
 
 [resources.sources.build_sources]
 format = "tar.gz"
 extract = false
 rename = "source.tar.gz"
-url = "https://github.com/Gente-del-Condado/headscale_gateway_ynh/releases/download/server-v1.4.9/source.tar.gz"
-sha256 = "b547c90c1c3b916b11cca3ac11f4bcf1f6d29cbbf9d3c24177de00785dc49df6"
+url = "https://github.com/Gente-del-Condado/headscale_gateway_ynh/releases/download/server-v1.4.12/source.tar.gz"
+sha256 = "159b51814b0fed253e3db5cc652bce488527cedfa57febd0d6b76eddb1e69186"

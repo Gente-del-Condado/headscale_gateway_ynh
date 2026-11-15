@@ -1,5 +1,5 @@
 {
-  "version": "1.4.9",
+  "version": "1.4.12",
   "commercial": false,
   "sources": {
     "acme_backoff.go": "0e972f49be4a267c0cedd63ff5785aae9f30ee2068ce09d506988303203b1e1e",
@@ -95,16 +95,16 @@
     "internal/admin/panel-globals.d.ts": "17d66be82527bb62f868161b17b9d89070698b615dc34d4a8683f6dba8401053",
     "internal/admin/panel-headscale.js": "8e25a699c9d3289ea17df66c6b9a6d8b25c75b1cce24882100a77e079f304d34",
     "internal/admin/panel-ops.js": "301fd47320dd2de9c343f0a2f5cff0f79980229f66d6c193e4fa530fb5d7f962",
-    "internal/admin/panel-pki.js": "43965aacf3c781654cb5f4a71d3e4d5448297a11b0da765405d939715d98ccae",
+    "internal/admin/panel-pki.js": "c1f356e6b431c9bf5c857c7910148732a7569383d42bbf7c3bc6310015550d19",
     "internal/admin/panel-policy-dns.js": "2f4103e6317f576d977d7b8ecae676acdfb5e1cabfdc348260edd3c81d629a20",
     "internal/admin/panel-policy-visual.js": "5a4e05d98e082c4ff127567d34372ed4029b250d1ff339490796c6b899e40c4c",
-    "internal/admin/panel-portability.js": "c7713f6e47d6d25b4bf3774af9e2f43eb14351e7f68ba19fd68eae5f160e204b",
+    "internal/admin/panel-portability.js": "a055aeb737b6fbcc01644470f4e24415187fd42be35ecf6e46f1b2ee09e59f4e",
     "internal/admin/panel-portal.js": "0974b0bb97d020236437998100bf427e23f4d2142b97e607f951c84bbe6fbaca",
     "internal/admin/panel-reference.js": "34e84ae74076b7b6cecaec764be250e9a5de9b3abe1d3ae3e5599d3805de48b1",
     "internal/admin/panel-security.js": "6c162b0d1882f818f46a114cf98ef31fbd6332437f1c045ca61a3f96f6a76765",
     "internal/admin/panel-templates.js": "fa9d219d63c25a53175b2d0a8c2784239a73f6dab13845a6a88e8c39d22e82a6",
-    "internal/admin/panel.css": "e85a70fa0ebd86c40b8555adfa81d184f8de493bd13d8fafb2d928385d3794e3",
-    "internal/admin/panel.html": "1dd9d3a968b5cd4b36050774d96d726035117ccc449993b3bc918cf11854153a",
+    "internal/admin/panel.css": "b0a22af4f61b380e40058ffe55e75301aa5c834eee8d483f2b1b00829d22f1d7",
+    "internal/admin/panel.html": "a054399c2806c2fe560875e4d58b86b349e987cef1f6ddd0d918eed1960af3fb",
     "internal/admin/panel.js": "f677a80bdc45aedf431336bebcfbeaf81bde8a654c08a2c2a133af50c5ef8232",
     "internal/admin/policy.go": "d0e5efdbf952ae9407df0e498c174913a7cfc9a9b0ec0e627cdecc3e27b9a949",
     "internal/admin/proxy-model.js": "71541a8bb95c9c6b470af82314970e038626bf56e4bf3800d5411cf931ea9c45",
@@ -141,7 +141,7 @@
     "internal/forgejostore/store.go": "8b980c5a9fa18dce2dec68cb0afc8eb475cf0fb1f628648af23e9350d0f74206",
     "internal/i18n/formatted.go": "7c01fdd5126a859eb5440ac4c6eb77215062d9508c9d066a04756a813ab910ac",
     "internal/i18n/i18n.go": "70315dcf32d0ed24c95356bcd073d456c182fe6d13a216c91e2c83cee57a03a1",
-    "internal/i18n/locales/en.json": "c7c7a6c69a08003ecf1d57dfd1fb33b84d79f33027c77c82595603480d559a44",
+    "internal/i18n/locales/en.json": "ce3380ea9ace1ae08206b41de3a1736e6623aefccef87bb2b47512dee09eed73",
     "internal/i18n/locales/es.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
     "internal/licensing/disabled.go": "160f1664a599cb9148d4c9acf637ca00cc429bda310fd97a0ed242db1077c81e",
     "internal/licensing/enabled.go": "90f36e1d69a176cd2ad61c8162288b397b59214a33abcdfab406128f99439e1b",
@@ -159,7 +159,7 @@
     "internal/pki/helper_linux.go": "223beed674be0c5c28da8499f69d9ada72c2af000004ba5f0931611ec793e9bb",
     "internal/pki/helper_other.go": "f3243f621093bf3ce4ca5b675cff555d4dbbb5782ba6bc0d1e8b6c567be95c3f",
     "internal/pki/helper_windows.go": "14cb0f3f433403c5ae96da7225c5c93200152552352951723452fa1ec885618a",
-    "internal/pki/peer_http.go": "e683fe39148060fca27305f537cf0f2c22b58f4e9e5e4acc04bf62ac31a49219",
+    "internal/pki/peer_http.go": "e5114bab81b4cd85a8975a00dfd9342d89904d34dbbc89c1886f5ab26d612692",
     "internal/pki/remove_local.go": "7eb0644ff94dc23d2a27bc6485a999b3452f2e6c265133d24c02be2300871e86",
     "internal/pki/system_android.go": "7a2f16e7d65e12a90e9a1456c41b91d7141063819549816860a98e1597643272",
     "internal/pki/system_darwin.go": "f8b7fd3939cf3aeeda949963339f7489d2083639f89f47f3e3ba0621be6de8ea",
@@ -168,7 +168,7 @@
     "internal/pki/system_windows.go": "b397b548eed8058fc648354e5a165b9fc9c59ca5a4b6614696840dcf48595790",
     "internal/pki/trust.go": "bfc09a22f9ebfe7fb427f9b99fe90f4b3d429783d10e9cc0f6777da896d3d01a",
     "internal/platform/firewall/report.go": "2c3a1e29543ee9cfef53963646e6299de0a9b462e2972b42a9a6e3754d9a55ae",
-    "internal/platform/firewall/report_android.go": "8e4b8feffd82c50743b0761f311b91520fce36957044b4d0c008939d1b5e4b79",
+    "internal/platform/firewall/report_android.go": "ba2ee3f494c5215375768d7cda6715e209b3c3f4ac0b6fd66bbdb5644d058233",
     "internal/platform/firewall/report_darwin.go": "6ff81bf4f16735910593e178fd03da0dffff155a12f225f9075c2e2750aea137",
     "internal/platform/firewall/report_linux.go": "e0a25be2dc4e93d78dcb6b1d6b950ca186dff5c88379fadde07a611f1656c33c",
     "internal/platform/firewall/report_windows.go": "f200aa90be22efec561390cf6273cf56189005ffcb9a972af4d8df0ee9519044",
@@ -198,7 +198,7 @@
     "go.sum": "243a47992a6759d7d2a2751e872d120e5fcf557f93c57215b4cfc9372c5cceba",
     "LICENSE": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
     "NOTICE": "abeb690e1ae9a23f538c756b37b72ba3bcb86f2212cfdd6f35f583d5df53ebd1",
-    "VERSION": "c7ec5b917108bf8f2189f99515c56d2437598fa77f6e65f0cb72e9e1de693d56",
+    "VERSION": "5dd084c2f564d65c853f24ba55ed8acfbc208ae3ac9aff835e29df5a0c764f1a",
     "SOURCE.md": "c2f4c6454cae5c8b2e5415eff663309d118e06abc01fcadb04d20fb52f52f895",
     "vendor/filippo.io/edwards25519/LICENSE": "2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067",
     "vendor/filippo.io/edwards25519/README.md": "39760d8b144d127d4b3be241cf93f7c12fbc1d0b6d3ac4e2da8f0ba68a3b1532",
@@ -5782,7 +5782,7 @@
     "vendor/tailscale.com/wgengine/wglog/wglog.go": "e670e28878ec8b5805c97ac8559f6c60c533b08cf94c252b66b556f0a180f595"
   },
   "binaries": {
-    "headscale-gateway-linux-amd64": "418a9eb73d994ab732699653142a2fc1534240eb150d84102624f40da5a111cf",
-    "headscale-gateway-linux-arm64": "e290bc6b460d4c9d9288ca6479ac52db03f9cc21b4a07c311d3f5579bd3fdefb"
+    "headscale-gateway-linux-amd64": "5c061f2912cae402566cee4097f38daad000e98e51058802ead89cd87fee6c70",
+    "headscale-gateway-linux-arm64": "db575d15359c7254279dc345eff71fcfcc4235ec61800e847c5b760d287ab39c"
   }
 }
