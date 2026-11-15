@@ -180,7 +180,7 @@ sube el commit a Forgejo por SSH. Los publicadores esperan una ejecución correc
 del flujo de calidad y descargan su SHA exacto. Omiten las revisiones que ya no
 sean main al comenzar la publicación. Los pull requests nunca publican.</p>
 <p><code>PUBLICATION_TOKEN</code> se guarda en los secretos de Actions de los tres principales.
-Es fine-grained, limitado a los seis repositorios públicos indicados y con
+Es fine-grained, limitado a los ocho repositorios públicos indicados y con
 Contents de lectura y escritura. No necesita Administration, Workflows ni acceso
 a Forgejo. Los publicadores conservan las otras aplicaciones de cada tienda y
 no sobrescriben etiquetas ni recursos publicados con otro contenido.</p>
@@ -231,7 +231,56 @@ fragmentos. Esto no modifica los binarios 1.4.8 ni la firma Android.</p>
 <p>Consulta <a href="LINUX_NATIVO.html">Debian y Fedora</a>, <a href="FLATPAK.html">Flatpak</a> y
 <a href="DESCARGAS_PUBLICAS.html">descargas públicas</a>. El Flatpak es del motor completo,
 consola y panel web; no se solicita inclusión en Flathub ni se afirma aceptación.
-Play Store continúa solo preparado.</p></article>
+Play Store continúa solo preparado.</p>
+<h2 id="publicar-una-nueva-versión-desde-forgejo">Publicar una nueva versión desde Forgejo</h2>
+<ol>
+<li>Prepara un <code>main</code> válido: aumenta <code>VERSION</code> con <code>tools/set_version.py</code>, actualiza
+   las fuentes y los instaladores generados exigidos por el manifiesto y sube por
+   SSH a Forgejo. GitHub recibe el espejo, ejecuta calidad y actualiza paquetes,
+   ambas tiendas y manuales automáticamente. Una CI fallida bloquea la publicación.</li>
+<li>Publica en Forgejo una <strong>release estable</strong> con etiqueta <code>vX.Y.Z</code>, igual a
+   <code>VERSION</code>, apuntando al commit vigente de <code>main</code>. Puedes publicar solo las notas:
+   GitHub construye los instaladores desde los fuentes. Una etiqueta sin release,
+   un borrador o una prerelease no autorizan las descargas generales.</li>
+<li><strong>Detectar versiones de Forgejo</strong> se ejecuta al recibir main o una etiqueta,
+   después de calidad y, como respaldo, cada hora. Solo consulta Forgejo mediante
+   GET con un token de lectura. La cola y los horarios de GitHub pueden retrasarlo;
+   no se necesita pulsar Run workflow. No se envía ningún cambio a Forgejo.</li>
+<li>El detector despacha <strong>Preparar entrega completa</strong> para el SHA aprobado.
+   Construye motores, escritorios con sus fuentes exactos y Android Go compartido:
+   APK directo firmado, APK F-Droid sin firma y AAB firmado solo preparado.</li>
+<li>Su finalización correcta activa <strong>Preparar y publicar release privada</strong>.
+   Verifica origen, versión, sumas y descargas y publica la entrega privada.
+   <strong>Preparar distribución pública</strong> se activa por la finalización de ese flujo:
+   no depende del evento release creado mediante <code>GITHUB_TOKEN</code>, que no iniciaría
+   otra Action. Construye Debian/Fedora y Flatpak y comprueba su instalación.</li>
+<li><strong>Publicar descargas públicas</strong> espera calidad y preparación correctas del
+   mismo SHA de main. Exporta los dos derivados nuevos y publica en los cuatro
+   destinos, verificando los archivos y sus descargas anónimas. Los archivos y
+   etiquetas ya publicados se conservan. Una versión completa no se recompila.</li>
+</ol>
+<p>La cadena utiliza tres enlaces <code>workflow_run</code> después de la compilación; no se
+excede su límite en GitHub. <code>workflow_dispatch</code> se conserva como mecanismo
+interno llamado por el detector y como recuperación administrativa, no como paso
+manual de una publicación normal. No avances main a otra revisión durante la
+entrega: el cambio se detecta y se detiene la publicación de la revisión anterior.</p>
+<h3 id="credenciales">Credenciales</h3>
+<p>En el principal privado de GitHub se mantienen:</p>
+<ul>
+<li><code>PUBLICATION_TOKEN</code>: Contents lectura/escritura en los ocho destinos públicos.</li>
+<li><code>FORGEJO_RELEASE_READ_TOKEN</code>: solo <code>repository:read</code>, limitado al principal de
+  Forgejo. Una redirección al SSO o una respuesta que no sea JSON detienen el flujo;
+  nunca se reenvía el Bearer a otro origen ni al portal de autenticación.</li>
+<li><code>ANDROID_SIGNING_BUNDLE</code>: copia de la identidad Android existente, contraseña
+  y alias dentro de un secreto cifrado de Actions. Solo se materializa en una
+  carpeta temporal privada; se verifica su certificado público fijado y se retira
+  al finalizar. No se genera una clave distinta ni se distribuye en artefactos.</li>
+</ul>
+<p>La compilación comprueba firma, identidad, versión y bibliotecas del APK y AAB.
+No afirma una actualización en un teléfono real en cada entrega: esa aceptación
+sigue siendo una prueba adicional. Play Store y F-Droid quedan preparados; no se
+envían aplicaciones ni solicitudes a sus catálogos. Flatpak se distribuye fuera
+de Flathub.</p></article>
       <footer class="page-footer">
         <p>Headscale Gateway · Documentación en español</p>
         <a href="MANUAL_WEB.html">Cómo editar este manual</a>
@@ -241,6 +290,8 @@ Play Store continúa solo preparado.</p></article>
       <nav aria-label="En esta página"><p>En esta página</p><ul>
         
           <li><a href="#descargas-públicas-y-nuevos-paquetes-linux">Descargas públicas y nuevos paquetes Linux</a></li>
+        
+          <li><a href="#publicar-una-nueva-versión-desde-forgejo">Publicar una nueva versión desde Forgejo</a></li>
         
       </ul></nav>
     </aside>
