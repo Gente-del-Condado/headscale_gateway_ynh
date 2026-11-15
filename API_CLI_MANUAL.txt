@@ -60,3 +60,33 @@ lo devuelve desactivado. La activación/renovación se realiza con un archivo fi
 subscription.license en data_dir, no con un token Bearer ni una clave Headscale.
 El comando de emisión src/tools/license-admin es una herramienta separada; no forma parte
 del CLI del Gateway ni representa un proveedor de cobro. Véase SUSCRIPCIONES.md.
+
+RETIRADA DE NODOS Y LIMPIEZA DNS (1.4.13)
+
+POST /api/v1/network/admin/action, con rol administrador y CSRF cuando se usa sesión:
+  {"action":"node.delete","id":"7"}
+  {"action":"node.expire","id":"7"}
+
+Tras el éxito en Headscale, conserva los campos originales de su respuesta y añade:
+  "dns_cleanup": {
+    "status": "complete | none | warning",
+    "deleted": 2,
+    "message": "resultado legible"
+  }
+
+Un aviso DNS no transforma en error HTTP una operación que Headscale ya confirmó.
+No repitas el borrado del nodo para resolver el DNS: revisa el aviso y el proveedor.
+La identidad se consulta antes de retirar el nodo; la limpieza solo utiliza registros
+A de la zona configurada, con marca exacta del nodo y una IPv4 que coincida con su
+inventario. Conserva registros manuales, otros nodos, otras IP, CNAME y TXT de ACME.
+El resultado también queda en el registro administrativo HGW-HS-DNS-CLEANUP.
+
+ELECCIÓN INICIAL DEL NOMBRE (1.4.13)
+
+La configuración editable headscale.node_name es el nombre solicitado; Headscale
+asigna el definitivo y resuelve duplicados. En instalaciones nuevas, el estado
+headscale.node_name_confirmed=false impide iniciar tsnet hasta guardar explícitamente
+headscale.node_name mediante PUT /api/v1/config. El marcador de confirmación es interno,
+no se puede editar directamente y no se importa con perfiles. Las instalaciones
+anteriores no se bloquean por la ausencia de ese marcador. Nombre y carpeta de claves
+VPN se mantienen separados: cambiar una propuesta no crea otra identidad.

@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.12</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.13</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -50,6 +50,8 @@
                 <li><a href="DESCARGAS_PUBLICAS.html" >Descargas públicas</a></li>
               
                 <li><a href="LINUX_NATIVO.html" >Debian y Fedora</a></li>
+              
+                <li><a href="WINDOWS_SERVICIO.html" >Servicio de Windows</a></li>
               
                 <li><a href="FLATPAK.html" >Flatpak</a></li>
               
@@ -146,6 +148,29 @@
     <main id="contenido" tabindex="-1">
       <p class="breadcrumb"><a href="index.html">Manual</a><span aria-hidden="true"> / </span>Pruebas</p>
       <article class="prose"><h1 id="plan-de-regresión-y-despliegue-seguro">Plan de regresión y despliegue seguro</h1>
+<h2 id="validación-local-antes-de-enviar-a-forgejo">Validación local antes de enviar a Forgejo</h2>
+<p>En Linux con systemd, ejecuta las comprobaciones en este equipo antes de subir
+un candidato. Las tareas van en secuencia, con un límite conjunto de 3 GiB de
+RAM, 512 MiB de intercambio y dos CPU. Los temporales se guardan en el disco de
+<code>builds/</code>, no en <code>/tmp</code>. No se publica nada ni se usan bases de producción.</p>
+<pre tabindex="0"><code class="language-bash"># Entorno con requirements-docs.txt instalado:
+DOCS_PYTHON=/ruta/al/entorno/bin/python bash tools/preflight_local.sh --containers
+</code></pre>
+<p>El script comprueba motor, panel, conservación de credenciales e identidad,
+emisión y renovación ACME DNS-01 con una CA y un DNS locales de laboratorio,
+paquetes generados y manual. <code>--containers</code> añade el complemento Home Assistant
+y el proxy nginx/SSO de YunoHost con Docker o Podman rootless. Conserva el informe
+en <code>builds/preflight-*/results.log</code> y se detiene al primer fallo. Antes de
+repetirlo tras cambiar fuentes, regenera los paquetes con
+<code>python3 tools/prepare_git_install.py</code>.</p>
+<p>La prueba del proxy YunoHost no sustituye la aceptación completa en una VM.
+Android se comprueba además en la tablet con la misma firma y sin borrar datos;
+el arranque real del servicio Windows se comprueba en un runner Windows
+o en una VM de laboratorio con <code>tools/check_windows_service.ps1 -LocalLab</code>.
+La prueba local necesita PowerShell como administrador y un paquete Windows
+compilado de las mismas fuentes. Crea su propio servicio y directorios con
+nombres únicos; no sustituye una instalación existente y los retira al terminar.
+GitHub mantiene las comprobaciones y la publicación de los destinos públicos.</p>
 <h2 id="automatizadas">Automatizadas</h2>
 <pre tabindex="0"><code class="language-bash">./tools/verify.sh       # Linux/macOS: go -C src test, vet, build, JS y HTML
 # o en PowerShell:
@@ -178,18 +203,37 @@ CGO_ENABLED=0 go -C src test -tags commercial . -run '^TestCommercial'
 </ol>
 <p>La comprobación real del producto exige todas estas pruebas. <strong>No probar
 restauraciones destructivas ni políticas ACL de bloqueo sobre la red de
-producción</strong> como primer ensayo.</p></article>
+producción</strong> como primer ensayo.</p>
+<h2 id="certificados-acme-dns-01-y-technitium">Certificados ACME DNS-01 y Technitium</h2>
+<p><code>bash tools/check_acme_dns01.sh</code> construye Pebble 2.10.3 como herramienta de
+laboratorio y comprueba la emisión y renovación de un nodo y su wildcard.
+Utiliza el configurador DNS-01 real del Gateway, el proveedor Technitium MIT,
+una API Technitium simulada y un DNS autoritativo en loopback. Pebble valida los
+TXT realmente; no se omite su validación. Se comprueban la cadena TLS, los
+nombres, el cambio de certificado al renovar, la conservación de la cuenta
+ACME y la retirada exclusiva de los TXT del desafío, conservando un TXT manual antiguo.
+También se comprueba que una cuenta nueva exige aceptación explícita sin consola y que una cuenta guardada puede renovar sin la opción nueva.
+La CA de ensayo solo se confía dentro del cliente de prueba. Las claves y el
+almacén se generan en una carpeta temporal; no se utiliza el proveedor real.
+Pebble se fija por versión y no se distribuye con el producto. La primera
+preparación de la herramienta requiere acceso a los módulos Go; las peticiones
+ACME y DNS del ensayo son locales.</p></article>
       <footer class="page-footer">
-        <p>Headscale Gateway · Documentación en español</p>
+        <p>Headscale Gateway · Gente del Condado · Documentación en español</p>
+        <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>
         <a href="MANUAL_WEB.html">Cómo editar este manual</a>
       </footer>
     </main>
     <aside class="page-toc">
       <nav aria-label="En esta página"><p>En esta página</p><ul>
         
+          <li><a href="#validación-local-antes-de-enviar-a-forgejo">Validación local antes de enviar a Forgejo</a></li>
+        
           <li><a href="#automatizadas">Automatizadas</a></li>
         
           <li><a href="#manuales-obligatorias-antes-de-desplegar">Manuales obligatorias antes de desplegar</a></li>
+        
+          <li><a href="#certificados-acme-dns-01-y-technitium">Certificados ACME DNS-01 y Technitium</a></li>
         
       </ul></nav>
     </aside>

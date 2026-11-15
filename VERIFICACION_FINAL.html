@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.12</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.13</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -50,6 +50,8 @@
                 <li><a href="DESCARGAS_PUBLICAS.html" >Descargas públicas</a></li>
               
                 <li><a href="LINUX_NATIVO.html" >Debian y Fedora</a></li>
+              
+                <li><a href="WINDOWS_SERVICIO.html" >Servicio de Windows</a></li>
               
                 <li><a href="FLATPAK.html" >Flatpak</a></li>
               
@@ -146,6 +148,39 @@
     <main id="contenido" tabindex="-1">
       <p class="breadcrumb"><a href="index.html">Manual</a><span aria-hidden="true"> / </span>Validación y límites</p>
       <article class="prose"><h1 id="validación-y-límites-conocidos">Validación y límites conocidos</h1>
+<h2 id="validación-local-del-candidato-1413">Validación local del candidato 1.4.13</h2>
+<p>Revisión del 15 de noviembre de 2026, anterior a la publicación estable. La
+validación local con contenedores ha superado 91 pruebas de repositorio, las
+pruebas Go y JavaScript, vet, compilación, auditorías Go y npm sin
+vulnerabilidades detectadas, actualización con credenciales y clave estables,
+integridad SQLite y manual estricto (45 páginas y 2.615 enlaces locales).
+Home Assistant pasa Ingress, SSO, CSRF y rechazo de cabeceras suplantadas;
+YunoHost pasa nginx/NSS, SSO, raíz/subruta, revocación y conservación de clave.
+Esta última prueba es de contenedor y no sustituye una instalación completa en VM.</p>
+<p>En Windows 11 LTSC se ha validado el servicio LocalService real: instalación,
+actualización con contraseña, configuración, datos y clave conservados,
+recuperación tras terminar deliberadamente el proceso y reinicio desde el panel.
+El fallo inicial tenía dos causas: el registro automático del SCM al importar
+el adaptador Caddy de Technitium y los permisos heredados de archivos al
+actualizar. Se utiliza ahora únicamente el proveedor libdns MIT, con procedencia
+y licencia conservadas, y se espera al cierre del proceso antes de sustituirlo.
+Tailscale estaba detenido por decisión del usuario; esta ejecución no certifica
+la coexistencia con Tailscale activo. El panel local no necesita Internet.</p>
+<p>CertMagic sigue gestionando ACME. Pebble 2.10.3 y un DNS local de laboratorio
+han validado emisión y renovación del nodo y su comodín, cadena y nombres TLS,
+clave de cuenta conservada, retirada de TXT propios y conservación de un TXT
+manual antiguo. La primera cuenta exige aceptación explícita sin consola; las
+cuentas guardadas renuevan aunque falte la opción nueva. Se comprueba además
+que los errores del proveedor no exponen el token. No se han tocado registros
+DNS ni certificados de producción.</p>
+<p>La APK directa mantiene la firma estable, target API 36 y los dos motores
+arm64-v8a/x86_64 con alineación ELF de 16 KiB. Incluye LICENSE y NOTICE completos.
+La tablet había sido desinstalada por el usuario antes de esta revisión y se
+reinstaló con autorización; no se atribuye conservación a aquellos datos ya
+retirados. La actualización posterior del candidato se realiza con <code>adb install -r</code>,
+conservando identidad del paquete y fecha de primera instalación. Android Lint
+mantiene cero errores y 23 avisos de mantenimiento. Play Store continúa preparado,
+sin publicación en la tienda.</p>
 <h2 id="revisión-de-dependencias-de-la-versión-146">Revisión de dependencias de la versión 1.4.6</h2>
 <p>Revisión del 11 de noviembre de 2026. Se actualizan Caddy a 2.11.5, go-jose a
 4.1.6, QUIC a 0.63.0 y las dependencias de red y compresión. La compilación
@@ -266,12 +301,15 @@ Git, cachés, credenciales, SQLite y perfiles de ejecución.</p>
 exportación y revisarla. Los paquetes de ejecutables incluyen también los
 recursos de las guías, como las capturas, conservando sus subdirectorios.</p></article>
       <footer class="page-footer">
-        <p>Headscale Gateway · Documentación en español</p>
+        <p>Headscale Gateway · Gente del Condado · Documentación en español</p>
+        <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>
         <a href="MANUAL_WEB.html">Cómo editar este manual</a>
       </footer>
     </main>
     <aside class="page-toc">
       <nav aria-label="En esta página"><p>En esta página</p><ul>
+        
+          <li><a href="#validación-local-del-candidato-1413">Validación local del candidato 1.4.13</a></li>
         
           <li><a href="#revisión-de-dependencias-de-la-versión-146">Revisión de dependencias de la versión 1.4.6</a></li>
         

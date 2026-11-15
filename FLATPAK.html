@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.12</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.13</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -50,6 +50,8 @@
                 <li><a href="DESCARGAS_PUBLICAS.html" >Descargas públicas</a></li>
               
                 <li><a href="LINUX_NATIVO.html" >Debian y Fedora</a></li>
+              
+                <li><a href="WINDOWS_SERVICIO.html" >Servicio de Windows</a></li>
               
                 <li><a href="FLATPAK.html" aria-current="page">Flatpak</a></li>
               
@@ -165,7 +167,7 @@ Para un servicio de sistema que arranque con Debian o Fedora, utiliza .deb/.rpm.
 <h2 id="instalación">Instalación</h2>
 <p>Descarga el archivo <code>.flatpak</code> de la release pública correspondiente, comprueba
 su suma e instala:</p>
-<pre tabindex="0"><code class="language-sh">flatpak install --user ./headscale-gateway-1.4.12-x86_64.flatpak
+<pre tabindex="0"><code class="language-sh">flatpak install --user ./headscale-gateway-1.4.13-x86_64.flatpak
 flatpak run es.gentedelcondado.HeadscaleGateway
 </code></pre>
 <p>Se necesita el runtime Freedesktop declarado en el manifiesto. Una actualización
@@ -177,15 +179,37 @@ excluyen software solo de consola o bandeja y prohíben manifiestos generados o
 asistidos por IA para una solicitud. Este manifiesto se prepara con asistencia
 IA: no se presenta como apto para solicitar inclusión ni se envía una solicitud.</p>
 <h2 id="construcción">Construcción</h2>
-<p>El manifiesto toma binarios 1.4.12 verificados de los recursos públicos YunoHost.
+<p>El manifiesto toma binarios 1.4.13 verificados de los recursos públicos YunoHost.
 Los fuentes completos del motor y sus dependencias están en <code>source.tar.gz</code>
 de esa misma release; los fuentes completos del proyecto se publican aparte.
 No reconstruye ni modifica el motor para Flatpak. <code>flatpak-builder</code> construye el
 paquete dentro de su sandbox; las pruebas se ejecutan en GitHub, no en el Linux
 habitual del mantenedor.</p>
-<p><a href="https://gente-del-condado.github.io/headscale_gateway_ynh/">Manual</a>.</p></article>
+<p><a href="https://gente-del-condado.github.io/headscale_gateway_ynh/">Manual</a>.</p>
+<h2 id="autor-y-soporte">Autor y soporte</h2>
+<p>Autor: <strong>Gente del Condado</strong>. Soporte: <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>.
+<a href="https://gente-del-condado.github.io/headscale_gateway_ynh/">Manual en línea</a>.</p>
+<h2 id="instalación-y-acceso-del-escritorio">Instalación y acceso del escritorio</h2>
+<p>El menú de KDE, GNOME u otro escritorio contiene <strong>Headscale Gateway</strong>. El primer
+arranque explica que el motor seguirá disponible al cerrar el navegador, pide una
+cuenta del panel y abre la administración local. Después se confirma el nombre del
+dispositivo desde el panel común antes de conectar a Headscale. Las contraseñas se
+introducen en diálogos del escritorio y se guardan con el contrato común protegido;
+no se pasan como argumentos ni aparecen en registros.</p>
+<p>La sesión mantiene una sola instancia con un bloqueo privado y recupera fallos del
+motor con reintentos limitados. Pulsar de nuevo el acceso abre el panel existente.
+El permiso de segundo plano y arranque al iniciar sesión se solicita mediante el
+portal del escritorio. Solo queda activado si el escritorio lo confirma; una
+negativa o un portal no compatible deja un aviso en los registros. No se modifica
+systemd del host ni se amplían los permisos de archivos o del bus de la aplicación.
+Para detenerlo utiliza <code>flatpak kill es.gentedelcondado.HeadscaleGateway</code>; para
+retirar el arranque automático revisa los permisos de aplicaciones de tu escritorio.</p>
+<p>Los datos siguen dentro de los datos privados de Flatpak. Si existe una instalación
+anterior, primero detén todas sus instancias; el asistente pide confirmarlo antes
+de adoptar la misma SQLite, identidad y credenciales, sin restablecerlas.</p></article>
       <footer class="page-footer">
-        <p>Headscale Gateway · Documentación en español</p>
+        <p>Headscale Gateway · Gente del Condado · Documentación en español</p>
+        <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>
         <a href="MANUAL_WEB.html">Cómo editar este manual</a>
       </footer>
     </main>
@@ -199,6 +223,10 @@ habitual del mantenedor.</p>
           <li><a href="#estado-de-flathub">Estado de Flathub</a></li>
         
           <li><a href="#construcción">Construcción</a></li>
+        
+          <li><a href="#autor-y-soporte">Autor y soporte</a></li>
+        
+          <li><a href="#instalación-y-acceso-del-escritorio">Instalación y acceso del escritorio</a></li>
         
       </ul></nav>
     </aside>

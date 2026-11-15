@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.12</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.13</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -50,6 +50,8 @@
                 <li><a href="DESCARGAS_PUBLICAS.html" >Descargas públicas</a></li>
               
                 <li><a href="LINUX_NATIVO.html" >Debian y Fedora</a></li>
+              
+                <li><a href="WINDOWS_SERVICIO.html" >Servicio de Windows</a></li>
               
                 <li><a href="FLATPAK.html" >Flatpak</a></li>
               
@@ -146,7 +148,7 @@
     <main id="contenido" tabindex="-1">
       <p class="breadcrumb"><a href="index.html">Manual</a><span aria-hidden="true"> / </span>Licencias</p>
       <article class="prose"><h1 id="licencia-y-avisos-de-terceros">Licencia y avisos de terceros</h1>
-<p>Revisión técnica: 12 de noviembre de 2026. Se han contrastado los avisos locales,
+<p>Revisión técnica: 15 de noviembre de 2026. Se han contrastado los avisos locales,
 los metadatos y la distribución de fuentes del motor. Esta revisión no acredita
 la titularidad histórica de las aportaciones ni sustituye la revisión de las
 obligaciones de cada componente distribuido.</p>
@@ -167,9 +169,12 @@ no se reescriben las etiquetas ni los avisos de las entregas históricas. Los
 componentes de terceros mantienen sus licencias. El titular debe tener derecho
 a licenciar las aportaciones originales incorporadas.</p>
 <h2 id="fuentes-públicas-del-motor">Fuentes públicas del motor</h2>
-<p>El <a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh">paquete público YunoHost</a>
-incluye <code>payload/source.tar.gz</code>, con las mismas fuentes de compilación que
-<code>source.tar.gz</code> del complemento Home Assistant. Ambos incluyen <code>LICENSE</code>,
+<p>Las <a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/releases">entregas públicas YunoHost</a>
+incluyen <code>source.tar.gz</code>, con las mismas fuentes de compilación que el
+complemento Home Assistant. La rama pública <code>main</code> descarga los recursos de
+su entrega mediante sumas verificadas; no contiene el directorio privado
+<code>payload/</code>. Los <a href="https://github.com/Gente-del-Condado/headscale_gateway_releases/releases">instaladores generales y sus fuentes</a>
+se publican juntos por versión. Los archivos de fuentes incluyen <code>LICENSE</code>,
 <code>NOTICE</code>, <code>VERSION</code>, <code>go.mod</code>, <code>go.sum</code> y <code>SOURCE.md</code>, con las órdenes Go para
 compilar sin descargar módulos usando el <code>vendor/</code> incluido. Las sumas de los archivos se registran en <code>build-manifest.json</code>; el
 publicador rechaza fuentes que no coincidan. Los avisos de las dependencias
@@ -178,9 +183,18 @@ acompañan al paquete en <code>notices/third_party/</code>.</p>
 Una rama <code>main</code> o un enlace al código más reciente no sustituye los fuentes de
 una entrega anterior. Los archivos privados de estado, identidades VPN y claves
 no forman parte de las fuentes del programa ni se publican.</p>
+<h2 id="dónde-consultar-los-textos">Dónde consultar los textos</h2>
+<p><code>LICENSE</code> contiene el texto completo y <code>NOTICE</code> el alcance y la procedencia.
+Los repositorios derivados YunoHost, Home Assistant y Flatpak conservan ambos
+archivos en su raíz. Cada complemento los lleva dentro de su propia carpeta,
+sin reemplazar la licencia de las demás aplicaciones de la tienda.</p>
+<p>El APK incluye los textos en <code>assets/licenses/</code> y permite leerlos sin conexión
+desde Ayuda. El instalador Windows copia también <code>third_party/</code> junto al motor.
+Los paquetes Linux y Flatpak conservan sus avisos instalados. «Acerca de»
+enlaza además los textos publicados con el manual.</p>
 <h2 id="inventario-reproducible">Inventario reproducible</h2>
 <p><code>src/third_party/inventory.json</code> contiene los módulos de Go y paquetes npm encontrados. <code>tools/audit_licenses.py</code> cruza los módulos con las importaciones realmente enlazadas en servidor/helper para Linux, Windows y macOS, amd64 y arm64. Copia los textos de licencia y avisos sin modificarlos, incluyendo avisos anidados y el runtime Go.</p>
-<p>Resultado de esta revisión: <strong>737 módulos en el grafo Go; 78 módulos enlazados por el servidor/helper en alguna plataforma; 52 registros npm encontrados</strong>. Los módulos del grafo no equivalen a código distribuido: hay dependencias de pruebas y herramientas. Las etiquetas <code>license_hints</code> son búsquedas heurísticas, no una declaración SPDX definitiva. <code>REVIEW</code> puede proceder de un archivo NOTICE o PATENTS que acompaña una licencia reconocida.</p>
+<p>Resultado de esta revisión: <strong>654 módulos en el grafo Go; 66 módulos Go enlazados por el servidor/helper, un proveedor libdns incorporado bajo MIT y 52 registros npm encontrados</strong>. Los módulos del grafo no equivalen a código distribuido: hay dependencias de pruebas y herramientas. Las etiquetas <code>license_hints</code> son búsquedas heurísticas, no una declaración SPDX definitiva. <code>REVIEW</code> puede proceder de un archivo NOTICE o PATENTS que acompaña una licencia reconocida.</p>
 <p>Componentes principales revisados:</p>
 <table>
 <thead>
@@ -197,9 +211,14 @@ no forman parte de las fuentes del programa ni se publican.</p>
 <td>Conservar copyright, condiciones y exención; no atribuir patrocinio</td>
 </tr>
 <tr>
-<td>CertMagic y proveedor Technitium</td>
+<td>CertMagic</td>
 <td>Apache-2.0</td>
 <td>Conservar licencia y avisos pertinentes; revisar obligaciones de cambios y patentes</td>
+</tr>
+<tr>
+<td>Proveedor Technitium libdns incorporado</td>
+<td>MIT</td>
+<td>Conservar el copyright y LICENSE de Aleksandar Spasojevic; procedencia en <code>src/internal/acmednstechnitium/UPSTREAM.md</code></td>
 </tr>
 <tr>
 <td>Go y módulos golang.org/x</td>
@@ -224,6 +243,11 @@ no forman parte de las fuentes del programa ni se publican.</p>
 </tbody>
 </table>
 <p>La referencia a GPL detectada en <code>modernc.org/sqlite/LICENSE-3RD-PARTY.md</code> está en el texto de licencias secundarias de MPL incluido en su inventario transitivo; <strong>no demuestra que el controlador SQLite enlazado sea GPL</strong>. Ese mismo documento distingue expresamente componentes enlazados, solo pruebas y materiales fuera de compilación. Las coincidencias en avisos agregados deben revisarse en contexto.</p>
+<p>El proveedor libdns Technitium conserva sus fuentes MIT sin el adaptador de
+registro Caddy. El adaptador importaba el servidor Caddy, que registra otro
+servicio Windows durante su inicialización; la interfaz DNS-01 de CertMagic
+no necesita ese registro. La procedencia y las sumas originales se conservan
+en <code>src/internal/acmednstechnitium/UPSTREAM.md</code>.</p>
 <h2 id="distribución-del-runtime-de-escritorio">Distribución del runtime de escritorio</h2>
 <p>Cada paquete de escritorio incorpora un directorio <code>legal/</code> con los avisos
 originales de Electron/Chromium, los fuentes completos de Electron, Chromium
@@ -243,7 +267,7 @@ la entrega, aplicar los parches y sustituir una biblioteca FFmpeg compatible.
 No se añaden restricciones de ingeniería inversa para depurar modificaciones.
 Se comprueban los archivos distribuidos; no se afirma haber recompilado todo
 Chromium/Electron ni obtenido una reproducción binaria exacta del runtime.</p>
-<p>No se ha detectado una licencia principal GPL/AGPL en los 78 módulos enlazados
+<p>No se ha detectado una licencia principal GPL/AGPL en los 66 módulos Go enlazados
 del servidor/helper al revisar sus textos principales. El inventario no es una
 auditoría de patentes, marcas ni procedencia de cada línea.</p>
 <h2 id="fuentes-consultadas">Fuentes consultadas</h2>
@@ -259,9 +283,14 @@ auditoría de patentes, marcas ni procedencia de cada línea.</p>
 (cd src/desktop &amp;&amp; npm ci)
 python3 tools/audit_licenses.py
 </code></pre>
+<p>Si solo cambian dependencias Go, <code>python3 tools/audit_licenses.py --go-only</code>
+actualiza ese inventario y conserva los avisos npm/Electron únicamente si los
+nombres y versiones npm siguen coincidiendo con el lock. Si el lock cambia,
+exige la auditoría completa y su runtime de escritorio preparado.</p>
 <p>Después de actualizar dependencias, repite el inventario y revisa los cambios antes de publicar otra versión. Los paquetes de servidor y GUI llevan los avisos de terceros. Las claves privadas del emisor y las licencias de clientes se excluyen de los paquetes de fuentes.</p></article>
       <footer class="page-footer">
-        <p>Headscale Gateway · Documentación en español</p>
+        <p>Headscale Gateway · Gente del Condado · Documentación en español</p>
+        <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>
         <a href="MANUAL_WEB.html">Cómo editar este manual</a>
       </footer>
     </main>
@@ -271,6 +300,8 @@ python3 tools/audit_licenses.py
           <li><a href="#código-propio">Código propio</a></li>
         
           <li><a href="#fuentes-públicas-del-motor">Fuentes públicas del motor</a></li>
+        
+          <li><a href="#dónde-consultar-los-textos">Dónde consultar los textos</a></li>
         
           <li><a href="#inventario-reproducible">Inventario reproducible</a></li>
         

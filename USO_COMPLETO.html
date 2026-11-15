@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.12</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.13</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -50,6 +50,8 @@
                 <li><a href="DESCARGAS_PUBLICAS.html" >Descargas públicas</a></li>
               
                 <li><a href="LINUX_NATIVO.html" >Debian y Fedora</a></li>
+              
+                <li><a href="WINDOWS_SERVICIO.html" >Servicio de Windows</a></li>
               
                 <li><a href="FLATPAK.html" >Flatpak</a></li>
               
@@ -376,6 +378,8 @@ sesión administradora; puedes activar <strong>Mostrar en la barra lateral</stro
 <p>MagicDNS+ ofrece exportación y herramientas para registros adicionales; no presupongas que editar el Gateway modifica automáticamente el YAML del servidor Headscale. Consulta la previsualización/exportación y aplica los cambios por el procedimiento correspondiente al servidor.</p>
 <h3 id="tls-y-ca">TLS y CA</h3>
 <p>El Gateway soporta certificados ACME y certificados con CA local. Con CA local, cada cliente debe confiar en la CA pública y el nombre o IP utilizado debe estar cubierto por el certificado. <strong>El puerto no forma parte del SAN</strong>: una URL IP:puerto se valida contra la IP del certificado.</p>
+<p>Para ACME DNS-01, selecciona Technitium o Cloudflare en <strong>Certificados</strong> y configura su acceso a la zona. Antes de crear una cuenta ACME nueva, revisa los <a href="https://letsencrypt.org/repository/">términos de la CA</a> y activa <strong>Acepto los términos de la CA ACME</strong> (<code>acme.agree_to_terms</code>). Si no aceptas, el panel informa de la decisión pendiente sin pedir entrada por consola. Las cuentas ACME existentes siguen renovando aunque una instalación antigua no tenga esta opción. La aceptación se guarda en esta instalación y no se copia al exportar o importar perfiles. Cada Gateway conserva su cuenta, claves y certificados; esto no modifica los certificados del servidor YunoHost.</p>
+<p>CertMagic realiza la emisión, el almacenamiento y la renovación. El proveedor Technitium retira únicamente los TXT de sus desafíos, sin barrer registros antiguos ajenos. La CA local funciona por separado y no requiere una cuenta ACME.</p>
 <p>En <strong>Sistema → CA y confianza</strong> puedes descargar certificados públicos, importar y aprobar peers, gestionar la publicación y retirar una CA. Retirar del Gateway y retirar del almacén del sistema son resultados independientes; la segunda operación puede requerir privilegios.</p>
 <p>Existe un helper opcional de instalación/retirada de CA. Se habilita de forma explícita y depende de la elevación del sistema. Consulta <a href="HELPER_CA.html">HELPER_CA.txt</a>. Las pruebas privilegiadas del helper no se consideran completadas por las pruebas del portal.</p>
 <h2 id="panel-de-administración">Panel de administración</h2>
@@ -685,7 +689,8 @@ Las entregas se generan en carpetas nuevas de <code>releases/</code>. Los paquet
 para instalación privada se conservan en <code>addons/</code> y <code>yunohost/</code>.
 No se incluyen bases de datos, credenciales, perfiles ni cachés.</p></article>
       <footer class="page-footer">
-        <p>Headscale Gateway · Documentación en español</p>
+        <p>Headscale Gateway · Gente del Condado · Documentación en español</p>
+        <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>
         <a href="MANUAL_WEB.html">Cómo editar este manual</a>
       </footer>
     </main>

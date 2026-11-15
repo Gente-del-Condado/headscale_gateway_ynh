@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.12</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.13</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -50,6 +50,8 @@
                 <li><a href="DESCARGAS_PUBLICAS.html" >Descargas públicas</a></li>
               
                 <li><a href="LINUX_NATIVO.html" aria-current="page">Debian y Fedora</a></li>
+              
+                <li><a href="WINDOWS_SERVICIO.html" >Servicio de Windows</a></li>
               
                 <li><a href="FLATPAK.html" >Flatpak</a></li>
               
@@ -150,15 +152,26 @@
 auxiliares. Gateway-Tray es un cliente opcional y no es necesario para usar el
 servidor. Las descargas y sus fuentes están en
 <a href="https://github.com/Gente-del-Condado/headscale_gateway_releases/releases">headscale_gateway_releases</a>.</p>
-<p>Instala el archivo de tu arquitectura con <code>sudo apt install ./headscale-gateway_1.4.12-1_amd64.deb</code>
-o <code>sudo dnf install ./headscale-gateway-1.4.12-1.x86_64.rpm</code>.
+<p>Instala el archivo de tu arquitectura con <code>sudo apt install ./headscale-gateway_1.4.13-1_amd64.deb</code>
+o <code>sudo dnf install ./headscale-gateway-1.4.13-1.x86_64.rpm</code>.
 El paquete crea un usuario de servicio sin acceso interactivo. La primera
 instalación no arranca ni expone el panel sin configurar una cuenta:</p>
 <pre tabindex="0"><code class="language-sh">sudo -u headscale-gateway headscale-gateway-configure --admin miadministrador
 sudo systemctl enable --now headscale-gateway
 </code></pre>
-<p>La contraseña se introduce oculta, nunca como argumento. El panel inicial escucha
-en http://127.0.0.1:9091; utiliza un túnel SSH para el acceso remoto inicial.
+<p>Con el ejemplo anterior, entra en <strong>http://127.0.0.1:9091/admin/</strong> con:</p>
+<ul>
+<li><strong>Usuario:</strong> <code>miadministrador</code>, el valor que elegiste en <code>--admin</code>.</li>
+<li><strong>Contraseña:</strong> la contraseña nueva del panel que creaste en el configurador.</li>
+</ul>
+<p>Si <code>sudo</code> pide una contraseña, esa es la de tu cuenta de Linux y sirve para
+autorizar el comando. Después el configurador pide crear y repetir otra
+contraseña para el panel. No es la contraseña del usuario de servicio
+<code>headscale-gateway</code>, que no tiene inicio de sesión interactivo. Puedes cambiar
+<code>miadministrador</code> por el nombre que prefieras antes de ejecutar el configurador.
+La contraseña del panel se introduce oculta, nunca como argumento.
+El configurador muestra al terminar el usuario, la URL y la orden de arranque.
+Para el acceso remoto inicial, utiliza un túnel SSH.
 Configura Headscale y el resto de opciones desde el panel común del proyecto.</p>
 <p>Los datos, identidad VPN, SQLite, claves y arranque se guardan bajo
 <code>/var/lib/headscale-gateway/</code>. Una actualización reemplaza ejecutables y reinicia
@@ -172,14 +185,40 @@ los perfiles o copias cifradas del manual. No compartas base de datos ni identid
 entre dos procesos. El paquete no modifica la confianza CA del sistema ni SELinux.</p>
 <p>Las comprobaciones de instalación, actualización y conservación se ejecutan en
 contenedores Debian y Fedora en GitHub. No sustituyen una aceptación real con
-systemd, SELinux y la red de tu equipo.</p></article>
+systemd, SELinux y la red de tu equipo.</p>
+<h2 id="autor-y-soporte">Autor y soporte</h2>
+<p>Autor: <strong>Gente del Condado</strong>. Soporte: <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>.
+<a href="https://gente-del-condado.github.io/headscale_gateway_ynh/">Manual en línea</a>.</p>
+<h2 id="elegir-arquitectura-e-instalar-en-fedora">Elegir arquitectura e instalar en Fedora</h2>
+<p>Comprueba <code>uname -m</code>: <code>x86_64</code> corresponde al RPM <code>x86_64</code> (Debian: <code>amd64</code>);
+<code>aarch64</code> corresponde al RPM <code>aarch64</code> (Debian: <code>arm64</code>). El RPM ARM no sirve
+para un PC Intel/AMD. Si la tienda permanece cargando, utiliza una terminal:
+<code>sudo dnf install ./headscale-gateway-VERSION-1.x86_64.rpm</code>, sustituyendo VERSION.
+DNF muestra la causa concreta si hay un error de arquitectura, dependencias o permisos.
+El paquete nativo instala un servicio, no un acceso de bandeja: configura la cuenta
+con <code>headscale-gateway-configure</code> antes de habilitarlo y abre el panel en el navegador.</p>
+<h2 id="servicio-y-menú-de-aplicaciones">Servicio y menú de aplicaciones</h2>
+<p>La instalación incluye la unidad systemd y el acceso <strong>Headscale Gateway</strong> del
+menú de KDE/GNOME. El acceso abre el navegador con el panel loopback del servicio,
+incluido un puerto local personalizado. Si aún no está configurado o activo,
+muestra las instrucciones iniciales; no crea credenciales ni eleva permisos por
+su cuenta. El paquete no habilita un servicio sin cuenta administrativa. Tras
+configurarla y activar la unidad con las órdenes anteriores, el servicio arranca
+con el sistema y se reinicia tras un fallo. Cerrar el navegador no lo detiene.</p></article>
       <footer class="page-footer">
-        <p>Headscale Gateway · Documentación en español</p>
+        <p>Headscale Gateway · Gente del Condado · Documentación en español</p>
+        <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>
         <a href="MANUAL_WEB.html">Cómo editar este manual</a>
       </footer>
     </main>
     <aside class="page-toc">
       <nav aria-label="En esta página"><p>En esta página</p><ul>
+        
+          <li><a href="#autor-y-soporte">Autor y soporte</a></li>
+        
+          <li><a href="#elegir-arquitectura-e-instalar-en-fedora">Elegir arquitectura e instalar en Fedora</a></li>
+        
+          <li><a href="#servicio-y-menú-de-aplicaciones">Servicio y menú de aplicaciones</a></li>
         
       </ul></nav>
     </aside>

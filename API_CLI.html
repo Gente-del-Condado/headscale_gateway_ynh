@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.12</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.13</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -50,6 +50,8 @@
                 <li><a href="DESCARGAS_PUBLICAS.html" >Descargas públicas</a></li>
               
                 <li><a href="LINUX_NATIVO.html" >Debian y Fedora</a></li>
+              
+                <li><a href="WINDOWS_SERVICIO.html" >Servicio de Windows</a></li>
               
                 <li><a href="FLATPAK.html" >Flatpak</a></li>
               
@@ -198,9 +200,33 @@ instance_id, expires_at y grace_until (segundos Unix UTC). La compilación norma
 lo devuelve desactivado. La activación/renovación se realiza con un archivo firmado
 subscription.license en data_dir, no con un token Bearer ni una clave Headscale.
 El comando de emisión src/tools/license-admin es una herramienta separada; no forma parte
-del CLI del Gateway ni representa un proveedor de cobro. Véase SUSCRIPCIONES.md.</p></article>
+del CLI del Gateway ni representa un proveedor de cobro. Véase SUSCRIPCIONES.md.</p>
+<p>RETIRADA DE NODOS Y LIMPIEZA DNS (1.4.13)</p>
+<p _action_:_node.expire_id_:_7_>POST /api/v1/network/admin/action, con rol administrador y CSRF cuando se usa sesión:
+  {"action":"node.delete","id":"7"}</p>
+<p>Tras el éxito en Headscale, conserva los campos originales de su respuesta y añade:
+  "dns_cleanup": {
+    "status": "complete | none | warning",
+    "deleted": 2,
+    "message": "resultado legible"
+  }</p>
+<p>Un aviso DNS no transforma en error HTTP una operación que Headscale ya confirmó.
+No repitas el borrado del nodo para resolver el DNS: revisa el aviso y el proveedor.
+La identidad se consulta antes de retirar el nodo; la limpieza solo utiliza registros
+A de la zona configurada, con marca exacta del nodo y una IPv4 que coincida con su
+inventario. Conserva registros manuales, otros nodos, otras IP, CNAME y TXT de ACME.
+El resultado también queda en el registro administrativo HGW-HS-DNS-CLEANUP.</p>
+<p>ELECCIÓN INICIAL DEL NOMBRE (1.4.13)</p>
+<p>La configuración editable headscale.node_name es el nombre solicitado; Headscale
+asigna el definitivo y resuelve duplicados. En instalaciones nuevas, el estado
+headscale.node_name_confirmed=false impide iniciar tsnet hasta guardar explícitamente
+headscale.node_name mediante PUT /api/v1/config. El marcador de confirmación es interno,
+no se puede editar directamente y no se importa con perfiles. Las instalaciones
+anteriores no se bloquean por la ausencia de ese marcador. Nombre y carpeta de claves
+VPN se mantienen separados: cambiar una propuesta no crea otra identidad.</p></article>
       <footer class="page-footer">
-        <p>Headscale Gateway · Documentación en español</p>
+        <p>Headscale Gateway · Gente del Condado · Documentación en español</p>
+        <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>
         <a href="MANUAL_WEB.html">Cómo editar este manual</a>
       </footer>
     </main>

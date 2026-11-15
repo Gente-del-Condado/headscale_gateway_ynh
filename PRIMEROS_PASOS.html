@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.12</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.13</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -50,6 +50,8 @@
                 <li><a href="DESCARGAS_PUBLICAS.html" >Descargas públicas</a></li>
               
                 <li><a href="LINUX_NATIVO.html" >Debian y Fedora</a></li>
+              
+                <li><a href="WINDOWS_SERVICIO.html" >Servicio de Windows</a></li>
               
                 <li><a href="FLATPAK.html" >Flatpak</a></li>
               
@@ -206,8 +208,8 @@
 <p>Con el túnel abierto, visita <code>http://127.0.0.1:9091/admin/</code> en tu ordenador. La URL loopback siempre se refiere al equipo desde el que se abre el navegador.</p>
 <h2 id="configura-y-conecta">Configura y conecta</h2>
 <ol>
-<li>En <strong>Sistema → Configuración</strong>, escribe la URL de Headscale y el dominio base de servicios.</li>
-<li>Define el nombre estable del nodo. Conserva ese nombre después del alta.</li>
+<li>En una instalación nueva, confirma o cambia el nombre propuesto del dispositivo en el primer formulario del panel. El motor administrativo está disponible, pero no registra el nodo ni publica DNS antes de confirmar. Android propone el nombre del dispositivo (o su modelo); el resto utiliza el nombre del equipo o la propuesta del instalador.</li>
+<li>En <strong>Sistema → Configuración</strong>, escribe la URL de Headscale y el dominio base de servicios. Headscale decide el nombre definitivo y añade sufijos si hay duplicados; el Gateway utiliza ese resultado.</li>
 <li>Selecciona el proveedor DNS y el modo de certificados. Con DNS manual tendrás que crear los registros correspondientes.</li>
 <li>Guarda. Si aparece un aviso de reinicio pendiente, reinicia desde el panel.</li>
 <li>Completa la autorización de Headscale que solicite el Gateway.</li>
@@ -228,9 +230,32 @@
 <p>Los <a href="EJEMPLOS.html">ejemplos</a> desarrollan este recorrido y el caso de Home Assistant con WebSocket.</p>
 <h2 id="prepara-la-recuperación">Prepara la recuperación</h2>
 <p>Antes de depender del Gateway, crea una copia cifrada desde <strong>Sistema → Copias de seguridad</strong> y guárdala fuera del equipo. Conserva su contraseña en un lugar accesible para quien deba restaurarla. Ensaya la recuperación en una instalación aislada.</p>
-<p>Consulta <a href="RECUPERAR_ACCESO.html">recuperar el acceso</a> para el código de consola y <a href="SOLUCION_PROBLEMAS.html">solución de problemas</a> para los fallos habituales.</p></article>
+<p>Consulta <a href="RECUPERAR_ACCESO.html">recuperar el acceso</a> para el código de consola y <a href="SOLUCION_PROBLEMAS.html">solución de problemas</a> para los fallos habituales.</p>
+<h2 id="nombre-e-identidad">Nombre e identidad</h2>
+<p><code>headscale.node_name</code> guarda el nombre solicitado en SQLite. El nombre definitivo
+lo asigna Headscale; la carpeta que contiene las claves VPN permanece fija al
+cambiar la propuesta. En instalaciones existentes no se fuerza una nueva confirmación
+ni se cambia el nombre. Para renombrar el nombre definitivo ya registrado utiliza
+<strong>Headscale → Red y nodos → Cambiar nombre</strong>. Los perfiles no importan el nombre
+del equipo de origen ni la confirmación local del destino; las copias completas
+sí conservan la configuración de la misma instalación.</p>
+<h2 id="caducar-o-eliminar-nodos-y-sus-dns">Caducar o eliminar nodos y sus DNS</h2>
+<p>Tras confirmar la operación en Headscale, el motor intenta retirar los registros A
+asociados a la identidad obtenida previamente del servidor: nombre definitivo,
+marca <code>managed-by=headscale-gateway;node=&lt;dominio&gt;</code> e IP del nodo deben coincidir.
+Solo actúa dentro de la zona configurada y con los permisos del proveedor actual,
+como Technitium o Cloudflare. Conserva registros manuales, otros nodos, otras IP,
+TXT de ACME, CNAME, claves y certificados. Un cambio previo de nombre puede dejar
+registros históricos que requieren revisión manual.</p>
+<p>Un fallo de permisos o conexión DNS no revierte la operación ya completada en
+Headscale: el panel muestra un aviso persistente y el número de registros eliminados.
+No se interpreta como fallo del borrado del nodo ni se reintenta borrarlo para
+resolver el DNS. Revisa los registros pendientes en el proveedor. Caducar una sesión
+no desinstala el Gateway remoto: si vuelve a autorizarse y publicar, podrá recrear
+sus registros. No se eliminan automáticamente registros al borrar usuarios.</p></article>
       <footer class="page-footer">
-        <p>Headscale Gateway · Documentación en español</p>
+        <p>Headscale Gateway · Gente del Condado · Documentación en español</p>
+        <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>
         <a href="MANUAL_WEB.html">Cómo editar este manual</a>
       </footer>
     </main>
@@ -248,6 +273,10 @@
           <li><a href="#publica-un-servicio-de-prueba">Publica un servicio de prueba</a></li>
         
           <li><a href="#prepara-la-recuperación">Prepara la recuperación</a></li>
+        
+          <li><a href="#nombre-e-identidad">Nombre e identidad</a></li>
+        
+          <li><a href="#caducar-o-eliminar-nodos-y-sus-dns">Caducar o eliminar nodos y sus DNS</a></li>
         
       </ul></nav>
     </aside>

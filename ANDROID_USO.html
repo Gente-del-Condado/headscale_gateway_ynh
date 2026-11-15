@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.12</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.13</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -50,6 +50,8 @@
                 <li><a href="DESCARGAS_PUBLICAS.html" >Descargas públicas</a></li>
               
                 <li><a href="LINUX_NATIVO.html" >Debian y Fedora</a></li>
+              
+                <li><a href="WINDOWS_SERVICIO.html" >Servicio de Windows</a></li>
               
                 <li><a href="FLATPAK.html" >Flatpak</a></li>
               
@@ -346,9 +348,20 @@ autorización si hay otra VPN activa.</p>
 en <a href="ANDROID.html">la documentación Android</a>. La versión sigue siendo
 experimental hasta validar también un teléfono físico, reconexión Wi-Fi/datos,
 suspensión, IPv6 y proveedores DNS/ACME reales.</p>
-<p>Consulta <a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/blob/upstream-source/android/TERCEROS.md">los componentes reutilizados y sus avisos</a>.</p></article>
+<p>Consulta <a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/blob/upstream-source/android/TERCEROS.md">los componentes reutilizados y sus avisos</a>.</p>
+<h2 id="autor-y-soporte">Autor y soporte</h2>
+<p>Autor: <strong>Gente del Condado</strong>. Soporte: <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>.
+<a href="https://gente-del-condado.github.io/headscale_gateway_ynh/">Manual en línea</a>.</p>
+<h2 id="nombre-propuesto-antes-de-conectar">Nombre propuesto antes de conectar</h2>
+<p>El primer formulario del panel propone el nombre del dispositivo Android (o su
+modelo si no está disponible) y permite editarlo antes de iniciar tsnet. No pide
+permisos de Bluetooth para obtenerlo. Headscale decide el nombre definitivo y
+resuelve los duplicados; se conserva la identidad VPN al actualizar. Una
+instalación existente conserva el nombre que ya tenía. Importar un perfil no
+copia el nombre del dispositivo de origen ni confirma la propuesta local.</p></article>
       <footer class="page-footer">
-        <p>Headscale Gateway · Documentación en español</p>
+        <p>Headscale Gateway · Gente del Condado · Documentación en español</p>
+        <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>
         <a href="MANUAL_WEB.html">Cómo editar este manual</a>
       </footer>
     </main>
@@ -374,6 +387,10 @@ suspensión, IPv6 y proveedores DNS/ACME reales.</p>
           <li><a href="#firma-estable-y-tiendas">Firma estable y tiendas</a></li>
         
           <li><a href="#verificación-y-límites">Verificación y límites</a></li>
+        
+          <li><a href="#autor-y-soporte">Autor y soporte</a></li>
+        
+          <li><a href="#nombre-propuesto-antes-de-conectar">Nombre propuesto antes de conectar</a></li>
         
       </ul></nav>
     </aside>
