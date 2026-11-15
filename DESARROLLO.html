@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.9</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.12</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -301,12 +301,11 @@ ni cambios en el Python del servidor YunoHost. Se necesita acceso a las
 publicaciones oficiales de Astral y a PyPI para las dependencias del manual.
 Forgejo no admite el campo <code>permissions</code> de GitHub: sus permisos se gestionan
 en el servidor y los PR externos quedan sujetos a sus restricciones propias.</p>
-<p>La protección de <code>main</code> en Forgejo exige el contexto exacto
-<code>Calidad multiplataforma / Seguridad de dependencias (pull_request)</code>, también
-para administradores, y deshabilita los pushes directos. Las reglas de GitHub
-para repositorios privados de una organización requieren un plan que permita
-aplicarlas (Team o Enterprise); crear una regla con un plan incompatible no
-proporciona ese bloqueo.</p>
+<p>Los cambios del principal se revisan en solicitudes de Forgejo. Las pruebas y
+el bloqueo de publicación se ejecutan en GitHub; no se devuelven estados desde
+GitHub a Forgejo ni se exige el antiguo contexto del runner de Forgejo. El
+control público no publica paquetes si falla alguna comprobación requerida.
+Consulta <a href="PUBLICACION.html">Publicación</a> para conocer el flujo vigente.</p>
 <h2 id="versiones-commits-y-entregas">Versiones, commits y entregas</h2>
 <p><code>VERSION</code> es la versión común de motor y paquetes, en formato <code>X.Y.Z</code>. Se cambia
 con <code>python3 tools/set_version.py X.Y.Z</code>. Una etiqueta Git identifica un commit;

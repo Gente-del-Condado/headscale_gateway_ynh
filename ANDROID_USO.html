@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.9</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.12</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -146,8 +146,8 @@
     <main id="contenido" tabindex="-1">
       <p class="breadcrumb"><a href="index.html">Manual</a><span aria-hidden="true"> / </span>Android</p>
       <article class="prose"><h1 id="headscale-gateway-para-android">Headscale Gateway para Android</h1>
-<p>La entrega común <strong>1.4.9</strong> utiliza el motor Go compartido y <code>versionCode</code>
-<code>10040090</code>. GitHub Actions construye el APK directo con la firma estable, el
+<p>La entrega común <strong>1.4.12</strong> utiliza el motor Go compartido y <code>versionCode</code>
+<code>10040120</code>. GitHub Actions construye el APK directo con la firma estable, el
 APK F-Droid sin firma y el AAB validado. Play Store continúa solo preparado;
 no se crea una ficha ni se envía la aplicación a las tiendas.</p>
 <p>Aplicación experimental con el motor completo del proyecto, panel administrativo
@@ -259,6 +259,41 @@ Con <code>--arch arm64-v8a</code> se limita al teléfono; con <code>--arch x86_6
 Las compilaciones de pruebas usan el identificador
 <code>org.headscalegateway.android.dev</code> para coexistir con una futura entrega estable.
 No se añaden las carpetas de compilación ni las claves a Git.</p>
+<h2 id="desconectar-las-aplicaciones-en-1412">Desconectar las aplicaciones en 1.4.12</h2>
+<p>La orden de desconexión cierra explícitamente el adaptador, incluso mientras
+Android mantiene enlazado <code>VpnService</code>. No depende de que <code>stopService</code> provoque
+<code>onDestroy</code>. Muestra «Desconectando aplicaciones…» durante el cierre y limita
+la espera del adaptador nativo a dos segundos, en su proceso auxiliar.
+El nodo Go y sus servicios siguen funcionando. Después puedes volver a conectar
+las aplicaciones, conservando la identidad, la configuración y los certificados.</p>
+<h2 id="descubrimiento-y-confianza-en-1411">Descubrimiento y confianza en 1.4.11</h2>
+<p>CA y confianza muestra un registro con estados escritos y colores: información,
+CA obtenida, puerto cerrado, sin respuesta o recurso no publicado. Los errores
+largos quedan en «Detalles técnicos», desplegables sin ocultar el resultado.
+El resumen y el progreso aparecen junto a los botones. No se solapan búsquedas
+y descargas aunque se pulse varias veces.</p>
+<p>«Gateway registrado» indica que ya existe una CA asociada a ese origen.
+«Gateway con CA disponible» indica que se ha obtenido una CA pública válida,
+pero <strong>no implica confianza ni aprobación</strong>. Los demás se muestran como
+«Nodo candidato · Gateway sin confirmar»: aparecer en Headscale o no responder
+al puerto 443 no permite demostrar si ejecutan Gateway.</p>
+<p>El Gateway remoto debe ofrecer su CA pública y permitir acceso al recurso
+HTTPS por la red elegida. En Home Assistant, un panel disponible solo por
+Ingress no equivale a publicar la administración por Tailnet. No hace falta
+abrirla a Internet. La publicación del catálogo y la CA son independientes.</p>
+<h2 id="correcciones-de-estado-en-1410">Correcciones de estado en 1.4.10</h2>
+<p>El indicador de la VPN comprueba su proceso mediante Android, sin depender de
+leer <code>/proc</code> ni pedir permisos nuevos. La actualización utiliza la firma
+existente y conserva la identidad del nodo, la configuración y la confianza.
+El resumen distingue «Acceso de red LAN sin comprobar» de una regla ausente;
+no poder inspeccionar el cortafuegos de Android no demuestra falta de permisos.
+CA y confianza muestra «—» si todavía no existe una fecha de verificación.
+Descubrir un candidato no aprueba su CA: compara su huella por un canal fiable.
+La descarga resume cuántas CA se obtuvieron y cuántas fallaron. Un HTTP 404 al
+pedir la CA significa que el Gateway remoto no ofrece ese recurso: comprueba
+«Publicar solamente el certificado público de mi CA» en ese Gateway, o importa
+su certificado público por un canal fiable. Publicar el catálogo del portal y
+publicar la CA son opciones independientes; activar una no activa la otra.</p>
 <h2 id="revisiones-y-actualización">Revisiones y actualización</h2>
 <p>La entrega <code>1.4.7-android.5</code> conserva el motor <code>1.4.7</code> y corrige los enlaces
 al manual y a privacidad tras renombrar el repositorio YunoHost. Android usa
@@ -327,6 +362,12 @@ suspensión, IPv6 y proveedores DNS/ACME reales.</p>
           <li><a href="#configuración-servicios-y-copias">Configuración, servicios y copias</a></li>
         
           <li><a href="#compilar">Compilar</a></li>
+        
+          <li><a href="#desconectar-las-aplicaciones-en-1412">Desconectar las aplicaciones en 1.4.12</a></li>
+        
+          <li><a href="#descubrimiento-y-confianza-en-1411">Descubrimiento y confianza en 1.4.11</a></li>
+        
+          <li><a href="#correcciones-de-estado-en-1410">Correcciones de estado en 1.4.10</a></li>
         
           <li><a href="#revisiones-y-actualización">Revisiones y actualización</a></li>
         
