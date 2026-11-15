@@ -16,7 +16,7 @@ del flujo de calidad y descargan su SHA exacto. Omiten las revisiones que ya no
 sean main al comenzar la publicación. Los pull requests nunca publican.
 
 `PUBLICATION_TOKEN` se guarda en los secretos de Actions de los tres principales.
-Es fine-grained, limitado a los seis repositorios públicos indicados y con
+Es fine-grained, limitado a los ocho repositorios públicos indicados y con
 Contents de lectura y escritura. No necesita Administration, Workflows ni acceso
 a Forgejo. Los publicadores conservan las otras aplicaciones de cada tienda y
 no sobrescriben etiquetas ni recursos publicados con otro contenido.
@@ -79,3 +79,55 @@ Consulta [Debian y Fedora](LINUX_NATIVO.md), [Flatpak](FLATPAK.md) y
 [descargas públicas](DESCARGAS_PUBLICAS.md). El Flatpak es del motor completo,
 consola y panel web; no se solicita inclusión en Flathub ni se afirma aceptación.
 Play Store continúa solo preparado.
+
+## Publicar una nueva versión desde Forgejo
+
+1. Prepara un `main` válido: aumenta `VERSION` con `tools/set_version.py`, actualiza
+   las fuentes y los instaladores generados exigidos por el manifiesto y sube por
+   SSH a Forgejo. GitHub recibe el espejo, ejecuta calidad y actualiza paquetes,
+   ambas tiendas y manuales automáticamente. Una CI fallida bloquea la publicación.
+2. Publica en Forgejo una **release estable** con etiqueta `vX.Y.Z`, igual a
+   `VERSION`, apuntando al commit vigente de `main`. Puedes publicar solo las notas:
+   GitHub construye los instaladores desde los fuentes. Una etiqueta sin release,
+   un borrador o una prerelease no autorizan las descargas generales.
+3. **Detectar versiones de Forgejo** se ejecuta al recibir main o una etiqueta,
+   después de calidad y, como respaldo, cada hora. Solo consulta Forgejo mediante
+   GET con un token de lectura. La cola y los horarios de GitHub pueden retrasarlo;
+   no se necesita pulsar Run workflow. No se envía ningún cambio a Forgejo.
+4. El detector despacha **Preparar entrega completa** para el SHA aprobado.
+   Construye motores, escritorios con sus fuentes exactos y Android Go compartido:
+   APK directo firmado, APK F-Droid sin firma y AAB firmado solo preparado.
+5. Su finalización correcta activa **Preparar y publicar release privada**.
+   Verifica origen, versión, sumas y descargas y publica la entrega privada.
+   **Preparar distribución pública** se activa por la finalización de ese flujo:
+   no depende del evento release creado mediante `GITHUB_TOKEN`, que no iniciaría
+   otra Action. Construye Debian/Fedora y Flatpak y comprueba su instalación.
+6. **Publicar descargas públicas** espera calidad y preparación correctas del
+   mismo SHA de main. Exporta los dos derivados nuevos y publica en los cuatro
+   destinos, verificando los archivos y sus descargas anónimas. Los archivos y
+   etiquetas ya publicados se conservan. Una versión completa no se recompila.
+
+La cadena utiliza tres enlaces `workflow_run` después de la compilación; no se
+excede su límite en GitHub. `workflow_dispatch` se conserva como mecanismo
+interno llamado por el detector y como recuperación administrativa, no como paso
+manual de una publicación normal. No avances main a otra revisión durante la
+entrega: el cambio se detecta y se detiene la publicación de la revisión anterior.
+
+### Credenciales
+
+En el principal privado de GitHub se mantienen:
+
+- `PUBLICATION_TOKEN`: Contents lectura/escritura en los ocho destinos públicos.
+- `FORGEJO_RELEASE_READ_TOKEN`: solo `repository:read`, limitado al principal de
+  Forgejo. Una redirección al SSO o una respuesta que no sea JSON detienen el flujo;
+  nunca se reenvía el Bearer a otro origen ni al portal de autenticación.
+- `ANDROID_SIGNING_BUNDLE`: copia de la identidad Android existente, contraseña
+  y alias dentro de un secreto cifrado de Actions. Solo se materializa en una
+  carpeta temporal privada; se verifica su certificado público fijado y se retira
+  al finalizar. No se genera una clave distinta ni se distribuye en artefactos.
+
+La compilación comprueba firma, identidad, versión y bibliotecas del APK y AAB.
+No afirma una actualización en un teléfono real en cada entrega: esa aceptación
+sigue siendo una prueba adicional. Play Store y F-Droid quedan preparados; no se
+envían aplicaciones ni solicitudes a sus catálogos. Flatpak se distribuye fuera
+de Flathub.

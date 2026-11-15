@@ -28,6 +28,8 @@ correctamente publica la revisión comprobada en los destinos siguientes:
 El mismo manual se publica en gh-pages de las dos distribuciones dedicadas.
 Los publicadores no escriben en Forgejo ni publican desde pull requests. Las
 reglas, permisos y recuperación están en [Publicación](docs/PUBLICACION.md).
+Una release estable nueva en Forgejo activa la compilación y publicación general
+desde GitHub, con detección periódica de respaldo y sin lanzar flujos a mano.
 
 ## Leer el manual
 
