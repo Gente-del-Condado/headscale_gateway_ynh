@@ -59,15 +59,16 @@ def publish():
             release = drafts[0]
         else:
             head = api('git/ref/heads/main')['object']['sha']
-            gh('release', 'create', tag, '--repo', REPOSITORY, '--target', head, '--draft',
-               '--title', 'Motor '+version, '--notes',
-               'Motor Linux amd64/arm64. source.tar.gz contiene los fuentes completos '
-               'correspondientes, dependencias y licencias. El paquete comprueba SHA-256.')
-            drafts = [item for item in api('releases?per_page=100')
-                      if item['tag_name'] == tag and item['draft']]
-            if len(drafts) != 1:
-                raise ValueError('No se ha podido identificar el borrador creado')
-            release = drafts[0]
+            # La lista de releases puede tardar en reflejar una creación. La
+            # respuesta del POST identifica el borrador sin depender de esa caché.
+            release = json.loads(gh('api', f'repos/{REPOSITORY}/releases', '--method', 'POST',
+                                    '-f', 'tag_name='+tag, '-f', 'target_commitish='+head,
+                                    '-F', 'draft=true', '-f', 'name=Motor '+version,
+                                    '-f', 'body=Motor Linux amd64/arm64. source.tar.gz contiene '
+                                    'los fuentes completos correspondientes, dependencias y '
+                                    'licencias. El paquete comprueba SHA-256.'))
+            if release.get('tag_name') != tag or release.get('draft') is not True or not release.get('id'):
+                raise ValueError('La respuesta de creación no identifica el borrador esperado')
     existing = {item['name']: item for item in release['assets']}
     if set(existing)-set(expected):
         raise ValueError('La release contiene recursos no esperados')
