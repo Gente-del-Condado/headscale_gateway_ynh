@@ -1,10 +1,10 @@
-# Preparación de Google Play · 1.4.7
+# Preparación de Google Play · 1.4.9
 
 Estado: AAB preparado; no se ha creado una cuenta ni publicado una aplicación.
 La revisión de Google y las pruebas exigidas a la cuenta son pasos externos.
 
 - Identificador: `org.headscalegateway.android`.
-- Versión: `1.4.7-android.5`; versionCode: `10040075`; min SDK 24; target SDK 36.
+- Versión: `1.4.9`; versionCode: `10040090`; min SDK 24; target SDK 36.
 - Arquitecturas: arm64-v8a y x86_64; bibliotecas alineadas a 16 KiB.
 - AAB: `builds/android/headscale-gateway-play.aab`.
 - Privacidad pública: https://gente-del-condado.github.io/headscale_gateway_ynh/PRIVACIDAD_ANDROID.html
@@ -12,7 +12,8 @@ La revisión de Google y las pruebas exigidas a la cuenta son pasos externos.
 
 ## Firma y acceso
 
-El AAB utiliza la identidad estable local. Al crear Play App Signing decide si
+El AAB utiliza la identidad estable existente, guardada fuera del repositorio y
+como secreto cifrado para la compilación de GitHub Actions. Al crear Play App Signing decide si
 Google conservará esa clave de aplicación o si utilizarás otra; las firmas de
 F-Droid, Play y descarga directa pueden ser distintas. Con firmas distintas no
 se puede actualizar una instalación desde otro canal sin desinstalarla. Exporta

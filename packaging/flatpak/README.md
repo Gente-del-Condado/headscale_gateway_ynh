@@ -26,7 +26,7 @@ Descarga el archivo `.flatpak` de la release pública correspondiente, comprueba
 su suma e instala:
 
 ```sh
-flatpak install --user ./headscale-gateway-1.4.8-x86_64.flatpak
+flatpak install --user ./headscale-gateway-1.4.9-x86_64.flatpak
 flatpak run es.gentedelcondado.HeadscaleGateway
 ```
 
@@ -43,7 +43,7 @@ IA: no se presenta como apto para solicitar inclusión ni se envía una solicitu
 
 ## Construcción
 
-El manifiesto toma binarios 1.4.8 verificados de los recursos públicos YunoHost.
+El manifiesto toma binarios 1.4.9 verificados de los recursos públicos YunoHost.
 Los fuentes completos del motor y sus dependencias están en `source.tar.gz`
 de esa misma release; los fuentes completos del proyecto se publican aparte.
 No reconstruye ni modifica el motor para Flatpak. `flatpak-builder` construye el

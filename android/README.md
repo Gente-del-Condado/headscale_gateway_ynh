@@ -1,5 +1,11 @@
 # Headscale Gateway para Android
 
+La entrega común **1.4.9** utiliza el motor Go compartido y `versionCode`
+`10040090`. GitHub Actions construye el APK directo con la firma estable, el
+APK F-Droid sin firma y el AAB validado. Play Store continúa solo preparado;
+no se crea una ficha ni se envía la aplicación a las tiendas.
+
+
 Aplicación experimental con el motor completo del proyecto, panel administrativo
 en español y conexión de las aplicaciones del teléfono a la misma VPN.
 No necesita root ni otro cliente Tailscale instalado. La descarga directa utiliza una firma estable. Se preparan también variantes

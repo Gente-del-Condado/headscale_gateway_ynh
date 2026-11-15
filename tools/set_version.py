@@ -33,6 +33,11 @@ def main():
         assert json.loads(desktop_lock.read_text())['packages']['']['version'] == version
         assert (ROOT / 'packaging/yunohost/README.md').read_text() == yunohost_readme(ROOT)
     else:
+        previous = (ROOT / 'VERSION').read_text().strip()
+        # Los ejemplos instalables deben acompañar a la versión de sus paquetes.
+        for guide in ('packaging/linux/README.md', 'packaging/flatpak/README.md'):
+            path = ROOT / guide
+            path.write_text(path.read_text().replace(previous, version))
         manifest = json.loads(hacs.read_text()); manifest['version'] = version
         hacs.write_text(json.dumps(manifest, indent=2) + '\n')
         app.write_text(re.sub(r'^version: .+$', 'version: ' + version, app.read_text(), flags=re.M))

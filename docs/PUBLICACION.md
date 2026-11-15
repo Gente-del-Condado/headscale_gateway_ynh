@@ -6,7 +6,7 @@ públicas. Ningún publicador de GitHub escribe en Forgejo.
 
 | Principal privado | Distribución individual | Tiendas compartidas |
 | --- | --- | --- |
-| headscale_gateway | headscale_gateway_ynh y headscale_gateway_ha | Mis_app_ha y Mis_componente_ha |
+| headscale_gateway | headscale_gateway_ynh, headscale_gateway_ha, headscale_gateway_releases y headscale_gateway_flatpak | Mis_app_ha y Mis_componente_ha |
 | pivigia | pivigia_ha | Mis_app_ha y Mis_componente_ha |
 | jacksignal | jacksignal_ha | Mis_app_ha y Mis_componente_ha |
 
@@ -81,6 +81,13 @@ consola y panel web; no se solicita inclusión en Flathub ni se afirma aceptaci�
 Play Store continúa solo preparado.
 
 ## Publicar una nueva versión desde Forgejo
+
+En ramas `codex/release-*`, los cambios de versión, motor o plantillas activan
+**Preparar instaladores revisables** al recibir el push. El resultado es un
+artefacto revisable; se incorpora por SSH a la revisión de Forgejo antes de
+fusionar, sin compilar en el Linux del mantenedor ni escribir a Forgejo desde
+GitHub. Una rama todavía sin sus generados puede fallar la comprobación de
+frescura hasta incorporar ese artefacto.
 
 1. Prepara un `main` válido: aumenta `VERSION` con `tools/set_version.py`, actualiza
    las fuentes y los instaladores generados exigidos por el manifiesto y sube por

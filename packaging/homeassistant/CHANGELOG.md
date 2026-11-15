@@ -1,3 +1,10 @@
+# 1.4.9
+
+- Publicación completa desde releases estables de Forgejo, con compilación y comprobaciones en GitHub.
+- Descargas públicas del motor y la bandeja, paquetes Debian/Fedora y Flatpak del Gateway completo.
+- Android conserva su firma estable; APK directo, APK F-Droid sin firma y AAB de Play preparado.
+- Guías de instalación y publicación actualizadas. Las entregas anteriores conservan sus archivos y etiquetas.
+
 # 1.4.8
 
 - Guías y enlaces actualizados a los repositorios actuales.
