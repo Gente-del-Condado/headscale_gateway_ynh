@@ -25,18 +25,19 @@ se mantienen porque son contratos del Gateway, no funciones inventadas de YunoHo
 
 ## Publicación automática
 
-Forgejo es el origen del proyecto; GitHub lo replica. Tras la revisión y la
-seguridad obligatoria, el flujo publica los fuentes completos en `upstream-source`
-y prepara una petición con sus sumas. El repositorio público construye recursos
-para amd64 y arm64 desde ese commit. La etiqueta `server-vX.Y.Z` se crea primero
-en Forgejo: así su espejo conserva la release de GitHub y no la devuelve a borrador
-al retirar una etiqueta que solo existiera en la réplica.
-Sus sumas deben coincidir con las de los
-binarios y fuentes previamente comprobados. Una release existente se verifica
-sin reemplazar sus archivos. Solo después de descargar y verificar los tres
-recursos se publica la revisión instalable, por Forgejo y su réplica GitHub.
-La descarga se comprueba sin credenciales: un borrador no es un recurso público.
-Un fallo deja publicada la revisión anterior del instalador.
+Forgejo es el origen privado del proyecto; GitHub es su espejo privado.
+Después de superar **Calidad multiplataforma** para el `main` vigente, GitHub
+Actions verifica los paquetes generados y publica directamente los tres recursos
+públicos `server-vX.Y.Z` en `headscale_gateway_ynh`: binarios amd64 y arm64 y
+`source.tar.gz` con sus fuentes completos. Verifica las sumas mediante descarga
+sin credenciales antes de actualizar el paquete instalable. Una release existente
+se verifica sin reemplazar archivos; una discrepancia detiene la publicación.
+
+El repositorio público contiene únicamente el paquete YunoHost y sus recursos.
+No existe un repositorio derivado en Forgejo ni un espejo de vuelta desde GitHub.
+La rama `upstream-source` conserva las instantáneas públicas de los fuentes;
+no es la rama de desarrollo del paquete. Los fuentes correspondientes al motor
+instalado se obtienen de la release que declara su manifiesto.
 
 Los cambios de paquete aumentan `~ynhN`, manteniendo la versión del motor.
 Las instalaciones se actualizan explícitamente desde su URL: publicar el
