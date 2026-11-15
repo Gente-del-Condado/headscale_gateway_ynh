@@ -6,7 +6,7 @@ import "context"
 
 func inspect(_ context.Context, r Report) Report {
 	r.Platform = "android"
-	r.Note = "Android: comprueba los permisos de red, la VPN activa y el cortafuegos de la red Wi-Fi. No se cambian reglas del sistema desde la aplicación."
+	r.Note = "Android no permite comprobar el cortafuegos desde esta aplicación. Este estado no indica que falte un permiso. Si falla el acceso por Wi-Fi, revisa la VPN y las restricciones de la red"
 	r.Instructions = []string{"Revisa los ajustes de la aplicación y las restricciones de batería y datos de Android"}
 	return r
 }

@@ -13,8 +13,11 @@ Android, integración de Home Assistant e instaladores. Se desarrolla primero en
 [GitHub privado](https://github.com/Gente-del-Condado/headscale_gateway) es su
 espejo; los cambios y las solicitudes se tramitan en Forgejo.
 
-Tras recibir main, GitHub ejecuta **Calidad multiplataforma**. Solo si termina
-correctamente publica la revisión comprobada en los destinos siguientes:
+El control de publicación de [headscale_gateway_releases](https://github.com/Gente-del-Condado/headscale_gateway_releases/actions)
+consulta las releases estables de Forgejo y utiliza runners públicos estándar de
+GitHub. Comprueba el commit etiquetado y solo publica tras superar seguridad,
+pruebas de plataforma y compilación. El principal y su historial permanecen
+privados. Los destinos son:
 
 | Destino público de GitHub | Contenido |
 | --- | --- |
@@ -28,8 +31,8 @@ correctamente publica la revisión comprobada en los destinos siguientes:
 El mismo manual se publica en gh-pages de las dos distribuciones dedicadas.
 Los publicadores no escriben en Forgejo ni publican desde pull requests. Las
 reglas, permisos y recuperación están en [Publicación](docs/PUBLICACION.md).
-Una release estable nueva en Forgejo activa la compilación y publicación general
-desde GitHub, con detección periódica de respaldo y sin lanzar flujos a mano.
+Una release estable nueva en Forgejo se detecta en la consulta horaria del
+control público y activa la compilación y publicación sin lanzar flujos a mano.
 
 ## Leer el manual
 

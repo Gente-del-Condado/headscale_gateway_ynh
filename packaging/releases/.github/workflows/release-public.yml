@@ -1,0 +1,198 @@
+name: Compilar y publicar desde Forgejo
+'on':
+  push:
+    branches: [main]
+    paths: ['automation/**', '.github/workflows/release-public.yml']
+  schedule:
+    - cron: '17 * * * *'
+permissions:
+  contents: read
+concurrency:
+  group: forgejo-public-release
+  cancel-in-progress: false
+env:
+  GOMAXPROCS: '2'
+  GOMEMLIMIT: 2GiB
+  GOFLAGS: -p=2
+jobs:
+  plan:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    outputs:
+      build: ${{ steps.release.outputs.build }}
+      sha: ${{ steps.release.outputs.source_sha }}
+      version: ${{ steps.release.outputs.version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - run: python3 -B -m unittest discover -s automation -p 'test_*.py'
+      - id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FORGEJO_RELEASE_READ_TOKEN: ${{ secrets.FORGEJO_RELEASE_READ_TOKEN }}
+        run: python3 automation/forgejo_source.py --plan
+  linux:
+    name: Seguridad, Linux, Debian y paquetes de plataforma
+    needs: plan
+    if: needs.plan.outputs.build == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: '3.12'
+      - &fetch
+        name: Leer el commit exacto de la release Forgejo
+        env:
+          FORGEJO_RELEASE_READ_TOKEN: ${{ secrets.FORGEJO_RELEASE_READ_TOKEN }}
+          SOURCE_SHA: ${{ needs.plan.outputs.sha }}
+          RELEASE_VERSION: ${{ needs.plan.outputs.version }}
+        run: python automation/forgejo_source.py --sha "$SOURCE_SHA" --version "$RELEASE_VERSION" --destination source
+      - &go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e
+        with:
+          go-version-file: source/src/go.mod
+          cache: false
+      - &node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '22'
+      - name: Auditar módulos y llamadas Go, incluida biblioteca estándar
+        working-directory: source/src
+        run: |
+          go run golang.org/x/vuln/cmd/govulncheck@v1.9.0 -scan module
+          go run golang.org/x/vuln/cmd/govulncheck@v1.9.0 -show verbose ./...
+      - name: Auditar npm incluidas dependencias de desarrollo
+        working-directory: source/src/desktop
+        run: |
+          npm ci --ignore-scripts --no-audit
+          npm audit --include=dev --audit-level=low
+      - name: Pruebas Go, JS, Python, manifiestos y despliegue
+        working-directory: source
+        run: |
+          sha256sum -c CONTENIDO.sha256 > /tmp/hgw-source-checksums.log
+          bash tools/verify.sh
+          python3 tools/check_console.py
+          python3 tools/check_deployment.py
+      - name: Comprobar motor en Debian 12
+        working-directory: source
+        run: docker run --rm --cpus 2 --memory 3g -e GOMAXPROCS=2 -e GOMEMLIMIT=2GiB -v "$PWD:/workspace" -w /workspace/src golang:1.27.4-bookworm sh -ec 'go test -p 2 ./...; go build -buildvcs=false -o /tmp/headscale-gateway .; /tmp/headscale-gateway --help'
+      - name: Validar complemento Home Assistant y proxy SSO YunoHost
+        working-directory: source
+        run: |
+          docker build --build-arg BUILD_VERSION="$(cat VERSION)" --build-arg BUILD_ARCH=amd64 -t hgw-homeassistant addons/headscale_gateway
+          docker network create --subnet 172.30.32.0/24 hgw-test
+          trap 'docker network rm hgw-test' EXIT
+          docker run --rm --network hgw-test --ip 172.30.32.2 --add-host supervisor:127.0.0.1 --entrypoint python3 -v "$PWD/tools/check_container.py:/check_container.py:ro" -v "$PWD/addons/headscale_gateway/config.yaml:/addon-config.yaml:ro" hgw-homeassistant /check_container.py
+          docker build -f tests/containers/yunohost-sso.Dockerfile -t hgw-yunohost-sso yunohost
+          docker run --rm -v "$PWD/tools/check_yunohost_sso.py:/check_yunohost_sso.py:ro" hgw-yunohost-sso
+  windows:
+    name: Motor nativo Windows
+    needs: plan
+    if: needs.plan.outputs.build == 'true'
+    runs-on: windows-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: '3.12'
+      - *fetch
+      - *go
+      - name: Pruebas y compilación sin CGO
+        working-directory: source/src
+        env:
+          CGO_ENABLED: '0'
+        run: |
+          go test -p 2 ./...
+          go build -buildvcs=false -o ../headscale-gateway.exe .
+  homeassistant:
+    name: Integración Home Assistant ${{ matrix.version }}
+    needs: plan
+    if: needs.plan.outputs.build == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - version: 2026.10.4
+            requirements: '2026.10'
+          - version: 2026.11.0
+            requirements: '2026.11'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: '3.14'
+      - *fetch
+      - name: Verificar integración en la versión declarada
+        working-directory: source
+        env:
+          EXPECTED_HA_VERSION: ${{ matrix.version }}
+          REQUIREMENTS: ${{ matrix.requirements }}
+        run: |
+          pip install -r "tests/homeassistant/requirements-$REQUIREMENTS.txt"
+          pip check
+          python -c 'import os; from homeassistant.const import __version__; assert __version__ == os.environ["EXPECTED_HA_VERSION"], __version__'
+          pytest -q -c tests/homeassistant/pytest.ini tests/homeassistant
+  release:
+    name: Compilar Android, escritorios, motores y Flatpak; publicar tras las pruebas
+    needs: [plan, linux, windows, homeassistant]
+    if: needs.plan.outputs.build == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: '3.12'
+      - *fetch
+      - *go
+      - *node
+      - name: Preparar Java, SDK y herramientas de empaquetado
+        run: |
+          echo "JAVA_HOME=$JAVA_HOME_17_X64" >> "$GITHUB_ENV"
+          echo "$JAVA_HOME_17_X64/bin" >> "$GITHUB_PATH"
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" 'platforms;android-36' 'build-tools;36.0.0' 'ndk;27.0.12077973'
+          sudo apt-get update
+          sudo apt-get install -y rpm flatpak flatpak-builder appstream dbus-x11 rsync
+      - name: Construir Android con la firma estable y Lint
+        env:
+          HGW_ANDROID_SIGNING_BUNDLE: ${{ secrets.ANDROID_SIGNING_BUNDLE }}
+        working-directory: source
+        run: python3 tools/build_android_ci_release.py --output releases/candidate-android
+      - name: Liberar herramientas Android en el runner tras verificar sus resultados
+        run: sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/share/boost /usr/local/lib/android
+      - name: Preparar motores, escritorios, paquetes nativos y fuentes correspondientes
+        run: python3 automation/build_public.py --source source --output "$RUNNER_TEMP/public-release" --android source/releases/candidate-android
+      - name: Construir e instalar Flatpak antes de publicar los recursos
+        run: |
+          flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+          python3 automation/build_public.py --source source --output "$RUNNER_TEMP/public-release" --flatpak-only
+      - name: Compilar y comprobar el manual
+        working-directory: source
+        run: |
+          python3 -m venv "$RUNNER_TEMP/docs-env"
+          "$RUNNER_TEMP/docs-env/bin/pip" install -r requirements-docs.txt
+          "$RUNNER_TEMP/docs-env/bin/python" -m mkdocs build --strict
+          python3 tools/check_manual.py builds/manual
+      - name: Publicar paquetes, tiendas, manuales y descargas anónimas
+        env:
+          GH_TOKEN: ${{ secrets.PUBLICATION_TOKEN }}
+          FORGEJO_RELEASE_READ_TOKEN: ${{ secrets.FORGEJO_RELEASE_READ_TOKEN }}
+          SOURCE_SHA: ${{ needs.plan.outputs.sha }}
+        run: python3 automation/publish_public.py --source source --output "$RUNNER_TEMP/public-release" --sha "$SOURCE_SHA"

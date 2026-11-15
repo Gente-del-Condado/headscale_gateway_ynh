@@ -58,21 +58,25 @@ class AutomaticReleaseTest(unittest.TestCase):
                     self.assertTrue((root/'releases/draft-assets/headscale-gateway-yunohost-1.4.9.zip').is_file())
                     self.assertIn('headscale-gateway-release.apk',(root/'releases/draft-assets/SHA256SUMS').read_text())
 
-    def test_automatic_chain_does_not_depend_on_release_event_from_github_token(self):
-        def workflow(name):return (ROOT/'.github/workflows'/name).read_text()
-        detector=workflow('automatic-release.yml')
-        self.assertIn('  schedule:',detector)
-        self.assertIn("tags: ['v*']",detector)
-        self.assertIn('  actions: write',detector)
-        draft=workflow('release-draft.yml');prepare=workflow('prepare-public-release.yml');publish=workflow('publish-public-release.yml')
-        self.assertIn('workflows: [Preparar entrega completa]',draft)
-        self.assertIn('workflows: [Preparar y publicar release privada]',prepare)
-        self.assertIn('Preparar distribución pública',publish)
-        # Tres enlaces workflow_run: no exceder el límite de GitHub.
-        self.assertEqual(len([draft,prepare,publish]),3)
-        source=(ROOT/'.github/workflows/release-draft.yml').read_text()
-        self.assertIn('gh release edit "$tag" --draft=false',source)
-        self.assertIn("run['head_sha']==os.environ['GITHUB_SHA']",source)
-        self.assertIn("'release-android'",source)
+    def test_public_control_is_the_only_automatic_publisher(self):
+        names=['automatic-release.yml','release-build.yml','release-draft.yml','prepare-public-release.yml','publish-public-release.yml','publish-store.yml','publish-yunohost.yml','publish-ha.yml','publish-components.yaml','pages.yml']
+        for name in names:
+            text=(ROOT/'.github/workflows'/name).read_text()
+            jobs=text.split('jobs:\n',1)[1]
+            bodies=re.split(r'(?m)^  [A-Za-z0-9_-]+:\s*$',jobs)[1:]
+            self.assertTrue(bodies,name)
+            for body in bodies:
+                self.assertRegex(body,r'(?m)^    if: false$',name)
+        control=(ROOT/'packaging/releases/.github/workflows/release-public.yml').read_text()
+        self.assertIn("cron: '17 * * * *'",control)
+        self.assertNotIn('workflow_dispatch:',control)
+        self.assertIn('needs: [plan, linux, windows, homeassistant]',control)
+        self.assertIn('govulncheck@v1.9.0 -scan module',control)
+        self.assertIn('npm audit --include=dev --audit-level=low',control)
+        self.assertIn('Verificar integración en la versión declarada',control)
+        self.assertIn('python3 automation/publish_public.py',control)
+        quality=(ROOT/'.github/workflows/quality.yml').read_text()
+        self.assertIn('pull_request:',quality)
+        self.assertIn('name: Seguridad de dependencias',quality)
 
 if __name__=='__main__':unittest.main()

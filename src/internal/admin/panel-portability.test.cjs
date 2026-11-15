@@ -5,7 +5,7 @@ const fs=require('node:fs');
 const vm=require('node:vm');
 const source=fs.readFileSync(__dirname+'/panel-portability.js','utf8');
 
-function setup() {
+function setup(report={remote:true,listener:'0.0.0.0:8443',status:'sin_regla',note:'sin permiso',instructions:[]}) {
  const controls=new Map();const calls=[];const downloads=[];
  function element(id){
   if(!controls.has(id))controls.set(id,{id,value:'',checked:false,files:[],textContent:'',style:{},listeners:{},addEventListener(name,fn){this.listeners[name]=fn},replaceChildren(){this.textContent=''}});
@@ -16,7 +16,7 @@ function setup() {
   calls.push(args);
   if(args[0]==='config/transfer/export')return {filename:'gateway.hgwcfg',data:'QUJDRA=='};
   if(args[0]==='config/transfer/import')return {imported:3};
-  return {listener:'0.0.0.0:8443',status:'sin_regla',note:'sin permiso',instructions:['sudo comando']};
+  return report;
  },confirm:()=>true,Blob,Uint8Array,URL:{createObjectURL:()=>"blob:test",revokeObjectURL(){}},setTimeout:()=>{},atob,btoa,Error};
  vm.runInNewContext(source,context,{filename:'panel-portability.js'});
  return {element,calls,downloads};
@@ -24,6 +24,21 @@ function setup() {
 test('los botones de exportación, importación y firewall tienen acción',()=>{
  const {element}=setup();
  for(const id of ['config-portable-export','config-portable-import','firewall-refresh'])assert.equal(typeof element(id).listeners.click,'function',id);
+});
+test('el resumen distingue cortafuegos desconocido de una regla ausente',async()=>{
+ for(const status of ['desconocido','sin_regla','permitido']){
+  const {element}=setup({remote:true,status,listener:'0.0.0.0:8443'});
+  element('[data-tab="overview"]').listeners.click();
+  await new Promise(resolve=>setImmediate(resolve));
+  assert.equal(element('firewall-overview-warning').hidden,status==='permitido');
+  assert.equal(element('firewall-overview-title').textContent,status==='sin_regla'?'Permisos de red LAN pendientes':'Acceso de red LAN sin comprobar');
+ }
+});
+test('un listener solo local no muestra un aviso de permisos',async()=>{
+ const {element}=setup({remote:false,status:'local'});
+ element('[data-tab="overview"]').listeners.click();
+ await new Promise(resolve=>setImmediate(resolve));
+ assert.equal(element('firewall-overview-warning').hidden,true);
 });
 test('exportación requiere contraseña y respeta elección de credenciales',async()=>{
  const {element,calls,downloads}=setup();

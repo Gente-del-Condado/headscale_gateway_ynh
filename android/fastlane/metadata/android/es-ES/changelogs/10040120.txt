@@ -1,0 +1,1 @@
+Cierre explícito de la VPN de aplicaciones: permite desconectar y reconectar sin detener el Gateway. Incluye el registro de CA y las correcciones de indicadores. Conserva datos y firma.

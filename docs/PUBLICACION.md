@@ -1,140 +1,110 @@
 # Publicación en una dirección
 
-Forgejo conserva el principal privado. Su espejo privado de GitHub recibe las
-ramas y etiquetas. GitHub Actions prueba la revisión y publica las distribuciones
-públicas. Ningún publicador de GitHub escribe en Forgejo.
+Forgejo conserva el principal privado. Su espejo privado de GitHub recibe ramas
+y etiquetas. Los publicadores de GitHub generan las distribuciones públicas;
+ninguno escribe en Forgejo. Las etiquetas y los archivos publicados no se
+reemplazan por otros de contenido diferente.
 
-| Principal privado | Distribución individual | Tiendas compartidas |
+| Principal privado | Distribuciones públicas | Tiendas compartidas |
 | --- | --- | --- |
 | headscale_gateway | headscale_gateway_ynh, headscale_gateway_ha, headscale_gateway_releases y headscale_gateway_flatpak | Mis_app_ha y Mis_componente_ha |
 | pivigia | pivigia_ha | Mis_app_ha y Mis_componente_ha |
 | jacksignal | jacksignal_ha | Mis_app_ha y Mis_componente_ha |
 
-Edita las fuentes, aumenta la versión cuando cambie el contenido instalable y
-sube el commit a Forgejo por SSH. Los publicadores esperan una ejecución correcta
-del flujo de calidad y descargan su SHA exacto. Omiten las revisiones que ya no
-sean main al comenzar la publicación. Los pull requests nunca publican.
+## Headscale Gateway: compilación pública
 
-`PUBLICATION_TOKEN` se guarda en los secretos de Actions de los tres principales.
-Es fine-grained, limitado a los ocho repositorios públicos indicados y con
-Contents de lectura y escritura. No necesita Administration, Workflows ni acceso
-a Forgejo. Los publicadores conservan las otras aplicaciones de cada tienda y
-no sobrescriben etiquetas ni recursos publicados con otro contenido.
+Desde la entrega 1.4.9, el control de
+[headscale_gateway_releases](https://github.com/Gente-del-Condado/headscale_gateway_releases/actions)
+compila en runners públicos estándar. Así no depende de la cuota de ejecución
+del espejo privado. Los publicadores anteriores del espejo están desactivados para evitar
+entregas duplicadas; la comprobación de calidad de pull requests se conserva.
+Lee la API de Forgejo con un token limitado y descarga solo
+el árbol de fuentes de la etiqueta publicada; no copia el historial privado.
 
-Las entregas a distintos repositorios son independientes: comprueba todas las
-ejecuciones antes de anunciar una versión. Ante un fallo transitorio, reejecuta
-el flujo de calidad; su finalización correcta activa de nuevo los publicadores.
-Ante un defecto, corrígelo primero en Forgejo. No evites las pruebas para publicar.
+Sus fuentes se mantienen primero en `packaging/releases/automation/` y
+`packaging/releases/.github/workflows/` del principal de Forgejo. Exportar ese
+control al repositorio público es una tarea de mantenimiento por SSH; no se
+necesita repetirla para cada versión normal de la aplicación.
 
-El manual se genera desde Headscale Gateway y se publica en gh-pages de sus dos
-distribuciones. Android utiliza la dirección estable
-https://gente-del-condado.github.io/headscale_gateway_ynh/.
-Renombrar un repositorio conserva releases y permisos, pero sus enlaces de
-GitHub Pages deben actualizarse expresamente. Los paquetes públicos excluyen
-claves, bases de datos e historial privado y conservan los fuentes y licencias
-correspondientes a los binarios distribuidos.
+1. Prepara las fuentes y `VERSION` con `tools/set_version.py`, los cambios de uso
+   y los instaladores generados del manifiesto. Revisa y sube por SSH a Forgejo.
+2. Publica allí una **release estable** `vX.Y.Z`, con VERSION coincidente y el
+   commit preparado. Una etiqueta sola, un borrador o una prerelease no publica.
+3. El flujo **Compilar y publicar desde Forgejo** consulta las releases cada hora,
+   en el minuto 17 UTC. También se activa al actualizar su controlador en main.
+   No hace falta lanzar flujos a mano. GitHub puede retrasar sus programaciones.
+4. Cada trabajo descarga el mismo commit y vuelve a comprobar etiqueta, versión
+   y manifiesto. Seguridad Go/npm, pruebas Go/JS/Python, Windows, Debian,
+   integración Home Assistant y contenedores preceden a la entrega. Un fallo
+   bloquea la publicación de instaladores.
+5. El runner construye Android con la identidad de firma existente y Lint, los
+   seis motores, bandejas, Debian/Fedora, fuentes correspondientes y Flatpak.
+   Instala y comprueba Flatpak y compila el manual estricto antes de publicar.
+6. Se actualizan paquetes, tiendas y ambas ramas gh-pages. Las tiendas conservan
+   las otras aplicaciones. Se publican las descargas en cuatro repositorios y
+   se comprueban todas sin credenciales y por SHA-256. Un recibo con el commit
+   Forgejo y el controlador identifica la entrega completada y evita repetirla.
 
-Antes de retirar derivados de Forgejo, conserva una copia recuperable y verifica
-que todos sus publicadores utilizan ya los destinos nuevos, incluidos los de
-otras aplicaciones de las tiendas compartidas.
+La etiqueta 1.4.9 conserva su commit original aunque después cambien el control
+o las guías del principal. No se mueve una etiqueta para corregir automatización.
+Una publicación parcial requiere revisar los resultados originales y completar
+su recuperación; no recompilar para sustituir archivos ya distribuidos.
 
-El paquete YunoHost 1.4.7~ynh2 conserva los informes de su laboratorio real.
-Las comprobaciones de nginx/NSS en contenedor son complementarias: no sustituyen
-package_check ni la actualización con datos y secretos. No se solicita su
-entrada en el catálogo oficial. No ejecutes máquinas virtuales del laboratorio
-ni compilaciones grandes en el Linux del usuario; utiliza GitHub para esas tareas.
+### Secretos del control público
 
-El publicador YunoHost también mantiene las instantáneas públicas de fuentes en
-`upstream-source` y etiquetas `source-vX.Y.Z`, sin historia privada ni claves.
-Son los fuentes completos de Android y del proyecto; `main` sigue conteniendo
-solo el paquete YunoHost. Las etiquetas existentes no se desplazan.
+Los siguientes secretos se guardan en Actions de **headscale_gateway_releases**:
 
-Los destinos se resuelven por su identificador estable de GitHub. Así se puede
-comprobar la publicación antes de renombrarlos y conservarla después, sin
-escribir en Forgejo ni ampliar los permisos del token.
+- `FORGEJO_RELEASE_READ_TOKEN`: solo `wolfbelmi88/headscale_gateway`, permiso
+  `repository` en Leídas y el resto sin acceso. No permite escribir en Forgejo.
+- `PUBLICATION_TOKEN`: token GitHub fine-grained con Contents de lectura y
+  escritura solo en los seis destinos públicos de Headscale de la tabla.
+  No necesita Administration, Workflows ni acceso al espejo privado.
+- `ANDROID_SIGNING_BUNDLE`: la firma Android existente. Nunca crear otra clave
+  para una actualización: impediría actualizar las instalaciones actuales.
+
+GitHub no permite recuperar los valores guardados. Para cambiar de repositorio
+compilador hay que volver a introducirlos en sus secretos cifrados. No se pegan
+en incidencias, conversaciones ni archivos Git. La prueba de lectura comprueba
+API, archivo de fuentes, SSO y firma sin compilar; la prueba de publicación usa
+`git push --dry-run` sin modificar referencias.
+
+Los tokens tienen caducidad: renuévalos antes de su fecha límite. GitHub desactiva
+las programaciones de repositorios públicos después de 60 días sin actividad;
+si sucede, el mantenedor debe reactivar el flujo. El principal sigue siendo
+privado y todas las compilaciones grandes se ejecutan fuera del Linux del usuario.
 
 ## Descargas públicas y nuevos paquetes Linux
 
-El principal privado publica los instaladores y sus fuentes en
-[headscale_gateway_releases](https://github.com/Gente-del-Condado/headscale_gateway_releases).
-Home Assistant y YunoHost conservan sus repositorios y releases propios.
-`headscale_gateway_flatpak` recibe el paquete específico Flatpak. No se publica
-el historial privado. PUBLICATION_TOKEN incluye estos dos nuevos destinos
-públicos, además de los seis originales, con Contents de lectura y escritura.
+Las instantáneas saneadas completas se publican en `upstream-source` del paquete
+YunoHost y en etiquetas `source-vX.Y.Z`, sin claves, bases de datos ni historial
+privado. Su main contiene solo el paquete YunoHost. Los binarios del motor y sus
+fuentes correspondientes se sirven desde `server-vX.Y.Z` en ese mismo destino.
 
-**Preparar distribución pública** comprueba los paquetes Debian/Fedora, construye
-e instala Flatpak y prepara los fuentes correspondientes sin recompilar en el
-Linux del mantenedor. **Publicar descargas públicas** exige además calidad
-correcta del mismo SHA vigente de main. Publica por separado en cuatro destinos,
-verifica los borradores y comprueba las descargas sin credenciales. Un archivo
-publicado con otro contenido nunca se reemplaza. Para reintentar, reutiliza los
-artefactos preparados; no cambies una etiqueta ni un instalador publicado.
+Los instaladores de bandeja son archivos pequeños completos. Los fuentes exactos
+de Electron/Chromium/FFmpeg, sus parches, avisos y sumas se distribuyen aparte en
+la misma release pública. Solo el archivo grande de fuentes Chromium usa partes.
+Conserva esos fuentes y avisos al redistribuir el escritorio.
 
-Los instaladores de bandeja son archivos pequeños completos. Los fuentes de
-Electron/Chromium/FFmpeg se proporcionan aparte en la misma release, con sus
-versiones, parches y sumas. Solo el archivo grande de fuentes Chromium utiliza
-fragmentos. Esto no modifica los binarios 1.4.8 ni la firma Android.
+El mismo manual se genera desde las fuentes y se publica en gh-pages de YunoHost
+y Home Assistant. Android utiliza la dirección estable
+https://gente-del-condado.github.io/headscale_gateway_ynh/.
+Renombrar un repositorio conserva releases y permisos, pero sus enlaces Pages
+deben actualizarse expresamente.
 
 Consulta [Debian y Fedora](LINUX_NATIVO.md), [Flatpak](FLATPAK.md) y
-[descargas públicas](DESCARGAS_PUBLICAS.md). El Flatpak es del motor completo,
-consola y panel web; no se solicita inclusión en Flathub ni se afirma aceptación.
-Play Store continúa solo preparado.
+[descargas públicas](DESCARGAS_PUBLICAS.md). Flatpak distribuye el motor completo,
+consola y panel web. No se solicita inclusión en Flathub ni en el catálogo
+YunoHost. **Play Store continúa solo preparado**: el AAB no se envía a la tienda.
 
-## Publicar una nueva versión desde Forgejo
+Los informes del laboratorio real YunoHost 1.4.7~ynh2 se conservan. Las pruebas
+nginx/NSS en contenedor son complementarias; no equivalen a repetir package_check
+o la actualización de una instalación real con datos y secretos. No ejecutes
+máquinas virtuales ni compilaciones grandes en el Linux del usuario.
 
-En ramas `codex/release-*`, los cambios de versión, motor o plantillas activan
-**Preparar instaladores revisables** al recibir el push. El resultado es un
-artefacto revisable; se incorpora por SSH a la revisión de Forgejo antes de
-fusionar, sin compilar en el Linux del mantenedor ni escribir a Forgejo desde
-GitHub. Una rama todavía sin sus generados puede fallar la comprobación de
-frescura hasta incorporar ese artefacto.
+## PiVigia y JackSignal
 
-1. Prepara un `main` válido: aumenta `VERSION` con `tools/set_version.py`, actualiza
-   las fuentes y los instaladores generados exigidos por el manifiesto y sube por
-   SSH a Forgejo. GitHub recibe el espejo, ejecuta calidad y actualiza paquetes,
-   ambas tiendas y manuales automáticamente. Una CI fallida bloquea la publicación.
-2. Publica en Forgejo una **release estable** con etiqueta `vX.Y.Z`, igual a
-   `VERSION`, apuntando al commit vigente de `main`. Puedes publicar solo las notas:
-   GitHub construye los instaladores desde los fuentes. Una etiqueta sin release,
-   un borrador o una prerelease no autorizan las descargas generales.
-3. **Detectar versiones de Forgejo** se ejecuta al recibir main o una etiqueta,
-   después de calidad y, como respaldo, cada hora. Solo consulta Forgejo mediante
-   GET con un token de lectura. La cola y los horarios de GitHub pueden retrasarlo;
-   no se necesita pulsar Run workflow. No se envía ningún cambio a Forgejo.
-4. El detector despacha **Preparar entrega completa** para el SHA aprobado.
-   Construye motores, escritorios con sus fuentes exactos y Android Go compartido:
-   APK directo firmado, APK F-Droid sin firma y AAB firmado solo preparado.
-5. Su finalización correcta activa **Preparar y publicar release privada**.
-   Verifica origen, versión, sumas y descargas y publica la entrega privada.
-   **Preparar distribución pública** se activa por la finalización de ese flujo:
-   no depende del evento release creado mediante `GITHUB_TOKEN`, que no iniciaría
-   otra Action. Construye Debian/Fedora y Flatpak y comprueba su instalación.
-6. **Publicar descargas públicas** espera calidad y preparación correctas del
-   mismo SHA de main. Exporta los dos derivados nuevos y publica en los cuatro
-   destinos, verificando los archivos y sus descargas anónimas. Los archivos y
-   etiquetas ya publicados se conservan. Una versión completa no se recompila.
-
-La cadena utiliza tres enlaces `workflow_run` después de la compilación; no se
-excede su límite en GitHub. `workflow_dispatch` se conserva como mecanismo
-interno llamado por el detector y como recuperación administrativa, no como paso
-manual de una publicación normal. No avances main a otra revisión durante la
-entrega: el cambio se detecta y se detiene la publicación de la revisión anterior.
-
-### Credenciales
-
-En el principal privado de GitHub se mantienen:
-
-- `PUBLICATION_TOKEN`: Contents lectura/escritura en los ocho destinos públicos.
-- `FORGEJO_RELEASE_READ_TOKEN`: solo `repository:read`, limitado al principal de
-  Forgejo. Una redirección al SSO o una respuesta que no sea JSON detienen el flujo;
-  nunca se reenvía el Bearer a otro origen ni al portal de autenticación.
-- `ANDROID_SIGNING_BUNDLE`: copia de la identidad Android existente, contraseña
-  y alias dentro de un secreto cifrado de Actions. Solo se materializa en una
-  carpeta temporal privada; se verifica su certificado público fijado y se retira
-  al finalizar. No se genera una clave distinta ni se distribuye en artefactos.
-
-La compilación comprueba firma, identidad, versión y bibliotecas del APK y AAB.
-No afirma una actualización en un teléfono real en cada entrega: esa aceptación
-sigue siendo una prueba adicional. Play Store y F-Droid quedan preparados; no se
-envían aplicaciones ni solicitudes a sus catálogos. Flatpak se distribuye fuera
-de Flathub.
+Sus flujos reciben el espejo desde Forgejo y publican directamente en GitHub
+tras calidad correcta del mismo SHA de main. Los pull requests no publican.
+Sus secretos PUBLICATION_TOKEN permanecen en los respectivos principales
+privados, limitados a sus destinos públicos. Esta migración del compilador de
+Headscale no cambia sus credenciales ni sus flujos.

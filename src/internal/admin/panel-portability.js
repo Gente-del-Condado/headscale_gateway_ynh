@@ -48,6 +48,7 @@
     try {
       const data=await api('system/firewall');
       summary.hidden=!data.remote || data.status==='permitido';
+      byId('firewall-overview-title').textContent=window.tr(data.status==='sin_regla'?'Permisos de red LAN pendientes':'Acceso de red LAN sin comprobar');
       if(!summary.hidden)byId('firewall-overview-summary').textContent=window.tr("HTTPS LAN {p0}: {p1}. No se cambiará ninguna regla automáticamente.", {p0:(data.listener),p1:(data.note||data.status)});
     }catch {summary.hidden=true;}
   }

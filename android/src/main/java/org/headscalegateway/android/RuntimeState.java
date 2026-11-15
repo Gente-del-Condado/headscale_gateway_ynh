@@ -2,6 +2,7 @@ package org.headscalegateway.android;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.app.ActivityManager;
 import android.net.*;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
@@ -25,10 +26,19 @@ final class RuntimeState {
         try {
             JSONObject state=new JSONObject(read(new FileInputStream(new File(root(c),"phone-vpn.json"))));
             String phase=state.optString("phase");
-            if(phase.equals("connected") || phase.equals("starting")) {
-                int pid=state.getInt("pid");Os.kill(pid,0);
-                String command=read(new FileInputStream("/proc/"+pid+"/cmdline")).split("\u0000")[0];
-                if(!command.equals(c.getPackageName()+":vpn"))return new JSONObject();
+            if(phase.equals("connected") || phase.equals("starting") || phase.equals("stopping")) {
+                int pid=state.getInt("pid");
+                // El fabricante puede restringir /proc incluso entre procesos
+                // del mismo UID. Consultamos Android sin pedir permisos nuevos;
+                // PID, UID y nombre evitan mostrar el estado de un PID reutilizado.
+                ActivityManager manager=(ActivityManager)c.getSystemService(Context.ACTIVITY_SERVICE);
+                List<ActivityManager.RunningAppProcessInfo> processes=manager==null?null:manager.getRunningAppProcesses();
+                boolean alive=false;
+                if(processes!=null)for(ActivityManager.RunningAppProcessInfo process:processes) {
+                    if(process.pid==pid && process.uid==android.os.Process.myUid()
+                        && (c.getPackageName()+":vpn").equals(process.processName)) {alive=true;break;}
+                }
+                if(!alive)return new JSONObject();
             }
             return state;
         } catch(Exception ignored) {return new JSONObject();}

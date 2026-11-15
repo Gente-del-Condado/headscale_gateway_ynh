@@ -193,6 +193,9 @@ func getPublicWithSystemDial(ctx context.Context, target Target, path, ca string
 	}
 	defer res.Body.Close()
 	if res.StatusCode != 200 {
+		if res.StatusCode == http.StatusNotFound && path == "/pki/v1/public-ca" {
+			return nil, fmt.Errorf("%s %s: HTTP 404; el Gateway remoto no ofrece su CA pública. Comprueba Publicar solamente el certificado público de mi CA en CA y confianza del Gateway remoto, o importa su certificado público por un canal fiable", target.Network, target.Origin)
+		}
 		return nil, fmt.Errorf("%s %s: HTTP %d", target.Network, target.Origin, res.StatusCode)
 	}
 	raw, err := io.ReadAll(io.LimitReader(res.Body, limit+1))

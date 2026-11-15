@@ -1,5 +1,5 @@
 name: Headscale Gateway
-version: 1.4.9
+version: 1.4.12
 slug: headscale_gateway
 description: Gateway HTTPS privado con VPN, DNS, certificados y panel de administración
 url: https://gente-del-condado.github.io/headscale_gateway_ynh/HOME_ASSISTANT.html

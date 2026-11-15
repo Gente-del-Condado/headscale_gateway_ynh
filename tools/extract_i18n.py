@@ -58,7 +58,7 @@ for text in (
 ): refs[text].add('admin_schema.go')
 for label in ('CA ya aprobada; se conserva su autorización.', 'Tailscale primero (HTTPS 443); después HTTPS LAN en el puerto anunciado. HTTP LAN solo para CA si lo permites. Descargar no implica aprobar.', 'el candidato ya no está disponible; vuelve a descubrir gateways'):
  refs[label].add("admin_federation.go")
-for label in ('Consultar','Público; puede requerir activación'):
+for label in ('Descarga de CA: {p0} obtenidas, {p1} con error. Revisa el resultado de cada Gateway; solo aprueba huellas verificadas.', 'Consultar','Público; puede requerir activación'):
  refs[label].add('internal/admin/panel-reference.js')
 for file in sorted((ROOT/'src/internal'/'admin').glob('*.html'))+sorted((ROOT/'src/desktop').glob('*.html')):
  h=ExtractHTML();h.feed(file.read_text(encoding='utf8'))

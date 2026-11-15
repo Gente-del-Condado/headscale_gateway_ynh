@@ -53,6 +53,8 @@ func TestCAOnlyBootstrapAndNoAutomaticTrust(t *testing.T) {
 			t.Error("credentials leaked")
 		}
 		switch mode {
+		case "missing":
+			http.NotFound(w, r)
 		case "redirect":
 			http.Redirect(w, r, "https://elsewhere.test", 302)
 		case "large":
@@ -111,6 +113,10 @@ func TestCAOnlyBootstrapAndNoAutomaticTrust(t *testing.T) {
 		if _, err = DownloadCA(context.Background(), []Target{target}, dial); err == nil {
 			t.Fatal("unsafe response accepted", m)
 		}
+	}
+	mode = "missing"
+	if _, err = DownloadCA(context.Background(), []Target{target}, dial); err == nil || !strings.Contains(err.Error(), "HTTP 404") || !strings.Contains(err.Error(), "Gateway remoto no ofrece su CA pública") {
+		t.Fatal("falta explicar el recurso de CA no publicado", err)
 	}
 	mode = "ok"
 	target.Origin = "https://wrong.test"

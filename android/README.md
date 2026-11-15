@@ -1,7 +1,7 @@
 # Headscale Gateway para Android
 
-La entrega común **1.4.9** utiliza el motor Go compartido y `versionCode`
-`10040090`. GitHub Actions construye el APK directo con la firma estable, el
+La entrega común **1.4.12** utiliza el motor Go compartido y `versionCode`
+`10040120`. GitHub Actions construye el APK directo con la firma estable, el
 APK F-Droid sin firma y el AAB validado. Play Store continúa solo preparado;
 no se crea una ficha ni se envía la aplicación a las tiendas.
 
@@ -134,6 +134,49 @@ Con `--arch arm64-v8a` se limita al teléfono; con `--arch x86_64`, al laborator
 Las compilaciones de pruebas usan el identificador
 `org.headscalegateway.android.dev` para coexistir con una futura entrega estable.
 No se añaden las carpetas de compilación ni las claves a Git.
+
+## Desconectar las aplicaciones en 1.4.12
+
+La orden de desconexión cierra explícitamente el adaptador, incluso mientras
+Android mantiene enlazado `VpnService`. No depende de que `stopService` provoque
+`onDestroy`. Muestra «Desconectando aplicaciones…» durante el cierre y limita
+la espera del adaptador nativo a dos segundos, en su proceso auxiliar.
+El nodo Go y sus servicios siguen funcionando. Después puedes volver a conectar
+las aplicaciones, conservando la identidad, la configuración y los certificados.
+
+## Descubrimiento y confianza en 1.4.11
+
+CA y confianza muestra un registro con estados escritos y colores: información,
+CA obtenida, puerto cerrado, sin respuesta o recurso no publicado. Los errores
+largos quedan en «Detalles técnicos», desplegables sin ocultar el resultado.
+El resumen y el progreso aparecen junto a los botones. No se solapan búsquedas
+y descargas aunque se pulse varias veces.
+
+«Gateway registrado» indica que ya existe una CA asociada a ese origen.
+«Gateway con CA disponible» indica que se ha obtenido una CA pública válida,
+pero **no implica confianza ni aprobación**. Los demás se muestran como
+«Nodo candidato · Gateway sin confirmar»: aparecer en Headscale o no responder
+al puerto 443 no permite demostrar si ejecutan Gateway.
+
+El Gateway remoto debe ofrecer su CA pública y permitir acceso al recurso
+HTTPS por la red elegida. En Home Assistant, un panel disponible solo por
+Ingress no equivale a publicar la administración por Tailnet. No hace falta
+abrirla a Internet. La publicación del catálogo y la CA son independientes.
+
+## Correcciones de estado en 1.4.10
+
+El indicador de la VPN comprueba su proceso mediante Android, sin depender de
+leer `/proc` ni pedir permisos nuevos. La actualización utiliza la firma
+existente y conserva la identidad del nodo, la configuración y la confianza.
+El resumen distingue «Acceso de red LAN sin comprobar» de una regla ausente;
+no poder inspeccionar el cortafuegos de Android no demuestra falta de permisos.
+CA y confianza muestra «—» si todavía no existe una fecha de verificación.
+Descubrir un candidato no aprueba su CA: compara su huella por un canal fiable.
+La descarga resume cuántas CA se obtuvieron y cuántas fallaron. Un HTTP 404 al
+pedir la CA significa que el Gateway remoto no ofrece ese recurso: comprueba
+«Publicar solamente el certificado público de mi CA» en ese Gateway, o importa
+su certificado público por un canal fiable. Publicar el catálogo del portal y
+publicar la CA son opciones independientes; activar una no activa la otra.
 
 ## Revisiones y actualización
 

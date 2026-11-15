@@ -1,0 +1,49 @@
+name: Actualizar guía de publicación tras la entrega
+'on':
+  workflow_run:
+    workflows: [Compilar y publicar desde Forgejo]
+    types: [completed]
+  push:
+    branches: [main]
+    paths: ['automation/manual-publication.md', '.github/workflows/manual-current.yml']
+permissions:
+  contents: read
+concurrency:
+  group: public-manual-current
+  cancel-in-progress: false
+jobs:
+  manual:
+    if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.head_repository.full_name == github.repository)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Seleccionar solo una entrega terminada y verificada
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FORGEJO_RELEASE_READ_TOKEN: ${{ secrets.FORGEJO_RELEASE_READ_TOKEN }}
+        run: python3 automation/forgejo_source.py --plan
+      - name: Descargar el árbol sin historial de la entrega completada
+        if: steps.release.outputs.build == 'false' && steps.release.outputs.source_sha != ''
+        env:
+          FORGEJO_RELEASE_READ_TOKEN: ${{ secrets.FORGEJO_RELEASE_READ_TOKEN }}
+          SOURCE_SHA: ${{ steps.release.outputs.source_sha }}
+          RELEASE_VERSION: ${{ steps.release.outputs.version }}
+        run: python3 automation/forgejo_source.py --sha "$SOURCE_SHA" --version "$RELEASE_VERSION" --destination source
+      - name: Construir el manual con la guía vigente del controlador
+        if: steps.release.outputs.build == 'false' && steps.release.outputs.source_sha != ''
+        run: |
+          cp automation/manual-publication.md source/docs/PUBLICACION.md
+          python3 -m venv "$RUNNER_TEMP/docs-env"
+          "$RUNNER_TEMP/docs-env/bin/pip" install -r source/requirements-docs.txt
+          cd source
+          "$RUNNER_TEMP/docs-env/bin/python" -m mkdocs build --strict
+          python3 tools/check_manual.py builds/manual
+      - name: Publicar solo las dos ramas del manual
+        if: steps.release.outputs.build == 'false' && steps.release.outputs.source_sha != ''
+        env:
+          GH_TOKEN: ${{ secrets.PUBLICATION_TOKEN }}
+        run: python3 automation/manual_public.py --source source

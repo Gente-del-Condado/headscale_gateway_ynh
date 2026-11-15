@@ -1,0 +1,1 @@
+Explicit app VPN shutdown: disconnect and reconnect without stopping Gateway. Includes CA discovery logs and corrected status indicators. Preserves data and signing identity.

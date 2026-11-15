@@ -1,6 +1,8 @@
 package org.headscalegateway.android;
 
 import android.content.Intent;
+import android.content.Context;
+import android.os.Build;
 import android.net.VpnService;
 import android.os.ParcelFileDescriptor;
 import java.io.File;
@@ -8,16 +10,28 @@ import java.util.concurrent.*;
 
 /** Adaptación del enfoque VpnService + HEV usado por TailSocks, con el nodo del Gateway. */
 public final class GatewayVpnService extends VpnService {
+    private static final String STOP="org.headscalegateway.android.STOP_VPN";
     static { System.loadLibrary("gateway-tunnel"); }
     static native int runTunnel(String config,int fd);
     static native void stopTunnel();
     static volatile boolean active=false;
     private ParcelFileDescriptor device;
     private volatile boolean stopping=false;
-    private String lastError="";
+    private volatile String lastError="";
     private final ExecutorService worker=Executors.newSingleThreadExecutor();
+    static void requestStop(Context context) {
+        // Android mantiene enlazado VpnService mientras exista el túnel.
+        // stopService por sí solo no invoca onDestroy en ese estado.
+        String phase=RuntimeState.phoneVPN(context).optString("phase");
+        Intent stop=new Intent(context,GatewayVpnService.class);
+        if(!phase.equals("connected") && !phase.equals("starting")) {context.stopService(stop);return;}
+        stop.setAction(STOP);
+        if(Build.VERSION.SDK_INT>=26)context.startForegroundService(stop);else context.startService(stop);
+    }
     @Override public int onStartCommand(Intent intent,int flags,int startId) {
         startForeground(11,GatewayService.notification(this,getString(R.string.vpn_active)));
+        if(intent!=null && STOP.equals(intent.getAction())) {shutdown();return START_NOT_STICKY;}
+        if(stopping)return START_NOT_STICKY;
         if(!active) { active=true; RuntimeState.phoneVPN(this,"starting","");worker.execute(this::connect); }
         return START_NOT_STICKY;
     }
@@ -40,19 +54,24 @@ public final class GatewayVpnService extends VpnService {
             int result=runTunnel(config.getPath(),device.getFd());
             if(result!=0 && !stopping)lastError="El túnel VPN se ha detenido.";
         } catch(Exception e) {lastError=getString(R.string.error,e.getMessage());}
-        finally {active=false;RuntimeState.phoneVPN(this,"stopped",lastError);stopSelf();}
+        finally {active=false;shutdown();}
     }
-    @Override public void onRevoke() { stopSelf(); }
-    @Override public void onDestroy() {
-        stopping=true;
+    @Override public void onRevoke() { shutdown(); }
+    private void finishProcess() {
         RuntimeState.phoneVPN(this,"stopped",lastError);
+        android.os.Process.killProcess(android.os.Process.myPid());
+    }
+    private void shutdown() {
+        synchronized(this) {if(stopping)return;stopping=true;}
+        RuntimeState.phoneVPN(this,"stopping",lastError);
         // HEV espera su inicialización al parar. El proceso auxiliar limita esa
         // espera sin bloquear la interfaz ni detener el proceso del Gateway.
-        new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(()->android.os.Process.killProcess(android.os.Process.myPid()),2000);
+        new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(this::finishProcess,2000);
         new Thread(()-> {
             if(device!=null) { stopTunnel(); try { device.close(); } catch(Exception ignored) {} }
-            android.os.Process.killProcess(android.os.Process.myPid());
+            finishProcess();
         },"cerrar-vpn").start();
-        active=false; worker.shutdown(); stopForeground(STOP_FOREGROUND_REMOVE); super.onDestroy();
+        active=false;worker.shutdown();stopForeground(STOP_FOREGROUND_REMOVE);stopSelf();
     }
+    @Override public void onDestroy() {shutdown();super.onDestroy();}
 }

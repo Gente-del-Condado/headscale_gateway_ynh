@@ -1,3 +1,28 @@
+# 1.4.12
+
+- Android cierra explícitamente el adaptador VPN aunque el sistema mantenga
+  enlazado VpnService. Desconectar aplicaciones conserva el motor del Gateway.
+- Estado de desconexión visible y espera nativa acotada; permite reconectar.
+- Conserva las correcciones de presentación y el registro PKI de 1.4.10/1.4.11.
+
+# 1.4.11
+
+- Descubrimiento y descarga de CA como registro de estados con colores y detalles
+  técnicos desplegables; resumen y progreso junto a los botones.
+- Distingue un Gateway registrado o con CA disponible de un nodo sin confirmar.
+  Un puerto cerrado o un timeout no demuestran que el nodo no ejecute Gateway.
+- Evita búsquedas y descargas simultáneas y conserva la aprobación manual.
+- Incluye las correcciones de los indicadores Android, LAN y fechas de 1.4.10.
+
+## 1.4.10
+
+- La descarga de CA informa de éxitos y errores e indica cómo revisar un HTTP 404.
+
+- El resumen distingue un cortafuegos sin comprobar de una regla LAN ausente.
+- CA y confianza no muestra una fecha ficticia cuando aún no hay verificación.
+- Android consulta su propio proceso VPN mediante las API del sistema; conserva
+  la firma y los datos al actualizar.
+
 # 1.4.9
 
 - Publicación completa desde releases estables de Forgejo, con compilación y comprobaciones en GitHub.

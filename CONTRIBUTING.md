@@ -125,12 +125,11 @@ publicaciones oficiales de Astral y a PyPI para las dependencias del manual.
 Forgejo no admite el campo `permissions` de GitHub: sus permisos se gestionan
 en el servidor y los PR externos quedan sujetos a sus restricciones propias.
 
-La protección de `main` en Forgejo exige el contexto exacto
-`Calidad multiplataforma / Seguridad de dependencias (pull_request)`, también
-para administradores, y deshabilita los pushes directos. Las reglas de GitHub
-para repositorios privados de una organización requieren un plan que permita
-aplicarlas (Team o Enterprise); crear una regla con un plan incompatible no
-proporciona ese bloqueo.
+Los cambios del principal se revisan en solicitudes de Forgejo. Las pruebas y
+el bloqueo de publicación se ejecutan en GitHub; no se devuelven estados desde
+GitHub a Forgejo ni se exige el antiguo contexto del runner de Forgejo. El
+control público no publica paquetes si falla alguna comprobación requerida.
+Consulta [Publicación](docs/PUBLICACION.md) para conocer el flujo vigente.
 
 ## Versiones, commits y entregas
 

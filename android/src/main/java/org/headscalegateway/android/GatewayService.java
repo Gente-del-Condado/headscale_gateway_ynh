@@ -30,7 +30,7 @@ public final class GatewayService extends Service {
     @Override public int onStartCommand(Intent intent,int flags,int startId) {
         if(intent!=null && STOP.equals(intent.getAction())) {
             RuntimeState.prefs(this).edit().putBoolean("desired_running",false).commit();
-            stopService(new Intent(this,GatewayVpnService.class)); stopSelf(); return START_NOT_STICKY;
+            GatewayVpnService.requestStop(this); stopSelf(); return START_NOT_STICKY;
         }
         startForeground(10,notification(this,getString(R.string.notification)));
         if(!RuntimeState.prefs(this).getBoolean("desired_running",false)) { stopSelf(); return START_NOT_STICKY; }
@@ -81,7 +81,7 @@ public final class GatewayService extends Service {
             if(!stopping) RuntimeState.prefs(this).edit().putString("last_error","El motor del Gateway se ha detenido. Revisa su configuración.").apply();
         } catch(Exception e) {
             RuntimeState.prefs(this).edit().putString("last_error",getString(R.string.error,e.getMessage())).apply();
-        } finally { RuntimeState.prefs(this).edit().putBoolean("starting",false).commit();running=false; stopService(new Intent(this,GatewayVpnService.class)); stopSelf(); }
+        } finally { RuntimeState.prefs(this).edit().putBoolean("starting",false).commit();running=false; GatewayVpnService.requestStop(this); stopSelf(); }
     }
     @Override public void onDestroy() {
         synchronized(this) { stopping=true; if(engine!=null) engine.destroy(); }

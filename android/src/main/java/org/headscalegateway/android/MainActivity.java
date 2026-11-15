@@ -37,7 +37,7 @@ public final class MainActivity extends Activity {
     private Runnable clearBackCallback;
     private String loadedBoot="",pendingSection="",mobileJS="";
     private boolean checking=false,visible=false,destroyed=false,engineReady=false,nodeConnected=false;
-    private boolean phoneConnected=false,phoneStarting=false;
+    private boolean phoneConnected=false,phoneStarting=false,phoneStopping=false;
 
     private int dp(float value) {return Math.round(value*getResources().getDisplayMetrics().density);}
     private GradientDrawable shape(int color,int radius) {
@@ -129,7 +129,7 @@ public final class MainActivity extends Activity {
         LinearLayout phone=card(content);heading(phone,"VPN del teléfono");
         vpnDetail=text("Conecta las demás aplicaciones a la misma red del Gateway.",15,MUTED);phone.addView(vpnDetail);
         vpnButton=button(phone,"Conectar aplicaciones",false,()-> {
-            if(phoneConnected || phoneStarting)stopService(new Intent(this,GatewayVpnService.class));else requestVpn();
+            if(phoneConnected || phoneStarting)GatewayVpnService.requestStop(this);else requestVpn();
         });vpnButton.setId(R.id.vpn_toggle);
         TextView vpnHelp=text("Puedes mantener los servicios publicados con la VPN del teléfono desconectada.",13,MUTED);space(phone,10);phone.addView(vpnHelp);
         LinearLayout quick=card(content);heading(quick,"Administración");
@@ -265,7 +265,7 @@ public final class MainActivity extends Activity {
         loadedPort=-1;gatewayButton.setEnabled(false);gatewayDetail.setText(R.string.opening);placeholderText.setText(R.string.opening);
     }
     private void stopGateway() {
-        RuntimeState.prefs(this).edit().putBoolean("desired_running",false).commit();stopService(new Intent(this,GatewayVpnService.class));stopService(new Intent(this,GatewayService.class));
+        RuntimeState.prefs(this).edit().putBoolean("desired_running",false).commit();GatewayVpnService.requestStop(this);stopService(new Intent(this,GatewayService.class));
         loadedPort=-1;engineReady=false;nodeConnected=false;panel.loadUrl("about:blank");panelPlaceholder.setVisibility(View.VISIBLE);render(null,new JSONObject());
     }
     private void requestVpn() {
@@ -288,7 +288,7 @@ public final class MainActivity extends Activity {
     private void render(JSONObject state,JSONObject phone) {
         boolean starting=RuntimeState.prefs(this).getBoolean("starting",false);engineReady=state!=null;nodeConnected=engineReady&&state.optBoolean("connected");
         boolean running=GatewayService.running||starting;
-        phoneConnected="connected".equals(phone.optString("phase"));phoneStarting="starting".equals(phone.optString("phase"));
+        phoneConnected="connected".equals(phone.optString("phase"));phoneStarting="starting".equals(phone.optString("phase"));phoneStopping="stopping".equals(phone.optString("phase"));
         gatewayTitle.setText(nodeConnected?"Conectado a Headscale":starting?"Iniciando Gateway":engineReady?"Gateway iniciado":running?"Gateway en ejecución":"Gateway detenido");
         gatewayTitle.setTextColor(nodeConnected?ACCENT:TEXT);
         gatewayDetail.setText(nodeConnected?"Tu nodo está conectado. Administra y publica tus servicios desde el panel.":starting?getString(R.string.opening):engineReady?"El panel está disponible. Configura Headscale o revisa la conexión del nodo.":running?"Esperando respuesta del motor. Si continúa, revisa los registros del Gateway.":getString(R.string.stopped));
@@ -296,9 +296,9 @@ public final class MainActivity extends Activity {
         nodeInfo.setText(engineReady?state.optInt("services")+" servicios activos"+(ips.isEmpty()?"":"\n"+ips):"");nodeInfo.setVisibility(engineReady?View.VISIBLE:View.GONE);
         gatewayButton.setEnabled(true);gatewayButton.setText(running?getString(R.string.stop):getString(R.string.start));
         gatewayButton.setTextColor(running?TEXT:BG);gatewayButton.setBackground(shape(running?SURFACE:ACCENT,12));
-        vpnButton.setEnabled(nodeConnected||phoneConnected||phoneStarting);vpnButton.setAlpha(vpnButton.isEnabled()?1f:.5f);
-        vpnButton.setText(phoneConnected||phoneStarting?"Desconectar aplicaciones":"Conectar aplicaciones");
-        vpnDetail.setText(phoneConnected?"Las aplicaciones del teléfono utilizan la conexión del Gateway.":phoneStarting?"Preparando la conexión de las aplicaciones…":nodeConnected?"Gateway conectado. Puedes conectar también las aplicaciones del teléfono.":"Conecta primero el nodo del Gateway a Headscale desde el panel.");
+        vpnButton.setEnabled(!phoneStopping&&(nodeConnected||phoneConnected||phoneStarting));vpnButton.setAlpha(vpnButton.isEnabled()?1f:.5f);
+        vpnButton.setText(phoneStopping?"Desconectando aplicaciones…":phoneConnected||phoneStarting?"Desconectar aplicaciones":"Conectar aplicaciones");
+        vpnDetail.setText(phoneStopping?"Cerrando el túnel de las aplicaciones…":phoneConnected?"Las aplicaciones del teléfono utilizan la conexión del Gateway.":phoneStarting?"Preparando la conexión de las aplicaciones…":nodeConnected?"Gateway conectado. Puedes conectar también las aplicaciones del teléfono.":"Conecta primero el nodo del Gateway a Headscale desde el panel.");
         String error=RuntimeState.prefs(this).getString("last_error","");if(!phone.optString("error").isEmpty())error=phone.optString("error");errorText.setText(error);errorText.setVisibility(error.isEmpty()?View.GONE:View.VISIBLE);
         if(!engineReady && !starting)placeholderText.setText("El panel estará disponible cuando el Gateway esté iniciado. Pulsa Abrir panel para continuar.");
         if(!running && !engineReady)panelPlaceholder.setVisibility(View.VISIBLE);

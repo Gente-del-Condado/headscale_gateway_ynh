@@ -5,8 +5,8 @@ auxiliares. Gateway-Tray es un cliente opcional y no es necesario para usar el
 servidor. Las descargas y sus fuentes están en
 [headscale_gateway_releases](https://github.com/Gente-del-Condado/headscale_gateway_releases/releases).
 
-Instala el archivo de tu arquitectura con `sudo apt install ./headscale-gateway_1.4.9-1_amd64.deb`
-o `sudo dnf install ./headscale-gateway-1.4.9-1.x86_64.rpm`.
+Instala el archivo de tu arquitectura con `sudo apt install ./headscale-gateway_1.4.12-1_amd64.deb`
+o `sudo dnf install ./headscale-gateway-1.4.12-1.x86_64.rpm`.
 El paquete crea un usuario de servicio sin acceso interactivo. La primera
 instalación no arranca ni expone el panel sin configurar una cuenta:
 

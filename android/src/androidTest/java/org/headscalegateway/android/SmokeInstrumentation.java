@@ -200,7 +200,11 @@ public final class SmokeInstrumentation extends Instrumentation {
                 while(!completed.get()&&System.currentTimeMillis()<deadline) Thread.sleep(500);
                 backend.close();
                 require(completed.get(),"No se completó la comprobación desde el otro nodo");
-                context.stopService(new Intent(context,GatewayVpnService.class));
+                GatewayVpnService.requestStop(context);
+                long stoppedDeadline=System.currentTimeMillis()+10000;
+                while(System.currentTimeMillis()<stoppedDeadline && !RuntimeState.phoneVPN(context).optString("phase","stopped").equals("stopped"))Thread.sleep(100);
+                require(RuntimeState.phoneVPN(context).optString("phase","stopped").equals("stopped"),"La VPN enlazada por Android no se ha detenido");
+                require(RuntimeState.control(context,"/state").optBoolean("connected"),"Desconectar aplicaciones detuvo el motor del Gateway");
             }
             phase(new JSONObject().put("phase","passed"));
             result.putString("stream","Pruebas Android correctas: arranque, sesión normal, navegación móvil, ancho de las secciones y adaptador privado.\n");

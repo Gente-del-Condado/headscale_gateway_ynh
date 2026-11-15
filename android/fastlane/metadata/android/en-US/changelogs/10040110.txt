@@ -1,0 +1,1 @@
+Corrected VPN and LAN status. CA discovery with status colors, expandable details and registered Gateway versus unconfirmed node labels. Preserves data and signing identity.

@@ -8,8 +8,50 @@
   const showError = error => message(error.message || String(error),true);
   const makeButton=(label,fn)=>{const btn=document.createElement('button');btn.type='button';btn.className='secondary';btn.textContent=label;btn.addEventListener('click',()=>{Promise.resolve(fn()).catch(showError);});return btn;};
   const cell=(value)=>{const el=document.createElement('td');el.textContent=value;return el;};
-  const date=value=>value?new Date(value).toLocaleString():'—';
-  let loaded=false;
+  // Go serializa una fecha no registrada como 0001-01-01. No es una
+  // verificación real y su conversión local puede mostrar el año anterior.
+  const date=value=>{
+    if(!value || (typeof value==='string' && value.startsWith('0001-01-01T')))return '—';
+    const parsed=new Date(value);
+    return Number.isNaN(parsed.getTime())?'—':parsed.toLocaleString();
+  };
+  let loaded=false,knownPeers=[],discoveryBusy=false,downloadButtons=[];
+  const textNode=(tag,text)=>{const node=document.createElement(tag);node.textContent=text;return node};
+  const discoveryMessage=(text,bad=false)=>{
+    message(text,bad);
+    const node=byId('pki-discovery-message');node.textContent=text;
+    node.className=['pki-discovery-summary',...(bad?['is-warning']:[])].join(' ');
+  };
+  function setDiscoveryBusy(busy){
+    discoveryBusy=busy;
+    for(const button of [byId('pki-lan-discover'),byId('pki-download-discovered'),...downloadButtons])button.disabled=busy;
+    byId('pki-discovery').setAttribute('aria-busy',String(busy));
+  }
+  function gatewayKind(endpoint,anchor){
+    if(anchor)return window.tr('Gateway con CA disponible');
+    if(knownPeers.some(peer=>peer.endpoint?.replace(/\/$/,'')===endpoint?.replace(/\/$/,'')))return window.tr('Gateway registrado');
+    return window.tr('Nodo candidato · Gateway sin confirmar');
+  }
+  function errorStatus(error){
+    if(/HTTP 404/i.test(error))return window.tr('CA no publicada o ruta no disponible');
+    if(/connection (?:was )?refused/i.test(error))return window.tr('Puerto cerrado o conexión rechazada');
+    if(/deadline exceeded|timed? ?out/i.test(error))return window.tr('Sin respuesta a tiempo');
+    if(/certificate|x509|TLS/i.test(error))return window.tr('Error de certificado HTTPS');
+    return window.tr('No disponible');
+  }
+  function discoveryEntry(endpoint,label,tone,anchor){
+    const row=document.createElement('li');row.className=['pki-discovery-entry','is-'+tone].join(' ');
+    const heading=document.createElement('div');heading.className='pki-discovery-heading';
+    const status=textNode('strong',label);status.className='pki-discovery-state';
+    heading.append(status,textNode('span',gatewayKind(endpoint,anchor)));
+    row.append(heading,textNode('code',endpoint));return row;
+  }
+  function technicalDetails(row,error){
+    const details=document.createElement('details'),pre=textNode('pre',error);
+    pre.tabIndex=0;pre.setAttribute('role','region');pre.setAttribute('aria-label',window.tr('Detalles técnicos de conexión'));
+    // El error remoto se presenta como texto, nunca como HTML ejecutable.
+    details.append(textNode('summary',window.tr('Detalles técnicos')),pre);row.append(details);
+  }
   function androidTrustInstructions(){
     message('Android: descarga la CA pública, compara su huella SHA-256 y usa Ajustes > Seguridad > Instalar certificado > CA. La instalación requiere tu consentimiento en Android.');
     window.dispatchEvent(new Event('hgw-android-certificate-settings'));
@@ -27,7 +69,7 @@
     catch(error){message(error.message,true);return;}
   }
   async function refreshPKI(){
-    const data=await api('pki');loaded=true;
+    const data=await api('pki');loaded=true;knownPeers=data.peers||[];
     const android=data.platform==='android';
     byId('pki-helper-status').closest('.card').hidden=android;
  byId('pki-helper-enabled').checked=!!data.helper_enabled;
@@ -73,30 +115,40 @@
     }catch(e){showError(e)}
   });
   byId('pki-lan-discover').addEventListener('click',async()=>{
+    if(discoveryBusy)return;
+    setDiscoveryBusy(true);discoveryMessage(window.tr('Buscando candidatos de Gateway…'));
     try{
-      const result=await api('pki/discover');const target=byId('pki-discovery');target.replaceChildren();
-      const info=document.createElement('p');info.textContent=result.note||'';target.append(info);
-      if(result.candidates){
-        for(const c of result.candidates){const row=document.createElement('p');row.textContent=c.name+' · '+c.endpoint+' · '+[...(c.targets||[]),...(c.ca_http_targets||[])].map(t=>t.network+' '+t.ip).join(' → ');if(c.error)row.append(document.createTextNode(' · '+c.error));row.append(makeButton('Descargar CA pendiente',()=>downloadPeerCA(c.endpoint)));target.append(row);}
-        return;
+      const result=await api('pki/discover'),target=byId('pki-discovery');target.replaceChildren();downloadButtons=[];
+      const candidates=result.candidates|| (result.lan||[]).map(host=>({name:host.name,endpoint:host.endpoint||('https://'+host.host+':'+host.port),targets:[]}));
+      for(const candidate of candidates){
+        const row=discoveryEntry(candidate.endpoint,candidate.error?errorStatus(candidate.error):window.tr('Candidato encontrado'),candidate.error?'warning':'info');
+        row.append(textNode('p',candidate.name));
+        const paths=[...(candidate.targets||[]),...(candidate.ca_http_targets||[])].map(t=>t.network+' '+t.ip).join(' → ');
+        if(paths)row.append(textNode('p',paths));
+        if(candidate.error)technicalDetails(row,candidate.error);
+        const button=makeButton('Descargar CA pendiente',()=>downloadPeerCA(candidate.endpoint));button.disabled=true;downloadButtons.push(button);row.append(button);target.append(row);
       }
-      const title=document.createElement('strong');title.textContent='Encontrados en LAN (sin verificar):';target.append(title);
-      const ul=document.createElement('ul');
-      for(const host of result.lan||[]){
-        const li=document.createElement('li');li.textContent=host.name+' · '+host.address+':'+host.port+' · '+host.host;
-        li.append(makeButton('Utilizar candidato',()=>{byId('pki-peer-name').value=host.name;byId('pki-peer-url').value=host.endpoint||('https://'+host.host+(host.port===443?'':':'+host.port));message('Selecciona el certificado público obtenido por un canal verificado. Descubrir no equivale a confiar.');}));ul.append(li);
-      }target.append(ul);
-      const candidates=document.createElement('p');candidates.textContent=window.tr("Nodos Headscale detectados: {p0} (no necesariamente ejecutan Gateway).", {p0:((result.tailnet_candidates||[]).map(n=>n.name).join(', '))});target.append(candidates);
-    }catch(e){showError(e)}
+      discoveryMessage(window.tr('Candidatos encontrados: {p0}. Un nodo Headscale no demuestra que ejecute Gateway. Descargar una CA no la aprueba.',{p0:candidates.length}));
+    }catch(error){discoveryMessage(error.message||String(error),true)}finally{setDiscoveryBusy(false);byId('pki-discovery-message').focus()}
   });
   async function downloadPeerCA(endpoint){
-    const bulk=byId('pki-download-discovered');bulk.disabled=true;
-    try{message('Descargando CA públicas: Tailscale primero y LAN después. No se aprueban automáticamente.');
+    if(discoveryBusy)return;
+    setDiscoveryBusy(true);
+    try{discoveryMessage('Descargando CA públicas: Tailscale primero y LAN después. No se aprueban automáticamente.');
       const results=await api('pki/discover/download','POST',{endpoint});
-      const target=byId('pki-discovery');target.replaceChildren();
-      for(const item of results){const p=document.createElement('p');p.textContent=item.endpoint+' · '+(item.error||(item.anchor?.approved?window.tr('CA ya aprobada; se conserva su autorización.'):window.tr('CA pendiente: compara su huella antes de aprobar.')))+' '+(item.anchor?.fingerprint||'');target.append(p)}
-      await refreshPKI();message('Descarga finalizada. Revisa las huellas y aprueba únicamente las CA verificadas.');
-    }catch(e){showError(e)}finally{bulk.disabled=false}
+      const target=byId('pki-discovery');target.replaceChildren();downloadButtons=[];
+      for(const item of results){
+        const ok=!!item.anchor&&!item.error;
+        const label=ok?(item.anchor.approved?window.tr('CA ya aprobada; se conserva su autorización.'):window.tr('CA pendiente: compara su huella antes de aprobar.')):errorStatus(item.error||'');
+        const row=discoveryEntry(item.endpoint,label,ok?'success':'warning',item.anchor);
+        if(item.anchor?.fingerprint)row.append(textNode('p',window.tr('Huella SHA-256')+': '+item.anchor.fingerprint));
+        if(item.error)technicalDetails(row,item.error);target.append(row);
+      }
+      const downloaded=results.filter(item=>item.anchor&&!item.error).length;
+      const failed=results.filter(item=>item.error).length;
+      await refreshPKI();
+      discoveryMessage(window.tr('Descarga de CA: {p0} obtenidas, {p1} con error. Revisa el resultado de cada Gateway; solo aprueba huellas verificadas.',{p0:downloaded,p1:failed}),failed>0);
+    }catch(error){discoveryMessage(error.message||String(error),true)}finally{setDiscoveryBusy(false);byId('pki-discovery-message').focus()}
   }
   byId('pki-download-discovered').addEventListener('click',()=>downloadPeerCA(''));
   document.querySelector('[data-tab="pki"]').addEventListener('click',()=>{if(!loaded)refreshPKI().catch(showError);});

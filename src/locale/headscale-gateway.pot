@@ -390,6 +390,11 @@ msgstr ""
 msgid "Acceso al panel"
 msgstr ""
 
+#: src/internal/admin/panel-portability.js
+#: src/internal/admin/panel.html
+msgid "Acceso de red LAN sin comprobar"
+msgstr ""
+
 #: src/mobile_android.go
 msgid "Acceso denegado"
 msgstr ""
@@ -767,16 +772,16 @@ msgstr ""
 msgid "Almacén seguro no disponible: desmarca Recordar token"
 msgstr ""
 
+#: src/internal/platform/firewall/report_android.go
+msgid "Android no permite comprobar el cortafuegos desde esta aplicación. Este estado no indica que falte un permiso. Si falla el acceso por Wi-Fi, revisa la VPN y las restricciones de la red"
+msgstr ""
+
 #: src/internal/pki/system_android.go
 msgid "Android requiere instalar la CA pública desde sus ajustes de seguridad con consentimiento del usuario"
 msgstr ""
 
 #: src/internal/pki/system_android.go
 msgid "Android requiere retirar la CA desde las credenciales de usuario en sus ajustes de seguridad"
-msgstr ""
-
-#: src/internal/platform/firewall/report_android.go
-msgid "Android: comprueba los permisos de red, la VPN activa y el cortafuegos de la red Wi-Fi. No se cambian reglas del sistema desde la aplicación."
 msgstr ""
 
 #: src/internal/pki/system_android.go
@@ -1258,6 +1263,10 @@ msgstr ""
 msgid "Buscador y filtro por Gateway"
 msgstr ""
 
+#: src/internal/admin/panel-pki.js
+msgid "Buscando candidatos de Gateway…"
+msgstr ""
+
 #: src/internal/admin/panel-portal.js
 msgid "Buscando portales principales…"
 msgstr ""
@@ -1382,6 +1391,10 @@ msgstr ""
 
 #: src/internal/admin/routes_pki.go
 msgid "CA no encontrada"
+msgstr ""
+
+#: src/internal/admin/panel-pki.js
+msgid "CA no publicada o ruta no disponible"
 msgstr ""
 
 #: src/internal/pki/system_darwin.go
@@ -1589,6 +1602,14 @@ msgstr ""
 
 #: src/internal/admin/panel.html
 msgid "Cancelar edición"
+msgstr ""
+
+#: src/internal/admin/panel-pki.js
+msgid "Candidato encontrado"
+msgstr ""
+
+#: src/internal/admin/panel-pki.js
+msgid "Candidatos encontrados: {p0}. Un nodo Headscale no demuestra que ejecute Gateway. Descargar una CA no la aprueba."
 msgstr ""
 
 #: src/certificates.go
@@ -3040,8 +3061,9 @@ msgstr ""
 msgid "descarga de CA no disponible"
 msgstr ""
 
+#: internal/admin/panel-reference.js
 #: src/internal/admin/panel-pki.js
-msgid "Descarga finalizada. Revisa las huellas y aprueba únicamente las CA verificadas."
+msgid "Descarga de CA: {p0} obtenidas, {p1} con error. Revisa el resultado de cada Gateway; solo aprueba huellas verificadas."
 msgstr ""
 
 #: internal/admin/reference-data.json
@@ -3165,8 +3187,13 @@ msgstr ""
 msgid "Detalles del nodo"
 msgstr ""
 
+#: src/internal/admin/panel-pki.js
 #: src/internal/admin/panel.html
 msgid "Detalles técnicos"
+msgstr ""
+
+#: src/internal/admin/panel-pki.js
+msgid "Detalles técnicos de conexión"
 msgstr ""
 
 #: src/internal/admin/panel.html
@@ -3716,10 +3743,6 @@ msgstr ""
 msgid "En una consola como administrador: certutil -delstore Root"
 msgstr ""
 
-#: src/internal/admin/panel-pki.js
-msgid "Encontrados en LAN (sin verificar):"
-msgstr ""
-
 #: src/internal/admin/panel-experience.js
 msgid "Encuentra equipos, revisa sus rutas y comprueba la conectividad."
 msgstr ""
@@ -3798,6 +3821,10 @@ msgstr ""
 #: src/internal/admin/backups.go
 #: src/internal/admin/routes_forgejo.go
 msgid "error de archivo"
+msgstr ""
+
+#: src/internal/admin/panel-pki.js
+msgid "Error de certificado HTTPS"
 msgstr ""
 
 #: src/internal/templatelib/repository.go
@@ -4242,12 +4269,20 @@ msgstr ""
 msgid "Gateway"
 msgstr ""
 
+#: src/internal/admin/panel-pki.js
+msgid "Gateway con CA disponible"
+msgstr ""
+
 #: src/admin_network.go
 msgid "Gateway conectado a Headscale"
 msgstr ""
 
 #: src/internal/licensing/license.go
 msgid "gateway feature not licensed"
+msgstr ""
+
+#: src/internal/admin/panel-pki.js
+msgid "Gateway registrado"
 msgstr ""
 
 #: src/internal/admin/panel-experience.js
@@ -4788,6 +4823,10 @@ msgstr ""
 
 #: src/internal/pki/helper.go
 msgid "huella o tamaño inválidos"
+msgstr ""
+
+#: src/internal/admin/panel-pki.js
+msgid "Huella SHA-256"
 msgstr ""
 
 #: src/internal/pki/trust.go
@@ -6026,6 +6065,7 @@ msgid "No activa automáticamente el reenvío IP del sistema operativo ni aprueb
 msgstr ""
 
 #: src/internal/admin/panel-backups.js
+#: src/internal/admin/panel-pki.js
 #: src/internal/admin/panel-portal.js
 msgid "No disponible"
 msgstr ""
@@ -6380,16 +6420,16 @@ msgstr ""
 msgid "node_id obligatorio"
 msgstr ""
 
+#: src/internal/admin/panel-pki.js
+msgid "Nodo candidato · Gateway sin confirmar"
+msgstr ""
+
 #: src/internal/network/headscale.go
 msgid "nodo mal formado: %w"
 msgstr ""
 
 #: src/admin_network.go
 msgid "nodo no encontrado o sin IP VPN válida"
-msgstr ""
-
-#: src/internal/admin/panel-pki.js
-msgid "Nodos Headscale detectados: {p0} (no necesariamente ejecutan Gateway)."
 msgstr ""
 
 #: src/internal/admin/panel.html
@@ -6922,7 +6962,7 @@ msgstr ""
 msgid "Permisos"
 msgstr ""
 
-#: src/internal/admin/panel.html
+#: src/internal/admin/panel-portability.js
 msgid "Permisos de red LAN pendientes"
 msgstr ""
 
@@ -7577,6 +7617,10 @@ msgstr ""
 msgid "puerto Android inválido: %s"
 msgstr ""
 
+#: src/internal/admin/panel-pki.js
+msgid "Puerto cerrado o conexión rechazada"
+msgstr ""
+
 #: src/config_sqlite.go
 #: src/internal/pki/discovery_udp.go
 msgid "puerto de descubrimiento fuera del intervalo 1..65535"
@@ -7993,6 +8037,10 @@ msgid "Resultados"
 msgstr ""
 
 #: src/internal/admin/panel.html
+msgid "Resultados de descubrimiento de Gateways"
+msgstr ""
+
+#: src/internal/admin/panel.html
 msgid "Resumen"
 msgstr ""
 
@@ -8311,10 +8359,6 @@ msgstr ""
 msgid "Selecciona el archivo que quieres recuperar."
 msgstr ""
 
-#: src/internal/admin/panel-pki.js
-msgid "Selecciona el certificado público obtenido por un canal verificado. Descubrir no equivale a confiar."
-msgstr ""
-
 #: src/internal/admin/panel.html
 msgid "Selecciona exactamente lo que deseas proteger. SQLite incluye siempre la clave maestra. «Todo» incluye"
 msgstr ""
@@ -8566,6 +8610,10 @@ msgstr ""
 
 #: src/admin_schema.go
 msgid "Sin plantilla predeterminada"
+msgstr ""
+
+#: src/internal/admin/panel-pki.js
+msgid "Sin respuesta a tiempo"
 msgstr ""
 
 #: src/internal/admin/panel-backups.js
@@ -9468,10 +9516,6 @@ msgstr ""
 #: certificates.go
 #: src/certificates.go
 msgid "utilizando CA local hasta el próximo reintento permitido"
-msgstr ""
-
-#: src/internal/admin/panel-pki.js
-msgid "Utilizar candidato"
 msgstr ""
 
 #: config_validate.go

@@ -1,0 +1,1 @@
+Estados VPN y LAN corregidos. Descubrimiento de CA con colores, detalles desplegables y distinción entre Gateway registrado y nodo sin confirmar. Conserva datos y firma.

@@ -199,3 +199,16 @@ button.danger{background:#b42338!important;color:white} .grid>*,#headscale-manag
 .reference-detail{min-width:0}.reference-detail pre,#ref-output{white-space:pre-wrap;overflow-wrap:anywhere;max-height:540px;overflow:auto}
 #ref-form textarea{width:100%;font-family:monospace}#ref-detail code{overflow-wrap:anywhere}
 @media(max-width:850px){.reference-layout{grid-template-columns:1fr}.reference-index{max-height:260px}}
+
+/* Registro de descubrimiento: el texto de estado acompaña siempre al color. */
+.pki-discovery-summary{overflow-wrap:anywhere}.pki-discovery-summary.is-warning{color:#fcd34d}
+.pki-discovery-log{list-style:none;padding:0;margin:12px 0;display:grid;gap:10px}
+.pki-discovery-entry{min-width:0;padding:12px 14px;border:1px solid #384c65;border-left:4px solid #38bdf8;border-radius:7px;background:#172337}
+.pki-discovery-heading{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px 16px;margin-bottom:7px}
+.pki-discovery-heading span{color:#c3cfdf;font-size:.9em}.pki-discovery-state{color:#7dd3fc}
+.pki-discovery-entry.is-success{border-left-color:#22c55e}.pki-discovery-entry.is-success .pki-discovery-state{color:#86efac}
+.pki-discovery-entry.is-warning{border-left-color:#f59e0b}.pki-discovery-entry.is-warning .pki-discovery-state{color:#fcd34d}
+.pki-discovery-entry p,.pki-discovery-entry code{overflow-wrap:anywhere;white-space:normal}
+.pki-discovery-entry details{margin-top:10px}.pki-discovery-entry summary{cursor:pointer}
+.pki-discovery-entry pre{max-height:180px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;padding:10px;background:#101827;color:#d7e3f2;border-radius:5px}
+.pki-discovery-entry pre:focus-visible{outline:2px solid #38bdf8;outline-offset:2px}
