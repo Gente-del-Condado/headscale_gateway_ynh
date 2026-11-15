@@ -52,3 +52,30 @@ solo el paquete YunoHost. Las etiquetas existentes no se desplazan.
 Los destinos se resuelven por su identificador estable de GitHub. Así se puede
 comprobar la publicación antes de renombrarlos y conservarla después, sin
 escribir en Forgejo ni ampliar los permisos del token.
+
+## Descargas públicas y nuevos paquetes Linux
+
+El principal privado publica los instaladores y sus fuentes en
+[headscale_gateway_releases](https://github.com/Gente-del-Condado/headscale_gateway_releases).
+Home Assistant y YunoHost conservan sus repositorios y releases propios.
+`headscale_gateway_flatpak` recibe el paquete específico Flatpak. No se publica
+el historial privado. PUBLICATION_TOKEN incluye estos dos nuevos destinos
+públicos, además de los seis originales, con Contents de lectura y escritura.
+
+**Preparar distribución pública** comprueba los paquetes Debian/Fedora, construye
+e instala Flatpak y prepara los fuentes correspondientes sin recompilar en el
+Linux del mantenedor. **Publicar descargas públicas** exige además calidad
+correcta del mismo SHA vigente de main. Publica por separado en cuatro destinos,
+verifica los borradores y comprueba las descargas sin credenciales. Un archivo
+publicado con otro contenido nunca se reemplaza. Para reintentar, reutiliza los
+artefactos preparados; no cambies una etiqueta ni un instalador publicado.
+
+Los instaladores de bandeja son archivos pequeños completos. Los fuentes de
+Electron/Chromium/FFmpeg se proporcionan aparte en la misma release, con sus
+versiones, parches y sumas. Solo el archivo grande de fuentes Chromium utiliza
+fragmentos. Esto no modifica los binarios 1.4.8 ni la firma Android.
+
+Consulta [Debian y Fedora](LINUX_NATIVO.md), [Flatpak](FLATPAK.md) y
+[descargas públicas](DESCARGAS_PUBLICAS.md). El Flatpak es del motor completo,
+consola y panel web; no se solicita inclusión en Flathub ni se afirma aceptación.
+Play Store continúa solo preparado.

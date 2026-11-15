@@ -6,6 +6,11 @@ No necesita root ni otro cliente Tailscale instalado. La descarga directa utiliz
 para F-Droid y Google Play; no están publicadas en esas tiendas. F-Droid exige
 los fuentes completos en un repositorio público.
 
+La APK directa y sus fuentes se descargan sin cuenta desde
+[headscale_gateway_releases](https://github.com/Gente-del-Condado/headscale_gateway_releases/releases).
+Selecciona `headscale-gateway-release.apk`; los archivos sin firma y AAB son para
+preparar sus canales y no sustituyen esa APK de instalación directa.
+
 ## Uso
 
 1. Instala la APK y abre **Headscale Gateway**.

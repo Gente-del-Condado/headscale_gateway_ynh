@@ -14,6 +14,9 @@ from mkdocs.structure.files import File
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCES = {
+    'LINUX_NATIVO.md': 'packaging/linux/README.md',
+    'FLATPAK.md': 'packaging/flatpak/README.md',
+    'DESCARGAS_PUBLICAS.md': 'packaging/releases/README.md',
     'ESCRITORIO_LICENCIAS.md': 'packaging/desktop/README.md',
     'HOME_ASSISTANT.md': 'packaging/homeassistant/DOCS.md',
     'INTEGRACION_HA.md': 'packaging/hacs/README.md',

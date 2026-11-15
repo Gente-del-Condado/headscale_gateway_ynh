@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="console-application">
+  <id>es.gentedelcondado.HeadscaleGateway</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>AGPL-3.0-only</project_license>
+  <name>Headscale Gateway</name>
+  <summary>Gateway HTTPS privado con panel de administración web</summary>
+  <developer id="es.gentedelcondado"><name>Gente del Condado</name></developer>
+  <description><p>Ejecuta el motor Go compartido, un nodo VPN tsnet, el proxy de servicios, DNS, certificados y copias cifradas. El panel se abre en el navegador.</p><p>Esta distribución usa datos aislados de la sesión de usuario y no instala servicios ni certificados CA en el sistema anfitrión.</p></description>
+  <provides><binary>headscale-gateway-launcher</binary></provides>
+  <icon type="stock">es.gentedelcondado.HeadscaleGateway</icon>
+  <launchable type="desktop-id">es.gentedelcondado.HeadscaleGateway.desktop</launchable>
+  <url type="homepage">https://gente-del-condado.github.io/headscale_gateway_ynh/</url>
+  <url type="vcs-browser">https://github.com/Gente-del-Condado/headscale_gateway_flatpak</url>
+  <url type="bugtracker">https://github.com/Gente-del-Condado/headscale_gateway_flatpak/issues</url>
+  <content_rating type="oars-1.1"/>
+  <releases><release version="@VERSION@" date="@DATE@"/></releases>
+</component>

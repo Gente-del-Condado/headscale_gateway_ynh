@@ -1,0 +1,20 @@
+#!/usr/bin/python3
+"""Primera configuración explícita; una actualización nunca la sobrescribe."""
+import argparse
+from getpass import getpass
+from pathlib import Path
+import sys
+sys.path.insert(0, '/usr/libexec/headscale-gateway')
+from hgw_bootstrap import prepare
+p = argparse.ArgumentParser(description=__doc__)
+p.add_argument('--admin', required=True)
+p.add_argument('--listen', default='127.0.0.1:9091')
+a = p.parse_args()
+data = Path('/var/lib/headscale-gateway')
+if (data/'config/startup.json').exists() or (data/'gateway/gateway.sqlite').exists():
+    p.error('Ya existe una instalación: utiliza el panel o la recuperación; no se sobrescribe su configuración.')
+password = getpass('Contraseña inicial (12–72 bytes): ')
+if password != getpass('Repite la contraseña: '):
+    p.error('Las contraseñas no coinciden')
+prepare(data, data/'config', a.listen, username=a.admin, password=password)
+print('Configuración preparada. Inicia el servicio con sudo systemctl enable --now headscale-gateway')

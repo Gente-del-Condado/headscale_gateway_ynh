@@ -3,7 +3,25 @@
 Cada distribución Windows x64 y Linux x64 de Gateway-Tray incluye `legal/`.
 Conserva esa carpeta completa junto con el ejecutable al redistribuirlo.
 
-## Qué incluye
+## Descargas públicas ligeras
+
+Las entregas públicas separan el instalador del conjunto de fuentes común a
+Linux y Windows. Los instaladores `gateway-tray-linux-x64.tar.gz` y
+`gateway-tray-windows-x64.zip` se extraen directamente, sin unir partes.
+Conservan todos los avisos y los fuentes de la aplicación en `legal/`.
+`legal/PUBLIC-SOURCES.json` indica las URL públicas, las versiones y las sumas
+exactas de Electron, Chromium, Node y NAN. Descárgalos de la misma release de
+[descargas públicas](https://github.com/Gente-del-Condado/headscale_gateway_releases/releases).
+Solo Chromium necesita partes por el límite de tamaño de GitHub; su JSON
+indica el orden y la suma del archivo completo. Al redistribuir, conserva
+los avisos y facilita también esos fuentes exactos y sus parches.
+
+El empaquetado original completo descrito a continuación usa el manifiesto de
+formato 1. `tools/prepare_public_release.py` lo verifica antes de separar los
+fuentes; produce el formato 2 con referencias públicas y comprueba que no ha
+cambiado ningún archivo del runtime. Los archivos originales permanecen intactos.
+
+## Qué incluye el empaquetado completo
 
 - `LICENSE` y `LICENSES.chromium.html`: avisos originales del runtime concreto,
   sin sustituirlos por la licencia de Headscale Gateway.

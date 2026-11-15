@@ -18,6 +18,8 @@ correctamente publica la revisión comprobada en los destinos siguientes:
 
 | Destino público de GitHub | Contenido |
 | --- | --- |
+| [headscale_gateway_releases](https://github.com/Gente-del-Condado/headscale_gateway_releases) | Descargas generales sin autenticación, fuentes correspondientes, escritorios ligeros, Debian y Fedora |
+| [headscale_gateway_flatpak](https://github.com/Gente-del-Condado/headscale_gateway_flatpak) | Motor completo empaquetado para la sesión de usuario, fuera del catálogo Flathub |
 | [headscale_gateway_ynh](https://github.com/Gente-del-Condado/headscale_gateway_ynh) | Paquete YunoHost: manifiesto, scripts, configuración y documentación; recursos del motor en releases |
 | [headscale_gateway_ha](https://github.com/Gente-del-Condado/headscale_gateway_ha) | Integración de entidades; requiere un Gateway ya funcionando |
 | [Mis_app_ha](https://github.com/Gente-del-Condado/Mis_app_ha) | Aplicación que ejecuta el Gateway en Home Assistant |

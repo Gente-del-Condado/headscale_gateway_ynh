@@ -44,6 +44,9 @@ nav:
       - Ejemplos completos: EJEMPLOS.md
       - Capturas del panel: CAPTURAS.md
   - Instalar:
+      - Descargas públicas: DESCARGAS_PUBLICAS.md
+      - Debian y Fedora: LINUX_NATIVO.md
+      - Flatpak: FLATPAK.md
       - Home Assistant: HOME_ASSISTANT.md
       - Entidades en Home Assistant: INTEGRACION_HA.md
       - YunoHost: YUNOHOST.md

@@ -1,0 +1,51 @@
+{
+  "app-id": "es.gentedelcondado.HeadscaleGateway",
+  "runtime": "org.freedesktop.Platform",
+  "runtime-version": "25.08",
+  "sdk": "org.freedesktop.Sdk",
+  "command": "headscale-gateway-launcher",
+  "finish-args": [
+    "--share=network"
+  ],
+  "modules": [
+    {
+      "name": "headscale-gateway",
+      "buildsystem": "simple",
+      "build-commands": [
+        "install -Dm755 headscale-gateway /app/bin/headscale-gateway",
+        "install -Dm755 files/headscale-gateway-launcher /app/bin/headscale-gateway-launcher",
+        "install -Dm644 files/es.gentedelcondado.HeadscaleGateway.desktop /app/share/applications/es.gentedelcondado.HeadscaleGateway.desktop",
+        "install -Dm644 files/es.gentedelcondado.HeadscaleGateway.metainfo.xml /app/share/metainfo/es.gentedelcondado.HeadscaleGateway.metainfo.xml",
+        "install -Dm644 files/es.gentedelcondado.HeadscaleGateway.png /app/share/icons/hicolor/128x128/apps/es.gentedelcondado.HeadscaleGateway.png",
+        "install -Dm644 files/LICENSE /app/share/licenses/headscale-gateway/LICENSE",
+        "install -Dm644 files/NOTICE /app/share/licenses/headscale-gateway/NOTICE",
+        "cp -a files/notices /app/share/licenses/headscale-gateway/notices"
+      ],
+      "sources": [
+        {
+          "type": "file",
+          "url": "https://github.com/Gente-del-Condado/headscale_gateway_ynh/releases/download/server-v@VERSION@/headscale-gateway-linux-amd64",
+          "sha256": "@AMD64_SHA256@",
+          "dest-filename": "headscale-gateway",
+          "only-arches": [
+            "x86_64"
+          ]
+        },
+        {
+          "type": "file",
+          "url": "https://github.com/Gente-del-Condado/headscale_gateway_ynh/releases/download/server-v@VERSION@/headscale-gateway-linux-arm64",
+          "sha256": "@ARM64_SHA256@",
+          "dest-filename": "headscale-gateway",
+          "only-arches": [
+            "aarch64"
+          ]
+        },
+        {
+          "type": "dir",
+          "path": "files",
+          "dest": "files"
+        }
+      ]
+    }
+  ]
+}

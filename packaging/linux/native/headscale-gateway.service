@@ -1,0 +1,35 @@
+[Unit]
+Description=Headscale Gateway (motor Go y panel web)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=headscale-gateway
+Group=headscale-gateway
+StateDirectory=headscale-gateway
+StateDirectoryMode=0700
+WorkingDirectory=/var/lib/headscale-gateway
+Environment=GATEWAY_BOOTSTRAP_FILE=/var/lib/headscale-gateway/config/startup.json
+ExecCondition=/usr/bin/test -f /var/lib/headscale-gateway/config/startup.json
+ExecStart=/usr/bin/headscale-gateway --db /var/lib/headscale-gateway/gateway/gateway.sqlite
+Restart=on-failure
+RestartSec=5s
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictRealtime=true
+ReadWritePaths=/var/lib/headscale-gateway
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+
+[Install]
+WantedBy=multi-user.target

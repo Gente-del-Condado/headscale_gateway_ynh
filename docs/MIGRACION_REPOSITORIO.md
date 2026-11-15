@@ -135,3 +135,13 @@ En Home Assistant los datos del motor están en `/data/gateway/`. En YunoHost se
 utiliza la subcarpeta `gateway/` del directorio de datos asignado a la instancia.
 Mantén las bases de datos, claves, perfiles y copias privadas fuera del clon.
 Las actualizaciones se realizan con el procedimiento de cada plataforma.
+
+## Distribuir sin abrir el principal
+
+El borrador y las pruebas del principal privado son una etapa de preparación.
+Las descargas para usuarios se publican sin credenciales en
+[headscale_gateway_releases](https://github.com/Gente-del-Condado/headscale_gateway_releases/releases),
+con fuentes saneados y sin copiar la historia privada. Los paquetes específicos
+se publican en sus repositorios YunoHost, Home Assistant y Flatpak. Consulta
+[el flujo público](PUBLICACION.md#descargas-públicas-y-nuevos-paquetes-linux).
+No compartas un enlace al principal privado como descarga para usuarios públicos.

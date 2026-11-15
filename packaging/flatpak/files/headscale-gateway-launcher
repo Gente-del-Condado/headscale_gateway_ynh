@@ -1,0 +1,8 @@
+#!/bin/sh
+# El sandbox mantiene una identidad y una base de datos propias del usuario.
+set -eu
+umask 077
+data="${XDG_DATA_HOME:?Flatpak debe definir XDG_DATA_HOME}/headscale-gateway"
+mkdir -p "$data"
+chmod 700 "$data"
+exec /app/bin/headscale-gateway --db "$data/gateway.sqlite" "$@"
