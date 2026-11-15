@@ -247,3 +247,17 @@ experimental hasta validar también un teléfono físico, reconexión Wi-Fi/dato
 suspensión, IPv6 y proveedores DNS/ACME reales.
 
 Consulta [los componentes reutilizados y sus avisos](TERCEROS.md).
+
+## Autor y soporte
+
+Autor: **Gente del Condado**. Soporte: [headscale-gateway@gentedelcondado.es](mailto:headscale-gateway@gentedelcondado.es).
+[Manual en línea](https://gente-del-condado.github.io/headscale_gateway_ynh/).
+
+## Nombre propuesto antes de conectar
+
+El primer formulario del panel propone el nombre del dispositivo Android (o su
+modelo si no está disponible) y permite editarlo antes de iniciar tsnet. No pide
+permisos de Bluetooth para obtenerlo. Headscale decide el nombre definitivo y
+resuelve los duplicados; se conserva la identidad VPN al actualizar. Una
+instalación existente conserva el nombre que ya tenía. Importar un perfil no
+copia el nombre del dispositivo de origen ni confirma la propuesta local.

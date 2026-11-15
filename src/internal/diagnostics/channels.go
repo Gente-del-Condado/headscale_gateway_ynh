@@ -41,10 +41,19 @@ func (c *channelSink) swap(w *rotatingWriter) error {
 	return nil
 }
 
+// Un servicio Windows puede carecer de consola. Su fallo no debe impedir
+// escribir el registro persistente; los errores del archivo siguen propagándose.
+type optionalConsoleWriter struct{ io.Writer }
+
+func (w optionalConsoleWriter) Write(p []byte) (int, error) {
+	_, _ = w.Writer.Write(p)
+	return len(p), nil
+}
+
 var channels = map[string]*channelSink{"gateway": {}, "proxy": {}, "admin": {}}
-var gatewayLogger = log.New(redactedWriter{io.MultiWriter(os.Stderr, channels["gateway"])}, "[HGW] ", log.LstdFlags|log.Lmicroseconds|log.LUTC)
-var adminLogger = log.New(redactedWriter{io.MultiWriter(os.Stderr, channels["admin"])}, "[HGW-ADMIN] ", log.LstdFlags|log.Lmicroseconds|log.LUTC)
-var proxyLogger = log.New(redactedWriter{io.MultiWriter(os.Stderr, channels["proxy"])}, "[HGW-PROXY] ", log.LstdFlags|log.Lmicroseconds|log.LUTC)
+var gatewayLogger = log.New(redactedWriter{io.MultiWriter(optionalConsoleWriter{os.Stderr}, channels["gateway"])}, "[HGW] ", log.LstdFlags|log.Lmicroseconds|log.LUTC)
+var adminLogger = log.New(redactedWriter{io.MultiWriter(optionalConsoleWriter{os.Stderr}, channels["admin"])}, "[HGW-ADMIN] ", log.LstdFlags|log.Lmicroseconds|log.LUTC)
+var proxyLogger = log.New(redactedWriter{io.MultiWriter(optionalConsoleWriter{os.Stderr}, channels["proxy"])}, "[HGW-PROXY] ", log.LstdFlags|log.Lmicroseconds|log.LUTC)
 var configurationMu sync.RWMutex
 var configuredDir string
 var configuredMB, configuredBackups int

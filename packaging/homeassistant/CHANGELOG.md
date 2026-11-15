@@ -1,3 +1,10 @@
+# 1.4.13
+
+- Certificados: conserva CertMagic y DNS-01 sin cargar el servidor Caddy; mantiene TXT ajenos y protege los tokens en errores de ACME.
+- Confirmación del nombre propuesto antes del primer registro en Headscale, con identidad conservada al actualizar.
+- Limpieza DNS al caducar o eliminar nodos, con avisos separados si falla el proveedor.
+- Autor, soporte y manual unificados; servicios nativos y accesos del escritorio mejorados.
+
 # 1.4.12
 
 - Android cierra explícitamente el adaptador VPN aunque el sistema mantenga

@@ -38,8 +38,8 @@ Con el túnel abierto, visita `http://127.0.0.1:9091/admin/` en tu ordenador. La
 
 ## Configura y conecta
 
-1. En **Sistema → Configuración**, escribe la URL de Headscale y el dominio base de servicios.
-2. Define el nombre estable del nodo. Conserva ese nombre después del alta.
+1. En una instalación nueva, confirma o cambia el nombre propuesto del dispositivo en el primer formulario del panel. El motor administrativo está disponible, pero no registra el nodo ni publica DNS antes de confirmar. Android propone el nombre del dispositivo (o su modelo); el resto utiliza el nombre del equipo o la propuesta del instalador.
+2. En **Sistema → Configuración**, escribe la URL de Headscale y el dominio base de servicios. Headscale decide el nombre definitivo y añade sufijos si hay duplicados; el Gateway utiliza ese resultado.
 3. Selecciona el proveedor DNS y el modo de certificados. Con DNS manual tendrás que crear los registros correspondientes.
 4. Guarda. Si aparece un aviso de reinicio pendiente, reinicia desde el panel.
 5. Completa la autorización de Headscale que solicite el Gateway.
@@ -65,3 +65,30 @@ Los [ejemplos](EJEMPLOS.md) desarrollan este recorrido y el caso de Home Assista
 Antes de depender del Gateway, crea una copia cifrada desde **Sistema → Copias de seguridad** y guárdala fuera del equipo. Conserva su contraseña en un lugar accesible para quien deba restaurarla. Ensaya la recuperación en una instalación aislada.
 
 Consulta [recuperar el acceso](RECUPERAR_ACCESO.md) para el código de consola y [solución de problemas](SOLUCION_PROBLEMAS.md) para los fallos habituales.
+
+## Nombre e identidad
+
+`headscale.node_name` guarda el nombre solicitado en SQLite. El nombre definitivo
+lo asigna Headscale; la carpeta que contiene las claves VPN permanece fija al
+cambiar la propuesta. En instalaciones existentes no se fuerza una nueva confirmación
+ni se cambia el nombre. Para renombrar el nombre definitivo ya registrado utiliza
+**Headscale → Red y nodos → Cambiar nombre**. Los perfiles no importan el nombre
+del equipo de origen ni la confirmación local del destino; las copias completas
+sí conservan la configuración de la misma instalación.
+
+## Caducar o eliminar nodos y sus DNS
+
+Tras confirmar la operación en Headscale, el motor intenta retirar los registros A
+asociados a la identidad obtenida previamente del servidor: nombre definitivo,
+marca `managed-by=headscale-gateway;node=<dominio>` e IP del nodo deben coincidir.
+Solo actúa dentro de la zona configurada y con los permisos del proveedor actual,
+como Technitium o Cloudflare. Conserva registros manuales, otros nodos, otras IP,
+TXT de ACME, CNAME, claves y certificados. Un cambio previo de nombre puede dejar
+registros históricos que requieren revisión manual.
+
+Un fallo de permisos o conexión DNS no revierte la operación ya completada en
+Headscale: el panel muestra un aviso persistente y el número de registros eliminados.
+No se interpreta como fallo del borrado del nodo ni se reintenta borrarlo para
+resolver el DNS. Revisa los registros pendientes en el proveedor. Caducar una sesión
+no desinstala el Gateway remoto: si vuelve a autorizarse y publicar, podrá recrear
+sus registros. No se eliminan automáticamente registros al borrar usuarios.

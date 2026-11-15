@@ -44,7 +44,7 @@ with logs.open('wb') as output:
 try:
     deadline = time.monotonic() + 15
     while time.monotonic() < deadline:
-        assert child.poll() is None, 'Container entry point stopped unexpectedly'
+        assert child.poll() is None, 'Container entry point stopped unexpectedly: ' + logs.read_text()
         match = re.search(r'Panel disponible mediante el proxy autorizado; escucha interna: (?:0\.0\.0\.0|\[::\]):(\d+)', logs.read_text())
         if match:
             break

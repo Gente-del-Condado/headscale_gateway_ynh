@@ -6,6 +6,7 @@ RUN CGO_ENABLED=0 go build -mod=readonly -buildvcs=false -trimpath -o /out/heads
 FROM python:3.14-alpine3.24
 ARG BUILD_VERSION
 ARG BUILD_ARCH
+LABEL org.opencontainers.image.authors="Gente del Condado <headscale-gateway@gentedelcondado.es>" org.opencontainers.image.documentation="https://gente-del-condado.github.io/headscale_gateway_ynh/HOME_ASSISTANT.html"
 LABEL io.hass.type="app" io.hass.version="${BUILD_VERSION}" io.hass.arch="${BUILD_ARCH}"
 COPY --from=build /usr/local/go/lib/time/zoneinfo.zip /usr/share/zoneinfo.zip
 ENV ZONEINFO=/usr/share/zoneinfo.zip

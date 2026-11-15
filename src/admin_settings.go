@@ -19,6 +19,14 @@ func (a *adminController) Settings(_ context.Context) (any, error) {
 	if err != nil {
 		return nil, err
 	}
+	if _, ok := values["headscale.node_name_confirmed"]; !ok {
+		values["headscale.node_name_confirmed"] = "true"
+	}
+	if values["headscale.node_name"] == "" {
+		if snapshot := a.runtime.active.Load(); snapshot != nil {
+			values["headscale.node_name"] = snapshot.name
+		}
+	}
 	for k, v := range initialSettings() {
 		if _, ok := values[k]; !ok {
 			values[k] = v
@@ -31,14 +39,15 @@ func (a *adminController) Settings(_ context.Context) (any, error) {
 }
 
 var allowedSettings = map[string]bool{
-	"pki.discovery_port": true,
-	"pki.http_enabled":   true, "pki.http_listen_addr": true, "pki.allow_http_download": true,
+	"headscale.node_name": true,
+	"pki.discovery_port":  true,
+	"pki.http_enabled":    true, "pki.http_listen_addr": true, "pki.allow_http_download": true,
 	"server.listen_addr": true, "domain.base_domain": true, "headscale.url": true,
 	"headscale.api_key": true, "headscale.panel_enabled": true, "dns.provider": true,
 	"dns.zone": true, "dns.technitium.url": true, "dns.technitium.token": true,
 	"dns.cloudflare.zone_id": true, "dns.cloudflare.token": true,
 	"acme.cloudflare.zone_id": true, "acme.cloudflare.token": true,
-	"acme.dns_provider": true, "acme.email": true, "certificates.mode": true,
+	"acme.dns_provider": true, "acme.email": true, "acme.agree_to_terms": true, "certificates.mode": true,
 	"certificates.renew_before": true, "certificates.local_ca_validity": true,
 	"certificates.local_certificate_validity": true, "services.default_template": true, "proxy.default_egress": true,
 	"admin.enabled": true, "admin.listen_addr": true,
@@ -76,6 +85,12 @@ func (a *adminController) UpdateSettings(_ context.Context, changes map[string]s
 			continue
 		}
 		next[k] = v
+	}
+	if name, ok := changes["headscale.node_name"]; ok {
+		if !validRequestedNodeName(name) {
+			return fmt.Errorf("nombre de nodo inválido: usa 1..63 letras minúsculas, números o guiones sin repetir")
+		}
+		next["headscale.node_name_confirmed"] = "true"
 	}
 	candidate, err := configFromSettings(a.configPath, next, db)
 	if err == nil {

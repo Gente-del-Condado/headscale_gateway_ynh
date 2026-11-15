@@ -69,3 +69,18 @@ se edita una sola vez en docs/. Tras una entrega completada, el flujo del manual
 superpone esa guía al árbol de documentación de la release, valida todos los
 enlaces y actualiza las dos ramas gh-pages. Los fuentes y los instaladores de la
 entrega conservan sus archivos originales. Este trabajo no compila el motor.
+
+## Validar una revisión antes de crear la release
+
+`Validar revisión antes de publicar` comprueba un commit exacto de una rama
+`codex/` de Forgejo. El mantenedor indica rama, SHA y versión; el lector verifica
+que la rama sigue apuntando a ese commit y que los paquetes generados coinciden.
+No acepta otra rama, no publica paquetes y no dispone de credenciales de firma
+ni de escritura en destinos. Usa el token de lectura ya existente solo al descargar
+el árbol; las pruebas se ejecutan después sin ese secreto en su entorno.
+
+Ejecuta seguridad, motor, panel y conservación, el complemento Home Assistant,
+el proxy SSO de YunoHost y la aceptación del servicio nativo en un Windows
+desechable. Las pruebas del SCM solo se activan dentro de ese runner, nunca al
+hacer `go test` en el PC del usuario. La publicación estable mantiene su circuito
+independiente y sus comprobaciones obligatorias.

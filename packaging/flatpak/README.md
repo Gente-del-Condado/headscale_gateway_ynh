@@ -26,7 +26,7 @@ Descarga el archivo `.flatpak` de la release pública correspondiente, comprueba
 su suma e instala:
 
 ```sh
-flatpak install --user ./headscale-gateway-1.4.12-x86_64.flatpak
+flatpak install --user ./headscale-gateway-1.4.13-x86_64.flatpak
 flatpak run es.gentedelcondado.HeadscaleGateway
 ```
 
@@ -43,7 +43,7 @@ IA: no se presenta como apto para solicitar inclusión ni se envía una solicitu
 
 ## Construcción
 
-El manifiesto toma binarios 1.4.12 verificados de los recursos públicos YunoHost.
+El manifiesto toma binarios 1.4.13 verificados de los recursos públicos YunoHost.
 Los fuentes completos del motor y sus dependencias están en `source.tar.gz`
 de esa misma release; los fuentes completos del proyecto se publican aparte.
 No reconstruye ni modifica el motor para Flatpak. `flatpak-builder` construye el
@@ -51,3 +51,30 @@ paquete dentro de su sandbox; las pruebas se ejecutan en GitHub, no en el Linux
 habitual del mantenedor.
 
 [Manual](https://gente-del-condado.github.io/headscale_gateway_ynh/).
+
+## Autor y soporte
+
+Autor: **Gente del Condado**. Soporte: [headscale-gateway@gentedelcondado.es](mailto:headscale-gateway@gentedelcondado.es).
+[Manual en línea](https://gente-del-condado.github.io/headscale_gateway_ynh/).
+
+## Instalación y acceso del escritorio
+
+El menú de KDE, GNOME u otro escritorio contiene **Headscale Gateway**. El primer
+arranque explica que el motor seguirá disponible al cerrar el navegador, pide una
+cuenta del panel y abre la administración local. Después se confirma el nombre del
+dispositivo desde el panel común antes de conectar a Headscale. Las contraseñas se
+introducen en diálogos del escritorio y se guardan con el contrato común protegido;
+no se pasan como argumentos ni aparecen en registros.
+
+La sesión mantiene una sola instancia con un bloqueo privado y recupera fallos del
+motor con reintentos limitados. Pulsar de nuevo el acceso abre el panel existente.
+El permiso de segundo plano y arranque al iniciar sesión se solicita mediante el
+portal del escritorio. Solo queda activado si el escritorio lo confirma; una
+negativa o un portal no compatible deja un aviso en los registros. No se modifica
+systemd del host ni se amplían los permisos de archivos o del bus de la aplicación.
+Para detenerlo utiliza `flatpak kill es.gentedelcondado.HeadscaleGateway`; para
+retirar el arranque automático revisa los permisos de aplicaciones de tu escritorio.
+
+Los datos siguen dentro de los datos privados de Flatpak. Si existe una instalación
+anterior, primero detén todas sus instancias; el asistente pide confirmarlo antes
+de adoptar la misma SQLite, identidad y credenciales, sin restablecerlas.

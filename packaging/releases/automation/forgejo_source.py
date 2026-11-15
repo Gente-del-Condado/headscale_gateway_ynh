@@ -125,11 +125,17 @@ def verify_manifest(root):
         raise ValueError('Los instaladores no corresponden a los fuentes etiquetados')
 
 
-def fetch(sha,version,destination):
+def fetch(sha,version,destination,candidate_ref=None):
     if not re.fullmatch(r'[0-9a-f]{40}',sha) or not re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+',version):raise ValueError('Referencia no válida')
-    release=forgejo_json('/releases/tags/v'+version);validate_release(release)
-    tag=forgejo_json('/tags/v'+version)
-    if tag['commit']['sha']!=sha:raise ValueError('La etiqueta ha cambiado; se detiene la construcción')
+    if candidate_ref:
+        if not re.fullmatch(r'codex/[a-z0-9-]+',candidate_ref):raise ValueError('La validación requiere una rama de revisión codex/')
+        branches=forgejo_json('/branches?limit=100')
+        branch=next((item for item in branches if item['name']==candidate_ref),None)
+        if not branch or branch['commit']['id']!=sha:raise ValueError('La rama de revisión ha cambiado; se detiene la validación')
+    else:
+        release=forgejo_json('/releases/tags/v'+version);validate_release(release)
+        tag=forgejo_json('/tags/v'+version)
+        if tag['commit']['sha']!=sha:raise ValueError('La etiqueta ha cambiado; se detiene la construcción')
     with tempfile.TemporaryFile() as temporary:
         with forgejo('/archive/'+sha+'.tar.gz') as response:
             total=0
@@ -153,14 +159,14 @@ def fetch(sha,version,destination):
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--plan',action='store_true');p.add_argument('--sha');p.add_argument('--version');p.add_argument('--destination',type=Path);a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--plan',action='store_true');p.add_argument('--sha');p.add_argument('--version');p.add_argument('--destination',type=Path);p.add_argument('--candidate-ref');a=p.parse_args()
     try:
         if a.plan:
             result=plan();print(json.dumps(result,ensure_ascii=False))
             if os.environ.get('GITHUB_OUTPUT'):
                 with open(os.environ['GITHUB_OUTPUT'],'a') as out:
                     for key,value in result.items():out.write(key+'='+str(value).lower()+'\n' if isinstance(value,bool) else key+'='+str(value)+'\n')
-        elif a.sha and a.version and a.destination:fetch(a.sha,a.version,a.destination)
+        elif a.sha and a.version and a.destination:fetch(a.sha,a.version,a.destination,a.candidate_ref)
         else:p.error('Usa --plan o --sha/--version/--destination')
     except (ValueError,KeyError,OSError,subprocess.CalledProcessError) as error:p.exit(1,str(error)+'\n')
 

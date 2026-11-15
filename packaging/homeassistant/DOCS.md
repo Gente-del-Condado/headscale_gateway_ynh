@@ -241,3 +241,13 @@ o registros completos sin revisar.
 El código propio es software libre bajo **AGPL-3.0-only**. `source.tar.gz`
 contiene las fuentes del motor, `LICENSE`, `NOTICE` y `SOURCE.md` con las
 instrucciones de compilación. Los avisos de terceros se conservan en `notices/`.
+
+## Autor, soporte y nombre del nodo
+
+Autor: **Gente del Condado**. Soporte:
+[headscale-gateway@gentedelcondado.es](mailto:headscale-gateway@gentedelcondado.es).
+[Manual en línea](https://gente-del-condado.github.io/headscale_gateway_ynh/).
+En una instalación nueva, el panel común pide confirmar o editar el nombre
+propuesto antes de conectar a Headscale. La propuesta del instalador no sustituye
+esa elección. Headscale asigna el nombre definitivo y resuelve duplicados. Las
+actualizaciones conservan el nombre, la identidad, las credenciales y los datos.

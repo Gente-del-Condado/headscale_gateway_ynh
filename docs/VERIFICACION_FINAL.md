@@ -1,5 +1,43 @@
 # Validación y límites conocidos
 
+## Validación local del candidato 1.4.13
+
+Revisión del 15 de noviembre de 2026, anterior a la publicación estable. La
+validación local con contenedores ha superado 91 pruebas de repositorio, las
+pruebas Go y JavaScript, vet, compilación, auditorías Go y npm sin
+vulnerabilidades detectadas, actualización con credenciales y clave estables,
+integridad SQLite y manual estricto (45 páginas y 2.615 enlaces locales).
+Home Assistant pasa Ingress, SSO, CSRF y rechazo de cabeceras suplantadas;
+YunoHost pasa nginx/NSS, SSO, raíz/subruta, revocación y conservación de clave.
+Esta última prueba es de contenedor y no sustituye una instalación completa en VM.
+
+En Windows 11 LTSC se ha validado el servicio LocalService real: instalación,
+actualización con contraseña, configuración, datos y clave conservados,
+recuperación tras terminar deliberadamente el proceso y reinicio desde el panel.
+El fallo inicial tenía dos causas: el registro automático del SCM al importar
+el adaptador Caddy de Technitium y los permisos heredados de archivos al
+actualizar. Se utiliza ahora únicamente el proveedor libdns MIT, con procedencia
+y licencia conservadas, y se espera al cierre del proceso antes de sustituirlo.
+Tailscale estaba detenido por decisión del usuario; esta ejecución no certifica
+la coexistencia con Tailscale activo. El panel local no necesita Internet.
+
+CertMagic sigue gestionando ACME. Pebble 2.10.3 y un DNS local de laboratorio
+han validado emisión y renovación del nodo y su comodín, cadena y nombres TLS,
+clave de cuenta conservada, retirada de TXT propios y conservación de un TXT
+manual antiguo. La primera cuenta exige aceptación explícita sin consola; las
+cuentas guardadas renuevan aunque falte la opción nueva. Se comprueba además
+que los errores del proveedor no exponen el token. No se han tocado registros
+DNS ni certificados de producción.
+
+La APK directa mantiene la firma estable, target API 36 y los dos motores
+arm64-v8a/x86_64 con alineación ELF de 16 KiB. Incluye LICENSE y NOTICE completos.
+La tablet había sido desinstalada por el usuario antes de esta revisión y se
+reinstaló con autorización; no se atribuye conservación a aquellos datos ya
+retirados. La actualización posterior del candidato se realiza con `adb install -r`,
+conservando identidad del paquete y fecha de primera instalación. Android Lint
+mantiene cero errores y 23 avisos de mantenimiento. Play Store continúa preparado,
+sin publicación en la tienda.
+
 ## Revisión de dependencias de la versión 1.4.6
 
 Revisión del 11 de noviembre de 2026. Se actualizan Caddy a 2.11.5, go-jose a

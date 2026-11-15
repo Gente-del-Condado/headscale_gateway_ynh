@@ -65,3 +65,6 @@ class PublicDistributionTest(unittest.TestCase):
             self.assertFalse((result/'es.gentedelcondado.HeadscaleGateway.json.in').exists())
             self.assertFalse((result/'files/es.gentedelcondado.HeadscaleGateway.metainfo.xml.in').exists())
             self.assertTrue((result/'files/notices/third_party/go').is_dir())
+            for name in ('LICENSE', 'NOTICE'):
+                self.assertEqual((result/name).read_bytes(), (prepare_flatpak.ROOT/name).read_bytes())
+                self.assertEqual((result/'files'/name).read_bytes(), (prepare_flatpak.ROOT/name).read_bytes())

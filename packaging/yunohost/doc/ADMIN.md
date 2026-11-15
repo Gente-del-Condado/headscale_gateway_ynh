@@ -209,3 +209,13 @@ El código propio es software libre bajo **AGPL-3.0-only**. La revisión
 de compilación. Se conservan también en la release pública del motor.
 `build-manifest.json` registra las sumas de cada archivo. Las licencias de
 terceros se conservan en `doc/third_party/` del repositorio y `notices/` de la instalación.
+
+## Autor, soporte y nombre del nodo
+
+Autor: **Gente del Condado**. Soporte:
+[headscale-gateway@gentedelcondado.es](mailto:headscale-gateway@gentedelcondado.es).
+[Manual en línea](https://gente-del-condado.github.io/headscale_gateway_ynh/).
+En una instalación nueva, el panel común pide confirmar o editar el nombre
+propuesto antes de conectar a Headscale. La propuesta del instalador no sustituye
+esa elección. Headscale asigna el nombre definitivo y resuelve duplicados. Las
+actualizaciones conservan el nombre, la identidad, las credenciales y los datos.

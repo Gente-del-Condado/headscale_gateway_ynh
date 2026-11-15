@@ -5,8 +5,8 @@ import argparse,subprocess
 p=argparse.ArgumentParser(description=__doc__);p.add_argument('directory',type=Path);a=p.parse_args()
 root=a.directory.resolve()
 for image,kind,pattern,install,remove in [
-    ('debian:12','deb','*_amd64.deb','apt-get update && apt-get install -y python3 systemd curl && dpkg -i /packages/*.deb','dpkg -r headscale-gateway'),
-    ('fedora:44','rpm','*.x86_64.rpm','dnf install -y python3 systemd util-linux && rpm -i /packages/*.rpm','rpm -e headscale-gateway')]:
+    ('debian:12','deb','*_amd64.deb','apt-get update && apt-get install -y --no-install-recommends python3 systemd curl xdg-utils && dpkg -i /packages/*.deb','dpkg -r headscale-gateway'),
+    ('fedora:44','rpm','*.x86_64.rpm','dnf install -y --setopt=install_weak_deps=False python3 systemd util-linux xdg-utils && rpm -i /packages/*.rpm','rpm -e headscale-gateway')]:
     files=list(root.glob(pattern))
     if len(files)!=1:raise SystemExit('No se ha encontrado un único paquete '+kind)
     # Solo se monta la copia exacta del paquete objetivo; no se usa la red del host.
@@ -22,6 +22,6 @@ sha256sum /var/lib/headscale-gateway/gateway/* /var/lib/headscale-gateway/config
 '''
     script+=('dpkg -i /packages/*.deb\n' if kind=='deb' else 'rpm -U --replacepkgs /packages/*.rpm\n')
     script+='sha256sum -c /tmp/preserved\n'+remove+'\nsha256sum -c /tmp/preserved\n'
-    subprocess.run(['docker','run','--rm','--cpus','2','--memory','2g','-v',str(mount)+':/packages:ro',image,'sh','-ec',script],check=True)
+    subprocess.run(['docker','run','--rm','--cpus','2','--memory','2g','-v',str(mount)+':/packages:ro,Z',image,'sh','-ec',script],check=True)
     shutil.rmtree(mount)
 print('PAQUETES_NATIVOS_OK: instalación, reinstalación y conservación tras desinstalar')

@@ -17,3 +17,9 @@ yunohost/payload/headscale-gateway-linux-* binary
 # Generated install trees must keep the exact checksummed build bytes.
 addons/** -text
 yunohost/** -text
+
+# Los avisos y fuentes incorporados de terceros conservan sus bytes originales.
+src/third_party/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
+src/internal/acmednstechnitium/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
+addons/headscale_gateway/notices/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
+yunohost/doc/third_party/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol

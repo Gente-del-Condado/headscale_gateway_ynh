@@ -1,6 +1,6 @@
 # Licencia y avisos de terceros
 
-Revisión técnica: 12 de noviembre de 2026. Se han contrastado los avisos locales,
+Revisión técnica: 15 de noviembre de 2026. Se han contrastado los avisos locales,
 los metadatos y la distribución de fuentes del motor. Esta revisión no acredita
 la titularidad histórica de las aportaciones ni sustituye la revisión de las
 obligaciones de cada componente distribuido.
@@ -27,9 +27,12 @@ a licenciar las aportaciones originales incorporadas.
 
 ## Fuentes públicas del motor
 
-El [paquete público YunoHost](https://github.com/Gente-del-Condado/headscale_gateway_ynh)
-incluye `payload/source.tar.gz`, con las mismas fuentes de compilación que
-`source.tar.gz` del complemento Home Assistant. Ambos incluyen `LICENSE`,
+Las [entregas públicas YunoHost](https://github.com/Gente-del-Condado/headscale_gateway_ynh/releases)
+incluyen `source.tar.gz`, con las mismas fuentes de compilación que el
+complemento Home Assistant. La rama pública `main` descarga los recursos de
+su entrega mediante sumas verificadas; no contiene el directorio privado
+`payload/`. Los [instaladores generales y sus fuentes](https://github.com/Gente-del-Condado/headscale_gateway_releases/releases)
+se publican juntos por versión. Los archivos de fuentes incluyen `LICENSE`,
 `NOTICE`, `VERSION`, `go.mod`, `go.sum` y `SOURCE.md`, con las órdenes Go para
 compilar sin descargar módulos usando el `vendor/` incluido. Las sumas de los archivos se registran en `build-manifest.json`; el
 publicador rechaza fuentes que no coincidan. Los avisos de las dependencias
@@ -40,24 +43,43 @@ Una rama `main` o un enlace al código más reciente no sustituye los fuentes de
 una entrega anterior. Los archivos privados de estado, identidades VPN y claves
 no forman parte de las fuentes del programa ni se publican.
 
+## Dónde consultar los textos
+
+`LICENSE` contiene el texto completo y `NOTICE` el alcance y la procedencia.
+Los repositorios derivados YunoHost, Home Assistant y Flatpak conservan ambos
+archivos en su raíz. Cada complemento los lleva dentro de su propia carpeta,
+sin reemplazar la licencia de las demás aplicaciones de la tienda.
+
+El APK incluye los textos en `assets/licenses/` y permite leerlos sin conexión
+desde Ayuda. El instalador Windows copia también `third_party/` junto al motor.
+Los paquetes Linux y Flatpak conservan sus avisos instalados. «Acerca de»
+enlaza además los textos publicados con el manual.
+
 ## Inventario reproducible
 
 `src/third_party/inventory.json` contiene los módulos de Go y paquetes npm encontrados. `tools/audit_licenses.py` cruza los módulos con las importaciones realmente enlazadas en servidor/helper para Linux, Windows y macOS, amd64 y arm64. Copia los textos de licencia y avisos sin modificarlos, incluyendo avisos anidados y el runtime Go.
 
-Resultado de esta revisión: **737 módulos en el grafo Go; 78 módulos enlazados por el servidor/helper en alguna plataforma; 52 registros npm encontrados**. Los módulos del grafo no equivalen a código distribuido: hay dependencias de pruebas y herramientas. Las etiquetas `license_hints` son búsquedas heurísticas, no una declaración SPDX definitiva. `REVIEW` puede proceder de un archivo NOTICE o PATENTS que acompaña una licencia reconocida.
+Resultado de esta revisión: **654 módulos en el grafo Go; 66 módulos Go enlazados por el servidor/helper, un proveedor libdns incorporado bajo MIT y 52 registros npm encontrados**. Los módulos del grafo no equivalen a código distribuido: hay dependencias de pruebas y herramientas. Las etiquetas `license_hints` son búsquedas heurísticas, no una declaración SPDX definitiva. `REVIEW` puede proceder de un archivo NOTICE o PATENTS que acompaña una licencia reconocida.
 
 Componentes principales revisados:
 
 | Componente | Texto observado | Consecuencia para esta entrega |
 | --- | --- | --- |
 | Tailscale / tsnet | BSD-3-Clause | Conservar copyright, condiciones y exención; no atribuir patrocinio |
-| CertMagic y proveedor Technitium | Apache-2.0 | Conservar licencia y avisos pertinentes; revisar obligaciones de cambios y patentes |
+| CertMagic | Apache-2.0 | Conservar licencia y avisos pertinentes; revisar obligaciones de cambios y patentes |
+| Proveedor Technitium libdns incorporado | MIT | Conservar el copyright y LICENSE de Aleksandar Spasojevic; procedencia en `src/internal/acmednstechnitium/UPSTREAM.md` |
 | Go y módulos golang.org/x | BSD y avisos PATENTS | Conservar los textos correspondientes |
 | modernc.org/sqlite | BSD-3-Clause; SQLite dominio público; avisos adicionales | Se incluyen LICENSE, LICENSE-SQLITE y LICENSE-3RD-PARTY.md completos |
 | Electron | MIT para Electron; numerosas licencias para Chromium y componentes | Conservar LICENSE y LICENSES.chromium.html de cada distribución |
 | Herramientas npm | Licencias declaradas por cada paquete | Inventario separado; no confundir herramientas de empaquetado con dependencias del código de aplicación |
 
 La referencia a GPL detectada en `modernc.org/sqlite/LICENSE-3RD-PARTY.md` está en el texto de licencias secundarias de MPL incluido en su inventario transitivo; **no demuestra que el controlador SQLite enlazado sea GPL**. Ese mismo documento distingue expresamente componentes enlazados, solo pruebas y materiales fuera de compilación. Las coincidencias en avisos agregados deben revisarse en contexto.
+
+El proveedor libdns Technitium conserva sus fuentes MIT sin el adaptador de
+registro Caddy. El adaptador importaba el servidor Caddy, que registra otro
+servicio Windows durante su inicialización; la interfaz DNS-01 de CertMagic
+no necesita ese registro. La procedencia y las sumas originales se conservan
+en `src/internal/acmednstechnitium/UPSTREAM.md`.
 
 ## Distribución del runtime de escritorio
 
@@ -82,7 +104,7 @@ No se añaden restricciones de ingeniería inversa para depurar modificaciones.
 Se comprueban los archivos distribuidos; no se afirma haber recompilado todo
 Chromium/Electron ni obtenido una reproducción binaria exacta del runtime.
 
-No se ha detectado una licencia principal GPL/AGPL en los 78 módulos enlazados
+No se ha detectado una licencia principal GPL/AGPL en los 66 módulos Go enlazados
 del servidor/helper al revisar sus textos principales. El inventario no es una
 auditoría de patentes, marcas ni procedencia de cada línea.
 
@@ -101,5 +123,10 @@ go -C src mod download
 (cd src/desktop && npm ci)
 python3 tools/audit_licenses.py
 ```
+
+Si solo cambian dependencias Go, `python3 tools/audit_licenses.py --go-only`
+actualiza ese inventario y conserva los avisos npm/Electron únicamente si los
+nombres y versiones npm siguen coincidiendo con el lock. Si el lock cambia,
+exige la auditoría completa y su runtime de escritorio preparado.
 
 Después de actualizar dependencias, repite el inventario y revisa los cambios antes de publicar otra versión. Los paquetes de servidor y GUI llevan los avisos de terceros. Las claves privadas del emisor y las licencias de clientes se excluyen de los paquetes de fuentes.

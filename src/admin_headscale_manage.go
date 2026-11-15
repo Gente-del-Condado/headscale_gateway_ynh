@@ -66,10 +66,8 @@ func (a *adminController) HeadscaleManage(ctx context.Context, cmd admin.Headsca
 	switch cmd.Action {
 	case "node.rename":
 		return h.RenameNode(ctx, cmd.ID, cmd.Name)
-	case "node.expire":
-		return h.ExpireNode(ctx, cmd.ID)
-	case "node.delete":
-		return h.DeleteNode(ctx, cmd.ID)
+	case "node.expire", "node.delete":
+		return a.retireHeadscaleNode(ctx, h, cmd)
 	case "node.tags":
 		return h.SetTags(ctx, cmd.ID, cmd.Tags)
 	case "node.routes":

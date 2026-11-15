@@ -1,6 +1,8 @@
 # Los textos viven en docs/ y en los README/DOCS de cada plataforma.
 # tools/manual_hooks.py incorpora esas fuentes sin mantener copias manuales.
 site_name: Headscale Gateway
+site_author: Gente del Condado
+copyright: Gente del Condado · headscale-gateway@gentedelcondado.es
 # Pages proporciona su URL real; en local todos los enlaces siguen siendo relativos.
 site_url: !ENV [HGW_DOCS_URL, ""]
 site_description: Manual de instalación, administración y desarrollo de Headscale Gateway.
@@ -46,6 +48,7 @@ nav:
   - Instalar:
       - Descargas públicas: DESCARGAS_PUBLICAS.md
       - Debian y Fedora: LINUX_NATIVO.md
+      - Servicio de Windows: WINDOWS_SERVICIO.md
       - Flatpak: FLATPAK.md
       - Home Assistant: HOME_ASSISTANT.md
       - Entidades en Home Assistant: INTEGRACION_HA.md

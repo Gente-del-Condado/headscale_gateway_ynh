@@ -44,7 +44,7 @@ func superviseTailscale(cfg Config, requestedName, dataDir, stateDir string, run
 				return
 			}
 		}
-		if saved, err := loadStoredTailscaleName(dataDir); err == nil && saved != "" {
+		if saved, err := loadStoredTailscaleName(dataDir); cfg.NodeName == "" && err == nil && saved != "" {
 			requestedName = saved
 		}
 		tsServer, err := newTailscaleServer(cfg, requestedName, stateDir, func(s *tsnet.Server) {

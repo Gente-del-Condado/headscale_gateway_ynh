@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Empaqueta binarios ya comprobados del Gateway, sin compilarlos ni tocar el host."""
 import argparse
+import datetime
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -25,6 +27,9 @@ def stage(destination, binary, helper):
         (ROOT/'packaging/linux/native/headscale-gateway.sysusers','usr/lib/sysusers.d/headscale-gateway.conf',0o644),
         (ROOT/'packaging/linux/native/headscale-gateway.tmpfiles','usr/lib/tmpfiles.d/headscale-gateway.conf',0o644),
         (ROOT/'packaging/linux/native/headscale-gateway-configure','usr/bin/headscale-gateway-configure',0o755),
+        (ROOT/'packaging/linux/native/headscale-gateway-open-admin','usr/bin/headscale-gateway-open-admin',0o755),
+        (ROOT/'packaging/linux/native/es.gentedelcondado.HeadscaleGateway.desktop','usr/share/applications/es.gentedelcondado.HeadscaleGateway.desktop',0o644),
+        (ROOT/'packaging/flatpak/files/es.gentedelcondado.HeadscaleGateway.png','usr/share/icons/hicolor/128x128/apps/es.gentedelcondado.HeadscaleGateway.png',0o644),
         (ROOT/'packaging/common/hgw_bootstrap.py','usr/libexec/headscale-gateway/hgw_bootstrap.py',0o644),
         (ROOT/'packaging/linux/README.md','usr/share/doc/headscale-gateway/README.md',0o644),
         (ROOT/'LICENSE','usr/share/licenses/headscale-gateway/LICENSE',0o644),
@@ -68,7 +73,7 @@ def build(output,binary,helper,arch,kind):
         base=Path(temporary);root=base/'root';stage(root,binary,helper)
         if kind=='deb':
             control=root/'DEBIAN';control.mkdir()
-            (control/'control').write_text(f'Package: headscale-gateway\nVersion: {version}-1\nArchitecture: {arch}\nMaintainer: Gente del Condado <gente.del.conado.jaen@gmail.com>\nDepends: python3, systemd\nSection: net\nPriority: optional\nHomepage: https://gente-del-condado.github.io/headscale_gateway_ynh/\nDescription: Gateway HTTPS privado con motor Go y panel web\n Incluye nodo VPN, proxy, DNS, certificados y copias cifradas.\n')
+            (control/'control').write_text(f'Package: headscale-gateway\nVersion: {version}-1\nArchitecture: {arch}\nMaintainer: Gente del Condado <headscale-gateway@gentedelcondado.es>\nDepends: python3, systemd, xdg-utils\nSection: net\nPriority: optional\nHomepage: https://gente-del-condado.github.io/headscale_gateway_ynh/\nDescription: Gateway HTTPS privado instalado como servicio con panel web\n Incluye motor Go, nodo VPN, proxy, DNS, certificados y copias cifradas.\n Crea un acceso al panel local en el menu de aplicaciones; configura la cuenta inicial antes de habilitar el servicio.\n')
             for name,body in [('preinst',PRE),('postinst',POST),('prerm',REMOVE),('postrm',"#!/bin/sh\nset -eu\nif [ -d /run/systemd/system ]; then systemctl daemon-reload; fi\n")]:
                 p=control/name;p.write_text(body);p.chmod(0o755)
             target=output/f'headscale-gateway_{version}-1_{arch}.deb'
@@ -79,16 +84,20 @@ def build(output,binary,helper,arch,kind):
             top=base/'rpmbuild'
             for d in ['BUILD','RPMS','SOURCES','SPECS','SRPMS','BUILDROOT']:(top/d).mkdir(parents=True)
             spec=top/'SPECS/headscale-gateway.spec'
+            epoch=int(os.environ.get('SOURCE_DATE_EPOCH') or subprocess.check_output(['git','-C',str(ROOT),'log','-1','--format=%ct','--','VERSION'],text=True).strip())
+            date=datetime.datetime.fromtimestamp(epoch,datetime.timezone.utc).strftime('%a %b %d %Y')
             content=f'''Name: headscale-gateway
 Version: {version}
 Release: 1
-Summary: Gateway HTTPS privado con motor Go y panel web
+Summary: Gateway HTTPS privado como servicio con panel web
 License: AGPL-3.0-only
+Vendor: Gente del Condado
+Packager: Gente del Condado <headscale-gateway@gentedelcondado.es>
 URL: https://gente-del-condado.github.io/headscale_gateway_ynh/
-Requires: python3, systemd
+Requires: python3, systemd, xdg-utils
 AutoReqProv: no
 %description
-Motor Go completo, panel web, nodo VPN, proxy, DNS, certificados y copias cifradas.
+Motor Go completo instalado como servicio, panel web, nodo VPN, proxy, DNS, certificados y copias cifradas. Acceso Headscale Gateway en el menú de aplicaciones.
 %prep
 %build
 %install
@@ -103,14 +112,20 @@ cp -a {root}/. %{{buildroot}}/
 %postun
 if [ -d /run/systemd/system ]; then systemctl daemon-reload; fi
 %files
-%attr(0755,root,root) /usr/bin/headscale-gateway
+/usr/bin/headscale-gateway
 %attr(0755,root,root) /usr/bin/headscale-gateway-configure
+%attr(0755,root,root) /usr/bin/headscale-gateway-open-admin
+/usr/share/applications/es.gentedelcondado.HeadscaleGateway.desktop
+/usr/share/icons/hicolor/128x128/apps/es.gentedelcondado.HeadscaleGateway.png
 /usr/libexec/headscale-gateway
 /usr/lib/systemd/system/headscale-gateway.service
 /usr/lib/sysusers.d/headscale-gateway.conf
 /usr/lib/tmpfiles.d/headscale-gateway.conf
 /usr/share/doc/headscale-gateway
 /usr/share/licenses/headscale-gateway
+%changelog
+* {date} Gente del Condado <headscale-gateway@gentedelcondado.es> - {version}-1
+- Motor compartido, servicio y acceso al panel local.
 '''
             spec.write_text(content)
             subprocess.run(['rpmbuild','-bb','--target',rpmarch,'--define','_topdir '+str(top),'--define','__os_install_post %{nil}','--define','_build_id_links none','--define','debug_package %{nil}',str(spec)],check=True)

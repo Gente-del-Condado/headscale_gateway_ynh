@@ -1,0 +1,100 @@
+name: Validar revisión antes de publicar
+'on':
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: Commit exacto revisado de Forgejo
+        required: true
+        type: string
+      version:
+        description: Versión numérica del candidato
+        required: true
+        type: string
+      branch:
+        description: Rama codex/ revisada de Forgejo
+        required: true
+        type: string
+permissions:
+  contents: read
+env:
+  GOMAXPROCS: '2'
+  GOMEMLIMIT: 2GiB
+  GOFLAGS: -p=2
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: '3.12'
+      - name: Leer exclusivamente el candidato revisado
+        env:
+          FORGEJO_RELEASE_READ_TOKEN: ${{ secrets.FORGEJO_RELEASE_READ_TOKEN }}
+          CANDIDATE_SHA: ${{ inputs.sha }}
+          CANDIDATE_VERSION: ${{ inputs.version }}
+          CANDIDATE_BRANCH: ${{ inputs.branch }}
+        run: python3 automation/forgejo_source.py --sha "$CANDIDATE_SHA" --version "$CANDIDATE_VERSION" --candidate-ref "$CANDIDATE_BRANCH" --destination source
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e
+        with:
+          go-version-file: source/src/go.mod
+          cache-dependency-path: source/src/go.sum
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '24'
+      - name: Seguridad de dependencias
+        working-directory: source/src
+        run: |
+          go run golang.org/x/vuln/cmd/govulncheck@v1.9.0 -scan module
+          go run golang.org/x/vuln/cmd/govulncheck@v1.9.0 -show verbose ./...
+          cd desktop
+          npm ci --ignore-scripts --no-audit
+          npm audit --include=dev --audit-level=low
+      - name: Motor, datos, secretos, panel y paquetes generados
+        working-directory: source
+        run: |
+          sha256sum -c CONTENIDO.sha256 > /tmp/hgw-candidate-checksums.log
+          bash tools/verify.sh
+          bash tools/check_acme_dns01.sh
+          python3 -B -m unittest discover -s tests -p 'test_*.py'
+          python3 tools/check_deployment.py
+      - name: Home Assistant y proxy SSO de YunoHost
+        working-directory: source
+        run: |
+          docker build -t hgw-candidate-ha addons/headscale_gateway
+          docker network create --subnet 172.30.32.0/24 hgw-candidate-test
+          docker run --rm --network hgw-candidate-test --ip 172.30.32.2 --add-host supervisor:127.0.0.1 --cpus 2 --memory 2g -v "$PWD/tools/check_container.py:/check.py:ro" -v "$PWD/addons/headscale_gateway/config.yaml:/addon-config.yaml:ro" --entrypoint python3 hgw-candidate-ha /check.py
+          docker build -f tests/containers/yunohost-sso.Dockerfile -t hgw-candidate-ynh yunohost
+          docker run --rm --cpus 2 --memory 1g -v "$PWD/tools/check_yunohost_sso.py:/check_yunohost_sso.py:ro" hgw-candidate-ynh
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: '3.12'
+      - name: Leer exclusivamente el candidato revisado
+        env:
+          FORGEJO_RELEASE_READ_TOKEN: ${{ secrets.FORGEJO_RELEASE_READ_TOKEN }}
+          CANDIDATE_SHA: ${{ inputs.sha }}
+          CANDIDATE_VERSION: ${{ inputs.version }}
+          CANDIDATE_BRANCH: ${{ inputs.branch }}
+        run: python3 automation/forgejo_source.py --sha "$CANDIDATE_SHA" --version "$CANDIDATE_VERSION" --candidate-ref "$CANDIDATE_BRANCH" --destination source
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e
+        with:
+          go-version-file: source/src/go.mod
+          cache-dependency-path: source/src/go.sum
+      - name: Motor y aceptación real del servicio Windows desechable
+        working-directory: source/src
+        env:
+          CGO_ENABLED: '0'
+        run: go test -p 2 ./...

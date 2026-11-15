@@ -13,6 +13,7 @@ import (
 // Options distingue comandos de mantenimiento de la ejecución normal.
 // Al ampliar la CLI, añadir los argumentos aquí en vez de modificar main.
 type Options struct {
+	WindowsService     string
 	DB                 string
 	Reload             bool
 	ResetRecovery      bool
@@ -37,6 +38,7 @@ func Parse(args []string) (Options, error) {
 	var o Options
 	fs := flag.NewFlagSet("headscale-gateway", flag.ContinueOnError)
 	fs.SetOutput(io.Discard)
+	fs.StringVar(&o.WindowsService, "windows-service", "", "Ejecutar mediante el servicio nativo Windows")
 	fs.StringVar(&o.DB, "db", "", "Ruta de gateway.sqlite")
 	fs.BoolVar(&o.Reload, "reload", false, "Solicitar recarga")
 	fs.BoolVar(&o.ResetRecovery, "reset-recovery", false, "Rotar credencial de recuperación")

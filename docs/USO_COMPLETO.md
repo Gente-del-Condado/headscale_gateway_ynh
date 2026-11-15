@@ -199,6 +199,10 @@ MagicDNS+ ofrece exportación y herramientas para registros adicionales; no pres
 
 El Gateway soporta certificados ACME y certificados con CA local. Con CA local, cada cliente debe confiar en la CA pública y el nombre o IP utilizado debe estar cubierto por el certificado. **El puerto no forma parte del SAN**: una URL IP:puerto se valida contra la IP del certificado.
 
+Para ACME DNS-01, selecciona Technitium o Cloudflare en **Certificados** y configura su acceso a la zona. Antes de crear una cuenta ACME nueva, revisa los [términos de la CA](https://letsencrypt.org/repository/) y activa **Acepto los términos de la CA ACME** (`acme.agree_to_terms`). Si no aceptas, el panel informa de la decisión pendiente sin pedir entrada por consola. Las cuentas ACME existentes siguen renovando aunque una instalación antigua no tenga esta opción. La aceptación se guarda en esta instalación y no se copia al exportar o importar perfiles. Cada Gateway conserva su cuenta, claves y certificados; esto no modifica los certificados del servidor YunoHost.
+
+CertMagic realiza la emisión, el almacenamiento y la renovación. El proveedor Technitium retira únicamente los TXT de sus desafíos, sin barrer registros antiguos ajenos. La CA local funciona por separado y no requiere una cuenta ACME.
+
 En **Sistema → CA y confianza** puedes descargar certificados públicos, importar y aprobar peers, gestionar la publicación y retirar una CA. Retirar del Gateway y retirar del almacén del sistema son resultados independientes; la segunda operación puede requerir privilegios.
 
 Existe un helper opcional de instalación/retirada de CA. Se habilita de forma explícita y depende de la elevación del sistema. Consulta [HELPER_CA.txt](HELPER_CA.txt). Las pruebas privilegiadas del helper no se consideran completadas por las pruebas del portal.

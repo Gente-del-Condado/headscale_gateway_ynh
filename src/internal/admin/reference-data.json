@@ -1182,6 +1182,13 @@
   ],
   "options": [
     {
+      "name": "--windows-service",
+      "default": "\"\"",
+      "description": "Ejecutar mediante el servicio nativo Windows",
+      "source": "src/internal/bootstrap/options.go",
+      "context": "startup"
+    },
+    {
       "name": "--db",
       "default": "\"\"",
       "description": "Ruta de gateway.sqlite",

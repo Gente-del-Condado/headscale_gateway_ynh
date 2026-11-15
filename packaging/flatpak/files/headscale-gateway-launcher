@@ -1,8 +1,123 @@
-#!/bin/sh
-# El sandbox mantiene una identidad y una base de datos propias del usuario.
-set -eu
-umask 077
-data="${XDG_DATA_HOME:?Flatpak debe definir XDG_DATA_HOME}/headscale-gateway"
-mkdir -p "$data"
-chmod 700 "$data"
-exec /app/bin/headscale-gateway --db "$data/gateway.sqlite" "$@"
+#!/usr/bin/python3
+"""Servicio de sesión Flatpak: arranque privado, instancia única y panel local."""
+import fcntl
+import json
+import os
+from pathlib import Path
+import signal
+import socket
+import subprocess
+import sys
+import time
+import urllib.parse
+import urllib.request
+sys.path.insert(0, '/app/lib/headscale-gateway')
+from hgw_bootstrap import prepare
+
+MANUAL = 'https://gente-del-condado.github.io/headscale_gateway_ynh/FLATPAK.html'
+
+def dialog(*args):
+    result = subprocess.run(['zenity', *args], text=True, stdout=subprocess.PIPE)
+    if result.returncode: raise InterruptedError('Configuración cancelada')
+    return result.stdout.rstrip('\n')
+
+def admin_url(startup):
+    options = json.loads(Path(startup).read_text())
+    url = urllib.parse.urlsplit('http://' + options['listen_addr'] + '/admin/')
+    if url.hostname not in ('127.0.0.1', '::1') or not url.port or url.username or url.password or url.query or url.fragment:
+        raise ValueError('La administración debe escuchar en loopback')
+    return url.geturl()
+
+def configure(data):
+    startup = data/'config/startup.json'
+    legacy = data/'gateway.sqlite'
+    if startup.exists(): return (legacy if legacy.exists() else data/'gateway/gateway.sqlite'), startup, False
+    if legacy.exists():
+        dialog("--question","--title=Conservar instalación anterior","--text=Se ha detectado una instalación anterior. Antes de continuar debes haber detenido todas las instancias antiguas de Headscale Gateway. Se conservarán su SQLite, claves y credenciales. ¿Has detenido esas instancias?")
+    username = password = None
+    if not legacy.exists():
+        dialog('--info','--title=Instalar Headscale Gateway','--text=Se ejecutará como servicio de tu sesión, con datos privados y reinicio tras fallo. El acceso del menú abrirá el panel local.\nAutor: Gente del Condado\nSoporte: headscale-gateway@gentedelcondado.es\nManual: '+MANUAL)
+        username = dialog('--entry','--title=Headscale Gateway','--text=Nombre de la cuenta inicial del panel:')
+        password = dialog('--password','--title=Contraseña inicial (12–72 bytes)')
+        confirmation = dialog('--password','--title=Repite la contraseña inicial')
+        if password != confirmation: raise ValueError('Las contraseñas no coinciden')
+    with socket.socket() as sock:
+        sock.bind(('127.0.0.1',0)); port = sock.getsockname()[1]
+    database, startup = prepare(data,data/'config',f'127.0.0.1:{port}',username=username,password=password)
+    return (legacy if legacy.exists() else database), startup, True
+
+def wait_ready(url, child=None):
+    # La comprobación no usa credenciales ni sigue redirecciones externas.
+    class NoRedirect(urllib.request.HTTPRedirectHandler):
+        def redirect_request(self,*args,**kwargs): return None
+    opener = urllib.request.build_opener(NoRedirect)
+    for _ in range(60):
+        if child is not None and child.poll() is not None: raise RuntimeError('El motor no pudo iniciarse. Revisa los registros privados y el manual.')
+        try:
+            with opener.open(url,timeout=1) as response:
+                if response.status == 200: return
+        except (OSError,urllib.error.URLError): pass
+        time.sleep(.25)
+    raise RuntimeError('El panel local no está disponible. Revisa el servicio y sus registros.')
+
+def main(background=False):
+    os.umask(0o077)
+    data = Path(os.environ['XDG_DATA_HOME'])/'headscale-gateway'
+    if data.is_symlink(): raise ValueError('Directorio de datos no válido')
+    data.mkdir(mode=0o700,parents=True,exist_ok=True); data.chmod(0o700)
+    lock = os.open(data/'session.lock',os.O_CREAT|os.O_RDWR|os.O_NOFOLLOW,0o600)
+    try: fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+    except BlockingIOError:
+        try:
+            if background: return
+            url = admin_url(data/'config/startup.json'); wait_ready(url)
+            subprocess.run(['xdg-open',url],check=True); return
+        finally: os.close(lock)
+    child = None
+    try:
+        if background and not (data/'config/startup.json').exists(): return
+        database,startup,created = configure(data)
+        env = dict(os.environ,GATEWAY_BOOTSTRAP_FILE=str(startup))
+        if created:
+            try:
+                dialog('--question','--title=Arranque automático','--text=¿Solicitar al escritorio permiso para mantener el Gateway en segundo plano e iniciarlo al entrar en tu sesión? El escritorio pedirá tu autorización.')
+                env['GATEWAY_DESKTOP_BACKGROUND']='1'
+            except InterruptedError: pass
+        url = admin_url(startup)
+        logs = data/'logs'; logs.mkdir(mode=0o700,exist_ok=True)
+        def stop(_signal,_frame): raise SystemExit(0)
+        signal.signal(signal.SIGTERM,stop); signal.signal(signal.SIGINT,stop)
+        # El motor ya rota sus registros privados. No duplicamos stdout en un archivo sin límite.
+        with open(os.devnull,'wb') as output:
+            for attempt in range(4):
+                child = subprocess.Popen(['/app/bin/headscale-gateway','--db',str(database)],env=env,
+                    stdout=output,stderr=output,pass_fds=(lock,))
+                wait_ready(url,child)
+                if attempt==0 and not background: subprocess.run(['xdg-open',url],check=True)
+                code = child.wait()
+                if code==0:return
+                time.sleep(5)
+        raise RuntimeError('El motor ha fallado repetidamente. Revisa los registros privados antes de volver a iniciarlo.')
+    finally:
+        if child is not None and child.poll() is None:
+            child.terminate()
+            try: child.wait(timeout=30)
+            except subprocess.TimeoutExpired: child.kill(); child.wait()
+        os.close(lock)
+
+def entrypoint():
+    if sys.argv[1:]==['--background']:
+        main(background=True)
+        return
+    if len(sys.argv)>1:
+        os.execv('/app/bin/headscale-gateway',['headscale-gateway',*sys.argv[1:]])
+        return
+    main()
+
+if __name__=='__main__':
+    try: entrypoint()
+    except InterruptedError: pass
+    except Exception:
+        # No muestra excepciones que puedan incluir configuración o secretos.
+        subprocess.run(['zenity','--error','--title=Headscale Gateway','--text=No se ha podido abrir el Gateway. Se conservan los datos y las credenciales. Revisa los registros privados en los datos de la aplicación.\nManual: '+MANUAL+'\nSoporte: headscale-gateway@gentedelcondado.es'])
+        raise SystemExit(1)

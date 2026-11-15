@@ -2,7 +2,7 @@
 """Collect local dependency notices and a conservative, reviewable inventory.
 Requires go mod download and npm ci; identifiers are heuristic, not legal advice.
 """
-import hashlib, json, os, re, shutil, subprocess
+import argparse, hashlib, json, os, re, shutil, subprocess
 from pathlib import Path
 ROOT=Path(__file__).resolve().parent.parent
 OUT=ROOT/'src/third_party'
@@ -27,6 +27,22 @@ def classify(text):
  return labels or ['REVIEW']
 
 def main():
+ parser=argparse.ArgumentParser(description=__doc__)
+ parser.add_argument('--go-only',action='store_true',help='Actualiza Go y conserva npm/Electron si el lock sigue coincidiendo con el inventario')
+ args=parser.parse_args()
+ preserved=[]
+ if args.go_only:
+  previous=json.loads((OUT/'inventory.json').read_text())
+  preserved=[row for row in previous if row['ecosystem']=='npm']
+  lock=json.loads((ROOT/'src/desktop/package-lock.json').read_text())
+  expected={(item.get('name') or name.rsplit('node_modules/',1)[-1],item['version']) for name,item in lock['packages'].items() if name and 'version' in item}
+  if {(row['name'],row['version']) for row in preserved} != expected:
+   raise SystemExit('El lock npm ha cambiado: requiere auditoría completa con npm ci y el runtime Electron verificado')
+  for row in preserved:
+   for notice in row['notices']:
+    if not (ROOT/notice).is_file(): raise SystemExit('Falta un aviso npm conservado: '+notice)
+  for name in ('LICENSE','LICENSES.chromium.html'):
+   if not (OUT/'electron'/name).is_file(): raise SystemExit('Falta el aviso Electron conservado: '+name)
  OUT.mkdir(exist_ok=True)
  used=set()
  for system in ('linux','windows','darwin'):
@@ -54,7 +70,18 @@ def main():
     if len(relative.parts)==1:row['license_hints']+=classify(file.read_text(errors='replace'))
   row['license_hints']=sorted(set(row['license_hints'])) or ['REVIEW']
   rows.append(row)
- for file in sorted((ROOT/'src/desktop/node_modules').rglob('package.json')):
+ # La parte libdns se conserva separada del adaptador Caddy para evitar su
+ # registro automático en el SCM. Su licencia original sigue en cada paquete.
+ embedded=ROOT/'src/internal/acmednstechnitium'
+ notice=OUT/'go/github.com/ad-on-is/caddy-dns-technitium@v0.1.0/LICENSE'
+ notice.parent.mkdir(parents=True,exist_ok=True)
+ shutil.copyfile(embedded/'LICENSE',notice)
+ rows.append({'ecosystem':'Embedded Go','name':'github.com/ad-on-is/caddy-dns-technitium',
+              'version':'v0.1.0 (libdns only)','linked_server_or_helper':True,
+              'notices':[str(notice.relative_to(ROOT))], 'license_hints':['MIT'],
+              'source':'src/internal/acmednstechnitium', 'provenance':'src/internal/acmednstechnitium/UPSTREAM.md'})
+ rows.extend(preserved)
+ for file in ([] if args.go_only else sorted((ROOT/'src/desktop/node_modules').rglob('package.json'))):
   if file.parent.name=='dist':continue
   try:p=json.loads(file.read_text())
   except (ValueError,OSError):continue
@@ -64,7 +91,7 @@ def main():
    if notice.is_file() and re.match(r'^(LICENSE|LICENCE|COPYING|NOTICE)(?:[.\-_].*)?$',notice.name,re.I):
     target=OUT/'npm'/(p['name']+'@'+p['version'])/notice.name;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(notice,target);row['notices'].append(str(target.relative_to(ROOT)))
   rows.append(row)
- for name in ('LICENSE','LICENSES.chromium.html'):
+ for name in (() if args.go_only else ('LICENSE','LICENSES.chromium.html')):
   source=ROOT/'src/desktop/node_modules/electron/dist'/name
   target=OUT/'electron'/name;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source,target)
  goroot=Path(subprocess.check_output(['go','env','GOROOT'],text=True).strip())

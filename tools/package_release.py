@@ -64,6 +64,8 @@ def runtime_archives(output, server_only):
                 if verified.get(relative) != digest(source):
                     raise ValueError('Binario no verificado: ' + relative)
                 pairs.append((source, program + suffix))
+            if system == 'windows':
+                pairs.extend([(ROOT/'packaging/windows/Install-Service.ps1','Install-Service.ps1'), (ROOT/'packaging/windows/README.md','INSTALAR_WINDOWS.md')])
             extension = '.zip' if system == 'windows' else '.tar.gz'
             artifacts.append(write_archive(output / ('headscale-gateway-' + target + extension),
                                            pairs + common, windows=system == 'windows'))

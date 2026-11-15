@@ -18,10 +18,11 @@ func initialSettings() map[string]string {
 		"admin.domain_mode": "off", "admin.subdomain": "admin",
 		"pki.discovery_port": "47991", "pki.http_enabled": "false", "pki.http_listen_addr": "0.0.0.0:9080", "pki.allow_http_download": "false",
 		"server.listen_addr": "0.0.0.0:8443", "domain.base_domain": "",
-		"headscale.url": "", "headscale.panel_enabled": "true", "headscale.api_key": "",
+		"headscale.node_name": "",
+		"headscale.url":       "", "headscale.panel_enabled": "true", "headscale.api_key": "",
 		"dns.provider": "none", "dns.zone": "", "dns.technitium.url": "", "dns.technitium.token": "",
 		"dns.cloudflare.zone_id": "", "dns.cloudflare.token": "", "acme.cloudflare.zone_id": "",
-		"acme.cloudflare.token": "", "acme.dns_provider": "none", "acme.email": "",
+		"acme.cloudflare.token": "", "acme.dns_provider": "none", "acme.email": "", "acme.agree_to_terms": "false",
 		"certificates.mode": "force-local", "certificates.renew_before": "720h",
 		"certificates.local_ca_validity": "87600h", "certificates.local_certificate_validity": "8760h",
 		"services.default_template": "", "proxy.default_egress": "system",
@@ -50,6 +51,8 @@ func ensureSetupDatabase(dbPath string) error {
 	}
 	if len(settings) == 0 {
 		settings = initialSettings()
+		settings["headscale.node_name_confirmed"] = "false"
+		settings["headscale.node_name"] = proposedNodeName()
 		if err := startupInitialSettings(settings); err != nil {
 			return err
 		}
@@ -127,7 +130,16 @@ func configFromSettings(dbPath string, values map[string]string, db *state.Store
 			return Config{}, fmt.Errorf("puerto de descubrimiento fuera del intervalo 1..65535")
 		}
 	}
+	confirmed, err := boolSetting("headscale.node_name_confirmed", true)
+	if err != nil {
+		return Config{}, err
+	}
+	agreeToTerms, err := boolSetting("acme.agree_to_terms", false)
+	if err != nil {
+		return Config{}, err
+	}
 	cfg := Config{
+		NodeName: get("headscale.node_name"), NodeNamePending: !confirmed,
 		DiscoveryPort: discoveryPort,
 		CAHTTPEnabled: caHTTP, CAHTTPDownload: caDownload, CAHTTPListenAddr: get("pki.http_listen_addr"),
 		BaseDomain: get("domain.base_domain"), DNSProvider: get("dns.provider"), DNSZone: get("dns.zone"),
@@ -136,7 +148,7 @@ func configFromSettings(dbPath string, values map[string]string, db *state.Store
 		CloudflareDNSToken: get("dns.cloudflare.token"), CloudflareACMEZoneID: get("acme.cloudflare.zone_id"),
 		CloudflareACMEToken: get("acme.cloudflare.token"), HeadscaleURL: get("headscale.url"),
 		HeadscaleAPIKey: get("headscale.api_key"), NetworkPanelEnabled: networkEnabled,
-		ACMEEmail: get("acme.email"), DataDir: filepath.Dir(dbPath), DatabasePath: dbPath,
+		ACMEEmail: get("acme.email"), ACMEAgreeToTerms: agreeToTerms, DataDir: filepath.Dir(dbPath), DatabasePath: dbPath,
 		LocalListenAddr: get("server.listen_addr"), AdminEnabled: adminEnabled,
 		AdminListenAddr: get("admin.listen_addr"), AdminDomainMode: get("admin.domain_mode"),
 		AdminSubdomain: get("admin.subdomain"), CertificateMode: get("certificates.mode"),

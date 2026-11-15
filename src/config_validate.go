@@ -16,6 +16,9 @@ import (
 )
 
 func validateConfig(cfg Config) error {
+	if cfg.NodeName != "" && !validRequestedNodeName(cfg.NodeName) {
+		return fmt.Errorf("headscale.node_name: usa de 1 a 63 letras minúsculas, números o guiones, sin guiones consecutivos ni al principio o final")
+	}
 	diagnostics.Emit("gateway", diagnostics.InfoLevel, "HGW-CONFIG-VALIDATE-001",
 
 		// -------------------------------------------------------------------------

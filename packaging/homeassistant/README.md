@@ -31,3 +31,8 @@ opcionales y sirven para configurar una cuenta separada para el acceso directo.
 
 El complemento se publica como estable en la tienda de Home Assistant. Consulta
 `DOCS.md` para conocer los requisitos de red, las copias y la recuperación.
+
+## Autor y soporte
+
+Autor: **Gente del Condado**. Soporte: [headscale-gateway@gentedelcondado.es](mailto:headscale-gateway@gentedelcondado.es).
+[Manual en línea](https://gente-del-condado.github.io/headscale_gateway_ynh/).

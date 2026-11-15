@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Headscale Gateway
+Comment=Abre el panel del servicio local Headscale Gateway
+Exec=headscale-gateway-open-admin
+Icon=es.gentedelcondado.HeadscaleGateway
+Terminal=false
+Categories=Network;Utility;
+Keywords=Headscale;VPN;Gateway;

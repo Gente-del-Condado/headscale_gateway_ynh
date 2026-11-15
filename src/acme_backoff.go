@@ -29,6 +29,10 @@ func acmeRetryTime(err error, now time.Time) acmeCooldown {
 		return acmeCooldown{}
 	}
 	message := err.Error()
+	// Una decisión local pendiente no es un fallo de red ni un límite de la CA.
+	if strings.Contains(message, "acme.agree_to_terms") {
+		return acmeCooldown{}
+	}
 	match := acmeRetryPattern.FindStringSubmatch(message)
 	if len(match) > 1 {
 		if until, parseErr := time.ParseInLocation("2006-01-02 15:04:05", match[1], time.UTC); parseErr == nil {
@@ -83,7 +87,7 @@ func storeACMEBackoff(cfg Config, domain string, failure error) {
 	next := acmeRetryTime(failure, time.Now().UTC())
 	if err := db.PutJSON(acmeCooldownKey(cfg, domain), next); err != nil {
 		diagnostics.Emit("gateway", diagnostics.Warn, "HGW-ACME-BACKOFF-002", "persistencia backoff ACME fallida: %v", err)
-	} else if failure != nil {
+	} else if failure != nil && !next.Until.IsZero() {
 		diagnostics.Emit("gateway", diagnostics.InfoLevel, "HGW-ACME-BACKOFF-003", "próximo intento para %s a partir de %s (%s)", domain, next.Until.Format(time.RFC3339), next.Category)
 	}
 }

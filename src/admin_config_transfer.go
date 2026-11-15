@@ -25,7 +25,7 @@ func (a *adminController) ExportConfiguration(_ context.Context, secrets bool, p
 	}
 	allowed := make(map[string]string)
 	for k, v := range values {
-		if !allowedSettings[k] || (!secrets && secretSettings[k]) {
+		if !allowedSettings[k] || k == "acme.agree_to_terms" || (!secrets && secretSettings[k]) {
 			continue
 		}
 		allowed[k] = v
@@ -75,7 +75,7 @@ func portableChanges(payload []byte, password string) (map[string]string, error)
 			return nil, errors.New("valor de configuración demasiado grande")
 		}
 		switch key {
-		case "pki.http_enabled", "pki.http_listen_addr", "pki.discovery_port", "pki.allow_http_download", "server.listen_addr", "admin.listen_addr", "admin.enabled", "admin.domain_mode", "admin.subdomain":
+		case "acme.agree_to_terms", "headscale.node_name", "pki.http_enabled", "pki.http_listen_addr", "pki.discovery_port", "pki.allow_http_download", "server.listen_addr", "admin.listen_addr", "admin.enabled", "admin.domain_mode", "admin.subdomain":
 			// No cortar el acceso administrativo de destino al migrar ajustes.
 			continue
 		}

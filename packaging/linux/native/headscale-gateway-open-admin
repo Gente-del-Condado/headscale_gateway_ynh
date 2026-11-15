@@ -1,0 +1,40 @@
+#!/usr/bin/python3
+"""Abre el panel local del servicio; no concede acceso ni cambia su estado."""
+from pathlib import Path
+import subprocess
+import sys
+import urllib.parse
+import webbrowser
+
+URL = 'http://127.0.0.1:9091/admin/'
+
+def main():
+    # La configuración de servicio pertenece al administrador. No se leen las
+    # credenciales ni SQLite para construir un acceso directo de escritorio.
+    status = subprocess.run(['systemctl', 'is-active', '--quiet', 'headscale-gateway.service']).returncode
+    if status:
+        message = ('Headscale Gateway se instala como servicio. Antes de abrir el panel, configura la cuenta inicial en una terminal:\n\n'
+                   'sudo -u headscale-gateway headscale-gateway-configure --admin TU_USUARIO\n'
+                   'sudo systemctl enable --now headscale-gateway\n\n'
+                   'TU_USUARIO será tu usuario del panel. El configurador te pedirá crear su contraseña; no es la contraseña de sudo.\n\n'
+                   'Después vuelve a abrir este acceso directo. Si ya estaba configurado, revisa el estado del servicio.\n'
+                   'Manual: https://gente-del-condado.github.io/headscale_gateway_ynh/LINUX_NATIVO.html\n'
+                   'Soporte: headscale-gateway@gentedelcondado.es')
+        try:
+            subprocess.run(['kdialog', '--title', 'Headscale Gateway', '--msgbox', message], check=True)
+        except (OSError, subprocess.CalledProcessError):
+            try: subprocess.run(['zenity', '--info', '--title=Headscale Gateway', '--text='+message], check=True)
+            except (OSError, subprocess.CalledProcessError): print(message, file=sys.stderr)
+        return 1
+    # El puerto personalizado se publica por separado, sin exponer startup.json.
+    url = URL
+    try:
+        candidate = Path('/run/headscale-gateway/admin-url').read_text().strip()
+        parsed = urllib.parse.urlsplit(candidate)
+        if (parsed.scheme == 'http' and parsed.hostname in ('127.0.0.1', '::1')
+                and parsed.port and parsed.path == '/admin/' and not parsed.username
+                and not parsed.password and not parsed.query and not parsed.fragment): url = candidate
+    except (OSError, ValueError): pass
+    return 0 if webbrowser.open(url) else 1
+
+if __name__ == '__main__': raise SystemExit(main())

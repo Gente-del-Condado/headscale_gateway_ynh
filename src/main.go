@@ -16,7 +16,9 @@ import (
 	"github.com/gentedelcondado/headscale-gateway/internal/state"
 )
 
-func main() {
+func main() { runGateway() }
+
+func runGateway() {
 	// Los subcomandos de diagnóstico se ejecutan sin arrancar tsnet ni el panel.
 	if len(os.Args) > 1 && cli.IsCommand(os.Args[1]) {
 		if err := cli.Run(os.Args[1:]); err != nil {
@@ -33,6 +35,16 @@ func main() {
 	if opts.Help {
 		printHelp()
 		return
+	}
+	if opts.WindowsService != "" {
+		handled, err := platformServiceEntrypoint(opts.WindowsService, runGateway)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, i18n.T(err.Error()))
+			os.Exit(1)
+		}
+		if handled {
+			return
+		}
 	}
 	// Prioridad: opción CLI explícita > variable de entorno > SQLite > info.
 	cliLevel := opts.EffectiveLogLevel()

@@ -14,6 +14,7 @@
       "build-commands": [
         "install -Dm755 headscale-gateway /app/bin/headscale-gateway",
         "install -Dm755 files/headscale-gateway-launcher /app/bin/headscale-gateway-launcher",
+        "install -Dm644 files/hgw_bootstrap.py /app/lib/headscale-gateway/hgw_bootstrap.py",
         "install -Dm644 files/es.gentedelcondado.HeadscaleGateway.desktop /app/share/applications/es.gentedelcondado.HeadscaleGateway.desktop",
         "install -Dm644 files/es.gentedelcondado.HeadscaleGateway.metainfo.xml /app/share/metainfo/es.gentedelcondado.HeadscaleGateway.metainfo.xml",
         "install -Dm644 files/es.gentedelcondado.HeadscaleGateway.png /app/share/icons/hicolor/128x128/apps/es.gentedelcondado.HeadscaleGateway.png",

@@ -4,7 +4,7 @@ import json
 import os
 from pathlib import Path
 import sys
-from hgw_bootstrap import prepare as prepare_startup
+from hgw_bootstrap import prepare as prepare_startup, proposed_node_name
 import urllib.request
 
 
@@ -37,7 +37,7 @@ def prepare(options, ingress_port, data=Path('/data'), runtime=Path('/run/headsc
     if options.get('admin_password'):
         credentials = {'username': options.get('admin_username', 'admin'), 'password': options['admin_password']}
     return prepare_startup(data, runtime, f'0.0.0.0:{ingress_port}',
-        node_name=options.get('node_name', 'homeassistant-gateway'),
+        node_name=options.get('node_name') or proposed_node_name(),
         lan_listen_addr=f'0.0.0.0:{lan_port}', base_path_header='X-Ingress-Path',
         trusted_proxies=['172.30.32.2'], allow_frame=True,
         proxy_auth={'user_header': 'X-Remote-User-Id', 'groups_header': 'X-Remote-User-Groups',
@@ -68,6 +68,19 @@ def main():
     })
     with urllib.request.urlopen(request, timeout=15) as response:
         info = json.load(response)
+    if not options.get('node_name'):
+        # /host/info está permitido con el rol default; no se amplían permisos.
+        # Si no está disponible, el nombre local sigue siendo solo una propuesta.
+        class NoRedirect(urllib.request.HTTPRedirectHandler):
+            def redirect_request(self,*args,**kwargs): return None
+        try:
+            host_request = urllib.request.Request('http://supervisor/host/info', headers={
+                'Authorization':'Bearer '+os.environ['SUPERVISOR_TOKEN']})
+            with urllib.request.build_opener(NoRedirect).open(host_request,timeout=3) as response:
+                host_info = json.load(response)
+            options['node_name'] = proposed_node_name(host_info.get('data',{}).get('hostname') if host_info.get('result')=='ok' else None)
+        except (OSError,ValueError,TypeError,AttributeError):
+            options['node_name'] = proposed_node_name()
     db, deployment = prepare(options, supervisor_port(info))
     env = dict(os.environ, GATEWAY_BOOTSTRAP_FILE=str(deployment))
     # El Gateway ya no necesita acceso a Supervisor tras obtener el puerto Ingress.

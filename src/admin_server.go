@@ -84,6 +84,8 @@ func startAdministration(cfg Config, dbPath string, runtime *gatewayRuntime, vpn
 		_ = db.Close()
 		return err
 	}
+	publishDesktopAdminAddress(listener.Addr())
+	go requestDesktopBackground(processContext)
 	var bannerOnce sync.Once
 	runtime.showAdminConsole = func() {
 		bannerOnce.Do(func() {

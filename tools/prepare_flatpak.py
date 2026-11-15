@@ -12,6 +12,7 @@ def prepare(destination):
     destination=Path(destination).resolve()
     if destination.exists() and any(destination.iterdir()):raise ValueError('El destino debe estar vacío')
     shutil.copytree(ROOT/'packaging/flatpak',destination,dirs_exist_ok=True)
+    shutil.copy2(ROOT/'packaging/common/hgw_bootstrap.py',destination/'files/hgw_bootstrap.py')
     version=(ROOT/'VERSION').read_text().strip()
     date=subprocess.check_output(['git','-C',str(ROOT),'log','-1','--format=%cs','--','VERSION'],text=True).strip()
     values={'VERSION':version,'DATE':date}
@@ -21,7 +22,9 @@ def prepare(destination):
         text=path.read_text()
         for key,value in values.items():text=text.replace('@'+key+'@',value)
         path.with_suffix('').write_text(text);path.unlink()
-    for name in ['LICENSE','NOTICE']:shutil.copy2(ROOT/name,destination/'files'/name)
+    for name in ['LICENSE','NOTICE']:
+        shutil.copy2(ROOT/name,destination/'files'/name)
+        shutil.copy2(ROOT/name,destination/name)
     (destination/'README.md').write_text((destination/'README.md').read_text().replace('1.4.8',version))
     add_notices(destination/'files/notices')
     return destination

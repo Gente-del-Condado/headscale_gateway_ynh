@@ -22,6 +22,9 @@ func validateStagedConfig(cfg Config) error {
 }
 
 func setupReason(cfg Config) error {
+	if cfg.NodeNamePending {
+		return fmt.Errorf("confirma o cambia el nombre propuesto del dispositivo antes de conectar a Headscale")
+	}
 	if cfg.BaseDomain == "" || cfg.HeadscaleURL == "" {
 		missing := []string{}
 		if cfg.BaseDomain == "" {

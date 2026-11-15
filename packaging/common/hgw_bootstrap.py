@@ -4,6 +4,16 @@ import json
 import os
 from pathlib import Path
 import re
+import socket
+import unicodedata
+
+
+def proposed_node_name(value=None):
+    """Propone el nombre del equipo; la confirmación y el nombre final son del motor/Headscale."""
+    value = value if isinstance(value, str) and value.strip() else socket.gethostname()
+    value = unicodedata.normalize('NFKD', value).encode('ascii','ignore').decode().lower()
+    value = re.sub(r'[^a-z0-9]+', '-', value).strip('-')[:63].rstrip('-')
+    return value or 'gateway'
 
 
 def private_json(path, value):
@@ -18,7 +28,7 @@ def prepare(data_dir, config_dir, listen_addr, *, node_name='', lan_listen_addr=
             username=None, password=None, base_path='', base_path_header='',
             trusted_proxies=(), allow_frame=False, credentials_dir=None, proxy_auth=None):
     data_dir, config_dir = Path(data_dir), Path(config_dir)
-    if node_name and not re.fullmatch(r'[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?', node_name):
+    if node_name and ('--' in node_name or not re.fullmatch(r'[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?', node_name)):
         raise ValueError('node_name debe ser un nombre DNS estable en minúsculas')
     if not re.fullmatch(r'(?:/[A-Za-z0-9_-]+)*', base_path):
         raise ValueError('El prefijo de ruta no es válido')

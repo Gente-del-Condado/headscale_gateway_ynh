@@ -73,6 +73,10 @@ func startGateway(configPath string) {
 	if storedName != "" {
 		requestedName = storedName
 	}
+	// La carpeta de identidad se conserva aunque cambie el nombre solicitado.
+	if cfg.NodeName != "" {
+		requestedName = cfg.NodeName
+	}
 	stateDir := filepath.Join(dataDir, "tailscale-state-"+hostname)
 	if err := mkdirPrivate(stateDir); err != nil {
 		diagnostics.Fatal("HGW-STARTUP-GATEWAY-010",

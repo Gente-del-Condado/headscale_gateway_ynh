@@ -12,7 +12,7 @@ import tempfile
 import tomllib
 
 ROOT = Path(__file__).resolve().parents[1]
-MANAGED = ('LICENSE', 'README.md', 'build-manifest.json', 'conf', 'doc', 'go.mod',
+MANAGED = ('LICENSE', 'NOTICE', 'README.md', 'build-manifest.json', 'conf', 'doc', 'go.mod',
            'manifest.toml', 'payload', 'scripts', 'tests.toml')
 BINARIES = ('headscale-gateway-linux-amd64', 'headscale-gateway-linux-arm64')
 
@@ -42,7 +42,7 @@ def validate_archive(data, stage):
 
 
 def validate_package(stage, version):
-    required = ('LICENSE', 'README.md', 'manifest.toml', 'tests.toml', 'build-manifest.json',
+    required = ('LICENSE', 'NOTICE', 'README.md', 'manifest.toml', 'tests.toml', 'build-manifest.json',
                 'scripts/install', 'scripts/upgrade', 'scripts/backup', 'scripts/restore',
                 'conf/hgw_bootstrap.py', 'doc/logo.png', 'payload/SHA256SUMS', 'doc/third_party/LICENSE',
                 'doc/third_party/NOTICE', 'doc/third_party/third_party/inventory.json',

@@ -157,12 +157,27 @@ public final class MainActivity extends Activity {
         button(androidCard,"Abrir ajustes de la aplicación",false,()->startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,Uri.parse("package:"+getPackageName()))));
         LinearLayout about=card(content);heading(about,"Headscale Gateway");
         String version="";try {version=getPackageManager().getPackageInfo(getPackageName(),0).versionName;}catch(Exception ignored){}
-        about.addView(text("Versión "+version+"\nMotor Go compartido · AGPL-3.0-only",14,MUTED));
+        about.addView(text("Versión "+version+"\nMotor Go compartido · AGPL-3.0-only\nAutor: Gente del Condado\nSoporte: headscale-gateway@gentedelcondado.es",14,MUTED));
+        button(about,"Manual en línea",false,()->startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse("https://gente-del-condado.github.io/headscale_gateway_ynh/ANDROID_USO.html"))));
+        button(about,"Contactar con soporte",false,this::contactSupport);
         button(about,"Privacidad y datos",false,()->startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse("https://gente-del-condado.github.io/headscale_gateway_ynh/PRIVACIDAD_ANDROID.html"))));
+        button(about,"Licencia AGPL-3.0 completa",false,()->showLegalAsset("LICENSE"));
+        button(about,"Avisos del proyecto (NOTICE)",false,()->showLegalAsset("NOTICE"));
         button(about,getString(R.string.licenses),false,()-> {
             try {new AlertDialog.Builder(this).setTitle(R.string.licenses).setMessage(RuntimeState.read(getAssets().open("avisos.txt"))).setPositiveButton(R.string.accept,null).show();}
             catch(Exception e) {showError(e);}
         });return scroll(content);
+    }
+
+    // Los textos viajan dentro del APK y se pueden consultar sin conexión.
+    private void showLegalAsset(String name) {
+        try { new AlertDialog.Builder(this).setTitle(name).setMessage(RuntimeState.read(getAssets().open("licenses/"+name))).setPositiveButton(R.string.accept,null).show(); }
+        catch(Exception e) { showError(e); }
+    }
+
+    private void contactSupport() {
+        try { startActivity(new Intent(Intent.ACTION_SENDTO,Uri.parse("mailto:headscale-gateway@gentedelcondado.es"))); }
+        catch(android.content.ActivityNotFoundException e) { new AlertDialog.Builder(this).setMessage("headscale-gateway@gentedelcondado.es").setPositiveButton("Aceptar",null).show(); }
     }
 
     private FrameLayout buildPanel() {
@@ -179,6 +194,7 @@ public final class MainActivity extends Activity {
             }
             @Override public boolean shouldOverrideUrlLoading(WebView view,WebResourceRequest request) {
                 Uri url=request.getUrl();if(url.toString().startsWith(RuntimeState.base(MainActivity.this)+"/"))return false;
+                if(request.isForMainFrame() && "mailto:headscale-gateway@gentedelcondado.es".equals(url.toString())) {contactSupport();return true;}
                 if(request.isForMainFrame() && "https".equals(url.getScheme()))try {startActivity(new Intent(Intent.ACTION_VIEW,url));}catch(Exception e){showError(e);}
                 return true;
             }

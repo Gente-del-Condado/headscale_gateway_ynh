@@ -116,6 +116,9 @@ func startupInitialSettings(settings map[string]string) error {
 	}
 	// Los valores persistidos siguen siendo portables. La dirección HTTP asignada
 	// por el anfitrión es una opción del proceso, no otra configuración persistente.
+	if d.NodeName != "" {
+		settings["headscale.node_name"] = d.NodeName
+	}
 	if d.LANListenAddr != "" {
 		settings["server.listen_addr"] = d.LANListenAddr
 	}

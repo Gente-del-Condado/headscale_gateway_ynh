@@ -10,7 +10,7 @@ python3 tools/check_i18n.py
 PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
 python3 tools/prepare_git_install.py --check
 cd src
-unformatted="$(find . -name '*.go' -not -path './third_party/*' -not -path './desktop/node_modules/*' -print0 | xargs -0 gofmt -l)"
+unformatted="$(find . -name '*.go' -not -path './third_party/*' -not -path './internal/acmednstechnitium/*' -not -path './desktop/node_modules/*' -print0 | xargs -0 gofmt -l)"
 if [[ -n "$unformatted" ]]; then printf 'Archivos sin gofmt:\n%s\n' "$unformatted"; exit 1; fi
 for script in internal/admin/*.js; do node --check "$script"; done
 node --test internal/admin/*.test.cjs

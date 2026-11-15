@@ -1,0 +1,1 @@
+Nombre del dispositivo editable antes de conectar. Limpieza DNS protegida al retirar nodos y avisos de fallos. Autor, soporte y manual actualizados. Se conserva la firma, identidad y configuración.

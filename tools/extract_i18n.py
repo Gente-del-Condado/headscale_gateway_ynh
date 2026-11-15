@@ -80,7 +80,8 @@ for file in sorted((ROOT/'src/internal'/'admin').glob('*.js'))+sorted((ROOT/'src
   body=ast.literal_eval(m.group(1))
   if len(body)>=2:refs[body].add(str(file.relative_to(ROOT)))
 for file in sorted((ROOT / 'src').glob('*.go'))+sorted((ROOT/'src/internal').rglob('*.go')):
- if file.name.endswith('_test.go'):continue
+ # Las fuentes MIT incorporadas conservan el idioma y los textos originales.
+ if file.name.endswith('_test.go') or 'acmednstechnitium' in file.parts:continue
  text=file.read_text(encoding='utf8')
  for m in GO_RE.finditer(text):
   body=m.group(1)
@@ -91,7 +92,8 @@ for file in sorted((ROOT / 'src').glob('*.go'))+sorted((ROOT/'src/internal').rgl
 refs.update({s:refs.get(s,set()) for s in ('ERROR', 'ADVERTENCIA', 'INFORMACIÓN', 'DEPURACIÓN', 'TRAZA','Plantillas: %d nuevas, %d actualizadas, %d omitidas.', 'Repositorio sincronizado correctamente.', 'No se pudo abrir el archivo de log.', 'Configuración del repositorio guardada.', 'Importación de plantillas finalizada.', 'Sincronización de plantillas fallida.', 'Solicitud HTTP procesada.', 'Cambio administrativo registrado.')})
 GO_CALL=re.compile(r'(?:i18n\.T|\btr)\(\s*("(?:\\.|[^"\\])*"|`[^`]*`)')
 for file in sorted((ROOT / 'src').glob('*.go'))+sorted((ROOT/'src/internal').rglob('*.go')):
- if file.name.endswith('_test.go'):continue
+ # Las fuentes MIT incorporadas conservan el idioma y los textos originales.
+ if file.name.endswith('_test.go') or 'acmednstechnitium' in file.parts:continue
  for match in GO_CALL.finditer(file.read_text()):
   value=match.group(1);message=value[1:-1] if value.startswith('`') else json.loads(value)
   refs[message].add(str(file.relative_to(ROOT)))

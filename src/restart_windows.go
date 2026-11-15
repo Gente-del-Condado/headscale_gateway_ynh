@@ -17,6 +17,13 @@ import (
 // administrador. Para servicios Windows supervisados se recomienda que el SCM
 // administre el reinicio; este modo está destinado a ejecución interactiva.
 func replaceGatewayProcess() error {
+	if windowsServiceActive.Load() {
+		select {
+		case windowsServiceRestart <- struct{}{}:
+		default:
+		}
+		return nil
+	}
 	executable, err := os.Executable()
 	if err != nil {
 		return err

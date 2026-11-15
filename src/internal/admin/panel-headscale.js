@@ -14,7 +14,13 @@ const hsValue = value => value == null ? '—' : String(value);
 async function headscaleAction(command, message) {
   if (currentRole !== 'admin') throw Error(hsTr('Operación reservada a administradores'));
   const result = await api('network/admin/action', 'POST', command);
-  if (message) notice(hsTr(message));
+  if (result?.dns_cleanup) {
+    const status = hsEl('headscale-node-action-status');
+    status.textContent = hsTr(message || 'Cambio aplicado en Headscale') + ' · ' + result.dns_cleanup.message + ' · ' + hsTr('Registros A eliminados') + ': ' + Number(result.dns_cleanup.deleted || 0);
+    status.className = result.dns_cleanup.status === 'warning' ? 'error' : 'field-help';
+    status.focus();
+    notice(status.textContent, result.dns_cleanup.status === 'warning');
+  } else if (message) notice(hsTr(message));
   return result;
 }
 const hsRow = (target, columns, buttons) => {

@@ -60,7 +60,7 @@ def export(output, archives=True):
         copy_tree(ROOT / 'packaging/homeassistant', addon)
         (addon / 'config.yaml.in').rename(addon / 'config.yaml')
         shutil.copy2(ROOT / 'packaging/common/hgw_bootstrap.py', addon / 'hgw_bootstrap.py')
-        (ha / 'repository.yaml').write_text('name: Headscale Gateway\nmaintainer: gentedelcondado\n')
+        (ha / 'repository.yaml').write_text('name: Headscale Gateway\nmaintainer: Gente del Condado <headscale-gateway@gentedelcondado.es>\n')
         (ha / 'README.md').write_text(
             '# Complementos de Headscale Gateway\n\n'
             'Para una instalación local, copia headscale_gateway/ a la carpeta de aplicaciones '
@@ -90,6 +90,8 @@ def export(output, archives=True):
                         str(source_tar), str(addon/'source.tar.gz')],
                        cwd=ROOT/'src', check=True)
         add_notices(addon / 'notices')
+        for name in ('LICENSE', 'NOTICE'):
+            shutil.copy2(ROOT / name, addon / name)
         ynh = stage / 'yunohost'
         copy_tree(ROOT / 'packaging/yunohost', ynh)
         # El flujo del repositorio público se publica por separado; no forma
@@ -103,7 +105,8 @@ def export(output, archives=True):
         # Los binarios públicos siempre viajan con las mismas fuentes que usa HA.
         shutil.copy2(addon / 'source.tar.gz', payload / 'source.tar.gz')
         add_notices(payload / 'notices')
-        shutil.copy2(ROOT / 'LICENSE', ynh / 'LICENSE')
+        for name in ('LICENSE', 'NOTICE'):
+            shutil.copy2(ROOT / name, ynh / name)
         binaries = {}
         subprocess.run(['go', 'mod', 'verify'], cwd=ROOT / "src", check=True)
         for arch in ('amd64', 'arm64'):
@@ -135,7 +138,8 @@ def export(output, archives=True):
             copy_tree(ROOT / 'packaging/hacs', stage / 'hacs')
             copy_tree(ROOT / 'custom_components', stage / 'hacs/custom_components')
             shutil.copy2(ROOT / 'hacs.json', stage / 'hacs/hacs.json')
-            shutil.copy2(ROOT / 'LICENSE', stage / 'hacs/LICENSE')
+            for name in ('LICENSE', 'NOTICE'):
+                shutil.copy2(ROOT / name, stage / 'hacs' / name)
             repositories.append('hacs')
         manifest = {'version': VERSION, 'commercial': False, 'sources': source_hashes, 'binaries': binaries}
         for name in repositories:

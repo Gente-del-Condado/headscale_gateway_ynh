@@ -147,3 +147,8 @@ completos de [LICENSE](LICENSE). Se permite el uso, modificación y distribució
 también comercial, respetando sus condiciones. Los
 avisos de dependencias están en [NOTICE](NOTICE) y en los inventarios de terceros.
 Consulta [licencias](docs/LICENCIAS.md) antes de preparar una distribución.
+
+## Autor y soporte
+
+Autor: **Gente del Condado**. Soporte: [headscale-gateway@gentedelcondado.es](mailto:headscale-gateway@gentedelcondado.es).
+[Manual en línea](https://gente-del-condado.github.io/headscale_gateway_ynh/).

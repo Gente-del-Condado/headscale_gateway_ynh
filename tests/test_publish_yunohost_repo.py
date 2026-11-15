@@ -26,7 +26,7 @@ class PublishYunoHostTest(unittest.TestCase):
             self.git(repository, 'config', 'user.name', 'Pruebas')
             self.git(repository, 'config', 'user.email', 'tests@example.invalid')
         self.package = self.source / 'yunohost'
-        for relative in ('LICENSE', 'README.md', 'tests.toml', 'go.mod', 'doc/ADMIN.md', 'doc/logo.png',
+        for relative in ('LICENSE', 'NOTICE', 'README.md', 'tests.toml', 'go.mod', 'doc/ADMIN.md', 'doc/logo.png',
                          'scripts/install', 'scripts/upgrade', 'scripts/backup',
                          'scripts/restore', 'conf/hgw_bootstrap.py',
                          'doc/third_party/LICENSE', 'doc/third_party/NOTICE',

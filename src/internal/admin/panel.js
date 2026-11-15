@@ -61,6 +61,7 @@ async function refresh() {
   if(isAdmin){
     [settings,configSchema]=await Promise.all([api('config'),api('config/schema')]);
     renderSettings();
+    renderInitialNodeName(settings);
     window.configSchema=configSchema;
     el('policy-dns-nav').hidden = settings['headscale.panel_enabled'] !== 'true';
     el('magicdns-nav').hidden = settings['headscale.panel_enabled'] !== 'true';
@@ -92,6 +93,7 @@ async function refresh() {
 }
 
 function renderStatus(data) {
+  el("about-version").textContent = data.version || "—";
   el('setup-banner').hidden = !data.setup_required;
   el('setup-message').textContent = data.setup_message || '';
   el('reload').disabled = !!data.setup_required;
@@ -955,3 +957,33 @@ document.querySelectorAll('[data-diagnostic-tab]').forEach(button=>button.addEve
  const summary=button.dataset.diagnosticTab==='summary';el('network-diagnostic-summary').hidden=!summary;el('network-ping-result').hidden=summary;
  document.querySelectorAll('[data-diagnostic-tab]').forEach(b=>{const active=b===button;b.classList.toggle('selected',active);b.setAttribute('aria-selected',String(active));});
 }));
+
+// La confirmación es local y previa a tsnet. Cancelar o salir no crea un nodo.
+let initialNodeNameShown = false;
+function renderInitialNodeName(values) {
+  const pending = values['headscale.node_name_confirmed'] === 'false';
+  el('initial-node-name').hidden = !pending;
+  if (pending && !initialNodeNameShown) {
+    el('initial-node-value').value = values['headscale.node_name'] || '';
+    el('initial-node-value').focus();
+    initialNodeNameShown = true;
+  }
+}
+el('initial-node-form').addEventListener('submit', event => {
+  event.preventDefault();
+  run(async () => {
+    const form = el('initial-node-form');
+    if (!form.reportValidity()) return;
+    const submit = form.querySelector('button[type="submit"]');
+    submit.disabled = true;
+    try {
+      await api('config', 'PUT', {changes: {'headscale.node_name': el('initial-node-value').value}});
+      await refresh();
+      document.querySelector('[data-tab="settings"]').click();
+      const heading = document.querySelector('[data-page="settings"] h2');
+      heading.tabIndex = -1; heading.focus();
+      el('initial-node-result').textContent = tr('Nombre confirmado. Completa la configuración y reinicia el Gateway.');
+      notice('Nombre confirmado. Completa la configuración y reinicia el Gateway.');
+    } finally { submit.disabled = false; }
+  });
+});

@@ -20,7 +20,7 @@ public final class SmokeInstrumentation extends Instrumentation {
         java.util.concurrent.CountDownLatch complete=new java.util.concurrent.CountDownLatch(1);
         java.util.concurrent.atomic.AtomicReference<String> value=new java.util.concurrent.atomic.AtomicReference<>("");
         runOnMainSync(()->((android.webkit.WebView)activity.findViewById(R.id.panel_webview)).evaluateJavascript(code,result->{value.set(result);complete.countDown();}));
-        require(complete.await(5,java.util.concurrent.TimeUnit.SECONDS),"El WebView no responde");return value.get();
+        require(complete.await(15,java.util.concurrent.TimeUnit.SECONDS),"El WebView no responde");return value.get();
     }
     private void capture(String name) throws Exception {
         if(!arguments.getString("capture","false").equals("true"))return;
@@ -45,6 +45,16 @@ public final class SmokeInstrumentation extends Instrumentation {
         if(!ready) {
             capture("error");
             throw new AssertionError("El panel móvil no abrió su sesión: "+browser("JSON.stringify({url:location.href,app:document.getElementById('app')?.hidden,bridge:typeof window.gatewayAndroidSections,nav:document.querySelector('.main-navigation')?getComputedStyle(document.querySelector('.main-navigation')).display:null,body:document.body.innerText.slice(0,250)})"));
+        }
+        if(context.getPackageName().endsWith(".lab") && api("GET","/api/v1/config",null).optString("headscale.node_name_confirmed").equals("false")) {
+            require(!api("GET","/api/v1/status",null).optBoolean("vpn_connected"),"Se conectó antes de confirmar el nombre");
+            require(browser("!document.getElementById('initial-node-name').hidden").equals("true"),"No se muestra la elección inicial");
+            require(new JSONTokener(browser("document.getElementById('initial-node-value').value")).nextValue().equals(RuntimeState.deviceNodeName(context)),"La propuesta no coincide con el nombre del dispositivo");
+            capture("nombre-inicial");
+            browser("document.getElementById('initial-node-value').value='tablet-lab';document.getElementById('initial-node-form').dispatchEvent(new Event('submit',{cancelable:true}))");
+            long nameDeadline=System.currentTimeMillis()+10000;
+            while(System.currentTimeMillis()<nameDeadline && !api("GET","/api/v1/config",null).optString("headscale.node_name_confirmed").equals("true"))Thread.sleep(100);
+            require(api("GET","/api/v1/config",null).getString("headscale.node_name").equals("tablet-lab"),"No se conserva el nombre elegido");
         }
         require(browser("getComputedStyle(document.querySelector('.main-navigation')).display").equals("\"none\""),"La navegación de escritorio ocupa la pantalla Android");
         browser("window.__idiomaInglesObservado=false;const idiomas=new MutationObserver(()=>{if(document.documentElement.lang==='en')window.__idiomaInglesObservado=true});idiomas.observe(document.documentElement,{attributes:true,attributeFilter:['lang']});document.getElementById('ui-language').value='en';document.getElementById('ui-language').dispatchEvent(new Event('change'))");

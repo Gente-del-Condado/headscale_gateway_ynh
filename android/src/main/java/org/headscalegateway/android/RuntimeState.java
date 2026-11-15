@@ -83,6 +83,16 @@ final class RuntimeState {
         Os.rename(temporary.getPath(),file.getPath());
     }
 
+    static String deviceNodeName(Context c) {
+        String name=null;
+        try { name=android.provider.Settings.Global.getString(c.getContentResolver(),"device_name"); } catch(SecurityException ignored) {}
+        if(name==null || name.trim().isEmpty())name=android.os.Build.MODEL;
+        name=java.text.Normalizer.normalize(name,java.text.Normalizer.Form.NFD).replaceAll("\\p{M}","")
+            .toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9]+","-").replaceAll("^-+|-+$","");
+        if(name.length()>63)name=name.substring(0,63).replaceAll("-+$","");
+        return name.isEmpty()?"android-device":name;
+    }
+
     static void prepare(Context c) throws Exception {
         try(ServerSocket a=new ServerSocket(0,0,InetAddress.getByName("127.0.0.1"));
             ServerSocket b=new ServerSocket(0,0,InetAddress.getByName("127.0.0.1"));
@@ -93,7 +103,7 @@ final class RuntimeState {
         File initial=new File(root(c),"initial-admin.json");
         write(initial,new JSONObject().put("username","android").put("password",secret(c,"admin_password")).toString());
         JSONObject options=new JSONObject().put("listen_addr","127.0.0.1:"+prefs(c).getInt("admin_port",0))
-            .put("node_name","android-gateway").put("initial_admin_file",initial.getPath());
+            .put("node_name",deviceNodeName(c)).put("initial_admin_file",initial.getPath());
         write(new File(root(c),"startup.json"),options.toString());
         network(c);
     }

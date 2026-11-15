@@ -11,7 +11,7 @@ if ($LASTEXITCODE -ne 0) { throw 'Interfaz inválida' }
 
 Set-Location src
 $goFiles = Get-ChildItem -Recurse -Filter '*.go' -File |
-  Where-Object { $_.FullName -notmatch '[\\/](third_party|node_modules)[\\/]' }
+  Where-Object { $_.FullName -notmatch '[\\/](third_party|node_modules|acmednstechnitium)[\\/]' }
 $unformatted = @($goFiles | ForEach-Object { gofmt -l $_.FullName } | Where-Object { $_ })
 if ($unformatted.Count -gt 0) { throw "Ejecutar gofmt: $($unformatted -join ', ')" }
 

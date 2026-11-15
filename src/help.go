@@ -20,6 +20,7 @@ USO:
   headscale-gateway logs tail [--channel gateway|proxy|admin] [--lines 50] [--dir /ruta/logs]
   headscale-gateway logs follow [--channel proxy] [--dir /ruta/logs]   (Ctrl+C)
   headscale-gateway doctor [--db ruta/gateway.sqlite]
+  headscale-gateway --windows-service HeadscaleGateway --db ruta/gateway.sqlite (solo mediante SCM)
   headscale-gateway version
   headscale-gateway -help
 

@@ -161,6 +161,10 @@ msgstr "--log-max-mb outside range 1..1024"
 msgid "--restart-wait-pid no puede ser negativo"
 msgstr "--restart-wait-pid cannot be negative"
 
+#: src/service_other.go
+msgid "--windows-service solo está disponible en Windows"
+msgstr "--windows-service is only available on Windows"
+
 #: src/internal/admin/panel-reference.js
 msgid "-b cookies.txt -H \"X-CSRF-Token: $HGW_CSRF\""
 msgstr "-b cookies.txt -H \"X-CSRF-Token: $HGW_CSRF\""
@@ -491,6 +495,10 @@ msgstr "Accept Headscale DNS"
 msgid "Aceptar rutas de otros nodos"
 msgstr "Accept routes from other nodes"
 
+#: src/admin_schema.go
+msgid "Acepto los términos de la CA ACME"
+msgstr "I accept the ACME CA terms"
+
 #: src/internal/admin/panel.html
 msgid "Acerca de"
 msgstr "About"
@@ -718,6 +726,10 @@ msgid "Advertencias y errores"
 msgstr "Warnings and errors"
 
 #: src/internal/admin/panel.html
+msgid "AGPL-3.0-only. Consulta"
+msgstr "AGPL-3.0-only. See"
+
+#: src/internal/admin/panel.html
 msgid "Agrupa usuarios registrados en Headscale, por ejemplo"
 msgstr "Group registered Headscale users, for example"
 
@@ -799,6 +811,10 @@ msgstr "Android: manually remove the CA from user credentials in Settings > Secu
 #: src/internal/admin/panel.html
 msgid "Antes (Headscale)"
 msgstr "Before (Headscale)"
+
+#: src/internal/admin/panel.html
+msgid "Antes de conectar a Headscale, confirma el nombre propuesto o escribe otro. Usa 1 a 63 letras minúsculas, números o guiones, sin guiones consecutivos. Headscale decide el nombre definitivo y resuelve los duplicados."
+msgstr "Before connecting to Headscale, confirm the suggested name or enter another. Use 1 to 63 lowercase letters, digits or hyphens, without consecutive hyphens. Headscale assigns the final name and resolves duplicates."
 
 #: src/internal/admin/panel.html
 msgid "Antes de escribir se comprueba la revisión leída. Las modificaciones se auditan; exporta siempre una copia antes de guardar. Una política incorrecta puede cortar el acceso entre equipos."
@@ -2339,6 +2355,10 @@ msgstr "Confirm the operation before running it."
 msgid "confirma LIMPIAR"
 msgstr "confirm LIMPIAR"
 
+#: src/setup_mode.go
+msgid "confirma o cambia el nombre propuesto del dispositivo antes de conectar a Headscale"
+msgstr "confirm or change the suggested device name before connecting to Headscale"
+
 #: src/internal/admin/panel-backups.js
 msgid "Confirma por segunda vez la restauración de ACL remota."
 msgstr "Confirm the remote ACL restoration a second time."
@@ -2350,6 +2370,10 @@ msgstr "confirmation and password required"
 #: src/internal/admin/panel.html
 msgid "Confirmar contraseña"
 msgstr "Confirm password"
+
+#: src/internal/admin/panel.html
+msgid "Confirmar nombre del dispositivo"
+msgstr "Confirm device name"
 
 #: src/internal/admin/panel-pki.js
 msgid "Confirmar operación"
@@ -3358,6 +3382,34 @@ msgstr "Obsolete DNS detected: %s A %s"
 msgid "DNS OK: %s A %s"
 msgstr "DNS OK: %s A %s"
 
+#: src/admin_node_dns.go
+msgid "DNS pendiente: configura un proveedor con permisos de lectura y borrado para la zona del nodo."
+msgstr "DNS pending: configure a provider with read and delete permissions for the node zone."
+
+#: src/admin_node_dns.go
+msgid "DNS pendiente: el nodo no tiene una IPv4 verificable en Headscale."
+msgstr "DNS pending: the node has no verifiable IPv4 address in Headscale."
+
+#: src/admin_node_dns.go
+msgid "DNS pendiente: el nodo queda fuera de la zona DNS configurada."
+msgstr "DNS pending: the node is outside the configured DNS zone."
+
+#: src/admin_node_dns.go
+msgid "DNS pendiente: no se pudieron consultar los registros. Revisa la conexión y los permisos de lectura del proveedor."
+msgstr "DNS pending: records could not be queried. Check connectivity and provider read permissions."
+
+#: src/admin_node_dns.go
+msgid "DNS pendiente: no se pudo completar el borrado. Revisa la conexión y los permisos de eliminación del proveedor. La operación en Headscale ya se completó."
+msgstr "DNS pending: deletion could not be completed. Check connectivity and provider delete permissions. The Headscale operation has already completed."
+
+#: src/admin_node_dns.go
+msgid "DNS pendiente: no se pudo obtener la identidad del nodo antes de retirarlo. Revisa los registros manualmente."
+msgstr "DNS pending: the node identity could not be read before retiring it. Review its records manually."
+
+#: src/admin_node_dns.go
+msgid "DNS pendiente: no se puede determinar con seguridad el dominio del nodo."
+msgstr "DNS pending: the node domain cannot be safely determined."
+
 #: src/internal/admin/panel.html
 msgid "DNS · TCP 53"
 msgstr "DNS · TCP 53"
@@ -3489,6 +3541,11 @@ msgstr "Run"
 msgid "Ejecutar acción"
 msgstr "Run action"
 
+#: internal/admin/reference-data.json
+#: src/internal/bootstrap/options.go
+msgid "Ejecutar mediante el servicio nativo Windows"
+msgstr "Run through the native Windows service"
+
 #: src/internal/admin/panel.html
 msgid "Ejecutar prueba"
 msgstr "Run test"
@@ -3602,6 +3659,10 @@ msgstr "The local certificate cannot be parsed"
 msgid "el certificado local todavía no es válido hasta %s"
 msgstr "The local certificate is not valid until %s"
 
+#: src/desktop_background_linux.go
+msgid "El escritorio ha autorizado segundo plano y arranque de sesión del Gateway"
+msgstr "The desktop has authorized background activity and Gateway startup at login"
+
 #: src/restart_windows.go
 msgid "el Gateway anterior no terminó dentro de 30 segundos"
 msgstr "the previous Gateway did not stop within 30 seconds"
@@ -3702,6 +3763,10 @@ msgstr "This token is not authorized for the module"
 #: src/internal/admin/panel.html
 msgid "elegir una plantilla SOLO la copia al editor. No aplica cambios en Headscale. Comprueba el aviso de cada plantilla y guarda copia de la política anterior."
 msgstr "Selecting a template only copies it into the editor. It does not change Headscale. Read its warning and save a backup of the existing policy."
+
+#: src/internal/admin/panel.html
+msgid "Elige el nombre de este dispositivo"
+msgstr "Choose a name for this device"
 
 #: src/internal/admin/panel-experience.js
 msgid "Elige token, cuenta local, LDAP o Dex/OIDC. El token de recuperación permanece disponible."
@@ -4256,6 +4321,10 @@ msgid "frecuencia no válida"
 msgstr "invalid frequency"
 
 #: src/internal/admin/panel.html
+msgid "Fuentes y descargas públicas"
+msgstr "Public source and downloads"
+
+#: src/internal/admin/panel.html
 msgid "Función del servicio"
 msgstr "Service purpose"
 
@@ -4357,8 +4426,8 @@ msgid "Generar registros"
 msgstr "Generate records"
 
 #: src/internal/admin/panel.html
-msgid "Gentedelcondado ·"
-msgstr "Gentedelcondado ·"
+msgid "Gente-del-Condado"
+msgstr "Gente-del-Condado"
 
 #: src/internal/admin/panel-experience.js
 msgid "Gestiona autoridades, certificados y confianza del Gateway y del sistema."
@@ -4649,8 +4718,8 @@ msgid "Headscale Gateway · Administración"
 msgstr "Headscale Gateway · Administration"
 
 #: src/help.go
-msgid "Headscale Gateway — configuración centralizada en SQLite\n\nUSO:\n  headscale-gateway [-db /ruta/gateway.sqlite]\n  headscale-gateway [-db /ruta/gateway.sqlite] -reload\n  headscale-gateway -backup /ruta/nueva/copia  (DESHABILITADO: utiliza copias .hgw cifradas)\n  headscale-gateway -db /ruta/gateway.sqlite -restore-backup /ruta/copia (Gateway detenido)\n  headscale-gateway -reset-recovery (rehabilita bootstrap local)\n  headscale-gateway [-log-file /ruta/gateway.log] [-log-max-mb 10] [-log-backups 5]\n  headscale-gateway [--log-level error|warn|info|debug|trace] [--debug|--trace]\n  headscale-gateway logs status [--db ruta/gateway.sqlite]\n  headscale-gateway logs tail [--channel gateway|proxy|admin] [--lines 50] [--dir /ruta/logs]\n  headscale-gateway logs follow [--channel proxy] [--dir /ruta/logs]   (Ctrl+C)\n  headscale-gateway doctor [--db ruta/gateway.sqlite]\n  headscale-gateway version\n  headscale-gateway -help\n\nLinux: ~/.local/share/headscale-gateway/gateway.sqlite para usuario normal;\ncomo root usa /var/lib/headscale-gateway/gateway.sqlite.\nWindows: %LOCALAPPDATA%/HeadscaleGateway/gateway.sqlite, respetando una\ninstalación previa en %ProgramData%/HeadscaleGateway.\nEl primer inicio crea SQLite y sirve el panel local en:\n  http://127.0.0.1:9091/admin/\n\nAJUSTES Y SERVICIOS:\n  Se administran desde el panel y la API. No existe config.yaml.\n  La gestión de identidad, credenciales y roles utiliza la misma SQLite.\n  -reload almacena una solicitud en SQLite, procesada por el servidor.\n\nLOGS E IDIOMAS:\n  Canales independientes: gateway.log, proxy.log, admin.log.\n  Guarda 5 copias rotadas de 10 MiB por canal (configurable).\n  INFO predeterminado. DEBUG/TRACE detallan solicitudes sin cuerpos ni cabeceras.\n  Prioridad nivel: flags > GATEWAY_LOG_LEVEL > SQLite > INFO.\n  En el panel Registros se puede activar DEBUG temporal hasta 60 minutos.\n  CLI doctor/logs solo lee archivos y no inicia la VPN.\n  Los eventos de API y plantillas tienen identificadores HGW-*.\n  GATEWAY_LANG=es (predeterminado) o GATEWAY_LANG=en para los nuevos\n  mensajes de eventos traducidos. El idioma del panel es independiente.\n  Traducciones Poedit: locale/*.po y locale/headscale-gateway.pot.\n\nDATOS EXTERNOS A SQLITE:\n  Tailscale tsnet y CertMagic gestionan su propio estado y certificados.\n  No modifiques manualmente esos archivos. Usa copias consistentes de SQLite.\n  La restauración incluye gateway.sqlite y master.key; no restaura\n  automáticamente las ACL ni la configuración YAML del VPS Headscale.\n  Las copias .hgw actuales están cifradas con contraseña.\n\nRED Y SEGURIDAD:\n  El listener HTTP de administración utiliza loopback por defecto.\n  Para acceso remoto usa HTTPS del Gateway o un proxy HTTPS explícitamente autorizado.\nGATEWAY_BOOTSTRAP_FILE proporciona el mismo contrato de arranque en todas las instalaciones.\n"
-msgstr "Headscale Gateway — centralized SQLite configuration\n\nUSAGE:\n  headscale-gateway [-db /path/gateway.sqlite]\n  headscale-gateway [-db /path/gateway.sqlite] -reload\n  headscale-gateway -backup /path/new/backup  (DISABLED: use encrypted .hgw backups)\n  headscale-gateway -db /path/gateway.sqlite -restore-backup /path/backup (Gateway stopped)\n  headscale-gateway -reset-recovery (re-enables local bootstrap)\n  headscale-gateway [-log-file /path/gateway.log] [-log-max-mb 10] [-log-backups 5]\n  headscale-gateway [--log-level error|warn|info|debug|trace] [--debug|--trace]\n  headscale-gateway logs status [--db path/gateway.sqlite]\n  headscale-gateway logs tail [--channel gateway|proxy|admin] [--lines 50] [--dir /path/logs]\n  headscale-gateway logs follow [--channel proxy] [--dir /path/logs]   (Ctrl+C)\n  headscale-gateway doctor [--db path/gateway.sqlite]\n  headscale-gateway version\n  headscale-gateway -help\n\nLinux: ~/.local/share/headscale-gateway/gateway.sqlite for normal users;\nroot uses /var/lib/headscale-gateway/gateway.sqlite.\nWindows: %LOCALAPPDATA%/HeadscaleGateway/gateway.sqlite, respecting an\nexisting installation in %ProgramData%/HeadscaleGateway.\nFirst startup creates SQLite and serves the local panel at:\n  http://127.0.0.1:9091/admin/\n\nSETTINGS AND SERVICES:\n  Managed through the panel and API. There is no config.yaml.\n  Identity, credentials and roles are managed in the same SQLite database.\n  -reload stores a request in SQLite for the server to process.\n\nLOGS AND LANGUAGES:\n  Independent channels: gateway.log, proxy.log, admin.log.\n  Keeps 5 rotated copies of 10 MiB per channel (configurable).\n  INFORMATION by default. DEBUG/TRACE detail requests without bodies or headers.\n  Level priority: flags > GATEWAY_LOG_LEVEL > SQLite > INFORMATION.\n  The Logs panel can enable temporary debug for up to 60 minutes.\n  CLI doctor/logs only reads files and does not start the VPN.\n  Application events have HGW-* identifiers.\n  GATEWAY_LANG=es (default) or GATEWAY_LANG=en for new translated events.\n  The panel and tray client have separate language preferences.\n  Poedit translations: locale/*.po and locale/headscale-gateway.pot.\n\nDATA OUTSIDE SQLITE:\n  Tailscale tsnet and CertMagic manage their own state and certificates.\n  Do not edit these files manually. Use consistent SQLite backups.\n  Restoration includes gateway.sqlite and master.key; it does not\n  automatically restore ACLs or the Headscale VPS YAML configuration.\n  Current .hgw backups are password-encrypted.\n\nNETWORK AND SECURITY:\n  The administrative HTTP listener uses loopback by default.\n  For remote access, use Gateway HTTPS or an explicitly authorized HTTPS proxy.\n\nGATEWAY_BOOTSTRAP_FILE supplies the same startup contract on every installation.\n"
+msgid "Headscale Gateway — configuración centralizada en SQLite\n\nUSO:\n  headscale-gateway [-db /ruta/gateway.sqlite]\n  headscale-gateway [-db /ruta/gateway.sqlite] -reload\n  headscale-gateway -backup /ruta/nueva/copia  (DESHABILITADO: utiliza copias .hgw cifradas)\n  headscale-gateway -db /ruta/gateway.sqlite -restore-backup /ruta/copia (Gateway detenido)\n  headscale-gateway -reset-recovery (rehabilita bootstrap local)\n  headscale-gateway [-log-file /ruta/gateway.log] [-log-max-mb 10] [-log-backups 5]\n  headscale-gateway [--log-level error|warn|info|debug|trace] [--debug|--trace]\n  headscale-gateway logs status [--db ruta/gateway.sqlite]\n  headscale-gateway logs tail [--channel gateway|proxy|admin] [--lines 50] [--dir /ruta/logs]\n  headscale-gateway logs follow [--channel proxy] [--dir /ruta/logs]   (Ctrl+C)\n  headscale-gateway doctor [--db ruta/gateway.sqlite]\n  headscale-gateway --windows-service HeadscaleGateway --db ruta/gateway.sqlite (solo mediante SCM)\n  headscale-gateway version\n  headscale-gateway -help\n\nLinux: ~/.local/share/headscale-gateway/gateway.sqlite para usuario normal;\ncomo root usa /var/lib/headscale-gateway/gateway.sqlite.\nWindows: %LOCALAPPDATA%/HeadscaleGateway/gateway.sqlite, respetando una\ninstalación previa en %ProgramData%/HeadscaleGateway.\nEl primer inicio crea SQLite y sirve el panel local en:\n  http://127.0.0.1:9091/admin/\n\nAJUSTES Y SERVICIOS:\n  Se administran desde el panel y la API. No existe config.yaml.\n  La gestión de identidad, credenciales y roles utiliza la misma SQLite.\n  -reload almacena una solicitud en SQLite, procesada por el servidor.\n\nLOGS E IDIOMAS:\n  Canales independientes: gateway.log, proxy.log, admin.log.\n  Guarda 5 copias rotadas de 10 MiB por canal (configurable).\n  INFO predeterminado. DEBUG/TRACE detallan solicitudes sin cuerpos ni cabeceras.\n  Prioridad nivel: flags > GATEWAY_LOG_LEVEL > SQLite > INFO.\n  En el panel Registros se puede activar DEBUG temporal hasta 60 minutos.\n  CLI doctor/logs solo lee archivos y no inicia la VPN.\n  Los eventos de API y plantillas tienen identificadores HGW-*.\n  GATEWAY_LANG=es (predeterminado) o GATEWAY_LANG=en para los nuevos\n  mensajes de eventos traducidos. El idioma del panel es independiente.\n  Traducciones Poedit: locale/*.po y locale/headscale-gateway.pot.\n\nDATOS EXTERNOS A SQLITE:\n  Tailscale tsnet y CertMagic gestionan su propio estado y certificados.\n  No modifiques manualmente esos archivos. Usa copias consistentes de SQLite.\n  La restauración incluye gateway.sqlite y master.key; no restaura\n  automáticamente las ACL ni la configuración YAML del VPS Headscale.\n  Las copias .hgw actuales están cifradas con contraseña.\n\nRED Y SEGURIDAD:\n  El listener HTTP de administración utiliza loopback por defecto.\n  Para acceso remoto usa HTTPS del Gateway o un proxy HTTPS explícitamente autorizado.\nGATEWAY_BOOTSTRAP_FILE proporciona el mismo contrato de arranque en todas las instalaciones.\n"
+msgstr "Headscale Gateway — centralized SQLite configuration\n\nUSAGE:\n  headscale-gateway [-db /path/gateway.sqlite]\n  headscale-gateway [-db /path/gateway.sqlite] -reload\n  headscale-gateway -backup /path/new/backup  (DISABLED: use encrypted .hgw backups)\n  headscale-gateway -db /path/gateway.sqlite -restore-backup /path/backup (Gateway stopped)\n  headscale-gateway -reset-recovery (re-enables local bootstrap)\n  headscale-gateway [-log-file /path/gateway.log] [-log-max-mb 10] [-log-backups 5]\n  headscale-gateway [--log-level error|warn|info|debug|trace] [--debug|--trace]\n  headscale-gateway logs status [--db path/gateway.sqlite]\n  headscale-gateway logs tail [--channel gateway|proxy|admin] [--lines 50] [--dir /path/logs]\n  headscale-gateway logs follow [--channel proxy] [--dir /path/logs]   (Ctrl+C)\n  headscale-gateway doctor [--db path/gateway.sqlite]\n  headscale-gateway --windows-service HeadscaleGateway --db path/gateway.sqlite (SCM only)\n  headscale-gateway version\n  headscale-gateway -help\n\nLinux: ~/.local/share/headscale-gateway/gateway.sqlite for normal users;\nroot uses /var/lib/headscale-gateway/gateway.sqlite.\nWindows: %LOCALAPPDATA%/HeadscaleGateway/gateway.sqlite, respecting an\nexisting installation in %ProgramData%/HeadscaleGateway.\nFirst startup creates SQLite and serves the local panel at:\n  http://127.0.0.1:9091/admin/\n\nSETTINGS AND SERVICES:\n  Managed through the panel and API. There is no config.yaml.\n  Identity, credentials and roles are managed in the same SQLite database.\n  -reload stores a request in SQLite for the server to process.\n\nLOGS AND LANGUAGES:\n  Independent channels: gateway.log, proxy.log, admin.log.\n  Keeps 5 rotated copies of 10 MiB per channel (configurable).\n  INFORMATION by default. DEBUG/TRACE detail requests without bodies or headers.\n  Level priority: flags > GATEWAY_LOG_LEVEL > SQLite > INFORMATION.\n  The Logs panel can enable temporary debug for up to 60 minutes.\n  CLI doctor/logs only reads files and does not start the VPN.\n  Application events have HGW-* identifiers.\n  GATEWAY_LANG=es (default) or GATEWAY_LANG=en for new translated events.\n  The panel and tray client have separate language preferences.\n  Poedit translations: locale/*.po and locale/headscale-gateway.pot.\n\nDATA OUTSIDE SQLITE:\n  Tailscale tsnet and CertMagic manage their own state and certificates.\n  Do not edit these files manually. Use consistent SQLite backups.\n  Restoration includes gateway.sqlite and master.key; it does not\n  automatically restore ACLs or the Headscale VPS YAML configuration.\n  Current .hgw backups are password-encrypted.\n\nNETWORK AND SECURITY:\n  The administrative HTTP listener uses loopback by default.\n  For remote access, use Gateway HTTPS or an explicitly authorized HTTPS proxy.\n\nGATEWAY_BOOTSTRAP_FILE supplies the same startup contract on every installation.\n"
 
 #: src/internal/admin/panel-headscale.js
 msgid "Headscale no devolvió una clave de registro visible"
@@ -4691,6 +4760,14 @@ msgstr "Headscale, Tailscale, CertMagic, go-oidc, go-ldap, SQLite and DNS connec
 #: src/internal/admin/panel.html
 msgid "headscale-gateway"
 msgstr "headscale-gateway"
+
+#: src/internal/admin/panel.html
+msgid "headscale-gateway@gentedelcondado.es"
+msgstr "headscale-gateway@gentedelcondado.es"
+
+#: src/config_validate.go
+msgid "headscale.node_name: usa de 1 a 63 letras minúsculas, números o guiones, sin guiones consecutivos ni al principio o final"
+msgstr "headscale.node_name: use 1 to 63 lowercase letters, digits or hyphens, without consecutive, leading or trailing hyphens"
 
 #: src/config_validate.go
 msgid "headscale.url no definido"
@@ -5675,6 +5752,10 @@ msgstr "Application license"
 msgid "Licencia inválida"
 msgstr "Invalid license"
 
+#: src/internal/admin/panel.html
+msgid "LICENSE"
+msgstr "LICENSE"
+
 #: src/internal/licensing/license.go
 msgid "license expired"
 msgstr "license expired"
@@ -5698,6 +5779,10 @@ msgstr "Clear result and token"
 #: src/internal/admin/panel.html
 msgid "Limpiar todos los logs"
 msgstr "Clear all logs"
+
+#: src/admin_node_dns.go
+msgid "Limpieza DNS completada: solo se retiran registros A marcados del nodo y con su IP. Los registros manuales y de otros nodos se conservan."
+msgstr "DNS cleanup completed: only marked node A records with its IP are removed. Manual and other node records are retained."
 
 #: dns_cleanup.go
 #: src/dns_cleanup.go
@@ -5856,6 +5941,10 @@ msgstr "Keep access open between all devices"
 msgid "Mantener habilitada la pestaña de red"
 msgstr "Keep the network tab enabled"
 
+#: src/desktop_background_linux.go
+msgid "Mantener los servicios privados del Gateway disponibles al cerrar el navegador e iniciar sesión"
+msgstr "Keep the Gateway private services available after closing the browser and when logging in"
+
 #: src/internal/admin/panel.html
 msgid "Mantener sesión iniciada durante 30 días en este navegador"
 msgstr "Keep me signed in for 30 days on this browser"
@@ -5863,6 +5952,14 @@ msgstr "Keep me signed in for 30 days on this browser"
 #: src/internal/admin/panel.html
 msgid "Manual"
 msgstr "Manual"
+
+#: src/internal/admin/panel.html
+msgid "Manual de Headscale Gateway"
+msgstr "Headscale Gateway manual"
+
+#: src/internal/admin/panel.html
+msgid "Manual en línea"
+msgstr "Online manual"
 
 #: src/internal/admin/panel-experience.js
 msgid "Mapea únicamente correos verificados y expresamente autorizados: correo=admin, operator o viewer."
@@ -6019,6 +6116,10 @@ msgstr "Nameservers and Split DNS"
 msgid "Navegación del panel"
 msgstr "Panel navigation"
 
+#: src/admin_schema.go
+msgid "Necesario para crear una cuenta ACME nueva sin consola. Revisa los términos de la CA en el manual. Las cuentas existentes siguen renovando. Esta decisión es local y no se importa de perfiles."
+msgstr "Required to create a new ACME account without a console. Review the CA terms in the manual. Existing accounts continue renewing. This decision is local and is not imported from profiles."
+
 #: src/internal/pki/system_linux.go
 msgid "Necesita root. Guarda la CA pública como %s y ejecuta: sudo %s %s. Comprueba antes la huella SHA-256: %s"
 msgstr "Requires root. Save the public CA as %s and run: sudo %s %s. Verify the SHA-256 fingerprint first: %s"
@@ -6142,9 +6243,9 @@ msgstr "No matching services."
 msgid "no hay una VPN activa que desconectar"
 msgstr "no active VPN to disconnect"
 
-#: src/internal/admin/panel.html
-msgid "No se encontró un archivo LICENSE en el código entregado; la licencia de distribución debe declararla expresamente el titular del proyecto. No se presume una licencia de código abierto."
-msgstr "No LICENSE file was found in the supplied source. Distribution terms must be stated explicitly by the project owner. No open-source license is assumed."
+#: src/admin_node_dns.go
+msgid "No se encontraron registros A gestionados para la identidad actual del nodo. Los registros manuales o con nombres anteriores requieren revisión."
+msgstr "No managed A records were found for the current node identity. Manual records or records using previous names require review."
 
 #: src/internal/admin/panel.html
 msgid "No se guardan tokens, contraseñas ni contenido de las solicitudes."
@@ -6444,6 +6545,10 @@ msgstr "Nodes, certificates, logs…"
 msgid "Nombre"
 msgstr "Name"
 
+#: src/internal/admin/panel.js
+msgid "Nombre confirmado. Completa la configuración y reinicia el Gateway."
+msgstr "Name confirmed. Complete the configuration and restart the Gateway."
+
 #: src/internal/pki/remove_local.go
 msgid "nombre de CA inválido"
 msgstr "invalid CA name"
@@ -6455,6 +6560,10 @@ msgstr "Header name"
 #: src/internal/pki/trust.go
 msgid "nombre de Gateway inválido"
 msgstr "invalid Gateway name"
+
+#: src/admin_settings.go
+msgid "nombre de nodo inválido: usa 1..63 letras minúsculas, números o guiones sin repetir"
+msgstr "invalid node name: use 1..63 lowercase letters, digits or non-consecutive hyphens"
 
 #: src/tailscale_identity.go
 msgid "nombre de nodo Tailscale vacío después de normalizar"
@@ -6475,6 +6584,10 @@ msgstr "Gateway name"
 #: src/internal/admin/panel.html
 msgid "Nombre del grupo"
 msgstr "Group name"
+
+#: src/service_windows.go
+msgid "nombre del servicio Windows inválido"
+msgstr "invalid Windows service name"
 
 #: src/admin_schema.go
 msgid "Nombre del subdominio administrativo"
@@ -6531,6 +6644,14 @@ msgstr "invalid name or expiry"
 msgid "Nombre o valor de cabecera HTTP no válido: {p0}"
 msgstr "Invalid HTTP header name or value: {p0}"
 
+#: src/internal/admin/panel.html
+msgid "Nombre solicitado (obligatorio)"
+msgstr "Requested name (required)"
+
+#: src/admin_schema.go
+msgid "Nombre solicitado del nodo"
+msgstr "Requested node name"
+
 #: src/internal/admin/proxy_schema.go
 msgid "Nombre TLS (SNI)"
 msgstr "TLS name (SNI)"
@@ -6570,6 +6691,10 @@ msgstr "normalizeHost: %q -> %q"
 #: utils.go
 msgid "normalizeServiceName: %q -> %q"
 msgstr "normalizeServiceName: %q -> %q"
+
+#: src/internal/admin/panel.html
+msgid "NOTICE"
+msgstr "NOTICE"
 
 #: src/internal/admin/panel-headscale.js
 msgid "Notificaciones activadas en este navegador"
@@ -6884,6 +7009,10 @@ msgstr "stored certificate pair restored (primary + wildcard)"
 #: src/internal/admin/panel-security.js
 msgid "Para confirmar escribe ROTAR (mayúsculas):"
 msgstr "To confirm, type ROTAR (uppercase):"
+
+#: src/acme_account_consent.go
+msgid "Para crear una cuenta ACME nueva, revisa los términos de la CA y activa acme.agree_to_terms en Certificados"
+msgstr "To create a new ACME account, review the CA terms and enable acme.agree_to_terms in Certificates"
 
 #: src/internal/admin/panel.html
 msgid "Para Home Assistant y otras aplicaciones, genera tokens limitados. La clave completa aparece una sola vez; SQLite conserva exclusivamente su hash SHA-256. Los permisos se comprueban en cada solicitud."
@@ -7817,6 +7946,10 @@ msgstr "logging initialized; file=%s"
 msgid "Registros"
 msgstr "Logs"
 
+#: src/internal/admin/panel-headscale.js
+msgid "Registros A eliminados"
+msgstr "A records deleted"
+
 #: src/internal/admin/panel-policy-dns.js
 msgid "Registros copiados al portapapeles"
 msgstr "Records copied to clipboard"
@@ -8258,6 +8391,10 @@ msgstr "Tailnet egress: VPN is not configured"
 #: src/internal/admin/panel.html
 msgid "Salir"
 msgstr "Sign out"
+
+#: src/service_windows.go
+msgid "SCM_ERROR: %v (%#v)"
+msgstr "SCM_ERROR: %v (%#v)"
 
 #: internal/admin/reference-data.json
 msgid "SDK y LocalClient internos para estado, preferencias, login y diagnósticos. No se expone un proxy genérico de la API local de Tailscale."
@@ -8796,6 +8933,10 @@ msgstr "Only an administrator can manage repositories and template imports"
 #: src/internal/admin/backups.go
 msgid "solo un archivo permitido"
 msgstr "only one file allowed"
+
+#: src/internal/admin/panel.html
+msgid "Soporte"
+msgstr "Support"
 
 #: src/internal/policytemplates/services.go
 msgid "SQL Server"
@@ -9583,6 +9724,14 @@ msgstr "cryptographic and SHA-256 verification succeeded; starting offline mode"
 msgid "Verificar y aprobar"
 msgstr "Verify and approve"
 
+#: src/internal/admin/panel.html
+msgid "Versiones e instaladores"
+msgstr "Releases and installers"
+
+#: src/internal/admin/panel.html
+msgid "Versión"
+msgstr "Version"
+
 #: src/internal/configtransfer/transfer.go
 msgid "versión o formato de configuración no admitidos"
 msgstr "unsupported configuration version or format"
@@ -9666,6 +9815,10 @@ msgstr "Windows Defender Firewall"
 #: src/internal/admin/panel.html
 msgid "y el código temporal local. Rota el token actual para revocarlo inmediatamente; el nuevo se muestra una sola vez. Solo admite una sesión administrativa interactiva, no tokens Bearer."
 msgstr "and the local one-time code. Rotate the current token to revoke it immediately; the new token is shown only once. Requires an interactive admin session, not a Bearer token."
+
+#: src/internal/admin/panel.html
+msgid "y los avisos de terceros incluidos con la distribución."
+msgstr "and the third-party notices included with the distribution."
 
 #: src/internal/admin/panel.html
 msgid "y requieren reiniciar el proceso. Los secretos nunca se muestran. Las opciones disponibles se consultan a la API, no están fijadas en el navegador."

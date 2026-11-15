@@ -1,5 +1,5 @@
 name: Headscale Gateway
-version: 1.4.12
+version: 1.4.13
 slug: headscale_gateway
 description: Gateway HTTPS privado con VPN, DNS, certificados y panel de administración
 url: https://gente-del-condado.github.io/headscale_gateway_ynh/HOME_ASSISTANT.html
@@ -24,11 +24,11 @@ timeout: 30
 stage: stable
 options:
   admin_username: admin
-  node_name: homeassistant-gateway
+  node_name: ""
   lan_port: 8443
 schema:
   admin_username: str
   admin_password: password?
-  node_name: match(^[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$)
+  node_name: match(^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)?$)
   lan_port: port
   log_level: list(info|debug|trace|warn|error)?

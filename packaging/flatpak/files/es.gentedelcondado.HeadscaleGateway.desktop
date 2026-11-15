@@ -4,5 +4,5 @@ Name=Headscale Gateway
 Comment=Motor Gateway completo y panel web de administración
 Exec=headscale-gateway-launcher
 Icon=es.gentedelcondado.HeadscaleGateway
-Terminal=true
+Terminal=false
 Categories=Network;Utility;

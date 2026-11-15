@@ -168,7 +168,8 @@ else:
             first = json.loads((install / 'startup.json').read_text())
             proof = first['proxy_auth']['shared_secret']
             self.assertEqual(first['proxy_auth']['unix_group'], 'admins')
-            self.assertEqual(first['node_name'], 'headscale-gateway-2')
+            from hgw_bootstrap import proposed_node_name
+            self.assertEqual(first['node_name'], proposed_node_name())
             include = root/'nginx/proxy-auth.inc'
             self.assertIn(proof, include.read_text())
             self.assertEqual(include.stat().st_mode & 0o777, 0o600)

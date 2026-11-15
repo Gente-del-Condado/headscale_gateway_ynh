@@ -113,6 +113,11 @@ def check(binary):
             assert 'Path=/gateway/' in headers['Set-Cookie'] and 'Secure' in headers['Set-Cookie']
             csrf = json.loads(raw)['csrf']
             assert request('/api/v1/status', cookie=cookie)[0] == 200
+            initial_status = json.loads(request('/api/v1/status', cookie=cookie)[2])
+            assert initial_status['setup_required'] and not initial_status['vpn_connected']
+            proposal = json.loads(request('/api/v1/config', cookie=cookie)[2])
+            assert proposal['headscale.node_name'] == 'isolated-gateway' and proposal['headscale.node_name_confirmed'] == 'false'
+            assert request('/api/v1/config', 'PUT', {'changes': {'headscale.node_name':'pc-lab'}}, cookie, csrf)[0] == 200
             assert request('/api/v1/reload', 'POST', {}, cookie=cookie)[0] == 401
             status, _, _ = request('/api/v1/auth/settings', 'PUT', {
                 'mode': 'local', 'local_username': 'admin', 'local_password': 'changed-password-123',
@@ -122,6 +127,10 @@ def check(binary):
             stop(); start()
             assert login('initial-password-123')[0] == 401, 'installer reset an existing password'
             assert login('changed-password-123')[0] == 200
+            status, headers, raw = login('changed-password-123')
+            restored_cookie = headers['Set-Cookie'].split(';')[0]
+            restored = json.loads(request('/api/v1/config', cookie=restored_cookie)[2])
+            assert restored['headscale.node_name'] == 'pc-lab' and restored['headscale.node_name_confirmed'] == 'true', 'node choice lost after restart'
             assert hashlib.sha256((data / 'master.key').read_bytes()).hexdigest() == key_hash
             assert not initial.exists(), 'initial password file was retained'
             stop()

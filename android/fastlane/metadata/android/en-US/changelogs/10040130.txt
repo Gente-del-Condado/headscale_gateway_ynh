@@ -1,0 +1,1 @@
+Editable device name before connecting. Scoped DNS cleanup when retiring nodes, with failure warnings. Updated author, support and manual. Signing identity, VPN identity and configuration are retained.

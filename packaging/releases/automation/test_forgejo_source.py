@@ -64,6 +64,15 @@ class SourceContracts(unittest.TestCase):
         with patch.object(source, 'github', return_value={'draft': False, 'body': ''}):
             self.assertFalse(source.completed('1.4.9', sha))
 
+    def test_candidate_cannot_select_an_unreviewed_or_changed_branch(self):
+        with tempfile.TemporaryDirectory() as folder:
+            with patch.object(source,'forgejo') as download:
+                with self.assertRaises(ValueError):source.fetch('a'*40,'1.4.13',folder,'main')
+                download.assert_not_called()
+            with patch.object(source,'forgejo_json',return_value=[{'name':'codex/review','commit':{'id':'b'*40}}]),patch.object(source,'forgejo') as download:
+                with self.assertRaises(ValueError):source.fetch('a'*40,'1.4.13',folder,'codex/review')
+                download.assert_not_called()
+
 
 class PublicationContracts(unittest.TestCase):
     def publisher(self):

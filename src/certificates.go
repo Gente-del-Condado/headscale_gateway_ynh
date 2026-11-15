@@ -10,8 +10,8 @@ import (
 	"net"
 	"time"
 
-	technitium "github.com/ad-on-is/caddy-dns-technitium"
 	"github.com/caddyserver/certmagic"
+	technitium "github.com/gentedelcondado/headscale-gateway/internal/acmednstechnitium"
 )
 
 // certificateManager centraliza la gestión de los certificados TLS
@@ -333,10 +333,18 @@ func configureACMEDNS(
 	switch cfg.ACMEDNSProvider {
 
 	case "technitium":
-		return configureTechnitiumACMEDNS(cfg)
+		if err := configureTechnitiumACMEDNS(cfg); err != nil {
+			return err
+		}
+		configureACMEAccountConsent(cfg)
+		return nil
 
 	case "cloudflare":
-		return configureCloudflareACMEDNS(cfg)
+		if err := configureCloudflareACMEDNS(cfg); err != nil {
+			return err
+		}
+		configureACMEAccountConsent(cfg)
+		return nil
 
 	case "none":
 		return fmt.Errorf(
@@ -383,12 +391,16 @@ func configureTechnitiumACMEDNS(
 	provider := &technitium.Provider{
 		ServerURL: cfg.ProviderDNSURL,
 		APIToken:  cfg.ProviderDNSToken,
+		// CertMagic retira cada TXT por su valor. Se desactiva el barrido por
+		// antigüedad del proveedor: también podría borrar TXT manuales o de
+		// otros emisores que compartan el nombre del desafío.
+		StaleRecordTimeout: -1,
 	}
 
 	// Registramos Technitium como proveedor DNS-01 de CertMagic.
 	certmagic.DefaultACME.DNS01Solver = &certmagic.DNS01Solver{
 		DNSManager: certmagic.DNSManager{
-			DNSProvider: provider,
+			DNSProvider: &technitiumDNS01Provider{inner: provider},
 			Resolvers: []string{
 				"1.1.1.1:53",
 				"8.8.8.8:53",

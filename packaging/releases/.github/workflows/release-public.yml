@@ -76,6 +76,7 @@ jobs:
         run: |
           sha256sum -c CONTENIDO.sha256 > /tmp/hgw-source-checksums.log
           bash tools/verify.sh
+          bash tools/check_acme_dns01.sh
           python3 tools/check_console.py
           python3 tools/check_deployment.py
       - name: Comprobar motor en Debian 12

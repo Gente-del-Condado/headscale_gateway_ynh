@@ -1,5 +1,6 @@
 [Unit]
-Description=Headscale Gateway (motor Go y panel web)
+Description=Headscale Gateway - Gente del Condado (motor Go y panel web)
+Documentation=https://gente-del-condado.github.io/headscale_gateway_ynh/LINUX_NATIVO.html
 Wants=network-online.target
 After=network-online.target
 
@@ -9,6 +10,8 @@ User=headscale-gateway
 Group=headscale-gateway
 StateDirectory=headscale-gateway
 StateDirectoryMode=0700
+RuntimeDirectory=headscale-gateway
+RuntimeDirectoryMode=0755
 WorkingDirectory=/var/lib/headscale-gateway
 Environment=GATEWAY_BOOTSTRAP_FILE=/var/lib/headscale-gateway/config/startup.json
 ExecCondition=/usr/bin/test -f /var/lib/headscale-gateway/config/startup.json
