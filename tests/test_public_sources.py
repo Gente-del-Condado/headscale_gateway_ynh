@@ -20,7 +20,6 @@ class PublicSourcesTest(unittest.TestCase):
                 return subprocess.check_output(['git', '-C', str(folder), *args], stderr=subprocess.DEVNULL, text=True).strip()
             subprocess.run(['git', 'init', '--bare', str(remote)], check=True, capture_output=True)
             subprocess.run(['git', 'clone', str(remote), str(package)], check=True, capture_output=True)
-            git(package, 'config', 'core.sshCommand', 'ssh -o BatchMode=yes')
             version = source / 'VERSION'
             version.write_text('1.4.7\n')
             program = source / 'program.go'

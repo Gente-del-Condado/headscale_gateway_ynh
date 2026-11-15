@@ -5,10 +5,10 @@
     "@Gente-del-Condado"
   ],
   "config_flow": true,
-  "documentation": "https://gente-del-condado.github.io/headscale-gateway-ha/INTEGRACION_HA.html",
+  "documentation": "https://gente-del-condado.github.io/headscale_gateway_ynh/INTEGRACION_HA.html",
   "integration_type": "hub",
   "iot_class": "local_polling",
-  "issue_tracker": "https://github.com/Gente-del-Condado/Mis-component/issues",
+  "issue_tracker": "https://github.com/Gente-del-Condado/Mis_componente_ha/issues",
   "requirements": [],
-  "version": "1.4.7"
+  "version": "1.4.8"
 }

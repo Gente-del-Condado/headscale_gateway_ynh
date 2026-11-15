@@ -70,6 +70,8 @@ mantener duplicados editables. La plantilla, estilos y búsqueda residen en
 resultado HTML. El resultado se genera en `builds/manual/`, que no se versiona.
 
 La automatización de GitHub Pages está en `.github/workflows/pages.yml`;
-requiere activar Pages y la variable de publicación. La comprobación en Forgejo
-se integra en `.forgejo/workflows/quality.yml`. Ninguna instalación del Gateway
-necesita MkDocs para funcionar.
+requiere Pages configurado en los dos destinos públicos. Los flujos de GitHub
+esperan la calidad correcta del SHA vigente de `main` y publican directamente
+con `PUBLICATION_TOKEN`. Las Actions de Forgejo están desactivadas; Forgejo
+conserva el origen y replica Git hacia GitHub. Consulta
+[PUBLICACION.md](PUBLICACION.md).

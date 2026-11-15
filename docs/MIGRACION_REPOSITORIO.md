@@ -10,8 +10,8 @@ Clona el repositorio autorizado con tu clave SSH. El siguiente ejemplo usa una
 dirección ficticia que debes sustituir por la de tu servidor.
 
 ```bash
-git clone ssh://git@forgejo.example.net:2222/usuario/headscale-gateway.git
-cd headscale-gateway
+git clone ssh://git@forgejo.example.net:2222/usuario/headscale_gateway.git
+cd headscale_gateway
 git status
 python3 tools/check_repository.py
 python3 tools/prepare_git_install.py --check
@@ -35,12 +35,13 @@ Los commits nuevos conservan la historia de las versiones publicadas.
 
 ```bash
 git diff
+git switch -c codex/mi-cambio
 git add .
 git ls-files -z -- . ':(exclude)CONTENIDO.sha256' | xargs -0 sha256sum > CONTENIDO.sha256
 git add CONTENIDO.sha256
 git diff --cached --stat
 git commit -m "Describir el cambio realizado"
-git push origin main
+git push -u origin codex/mi-cambio
 ```
 
 `CONTENIDO.sha256` contiene las sumas de los archivos versionados del árbol
@@ -66,78 +67,50 @@ que acabas de publicar. La primera prueba documental utilizó `v0.1.0.1` mientra
 el motor declaraba `1.4.4`. Consulta ambos valores antes de automatizar números
 de versión en instaladores.
 
-### Adjuntos desde el runner de Forgejo
+### Publicación y adjuntos
 
-En el runner de este proyecto, situado en el mismo YunoHost que Forgejo, una
-etiqueta `vX.Y.Z` ejecuta primero seguridad y pruebas. Después publica los
-adjuntos preparados bajo `/var/lib/hgw-release-staging/vX.Y.Z/`. No instala
-el Gateway ni cambia servicios. Los envíos ordinarios a `main` conservan la
-sincronización automática con GitHub, Mis-app, el paquete YunoHost y el manual.
+Forgejo conserva el origen privado y replica ramas y etiquetas en el principal
+privado de GitHub. La calidad y los publicadores se ejecutan en GitHub Actions.
+Las Actions de Forgejo están desactivadas para este proyecto. El runner local,
+la carpeta histórica de preparación y `HGW_RELEASE_READ_TOKEN` no forman parte
+del recorrido automático vigente. No prepares nuevos adjuntos en YunoHost
+siguiendo instrucciones de entregas anteriores.
 
-El administrador prepara esa carpeta y sus archivos como propiedad de root,
-con lectura para el usuario del runner y sin escritura de grupo u otros.
-`release-assets.json` declara `tag`, `source_commit`, `body` (notas revisadas)
-y una lista `assets` de objetos con `name`, `bytes` y `sha256`. El commit debe
-coincidir exactamente con la etiqueta, que debe pertenecer al `main` aprobado. No se admiten enlaces,
-archivos adicionales, nombres repetidos, rutas dentro de los nombres ni partes
-de más de 2.100.000.000 bytes. La carpeta y sus antecesores deben estar protegidos.
+Después de fusionar una revisión en Forgejo, comprueba la misma referencia en
+GitHub y la ejecución **Calidad multiplataforma**. Su finalización correcta en
+`main` activa los publicadores de paquetes, integración, tiendas y manual.
+Consulta [PUBLICACION.md](PUBLICACION.md) para los destinos y permisos.
 
-`tools/publish_forgejo_release.py` utiliza el token temporal del trabajo para
-las operaciones de la API local de Forgejo en `127.0.0.1:6000`. Para descargar
-adjuntos privados, Forgejo 17 requiere un token de usuario normal: su usuario
-especial de Actions no obtiene esos permisos en la ruta web de adjuntos.
+El flujo **Preparar entrega completa** de GitHub construye los motores de las
+seis plataformas, los escritorios Linux/Windows con sus fuentes de terceros y
+los candidatos APK/AAB sin firma. Conserva los resultados como artefactos de
+Actions durante siete días; no crea una release ni publica Android sin firma.
+Se ejecuta sobre la revisión elegida con `workflow_dispatch`. Antes de distribuir,
+verifica la calidad de ese SHA, firma Android con la identidad estable local y
+comprueba la actualización desde la entrega anterior. Play Store queda preparado,
+sin enviar la aplicación a la tienda.
 
-Crea un token con **solo `read:repository`** y selecciona exclusivamente
-`wolfbelmi88/headscale-gateway` en los recursos autorizados. Guárdalo como
-secreto **`HGW_RELEASE_READ_TOKEN`** en Actions de este repositorio Forgejo,
-sin pegarlo en el chat, los fuentes o los registros. No necesita permisos de
-escritura ni acceso a otros repositorios. El token de lectura solo se envía a
-la descarga por UUID validado en loopback; nunca a las URLs externas de los
-metadatos. Las subidas y la publicación siguen usando el token efímero del
-trabajo. Si falta el secreto de lectura, la publicación se detiene sin usar
-como sustituto el token de escritura.
+Después, **Preparar borrador de release** recibe el número de esa ejecución.
+Exige calidad correcta en el `main` vigente, una etiqueta ya replicada desde
+Forgejo y los mismos fuentes de motor, Android y escritorio. Revalida las sumas,
+incorpora la documentación actual y prepara un borrador en el principal privado
+de GitHub. Los escritorios grandes se dividen sin retirar sus fuentes. Verifica
+cada descarga; no modifica una release existente ni publica automáticamente el
+borrador. Incorpora después Android firmado y su validación antes de publicarlo.
+Así los adjuntos grandes no vuelven a ocupar espacio en el servidor YunoHost.
 
-La herramienta mantiene la entrega en borrador hasta descargar cada adjunto y
-comprobar su tamaño y SHA-256. Un error
-detiene la publicación. Una repetición reutiliza solo adjuntos que se verifican;
-no elimina archivos ni sobrescribe una release publicada. La API de Forgejo 17
-devuelve todos los adjuntos en una consulta; este recurso no se pagina.
-No escribe tokens en disco ni los envía a direcciones indicadas en las
-respuestas HTTP.
+El espejo Git no copia metadatos de releases ni adjuntos. Una etiqueta recibida
+por GitHub no garantiza que estén publicados los instaladores de escritorio o
+Android. Comprueba por separado la lista de archivos, sus tamaños y SHA-256 y
+las notas de la entrega antes de anunciarla. No sobrescribas etiquetas ni
+archivos de una versión anterior.
 
-Los escritorios incluyen los fuentes y avisos completos del runtime. Si el
-archivo supera el límite de adjuntos, divídelo con `tools/split_release.py` y
-distribuye todas sus partes, sus sumas y las instrucciones de reconstrucción.
-Preparar la carpeta antes de enviar la etiqueta evita un trabajo fallido por
-falta de archivos. Este recorrido necesita el runner local; otro runner debe
-adaptar explícitamente su almacenamiento y acceso a Forgejo.
-
-Antes de enviar la etiqueta, se puede ejecutar manualmente «Calidad
-multiplataforma» sobre `main`, indicando la etiqueta del borrador. Repite
-seguridad y pruebas y usa `--draft-only`: sube y verifica los archivos, pero
-no publica la release ni crea la etiqueta Git. Solo después de confirmar
-`BORRADOR_VERIFICADO_SIN_PUBLICAR` se envía la etiqueta; el trabajo automático
-revalida los adjuntos y publica. Esta preparación manual no sustituye ni
-dispara los flujos automáticos de Mis-app y GitHub Pages.
-
-Si falla exclusivamente la infraestructura de publicación, corrige el publicador
-mediante una solicitud revisada y fusionada en Forgejo. Después ejecuta el flujo
-sobre `main` con la etiqueta original y «Publicar la etiqueta existente» activado.
-Repite seguridad, pruebas y descarga de todos los adjuntos. Conserva la etiqueta
-y los paquetes originales: solo permite cambios posteriores en el publicador,
-su flujo, sus pruebas, esta guía y `CONTENIDO.sha256`. Rechaza cambios en el
-producto o una etiqueta que no sea antecesora del `main` ejecutado. La casilla
-permanece desactivada por defecto para preparar borradores sin publicarlos.
-
-Forgejo puede convertir automáticamente un borrador en release al recibir la
-etiqueta Git, antes de que termine el flujo. Si faltan adjuntos, la publicación
-por etiqueta permite recuperar ese borrador únicamente después de verificar que
-todos los adjuntos existentes pertenecen al manifiesto protegido y sus SHA-256
-coinciden. Después sube los que faltan, verifica todas las descargas y publica.
-Para un reintento manual activa también «Recuperar como borrador una release
-incompleta». Sin esta opción, el publicador no añade archivos a una release
-publicada. Una release completa, con archivos ajenos o con sumas distintas no
-se devuelve a borrador. La recuperación no cambia ni recrea la etiqueta.
+Los escritorios deben acompañarse de los fuentes y avisos completos de Electron
+y FFmpeg previstos en [LICENCIAS.md](LICENCIAS.md). Si se divide un archivo con
+`tools/split_release.py`, se distribuyen todas las partes, las sumas y las
+instrucciones de reconstrucción. Android conserva su identidad de aplicación y
+la firma de release para permitir actualizar una instalación existente. Las
+claves de firma permanecen fuera del repositorio.
 
 ## Exportar una carpeta o un ZIP limpio
 

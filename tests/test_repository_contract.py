@@ -22,8 +22,10 @@ class RepositoryContractTest(unittest.TestCase):
         repository = repositories.pop()
         package_flow = (ROOT / '.github/workflows/publish-yunohost.yml').read_text()
         docs_flow = (ROOT / '.github/workflows/pages.yml').read_text()
-        self.assertIn('wolfbelmi88/' + repository + '.git package', package_flow)
-        self.assertIn('repository: ' + repository + '\n', docs_flow)
+        self.assertIn('Descargar ' + repository + ' de GitHub', package_flow)
+        self.assertNotIn('ssh://forgejo@', package_flow)
+        self.assertIn('repository: ' + repository, docs_flow)
+        self.assertNotIn('ssh://forgejo@', docs_flow)
 
     def test_one_release_version_for_all_packages(self):
         version = (ROOT / 'VERSION').read_text().strip()

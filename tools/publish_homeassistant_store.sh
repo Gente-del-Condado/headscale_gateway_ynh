@@ -2,7 +2,7 @@
 set -euo pipefail
 
 source_root=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)
-store_root=$(cd -- "${1:?Indica la carpeta del repositorio Mis-app}" && pwd -P)
+store_root=$(cd -- "${1:?Indica la carpeta del repositorio Mis_app_ha}" && pwd -P)
 app=headscale_gateway
 source_path=addons/$app
 destination=$store_root/$app

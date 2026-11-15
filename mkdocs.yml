@@ -66,6 +66,7 @@ nav:
       - Preparar Google Play: ANDROID_PLAY.md
       - Mantenimiento YunoHost: CATALOGO_YUNOHOST.md
       - Editar y publicar el manual: MANUAL_WEB.md
+      - Publicación y repositorios: PUBLICACION.md
       - Git y entregas: MIGRACION_REPOSITORIO.md
       - Pruebas: PRUEBAS.md
   - Referencia:

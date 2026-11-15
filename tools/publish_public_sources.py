@@ -40,19 +40,21 @@ def snapshot(destination):
 
 
 def publish(repository, tag=False):
-    # El destino es el clon del paquete ya autenticado por la clave limitada.
+    # El destino ya está autenticado; HTTPS usa el helper efímero de GitHub Actions.
     repository = Path(repository).resolve()
     def source_git(*args):
         return subprocess.check_output(['git', '-C', str(repository), *args], text=True).strip()
     remote = source_git('remote', 'get-url', 'origin')
-    ssh_command = source_git('config', '--get', 'core.sshCommand')
+    ssh_command = subprocess.run(['git', '-C', str(repository), 'config', '--get',
+                                  'core.sshCommand'], capture_output=True, text=True, check=False).stdout.strip()
     with tempfile.TemporaryDirectory(prefix='hgw-public-sources-') as temporary:
         stage = Path(temporary)
         snapshot(stage)
         def git(*args):
             return subprocess.run(['git', '-C', str(stage), *args], check=True)
         git('init', '-b', 'upstream-source')
-        git('config', 'core.sshCommand', ssh_command)
+        if ssh_command:
+            git('config', 'core.sshCommand', ssh_command)
         git('config', 'user.name', 'github-actions[bot]')
         git('config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com')
         git('remote', 'add', 'origin', remote)
@@ -84,7 +86,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     selection = parser.add_mutually_exclusive_group(required=True)
     selection.add_argument('--snapshot', type=Path)
-    selection.add_argument('--publish', type=Path, help='Clon del paquete con clave SSH limitada')
+    selection.add_argument('--publish', type=Path, help='Clon del paquete autenticado en GitHub')
     parser.add_argument('--tag', action='store_true')
     args = parser.parse_args()
     if args.snapshot:

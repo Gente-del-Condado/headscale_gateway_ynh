@@ -5,10 +5,32 @@ publica servicios con HTTPS y permite gestionar DNS, certificados, acceso y
 copias cifradas desde un panel en español. Comparte el motor entre Linux,
 Windows, macOS, Home Assistant, YunoHost y Android.
 
+## Repositorio principal y distribución
+
+Este es **headscale_gateway**, el principal completo: motor Go, panel, bandeja,
+Android, integración de Home Assistant e instaladores. Se desarrolla primero en
+[Forgejo privado](https://gentedelcondado.es/forgejo/wolfbelmi88/headscale_gateway).
+[GitHub privado](https://github.com/Gente-del-Condado/headscale_gateway) es su
+espejo; los cambios y las solicitudes se tramitan en Forgejo.
+
+Tras recibir main, GitHub ejecuta **Calidad multiplataforma**. Solo si termina
+correctamente publica la revisión comprobada en los destinos siguientes:
+
+| Destino público de GitHub | Contenido |
+| --- | --- |
+| [headscale_gateway_ynh](https://github.com/Gente-del-Condado/headscale_gateway_ynh) | Paquete YunoHost: manifiesto, scripts, configuración y documentación; recursos del motor en releases |
+| [headscale_gateway_ha](https://github.com/Gente-del-Condado/headscale_gateway_ha) | Integración de entidades; requiere un Gateway ya funcionando |
+| [Mis_app_ha](https://github.com/Gente-del-Condado/Mis_app_ha) | Aplicación que ejecuta el Gateway en Home Assistant |
+| [Mis_componente_ha](https://github.com/Gente-del-Condado/Mis_componente_ha) | Copia de la integración para el catálogo de Private Git Manager |
+
+El mismo manual se publica en gh-pages de las dos distribuciones dedicadas.
+Los publicadores no escriben en Forgejo ni publican desde pull requests. Las
+reglas, permisos y recuperación están en [Publicación](docs/PUBLICACION.md).
+
 ## Leer el manual
 
 Manual web público: [YunoHost](https://gente-del-condado.github.io/headscale_gateway_ynh/)
-y [Home Assistant](https://gente-del-condado.github.io/headscale-gateway-ha/).
+y [Home Assistant](https://gente-del-condado.github.io/headscale_gateway_ha/).
 Ambas webs muestran el mismo manual, generado desde las fuentes del proyecto.
 
 Empieza por el [manual del proyecto](docs/index.md) y los
@@ -18,7 +40,7 @@ mismas fuentes, sigue [Manual web y GitHub Pages](docs/MANUAL_WEB.md).
 
 | Quiero… | Guía |
 | --- | --- |
-| Instalar el complemento de Home Assistant | [Tienda Mis-app](https://github.com/Gente-del-Condado/Mis-app) · [Instalación, Ingress y copias](packaging/homeassistant/DOCS.md) |
+| Instalar el complemento de Home Assistant | [Tienda Mis_app_ha](https://github.com/Gente-del-Condado/Mis_app_ha) · [Instalación, Ingress y copias](packaging/homeassistant/DOCS.md) |
 | Ver el Gateway como entidades de Home Assistant | [Integración de entidades](packaging/hacs/README.md) |
 | Instalar en YunoHost | [Instalación, SSO y actualización](packaging/yunohost/doc/ADMIN.md) |
 | Ejecutar el servidor directamente | [Manual de uso](docs/USO_COMPLETO.md) |

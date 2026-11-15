@@ -101,11 +101,11 @@ al evento del cambio, sin fijarlo a `main`; en los pull requests se analiza el
 código que prepara cada plataforma para ese evento. Este trabajo se ejecuta
 en paralelo a las pruebas y no usa secretos de publicación.
 
-Se aplican las mismas auditorías previas a Mis-app y al paquete YunoHost: `govulncheck@v1.9.0`
+Se aplican las mismas auditorías previas a Mis_app_ha y al paquete YunoHost: `govulncheck@v1.9.0`
 a nivel de módulo y de llamadas Go, instalación npm sin scripts y
 `npm audit --include=dev --audit-level=low`. Una vulnerabilidad o un error del
 análisis deja el trabajo fallido. Los comandos para repetirlo están en
-[publicación en Mis-app](docs/USO_COMPLETO.md#publicar-el-complemento-en-mis-app).
+[publicación en Mis_app_ha](docs/USO_COMPLETO.md#publicar-el-complemento-en-mis_app_ha).
 El [publicador YunoHost](docs/USO_COMPLETO.md#publicar-el-paquete-yunohost)
 exporta exclusivamente `yunohost/` a la raíz de su repositorio de distribución,
 después de validar los manifiestos y los binarios de ambas arquitecturas.

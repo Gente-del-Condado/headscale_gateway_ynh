@@ -58,60 +58,28 @@ Las capturas se mantienen según [CAPTURAS.md](CAPTURAS.md).
 
 ## GitHub Pages
 
-El manual común se publica en los dos repositorios públicos de distribución:
+El principal privado `headscale_gateway` de Forgejo se replica al principal
+privado de GitHub. Después de superar **Calidad multiplataforma**, **Manual web**
+construye el HTML, comprueba sus enlaces y lo publica directamente en `gh-pages`
+de los dos repositorios públicos:
 
-- [Manual de YunoHost](https://gente-del-condado.github.io/headscale_gateway_ynh/),
-  con su [capítulo de instalación](https://gente-del-condado.github.io/headscale_gateway_ynh/YUNOHOST.html).
-- [Manual de Home Assistant](https://gente-del-condado.github.io/headscale-gateway-ha/),
-  con los capítulos del [complemento](https://gente-del-condado.github.io/headscale-gateway-ha/HOME_ASSISTANT.html)
-  y de la [integración de entidades](https://gente-del-condado.github.io/headscale-gateway-ha/INTEGRACION_HA.html).
+- [Manual YunoHost](https://gente-del-condado.github.io/headscale_gateway_ynh/).
+- [Manual Home Assistant](https://gente-del-condado.github.io/headscale_gateway_ha/).
 
-Las webs reutilizan el manual existente, sin mantener otras fuentes. El flujo
-**Manual web** compila y comprueba los enlaces; con `PUBLISH_PUBLIC_DOCS=true`
-en las variables Actions del proyecto principal, publica el resultado validado
-en la rama `gh-pages` de ambos repositorios de Forgejo. Sus espejos deben
-replicar también esa rama a GitHub. En cada destino, **Settings → Pages** usa
-**Deploy from a branch → gh-pages → / (root)**. Los cambios aprobados que llegan
-a `main` mediante la réplica vuelven a publicar automáticamente; los PR solo
-compilan y validan, sin acceder a las claves.
+Ambas webs contienen el mismo manual. En cada destino, **Settings → Pages**
+debe publicar desde la rama `gh-pages`, carpeta `/`. El principal no necesita
+Pages ni permisos `pages: write` o `id-token: write`. Tampoco utiliza las antiguas
+claves de escritura en Forgejo ni las variables `PUBLISH_DOCS` y
+`PUBLISH_PUBLIC_DOCS`. La credencial es `PUBLICATION_TOKEN`, limitada a Contents
+en las distribuciones públicas; consulta [Publicación](PUBLICACION.md).
 
-El publicador usa `YNH_FORGEJO_DEPLOY_KEY` para YunoHost y una clave dedicada
-`DOCS_HA_FORGEJO_DEPLOY_KEY` con escritura limitada al repositorio
-`headscale-gateway-ha` de Forgejo. No necesita permisos de escritura en el
-proyecto principal. `tools/publish_manual.py` exige otro checkout en `gh-pages`
-y conserva su historial: nunca modifica el `main` del paquete. Solo publica
-los HTML y recursos del manual generado, con `.nojekyll`; no copia las fuentes
-del motor ni los ejecutables de los paquetes.
+Los pull requests solo construyen y comprueban el manual, sin acceder a esa
+credencial. La publicación toma el SHA que superó las pruebas y descarta
+revisiones que ya no sean main al comenzar. Conserva el historial de gh-pages;
+no modifica la rama del paquete ni incluye el historial privado.
 
-El repositorio principal permanece privado. Si su plan de GitHub no permite
-Pages privados, se utiliza esta distribución del HTML mediante los repositorios
-públicos. Publicar el manual lo hace accesible sin autenticación.
-
-### Alternativa: Pages en el propio repositorio principal
-
-El repositorio contiene `.github/workflows/pages.yml`. La compilación se ejecuta
-en las solicitudes de cambio y comprueba enlaces. La publicación requiere que
-habilites GitHub Pages en el repositorio que quieras usar para el manual.
-
-1. Crea o utiliza el repositorio de GitHub autorizado para alojar esta documentación.
-2. Sube el proyecto allí conservando el remoto de Forgejo que utilizas para desarrollar.
-3. En **Settings → Pages → Build and deployment**, selecciona **GitHub Actions**.
-4. En **Settings → Secrets and variables → Actions → Variables**, crea la variable
-   de repositorio `PUBLISH_DOCS` con el valor `true`.
-5. En **Actions → Manual web**, ejecuta **Run workflow** sobre `main`.
-6. Abre la URL que muestre el despliegue y comprueba Inicio, búsqueda y una guía de plataforma.
-
-Los siguientes cambios en la documentación de `main` volverán a publicar el
-manual mientras esa variable esté habilitada. Revisa la visibilidad que ofrece
-el plan de GitHub antes de activar el alojamiento. La disponibilidad de Pages
-en repositorios privados depende del plan y del tipo de organización.
-
-El workflow usa los permisos de `contents: read`, `pages: write` e `id-token: write`
-en los trabajos que los necesitan. La construcción usa únicamente archivos de
-este repositorio y dependencias del generador. El resultado publicado es
-`builds/manual/`.
-
-La configuración sigue el [flujo oficial de GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).
+Al renombrar repositorios, actualiza los enlaces a Pages: GitHub no redirige
+los sitios de proyecto aunque sí redirija la URL del repositorio.
 
 ## Alojarlo junto a Forgejo
 

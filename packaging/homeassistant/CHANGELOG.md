@@ -1,9 +1,15 @@
+# 1.4.8
+
+- Guías y enlaces actualizados a los repositorios actuales.
+- Documentadas las publicaciones directas desde GitHub tras las pruebas y la separación entre servidor e integración.
+- Nueva entrega con los fuentes y avisos correspondientes, sin modificar las anteriores.
+
 # 1.4.7
 
 - Versión común del motor, complemento, paquete YunoHost y clientes de escritorio y Android.
 - Documentación de instalación, privacidad, firmas y canales actualizada en ambos manuales públicos.
 - Preparación del catálogo YunoHost y publicación de los fuentes completos sin historial privado.
-- Se conservan los controles de seguridad previos a la publicación automática en Mis-app.
+- Se conservan los controles de seguridad previos a la publicación automática en Mis_app_ha.
 
 # 1.4.6
 
@@ -16,7 +22,7 @@
 
 - Envío y recuperación manual de perfiles y copias cifradas en repositorios privados de Forgejo.
 - Icono y logotipo del complemento en la tienda de Home Assistant.
-- Publicación automática del complemento en Mis-app a partir de la rama principal.
+- Publicación automática del complemento en Mis_app_ha a partir de la rama principal.
 
 # 1.4.4
 

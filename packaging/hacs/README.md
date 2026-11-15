@@ -10,6 +10,14 @@ Esta integración no instala ni arranca el servidor Gateway. Puede consultar
 una instalación directa, el complemento de Home Assistant o una instalación
 de YunoHost mediante un acceso administrativo alcanzable desde Core.
 
+## Instalar desde el repositorio individual
+
+Añade [headscale_gateway_ha](https://github.com/Gente-del-Condado/headscale_gateway_ha)
+como repositorio personalizado de tipo **Integración** en HACS/Marketplace.
+Instala, reinicia Home Assistant cuando lo solicite y añade **Headscale Gateway**
+en **Dispositivos y servicios**. Después sigue la primera conexión de esta guía.
+Este repositorio contiene únicamente la integración; necesitas un Gateway activo.
+
 ## Compatibilidad comprobada
 
 El 4 de noviembre de 2026 se ejecutaron las mismas 12 pruebas sobre Home
@@ -20,13 +28,13 @@ controlada para verificar caída, recuperación y reautenticación automática
 tras un 401, conservando los identificadores de las entidades.
 
 El procedimiento reproducible está en la
-[guía de pruebas de plataformas](https://gente-del-condado.github.io/headscale-gateway-ha/PLATAFORMAS.html).
+[guía de pruebas de plataformas](https://gente-del-condado.github.io/headscale_gateway_ynh/PLATAFORMAS.html).
 La prueba de Core no sustituye la comprobación de Ingress o de la VPN en tu
 equipo Home Assistant OS. La instalación privada desde Forgejo se conserva.
 
-## Instalar la integración desde Mis-component
+## Instalar la integración desde Mis_componente_ha
 
-[Mis-component](https://github.com/Gente-del-Condado/Mis-component) es un
+[Mis_componente_ha](https://github.com/Gente-del-Condado/Mis_componente_ha) es un
 catálogo público con varias integraciones. Descarga su ZIP desde **Code →
 Download ZIP**, extráelo y copia la carpeta
 `custom_components/headscale_gateway/` a
@@ -39,12 +47,12 @@ conservando la configuración de Home Assistant. Reinicia después de la copia.
 Los enlaces de documentación y de incidencias de la integración son públicos.
 
 Marketplace y HACS esperan una integración por repositorio; Marketplace toma
-la primera carpeta de `custom_components/`. Por eso Mis-component se utiliza
+la primera carpeta de `custom_components/`. Por eso Mis_componente_ha se utiliza
 aquí mediante copia selectiva, conservando las otras integraciones del catálogo.
 La [estructura oficial](https://contributors.home-assistant.io/marketplace/reference/repository-structure/)
-explica este límite. La exportación individual descrita más abajo prepara la
-estructura para un repositorio dedicado; no se presenta el catálogo múltiple
-como una integración admitida en Marketplace.
+explica este límite. El repositorio individual headscale_gateway_ha, descrito más abajo, ya está
+publicado con esa estructura. No añadas el catálogo múltiple como una única
+integración en Marketplace.
 
 ## Instalar desde Forgejo privado
 
@@ -75,15 +83,19 @@ El repositorio conserva `hacs.json` y `custom_components/`. Sin embargo,
 Marketplace rechaza repositorios que contienen aplicaciones de Home Assistant
 OS: no añadas el repositorio principal, que también incluye `addons/`.
 
-La exportación `hacs/` de `tools/package_platforms.py` contiene únicamente la
-integración y sus archivos de distribución. La publicación en Mis-component
-utiliza esa estructura y se sincroniza desde el código principal tras las
-comprobaciones de seguridad. No mantiene otra implementación funcional.
-El complemento que ejecuta el servidor se distribuye como aplicación en Mis-app.
-El repositorio principal conserva el desarrollo privado y los fuentes públicos
-de la entrega se publican en la rama `upstream-source` del paquete YunoHost.
-La carpeta exportada `hacs/` contiene una única integración, README y
-`hacs.json`, y puede servir de raíz para una publicación independiente futura.
+GitHub publica la integración individual en
+[headscale_gateway_ha](https://github.com/Gente-del-Condado/headscale_gateway_ha),
+con `hacs.json`, avisos y este README. Ese es el repositorio que se añade a
+HACS/Marketplace. El mismo componente se copia a `Mis_componente_ha` para Private
+Git Manager. Este catálogo contiene varias integraciones y no se añade a HACS
+como si fuera una única integración.
+
+La fuente se desarrolla en el principal privado de
+[Forgejo](https://gentedelcondado.es/forgejo/wolfbelmi88/headscale_gateway), se
+replica en [GitHub](https://github.com/Gente-del-Condado/headscale_gateway) y solo
+se publica después de superar la calidad. Los publicadores no escriben en
+Forgejo. El servidor se distribuye como aplicación en Mis_app_ha; no está
+incluido en este repositorio de integración.
 
 Fuentes oficiales consultadas el 13 de noviembre de 2026:
 [transición de HACS a Marketplace](https://github.com/hacs/integration/issues/5590),

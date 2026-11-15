@@ -39,7 +39,9 @@ def wait_port(port, process):
 
 def request(port, path, *, cookie='admin-session', method='GET', extra=None):
     connection = http.client.HTTPConnection('127.0.0.1', port, timeout=10)
-    headers = {'Host':'ynh.test:18080', 'Origin':'https://ynh.test:18080', 'Content-Type':'application/json'}
+    # El puerto 18080 es solo del laboratorio. nginx reenvía $host sin ese puerto;
+    # la identidad pública de YunoHost continúa siendo HTTPS en el puerto habitual.
+    headers = {'Host':'ynh.test', 'Origin':'https://ynh.test', 'Content-Type':'application/json'}
     if cookie:
         headers['Cookie'] = 'fixture_session=' + cookie
     headers.update(extra or {})

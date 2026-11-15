@@ -23,7 +23,10 @@ mismo motor desde su Dockerfile y elige la arquitectura de su contenedor.
 Estas compilaciones normales no activan el módulo opcional `commercial`.
 
 Fuentes públicas del motor:
-https://github.com/Gente-del-Condado/headscale_gateway_ynh/blob/main/payload/source.tar.gz
+https://github.com/Gente-del-Condado/headscale_gateway_ynh/releases
+
+Elige `server-vX.Y.Z` con la misma versión que `VERSION` y descarga
+`source.tar.gz`. El paquete público no guarda payload/ en su rama main.
 
 Conserva las fuentes correspondientes de cada entrega que redistribuyas. Un
 enlace a una rama cambiante no sustituye los fuentes de esa entrega concreta.

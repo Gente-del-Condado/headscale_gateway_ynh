@@ -408,104 +408,60 @@ continuación. El resultado aparece antes de fusionar el cambio. Para exigirlo
 como condición de fusión, añade ese estado a la protección de `main` del servidor;
 los workflows no modifican esa configuración.
 
-## Publicar el complemento en Mis-app
+## Publicar el complemento en Mis_app_ha
 
-Añade [Mis-app](https://github.com/Gente-del-Condado/Mis-app) en **Ajustes → Aplicaciones → Instalar aplicación → Repositorios** de Home Assistant y selecciona **Headscale Gateway**.
+El complemento ejecuta el motor Go en Home Assistant OS. Se instala añadiendo
+[Mis_app_ha](https://github.com/Gente-del-Condado/Mis_app_ha) como repositorio de
+aplicaciones. Sus fuentes están en `packaging/homeassistant/`; `addons/` contiene
+el resultado generado que valida el principal.
 
-Cuando la réplica de Forgejo lleva a GitHub un cambio de `addons/headscale_gateway/` en `main`, GitHub Actions analiza la seguridad, valida los paquetes generados y sincroniza esa carpeta en la raíz de Mis-app. Los cambios en los manifiestos Go y npm también activan el flujo. También puedes lanzar **Publicar Headscale Gateway en Mis-app** manualmente desde Actions. La publicación conserva las demás aplicaciones. Para que Supervisor ofrezca una actualización, incrementa `VERSION` con `tools/set_version.py` y regenera los paquetes antes de subir los cambios.
+El desarrollo se sube por SSH a Forgejo y se fusiona allí. Su réplica privada de
+GitHub ejecuta **Calidad multiplataforma**. Solo si termina correctamente para
+el `main` vigente, **Publicar Headscale Gateway en Mis_app_ha** copia la carpeta
+`headscale_gateway/` a la tienda, conservando las demás aplicaciones. Los pull
+requests no publican. Para ofrecer una actualización, aumenta `VERSION` con
+`tools/set_version.py` y regenera los paquetes antes de subir la revisión.
 
-Antes de acceder a la clave de publicación, el flujo ejecuta `govulncheck` fijado
-en `v1.9.0`, primero sobre todos los módulos y después sobre las llamadas del
-código y la biblioteca estándar. Ejecuta también `npm ci --ignore-scripts
---no-audit` y `npm audit --include=dev --audit-level=low` en `src/desktop/`.
-La auditoría incluye herramientas de desarrollo y dependencias transitivas.
-Los analizadores consultan sus bases de avisos actuales; cualquier vulnerabilidad
-detectada, error de descarga o fallo del análisis bloquea la sincronización.
-Consulta los pasos fallidos en Actions, corrige las dependencias y vuelve a
-subir el cambio. No se ejecuta `audit fix` ni se descartan avisos automáticamente.
-
-Para repetir los análisis desde la raíz:
-
-```bash
-go -C src run golang.org/x/vuln/cmd/govulncheck@v1.9.0 -scan module
-go -C src run golang.org/x/vuln/cmd/govulncheck@v1.9.0 -show verbose ./...
-npm --prefix src/desktop ci --ignore-scripts --no-audit
-npm --prefix src/desktop audit --include=dev --audit-level=low
-```
-
-La publicación automática usa una clave SSH dedicada de Forgejo. Registra su
-parte pública con permiso de escritura en **Mis-app → Configuración → Claves
-de despliegue** de Forgejo. Guarda la parte privada como secreto
-`MIS_APP_FORGEJO_DEPLOY_KEY` en **headscale-gateway → Settings → Secrets and
-variables → Actions** de GitHub. El flujo publica por SSH en el catálogo de
-Forgejo, cuya réplica actualiza después Mis-app en GitHub.
+La integración de sensores se publica por separado en
+[headscale_gateway_ha](https://github.com/Gente-del-Condado/headscale_gateway_ha)
+y en [Mis_componente_ha](https://github.com/Gente-del-Condado/Mis_componente_ha).
+La integración se conecta a un Gateway existente; no ejecuta el servidor.
+El catálogo compartido se usa con Private Git Manager; para HACS/Marketplace se
+utiliza el repositorio individual, que contiene una sola integración.
 
 ## Publicar el paquete YunoHost
 
-El repositorio público de instalación es
-[headscale_gateway_ynh](https://github.com/Gente-del-Condado/headscale_gateway_ynh).
-Consulta la [guía de YunoHost](../packaging/yunohost/doc/ADMIN.md) para instalarlo y
-actualizarlo mediante su URL. Es un paquete independiente, validado en una
-máquina virtual aislada según los resultados de cada revisión. No se solicitará
-su incorporación al catálogo oficial de YunoHost.
+[headscale_gateway_ynh](https://github.com/Gente-del-Condado/headscale_gateway_ynh)
+contiene el paquete instalable, no el proyecto completo. El publicador de GitHub
+verifica los paquetes generados, publica los recursos públicos `server-vX.Y.Z`,
+descarga y comprueba sus sumas y después actualiza `main` del paquete. Una
+release existente con otro contenido se rechaza. No existe un derivado de este
+paquete en Forgejo y no hay sincronización de regreso.
 
-La cadena de publicación es:
-
-1. Fusionar el cambio en `main` del proyecto principal de Forgejo tras superar
-   **Seguridad de dependencias**, exigida por la protección de la rama.
-2. La réplica existente actualiza `Gente-del-Condado/headscale-gateway` en GitHub.
-3. El flujo **Publicar el paquete YunoHost** audita Go y npm con las mismas
-   comprobaciones anteriores y valida `git-install-manifest.json`. Solo entonces
-   obtiene la clave y publica por SSH en
-   `wolfbelmi88/headscale_gateway_ynh` de Forgejo.
-4. El espejo de salida de ese repositorio actualiza el repositorio público
-   `Gente-del-Condado/headscale_gateway_ynh` de GitHub.
-
-El flujo se activa al cambiar `yunohost/`, las dependencias auditadas o el propio
-publicador en `main`. Usa el último `main`, serializa las publicaciones y no
-crea commits si el paquete ya coincide. No se publica desde los pull requests.
-También admite ejecución manual para recuperar una sincronización fallida.
-
-`tools/publish_yunohost_repo.py` exporta solo el árbol **versionado**
-`HEAD:yunohost` a la raíz de otro checkout. Comprueba versión, manifiestos,
-sumas de los dos binarios y sus permisos antes de sustituir los archivos
-administrados. Rechaza enlaces y rutas ajenas al paquete. Conserva los archivos
-ajenos del destino, las licencias y los avisos; no copia el historial privado,
-`src/`, el complemento Home Assistant ni los datos de instalaciones.
-
-Para configurar las credenciales, registra una clave de despliegue dedicada
-con escritura solo en **headscale_gateway_ynh de Forgejo** y guarda su parte
-privada como secreto `YNH_FORGEJO_DEPLOY_KEY` en **headscale-gateway → Settings →
-Secrets and variables → Actions** de GitHub. Configura en el repositorio de
-paquete de Forgejo un espejo SSH hacia
-`git@github.com:Gente-del-Condado/headscale_gateway_ynh.git`, sincronización al
-recibir commits e intervalo de respaldo. Registra la clave pública de ese espejo
-como clave de despliegue con escritura exclusivamente en el paquete de GitHub.
-Son dos claves distintas; ninguna necesita escritura en el proyecto principal.
-
-No cambies la versión para repetir una publicación idéntica. Para una nueva
-versión del motor usa `tools/set_version.py`, regenera los paquetes y fusiona
-el cambio en Forgejo. La sincronización del repositorio no ejecuta actualizaciones
-en los servidores YunoHost instalados.
+Los cambios exclusivos del paquete incrementan `~ynhN`; un nuevo motor utiliza
+una versión `X.Y.Z` nueva. Publicar no actualiza instalaciones sin intervención
+del administrador. Consulta la guía de administración del paquete para
+actualizar conservando datos y secretos. No se solicita entrada en el catálogo
+oficial de YunoHost.
 
 ## Publicar en Forgejo o GitHub
 
-Mantén el proyecto en tu **repositorio privado**, con las fuentes y las carpetas
-instalables preparadas mediante `python3 tools/prepare_git_install.py`.
-`addons/headscale_gateway/` se copia a Home Assistant y `yunohost/` se instala
-desde un clon local. Sus archivos generados, incluidos los binarios necesarios
-de `yunohost/payload/`, sí se incluyen en Git para permitir actualizar con
-`git pull` sin trasladar ZIP ni compilar Go en YunoHost. Consulta
-[Instalación privada](INSTALACION_PRIVADA.md).
+El origen es [Forgejo](https://gentedelcondado.es/forgejo/wolfbelmi88/headscale_gateway)
+y el espejo privado es
+[GitHub](https://github.com/Gente-del-Condado/headscale_gateway).
+Los publicadores se ejecutan exclusivamente en GitHub y usan
+`PUBLICATION_TOKEN`, limitado a los seis destinos públicos de distribución con
+Contents de lectura y escritura. Las antiguas claves de publicación a derivados
+de Forgejo no se utilizan. No guardes credenciales en los fuentes o registros.
 
-Las compilaciones generales de `bin/` y los archivos de `releases/` permanecen
-fuera del historial. Si necesitas distribuciones independientes,
-`tools/package_release.py` prepara los archivos de entrega y excluye los datos
-de ejecución y las credenciales.
+Consulta [PUBLICACION.md](PUBLICACION.md) para el recorrido completo y
+[MIGRACION_REPOSITORIO.md](MIGRACION_REPOSITORIO.md) para etiquetas y adjuntos.
+Cada ejecución utiliza el SHA que superó las pruebas y omite revisiones que ya
+no sean `main`. Comprueba todos los destinos antes de anunciar la entrega: una
+publicación independiente puede fallar aunque las demás hayan terminado.
 
-Incluye `src/go.mod`, `src/go.sum`, los lockfiles, fuentes, pruebas, traducciones, scripts y documentación. No incluyas SQLite, `master.key`, claves privadas, perfiles de la mini GUI, archivos `.hgw/.hgwcfg`, logs reales ni tokens. `.gitignore` ayuda con los archivos nuevos, pero no retira secretos que ya estuvieran versionados.
-
-Antes de vender, completa las condiciones comerciales y el cumplimiento de dependencias descrito en [LICENCIAS.md](LICENCIAS.md). El runner de Forgejo ejecuta las comprobaciones; los flujos de publicación de GitHub solo actualizan Mis-app y el paquete YunoHost mediante las claves dedicadas descritas arriba.
+El código propio se distribuye bajo AGPL-3.0. Conserva también las licencias,
+fuentes y avisos de terceros descritos en [LICENCIAS.md](LICENCIAS.md).
 
 ## Solución de problemas
 
