@@ -47,6 +47,12 @@
             
               <p class="nav-group">Instalar</p>
               <ul>
+                <li><a href="DESCARGAS_PUBLICAS.html" >Descargas públicas</a></li>
+              
+                <li><a href="LINUX_NATIVO.html" >Debian y Fedora</a></li>
+              
+                <li><a href="FLATPAK.html" >Flatpak</a></li>
+              
                 <li><a href="HOME_ASSISTANT.html" >Home Assistant</a></li>
               
                 <li><a href="INTEGRACION_HA.html" >Entidades en Home Assistant</a></li>
@@ -203,7 +209,29 @@ Son los fuentes completos de Android y del proyecto; <code>main</code> sigue con
 solo el paquete YunoHost. Las etiquetas existentes no se desplazan.</p>
 <p>Los destinos se resuelven por su identificador estable de GitHub. Así se puede
 comprobar la publicación antes de renombrarlos y conservarla después, sin
-escribir en Forgejo ni ampliar los permisos del token.</p></article>
+escribir en Forgejo ni ampliar los permisos del token.</p>
+<h2 id="descargas-públicas-y-nuevos-paquetes-linux">Descargas públicas y nuevos paquetes Linux</h2>
+<p>El principal privado publica los instaladores y sus fuentes en
+<a href="https://github.com/Gente-del-Condado/headscale_gateway_releases">headscale_gateway_releases</a>.
+Home Assistant y YunoHost conservan sus repositorios y releases propios.
+<code>headscale_gateway_flatpak</code> recibe el paquete específico Flatpak. No se publica
+el historial privado. PUBLICATION_TOKEN incluye estos dos nuevos destinos
+públicos, además de los seis originales, con Contents de lectura y escritura.</p>
+<p><strong>Preparar distribución pública</strong> comprueba los paquetes Debian/Fedora, construye
+e instala Flatpak y prepara los fuentes correspondientes sin recompilar en el
+Linux del mantenedor. <strong>Publicar descargas públicas</strong> exige además calidad
+correcta del mismo SHA vigente de main. Publica por separado en cuatro destinos,
+verifica los borradores y comprueba las descargas sin credenciales. Un archivo
+publicado con otro contenido nunca se reemplaza. Para reintentar, reutiliza los
+artefactos preparados; no cambies una etiqueta ni un instalador publicado.</p>
+<p>Los instaladores de bandeja son archivos pequeños completos. Los fuentes de
+Electron/Chromium/FFmpeg se proporcionan aparte en la misma release, con sus
+versiones, parches y sumas. Solo el archivo grande de fuentes Chromium utiliza
+fragmentos. Esto no modifica los binarios 1.4.8 ni la firma Android.</p>
+<p>Consulta <a href="LINUX_NATIVO.html">Debian y Fedora</a>, <a href="FLATPAK.html">Flatpak</a> y
+<a href="DESCARGAS_PUBLICAS.html">descargas públicas</a>. El Flatpak es del motor completo,
+consola y panel web; no se solicita inclusión en Flathub ni se afirma aceptación.
+Play Store continúa solo preparado.</p></article>
       <footer class="page-footer">
         <p>Headscale Gateway · Documentación en español</p>
         <a href="MANUAL_WEB.html">Cómo editar este manual</a>
@@ -211,6 +239,8 @@ escribir en Forgejo ni ampliar los permisos del token.</p></article>
     </main>
     <aside class="page-toc">
       <nav aria-label="En esta página"><p>En esta página</p><ul>
+        
+          <li><a href="#descargas-públicas-y-nuevos-paquetes-linux">Descargas públicas y nuevos paquetes Linux</a></li>
         
       </ul></nav>
     </aside>

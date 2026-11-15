@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Manual de instalación, administración y desarrollo de Headscale Gateway.">
+  <title>Flatpak · Headscale Gateway</title>
+  <link rel="stylesheet" href="assets/manual.css">
+  <script src="assets/search-data.js" defer></script>
+  <script src="assets/manual.js" defer></script>
+</head>
+<body data-base=".">
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="site-header">
+    <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
+    <div class="header-links"><span>Manual · 1.4.8</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <details id="manual-menu" open>
+        <summary>Índice del manual</summary>
+        <search>
+          <label for="manual-search">Buscar en el manual</label>
+          <input id="manual-search" type="search" placeholder="Copias, DNS, instalación…" aria-controls="search-results">
+          <p id="search-status" role="status"></p>
+          <ul id="search-results" hidden></ul>
+        </search>
+        <nav aria-label="Temas del manual">
+          
+            
+              <a class="nav-home" href="index.html" >Inicio</a>
+            
+          
+            
+              <p class="nav-group">Empezar</p>
+              <ul>
+                <li><a href="PRIMEROS_PASOS.html" >Primeros pasos</a></li>
+              
+                <li><a href="USO_COMPLETO.html" >Manual de uso</a></li>
+              
+                <li><a href="EJEMPLOS.html" >Ejemplos completos</a></li>
+              
+                <li><a href="CAPTURAS.html" >Capturas del panel</a></li>
+              </ul>
+            
+          
+            
+              <p class="nav-group">Instalar</p>
+              <ul>
+                <li><a href="DESCARGAS_PUBLICAS.html" >Descargas públicas</a></li>
+              
+                <li><a href="LINUX_NATIVO.html" >Debian y Fedora</a></li>
+              
+                <li><a href="FLATPAK.html" aria-current="page">Flatpak</a></li>
+              
+                <li><a href="HOME_ASSISTANT.html" >Home Assistant</a></li>
+              
+                <li><a href="INTEGRACION_HA.html" >Entidades en Home Assistant</a></li>
+              
+                <li><a href="YUNOHOST.html" >YunoHost</a></li>
+              
+                <li><a href="ANDROID_USO.html" >Android</a></li>
+              
+                <li><a href="PRIVACIDAD_ANDROID.html" >Privacidad Android</a></li>
+              
+                <li><a href="ANDROID_CANALES.html" >Canales Android</a></li>
+              
+                <li><a href="INSTALACION_PRIVADA.html" >Acceso al Git privado</a></li>
+              
+                <li><a href="PLATAFORMAS.html" >Plataformas y contratos</a></li>
+              </ul>
+            
+          
+            
+              <p class="nav-group">Administrar</p>
+              <ul>
+                <li><a href="RED_Y_CA_LAN.html" >Red, puertos y CA</a></li>
+              
+                <li><a href="CA-FEDERACION.html" >Confianza y federación</a></li>
+              
+                <li><a href="RECUPERAR_ACCESO.html" >Recuperar el acceso</a></li>
+              
+                <li><a href="SOLUCION_PROBLEMAS.html" >Resolver problemas</a></li>
+              </ul>
+            
+          
+            
+              <p class="nav-group">Desarrollar</p>
+              <ul>
+                <li><a href="ESTRUCTURA.html" >Estructura del proyecto</a></li>
+              
+                <li><a href="ARQUITECTURA.html" >Arquitectura y flujos</a></li>
+              
+                <li><a href="DESARROLLO.html" >Guía de contribución</a></li>
+              
+                <li><a href="CONTINUIDAD.html" >Continuar con otra IA</a></li>
+              
+                <li><a href="ANDROID_FDROID.html" >Publicar en F-Droid</a></li>
+              
+                <li><a href="ANDROID_PLAY.html" >Preparar Google Play</a></li>
+              
+                <li><a href="CATALOGO_YUNOHOST.html" >Mantenimiento YunoHost</a></li>
+              
+                <li><a href="MANUAL_WEB.html" >Editar y publicar el manual</a></li>
+              
+                <li><a href="PUBLICACION.html" >Publicación y repositorios</a></li>
+              
+                <li><a href="MIGRACION_REPOSITORIO.html" >Git y entregas</a></li>
+              
+                <li><a href="PRUEBAS.html" >Pruebas</a></li>
+              </ul>
+            
+          
+            
+              <p class="nav-group">Referencia</p>
+              <ul>
+                <li><a href="MODELOS_API.html" >Modelos de la API</a></li>
+              
+                <li><a href="API_CLI.html" >Guía API y CLI</a></li>
+              
+                <li><a href="PORTAL_Y_FEDERACION.html" >Portal y federación</a></li>
+              
+                <li><a href="HELPER_CA.html" >Helper de certificados</a></li>
+              
+                <li><a href="IDIOMAS_Y_REGISTROS.html" >Idiomas y registros</a></li>
+              
+                <li><a href="ANDROID.html" >Android por dentro</a></li>
+              
+                <li><a href="FEDERACION_WINDOWS.html" >Prueba entre Windows y Linux</a></li>
+              
+                <li><a href="LEEME_BINARIOS.html" >Paquetes de ejecutables</a></li>
+              
+                <li><a href="VERIFICACION_FINAL.html" >Validación y límites</a></li>
+              
+                <li><a href="LICENCIAS.html" >Licencias</a></li>
+              
+                <li><a href="ESCRITORIO_LICENCIAS.html" >Fuentes del escritorio</a></li>
+              
+                <li><a href="SUSCRIPCIONES.html" >Activación comercial</a></li>
+              </ul>
+            
+          
+        </nav>
+      </details>
+    </aside>
+    <main id="contenido" tabindex="-1">
+      <p class="breadcrumb"><a href="index.html">Manual</a><span aria-hidden="true"> / </span>Flatpak</p>
+      <article class="prose"><h1 id="headscale-gateway-para-flatpak">Headscale Gateway para Flatpak</h1>
+<p>Distribución del <strong>motor Go completo y su panel web</strong>, no solo Gateway-Tray.
+La fuente se mantiene en <code>packaging/flatpak/</code> del principal privado de
+<a href="https://gentedelcondado.es/forgejo/wolfbelmi88/headscale_gateway">Forgejo</a>, se
+replica a <a href="https://github.com/Gente-del-Condado/headscale_gateway">GitHub</a> y
+Actions exporta aquí únicamente el paquete. Nunca escribe de vuelta en Forgejo.</p>
+<h2 id="alcance">Alcance</h2>
+<p>Se ejecuta como aplicación de consola en la sesión del usuario. Abre el panel
+con la dirección que muestra el proceso, normalmente http://127.0.0.1:9091.
+Incluye el mismo motor, API, SQLite, certificados y copias que otras plataformas.
+Usa tsnet en espacio de usuario y no pide acceso al TUN, al bus del sistema,
+a archivos del host ni a <code>flatpak-spawn --host</code>.</p>
+<p>Sus datos están aislados en <code>~/.var/app/es.gentedelcondado.HeadscaleGateway/data/</code>.
+No adopta automáticamente una instalación nativa ni su identidad VPN. Para
+migrar utiliza los perfiles o copias cifradas del manual; no ejecutes dos procesos
+con la misma base de datos o identidad. No instala una CA en el almacén del host.
+Para un servicio de sistema que arranque con Debian o Fedora, utiliza .deb/.rpm.</p>
+<h2 id="instalación">Instalación</h2>
+<p>Descarga el archivo <code>.flatpak</code> de la release pública correspondiente, comprueba
+su suma e instala:</p>
+<pre tabindex="0"><code class="language-sh">flatpak install --user ./headscale-gateway-1.4.8-x86_64.flatpak
+flatpak run es.gentedelcondado.HeadscaleGateway
+</code></pre>
+<p>Se necesita el runtime Freedesktop declarado en el manifiesto. Una actualización
+con el mismo identificador conserva el directorio de datos de Flatpak.</p>
+<h2 id="estado-de-flathub">Estado de Flathub</h2>
+<p>Este paquete se distribuye directamente, fuera del catálogo Flathub. Sus
+<a href="https://docs.flathub.org/docs/for-app-authors/requirements">normas actuales</a>
+excluyen software solo de consola o bandeja y prohíben manifiestos generados o
+asistidos por IA para una solicitud. Este manifiesto se prepara con asistencia
+IA: no se presenta como apto para solicitar inclusión ni se envía una solicitud.</p>
+<h2 id="construcción">Construcción</h2>
+<p>El manifiesto toma binarios 1.4.8 verificados de los recursos públicos YunoHost.
+Los fuentes completos del motor y sus dependencias están en <code>source.tar.gz</code>
+de esa misma release; los fuentes completos del proyecto se publican aparte.
+No reconstruye ni modifica el motor para Flatpak. <code>flatpak-builder</code> construye el
+paquete dentro de su sandbox; las pruebas se ejecutan en GitHub, no en el Linux
+habitual del mantenedor.</p>
+<p><a href="https://gente-del-condado.github.io/headscale_gateway_ynh/">Manual</a>.</p></article>
+      <footer class="page-footer">
+        <p>Headscale Gateway · Documentación en español</p>
+        <a href="MANUAL_WEB.html">Cómo editar este manual</a>
+      </footer>
+    </main>
+    <aside class="page-toc">
+      <nav aria-label="En esta página"><p>En esta página</p><ul>
+        
+          <li><a href="#alcance">Alcance</a></li>
+        
+          <li><a href="#instalación">Instalación</a></li>
+        
+          <li><a href="#estado-de-flathub">Estado de Flathub</a></li>
+        
+          <li><a href="#construcción">Construcción</a></li>
+        
+      </ul></nav>
+    </aside>
+  </div>
+</body>
+</html>

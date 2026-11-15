@@ -47,6 +47,12 @@
             
               <p class="nav-group">Instalar</p>
               <ul>
+                <li><a href="DESCARGAS_PUBLICAS.html" >Descargas públicas</a></li>
+              
+                <li><a href="LINUX_NATIVO.html" >Debian y Fedora</a></li>
+              
+                <li><a href="FLATPAK.html" >Flatpak</a></li>
+              
                 <li><a href="HOME_ASSISTANT.html" >Home Assistant</a></li>
               
                 <li><a href="INTEGRACION_HA.html" >Entidades en Home Assistant</a></li>
@@ -142,7 +148,22 @@
       <article class="prose"><h1 id="fuentes-y-avisos-de-la-versión-de-escritorio">Fuentes y avisos de la versión de escritorio</h1>
 <p>Cada distribución Windows x64 y Linux x64 de Gateway-Tray incluye <code>legal/</code>.
 Conserva esa carpeta completa junto con el ejecutable al redistribuirlo.</p>
-<h2 id="qué-incluye">Qué incluye</h2>
+<h2 id="descargas-públicas-ligeras">Descargas públicas ligeras</h2>
+<p>Las entregas públicas separan el instalador del conjunto de fuentes común a
+Linux y Windows. Los instaladores <code>gateway-tray-linux-x64.tar.gz</code> y
+<code>gateway-tray-windows-x64.zip</code> se extraen directamente, sin unir partes.
+Conservan todos los avisos y los fuentes de la aplicación en <code>legal/</code>.
+<code>legal/PUBLIC-SOURCES.json</code> indica las URL públicas, las versiones y las sumas
+exactas de Electron, Chromium, Node y NAN. Descárgalos de la misma release de
+<a href="https://github.com/Gente-del-Condado/headscale_gateway_releases/releases">descargas públicas</a>.
+Solo Chromium necesita partes por el límite de tamaño de GitHub; su JSON
+indica el orden y la suma del archivo completo. Al redistribuir, conserva
+los avisos y facilita también esos fuentes exactos y sus parches.</p>
+<p>El empaquetado original completo descrito a continuación usa el manifiesto de
+formato 1. <code>tools/prepare_public_release.py</code> lo verifica antes de separar los
+fuentes; produce el formato 2 con referencias públicas y comprueba que no ha
+cambiado ningún archivo del runtime. Los archivos originales permanecen intactos.</p>
+<h2 id="qué-incluye-el-empaquetado-completo">Qué incluye el empaquetado completo</h2>
 <ul>
 <li><code>LICENSE</code> y <code>LICENSES.chromium.html</code>: avisos originales del runtime concreto,
   sin sustituirlos por la licencia de Headscale Gateway.</li>
@@ -236,7 +257,9 @@ facilitan junto con el runtime; no se relicencian como AGPL.</p>
     <aside class="page-toc">
       <nav aria-label="En esta página"><p>En esta página</p><ul>
         
-          <li><a href="#qué-incluye">Qué incluye</a></li>
+          <li><a href="#descargas-públicas-ligeras">Descargas públicas ligeras</a></li>
+        
+          <li><a href="#qué-incluye-el-empaquetado-completo">Qué incluye el empaquetado completo</a></li>
         
           <li><a href="#preparar-una-distribución">Preparar una distribución</a></li>
         

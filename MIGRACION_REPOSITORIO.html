@@ -47,6 +47,12 @@
             
               <p class="nav-group">Instalar</p>
               <ul>
+                <li><a href="DESCARGAS_PUBLICAS.html" >Descargas públicas</a></li>
+              
+                <li><a href="LINUX_NATIVO.html" >Debian y Fedora</a></li>
+              
+                <li><a href="FLATPAK.html" >Flatpak</a></li>
+              
                 <li><a href="HOME_ASSISTANT.html" >Home Assistant</a></li>
               
                 <li><a href="INTEGRACION_HA.html" >Entidades en Home Assistant</a></li>
@@ -242,7 +248,15 @@ modificación revisada que conserve su directorio <code>.git</code> y su histori
 En Home Assistant los datos del motor están en <code>/data/gateway/</code>. En YunoHost se
 utiliza la subcarpeta <code>gateway/</code> del directorio de datos asignado a la instancia.
 Mantén las bases de datos, claves, perfiles y copias privadas fuera del clon.
-Las actualizaciones se realizan con el procedimiento de cada plataforma.</p></article>
+Las actualizaciones se realizan con el procedimiento de cada plataforma.</p>
+<h2 id="distribuir-sin-abrir-el-principal">Distribuir sin abrir el principal</h2>
+<p>El borrador y las pruebas del principal privado son una etapa de preparación.
+Las descargas para usuarios se publican sin credenciales en
+<a href="https://github.com/Gente-del-Condado/headscale_gateway_releases/releases">headscale_gateway_releases</a>,
+con fuentes saneados y sin copiar la historia privada. Los paquetes específicos
+se publican en sus repositorios YunoHost, Home Assistant y Flatpak. Consulta
+<a href="PUBLICACION.html#descargas-públicas-y-nuevos-paquetes-linux">el flujo público</a>.
+No compartas un enlace al principal privado como descarga para usuarios públicos.</p></article>
       <footer class="page-footer">
         <p>Headscale Gateway · Documentación en español</p>
         <a href="MANUAL_WEB.html">Cómo editar este manual</a>
@@ -260,6 +274,8 @@ Las actualizaciones se realizan con el procedimiento de cada plataforma.</p></ar
           <li><a href="#exportar-una-carpeta-o-un-zip-limpio">Exportar una carpeta o un ZIP limpio</a></li>
         
           <li><a href="#datos-de-las-instalaciones">Datos de las instalaciones</a></li>
+        
+          <li><a href="#distribuir-sin-abrir-el-principal">Distribuir sin abrir el principal</a></li>
         
       </ul></nav>
     </aside>
