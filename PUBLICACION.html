@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.8</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.9</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -160,7 +160,7 @@ públicas. Ningún publicador de GitHub escribe en Forgejo.</p>
 <tbody>
 <tr>
 <td>headscale_gateway</td>
-<td>headscale_gateway_ynh y headscale_gateway_ha</td>
+<td>headscale_gateway_ynh, headscale_gateway_ha, headscale_gateway_releases y headscale_gateway_flatpak</td>
 <td>Mis_app_ha y Mis_componente_ha</td>
 </tr>
 <tr>
@@ -233,6 +233,12 @@ fragmentos. Esto no modifica los binarios 1.4.8 ni la firma Android.</p>
 consola y panel web; no se solicita inclusión en Flathub ni se afirma aceptación.
 Play Store continúa solo preparado.</p>
 <h2 id="publicar-una-nueva-versión-desde-forgejo">Publicar una nueva versión desde Forgejo</h2>
+<p>En ramas <code>codex/release-*</code>, los cambios de versión, motor o plantillas activan
+<strong>Preparar instaladores revisables</strong> al recibir el push. El resultado es un
+artefacto revisable; se incorpora por SSH a la revisión de Forgejo antes de
+fusionar, sin compilar en el Linux del mantenedor ni escribir a Forgejo desde
+GitHub. Una rama todavía sin sus generados puede fallar la comprobación de
+frescura hasta incorporar ese artefacto.</p>
 <ol>
 <li>Prepara un <code>main</code> válido: aumenta <code>VERSION</code> con <code>tools/set_version.py</code>, actualiza
    las fuentes y los instaladores generados exigidos por el manifiesto y sube por
