@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Manual de instalación, administración y desarrollo de Headscale Gateway.">
-  <title>Publicación en una dirección · Headscale Gateway</title>
+  <title>Publicación y repositorios · Headscale Gateway</title>
   <link rel="stylesheet" href="assets/manual.css">
   <script src="assets/search-data.js" defer></script>
   <script src="assets/manual.js" defer></script>
@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.7</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.8</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -97,6 +97,8 @@
               
                 <li><a href="MANUAL_WEB.html" >Editar y publicar el manual</a></li>
               
+                <li><a href="PUBLICACION.html" aria-current="page">Publicación y repositorios</a></li>
+              
                 <li><a href="MIGRACION_REPOSITORIO.html" >Git y entregas</a></li>
               
                 <li><a href="PRUEBAS.html" >Pruebas</a></li>
@@ -136,7 +138,7 @@
       </details>
     </aside>
     <main id="contenido" tabindex="-1">
-      <p class="breadcrumb"><a href="index.html">Manual</a><span aria-hidden="true"> / </span>Publicación en una dirección</p>
+      <p class="breadcrumb"><a href="index.html">Manual</a><span aria-hidden="true"> / </span>Publicación y repositorios</p>
       <article class="prose"><h1 id="publicación-en-una-dirección">Publicación en una dirección</h1>
 <p>Forgejo conserva el principal privado. Su espejo privado de GitHub recibe las
 ramas y etiquetas. GitHub Actions prueba la revisión y publica las distribuciones
@@ -195,6 +197,10 @@ Las comprobaciones de nginx/NSS en contenedor son complementarias: no sustituyen
 package_check ni la actualización con datos y secretos. No se solicita su
 entrada en el catálogo oficial. No ejecutes máquinas virtuales del laboratorio
 ni compilaciones grandes en el Linux del usuario; utiliza GitHub para esas tareas.</p>
+<p>El publicador YunoHost también mantiene las instantáneas públicas de fuentes en
+<code>upstream-source</code> y etiquetas <code>source-vX.Y.Z</code>, sin historia privada ni claves.
+Son los fuentes completos de Android y del proyecto; <code>main</code> sigue conteniendo
+solo el paquete YunoHost. Las etiquetas existentes no se desplazan.</p>
 <p>Los destinos se resuelven por su identificador estable de GitHub. Así se puede
 comprobar la publicación antes de renombrarlos y conservarla después, sin
 escribir en Forgejo ni ampliar los permisos del token.</p></article>

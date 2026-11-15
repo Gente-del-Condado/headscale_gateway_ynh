@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.7</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.8</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -97,6 +97,8 @@
               
                 <li><a href="MANUAL_WEB.html" >Editar y publicar el manual</a></li>
               
+                <li><a href="PUBLICACION.html" >Publicación y repositorios</a></li>
+              
                 <li><a href="MIGRACION_REPOSITORIO.html" >Git y entregas</a></li>
               
                 <li><a href="PRUEBAS.html" >Pruebas</a></li>
@@ -158,18 +160,18 @@ La captura de SQLite, secretos e identidad VPN se hace con el servicio detenido,
 antes de que el sistema de copias copie el archivo de datos. Estas adaptaciones
 se mantienen porque son contratos del Gateway, no funciones inventadas de YunoHost.</p>
 <h2 id="publicación-automática">Publicación automática</h2>
-<p>Forgejo es el origen del proyecto; GitHub lo replica. Tras la revisión y la
-seguridad obligatoria, el flujo publica los fuentes completos en <code>upstream-source</code>
-y prepara una petición con sus sumas. El repositorio público construye recursos
-para amd64 y arm64 desde ese commit. La etiqueta <code>server-vX.Y.Z</code> se crea primero
-en Forgejo: así su espejo conserva la release de GitHub y no la devuelve a borrador
-al retirar una etiqueta que solo existiera en la réplica.
-Sus sumas deben coincidir con las de los
-binarios y fuentes previamente comprobados. Una release existente se verifica
-sin reemplazar sus archivos. Solo después de descargar y verificar los tres
-recursos se publica la revisión instalable, por Forgejo y su réplica GitHub.
-La descarga se comprueba sin credenciales: un borrador no es un recurso público.
-Un fallo deja publicada la revisión anterior del instalador.</p>
+<p>Forgejo es el origen privado del proyecto; GitHub es su espejo privado.
+Después de superar <strong>Calidad multiplataforma</strong> para el <code>main</code> vigente, GitHub
+Actions verifica los paquetes generados y publica directamente los tres recursos
+públicos <code>server-vX.Y.Z</code> en <code>headscale_gateway_ynh</code>: binarios amd64 y arm64 y
+<code>source.tar.gz</code> con sus fuentes completos. Verifica las sumas mediante descarga
+sin credenciales antes de actualizar el paquete instalable. Una release existente
+se verifica sin reemplazar archivos; una discrepancia detiene la publicación.</p>
+<p>El repositorio público contiene únicamente el paquete YunoHost y sus recursos.
+No existe un repositorio derivado en Forgejo ni un espejo de vuelta desde GitHub.
+La rama <code>upstream-source</code> conserva las instantáneas públicas de los fuentes;
+no es la rama de desarrollo del paquete. Los fuentes correspondientes al motor
+instalado se obtienen de la release que declara su manifiesto.</p>
 <p>Los cambios de paquete aumentan <code>~ynhN</code>, manteniendo la versión del motor.
 Las instalaciones se actualizan explícitamente desde su URL: publicar el
 repositorio no cambia el servidor del usuario.</p>

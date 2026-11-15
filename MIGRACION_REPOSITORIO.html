@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.7</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.8</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -97,6 +97,8 @@
               
                 <li><a href="MANUAL_WEB.html" >Editar y publicar el manual</a></li>
               
+                <li><a href="PUBLICACION.html" >Publicación y repositorios</a></li>
+              
                 <li><a href="MIGRACION_REPOSITORIO.html" aria-current="page">Git y entregas</a></li>
               
                 <li><a href="PRUEBAS.html" >Pruebas</a></li>
@@ -144,8 +146,8 @@ Para localizar un componente consulta <a href="ESTRUCTURA.html">ESTRUCTURA.md</a
 <h2 id="abrir-un-clon-de-trabajo">Abrir un clon de trabajo</h2>
 <p>Clona el repositorio autorizado con tu clave SSH. El siguiente ejemplo usa una
 dirección ficticia que debes sustituir por la de tu servidor.</p>
-<pre tabindex="0"><code class="language-bash">git clone ssh://git@forgejo.example.net:2222/usuario/headscale-gateway.git
-cd headscale-gateway
+<pre tabindex="0"><code class="language-bash">git clone ssh://git@forgejo.example.net:2222/usuario/headscale_gateway.git
+cd headscale_gateway
 git status
 python3 tools/check_repository.py
 python3 tools/prepare_git_install.py --check
@@ -161,12 +163,13 @@ los paquetes ya incluidos, sigue <a href="INSTALACION_PRIVADA.html">INSTALACION_
 las diferencias y ejecuta las pruebas indicadas en <a href="DESARROLLO.html">CONTRIBUTING.md</a>.
 Los commits nuevos conservan la historia de las versiones publicadas.</p>
 <pre tabindex="0"><code class="language-bash">git diff
+git switch -c codex/mi-cambio
 git add .
 git ls-files -z -- . ':(exclude)CONTENIDO.sha256' | xargs -0 sha256sum &gt; CONTENIDO.sha256
 git add CONTENIDO.sha256
 git diff --cached --stat
 git commit -m &quot;Describir el cambio realizado&quot;
-git push origin main
+git push -u origin codex/mi-cambio
 </code></pre>
 <p><code>CONTENIDO.sha256</code> contiene las sumas de los archivos versionados del árbol
 entregado. Añade primero los archivos nuevos y después calcula las sumas.
@@ -185,69 +188,44 @@ git ls-remote origin refs/heads/main 'refs/tags/v1.4.7^{}'
 que acabas de publicar. La primera prueba documental utilizó <code>v0.1.0.1</code> mientras
 el motor declaraba <code>1.4.4</code>. Consulta ambos valores antes de automatizar números
 de versión en instaladores.</p>
-<h3 id="adjuntos-desde-el-runner-de-forgejo">Adjuntos desde el runner de Forgejo</h3>
-<p>En el runner de este proyecto, situado en el mismo YunoHost que Forgejo, una
-etiqueta <code>vX.Y.Z</code> ejecuta primero seguridad y pruebas. Después publica los
-adjuntos preparados bajo <code>/var/lib/hgw-release-staging/vX.Y.Z/</code>. No instala
-el Gateway ni cambia servicios. Los envíos ordinarios a <code>main</code> conservan la
-sincronización automática con GitHub, Mis-app, el paquete YunoHost y el manual.</p>
-<p>El administrador prepara esa carpeta y sus archivos como propiedad de root,
-con lectura para el usuario del runner y sin escritura de grupo u otros.
-<code>release-assets.json</code> declara <code>tag</code>, <code>source_commit</code>, <code>body</code> (notas revisadas)
-y una lista <code>assets</code> de objetos con <code>name</code>, <code>bytes</code> y <code>sha256</code>. El commit debe
-coincidir exactamente con la etiqueta, que debe pertenecer al <code>main</code> aprobado. No se admiten enlaces,
-archivos adicionales, nombres repetidos, rutas dentro de los nombres ni partes
-de más de 2.100.000.000 bytes. La carpeta y sus antecesores deben estar protegidos.</p>
-<p><code>tools/publish_forgejo_release.py</code> utiliza el token temporal del trabajo para
-las operaciones de la API local de Forgejo en <code>127.0.0.1:6000</code>. Para descargar
-adjuntos privados, Forgejo 17 requiere un token de usuario normal: su usuario
-especial de Actions no obtiene esos permisos en la ruta web de adjuntos.</p>
-<p>Crea un token con <strong>solo <code>read:repository</code></strong> y selecciona exclusivamente
-<code>wolfbelmi88/headscale-gateway</code> en los recursos autorizados. Guárdalo como
-secreto <strong><code>HGW_RELEASE_READ_TOKEN</code></strong> en Actions de este repositorio Forgejo,
-sin pegarlo en el chat, los fuentes o los registros. No necesita permisos de
-escritura ni acceso a otros repositorios. El token de lectura solo se envía a
-la descarga por UUID validado en loopback; nunca a las URLs externas de los
-metadatos. Las subidas y la publicación siguen usando el token efímero del
-trabajo. Si falta el secreto de lectura, la publicación se detiene sin usar
-como sustituto el token de escritura.</p>
-<p>La herramienta mantiene la entrega en borrador hasta descargar cada adjunto y
-comprobar su tamaño y SHA-256. Un error
-detiene la publicación. Una repetición reutiliza solo adjuntos que se verifican;
-no elimina archivos ni sobrescribe una release publicada. La API de Forgejo 17
-devuelve todos los adjuntos en una consulta; este recurso no se pagina.
-No escribe tokens en disco ni los envía a direcciones indicadas en las
-respuestas HTTP.</p>
-<p>Los escritorios incluyen los fuentes y avisos completos del runtime. Si el
-archivo supera el límite de adjuntos, divídelo con <code>tools/split_release.py</code> y
-distribuye todas sus partes, sus sumas y las instrucciones de reconstrucción.
-Preparar la carpeta antes de enviar la etiqueta evita un trabajo fallido por
-falta de archivos. Este recorrido necesita el runner local; otro runner debe
-adaptar explícitamente su almacenamiento y acceso a Forgejo.</p>
-<p>Antes de enviar la etiqueta, se puede ejecutar manualmente «Calidad
-multiplataforma» sobre <code>main</code>, indicando la etiqueta del borrador. Repite
-seguridad y pruebas y usa <code>--draft-only</code>: sube y verifica los archivos, pero
-no publica la release ni crea la etiqueta Git. Solo después de confirmar
-<code>BORRADOR_VERIFICADO_SIN_PUBLICAR</code> se envía la etiqueta; el trabajo automático
-revalida los adjuntos y publica. Esta preparación manual no sustituye ni
-dispara los flujos automáticos de Mis-app y GitHub Pages.</p>
-<p>Si falla exclusivamente la infraestructura de publicación, corrige el publicador
-mediante una solicitud revisada y fusionada en Forgejo. Después ejecuta el flujo
-sobre <code>main</code> con la etiqueta original y «Publicar la etiqueta existente» activado.
-Repite seguridad, pruebas y descarga de todos los adjuntos. Conserva la etiqueta
-y los paquetes originales: solo permite cambios posteriores en el publicador,
-su flujo, sus pruebas, esta guía y <code>CONTENIDO.sha256</code>. Rechaza cambios en el
-producto o una etiqueta que no sea antecesora del <code>main</code> ejecutado. La casilla
-permanece desactivada por defecto para preparar borradores sin publicarlos.</p>
-<p>Forgejo puede convertir automáticamente un borrador en release al recibir la
-etiqueta Git, antes de que termine el flujo. Si faltan adjuntos, la publicación
-por etiqueta permite recuperar ese borrador únicamente después de verificar que
-todos los adjuntos existentes pertenecen al manifiesto protegido y sus SHA-256
-coinciden. Después sube los que faltan, verifica todas las descargas y publica.
-Para un reintento manual activa también «Recuperar como borrador una release
-incompleta». Sin esta opción, el publicador no añade archivos a una release
-publicada. Una release completa, con archivos ajenos o con sumas distintas no
-se devuelve a borrador. La recuperación no cambia ni recrea la etiqueta.</p>
+<h3 id="publicación-y-adjuntos">Publicación y adjuntos</h3>
+<p>Forgejo conserva el origen privado y replica ramas y etiquetas en el principal
+privado de GitHub. La calidad y los publicadores se ejecutan en GitHub Actions.
+Las Actions de Forgejo están desactivadas para este proyecto. El runner local,
+la carpeta histórica de preparación y <code>HGW_RELEASE_READ_TOKEN</code> no forman parte
+del recorrido automático vigente. No prepares nuevos adjuntos en YunoHost
+siguiendo instrucciones de entregas anteriores.</p>
+<p>Después de fusionar una revisión en Forgejo, comprueba la misma referencia en
+GitHub y la ejecución <strong>Calidad multiplataforma</strong>. Su finalización correcta en
+<code>main</code> activa los publicadores de paquetes, integración, tiendas y manual.
+Consulta <a href="PUBLICACION.html">PUBLICACION.md</a> para los destinos y permisos.</p>
+<p>El flujo <strong>Preparar entrega completa</strong> de GitHub construye los motores de las
+seis plataformas, los escritorios Linux/Windows con sus fuentes de terceros y
+los candidatos APK/AAB sin firma. Conserva los resultados como artefactos de
+Actions durante siete días; no crea una release ni publica Android sin firma.
+Se ejecuta sobre la revisión elegida con <code>workflow_dispatch</code>. Antes de distribuir,
+verifica la calidad de ese SHA, firma Android con la identidad estable local y
+comprueba la actualización desde la entrega anterior. Play Store queda preparado,
+sin enviar la aplicación a la tienda.</p>
+<p>Después, <strong>Preparar borrador de release</strong> recibe el número de esa ejecución.
+Exige calidad correcta en el <code>main</code> vigente, una etiqueta ya replicada desde
+Forgejo y los mismos fuentes de motor, Android y escritorio. Revalida las sumas,
+incorpora la documentación actual y prepara un borrador en el principal privado
+de GitHub. Los escritorios grandes se dividen sin retirar sus fuentes. Verifica
+cada descarga; no modifica una release existente ni publica automáticamente el
+borrador. Incorpora después Android firmado y su validación antes de publicarlo.
+Así los adjuntos grandes no vuelven a ocupar espacio en el servidor YunoHost.</p>
+<p>El espejo Git no copia metadatos de releases ni adjuntos. Una etiqueta recibida
+por GitHub no garantiza que estén publicados los instaladores de escritorio o
+Android. Comprueba por separado la lista de archivos, sus tamaños y SHA-256 y
+las notas de la entrega antes de anunciarla. No sobrescribas etiquetas ni
+archivos de una versión anterior.</p>
+<p>Los escritorios deben acompañarse de los fuentes y avisos completos de Electron
+y FFmpeg previstos en <a href="LICENCIAS.html">LICENCIAS.md</a>. Si se divide un archivo con
+<code>tools/split_release.py</code>, se distribuyen todas las partes, las sumas y las
+instrucciones de reconstrucción. Android conserva su identidad de aplicación y
+la firma de release para permitir actualizar una instalación existente. Las
+claves de firma permanecen fuera del repositorio.</p>
 <h2 id="exportar-una-carpeta-o-un-zip-limpio">Exportar una carpeta o un ZIP limpio</h2>
 <pre tabindex="0"><code class="language-bash">python3 tools/prepare_git_install.py --check
 python3 tools/repository_archive.py --output releases/headscale-gateway-fuentes.zip

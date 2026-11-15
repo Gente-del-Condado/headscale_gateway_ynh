@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.7</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.8</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -96,6 +96,8 @@
                 <li><a href="CATALOGO_YUNOHOST.html" >Mantenimiento YunoHost</a></li>
               
                 <li><a href="MANUAL_WEB.html" >Editar y publicar el manual</a></li>
+              
+                <li><a href="PUBLICACION.html" >Publicación y repositorios</a></li>
               
                 <li><a href="MIGRACION_REPOSITORIO.html" >Git y entregas</a></li>
               
@@ -272,11 +274,11 @@ en cada <code>push</code> y <code>pull_request</code>, sin filtros de archivos. 
 al evento del cambio, sin fijarlo a <code>main</code>; en los pull requests se analiza el
 código que prepara cada plataforma para ese evento. Este trabajo se ejecuta
 en paralelo a las pruebas y no usa secretos de publicación.</p>
-<p>Se aplican las mismas auditorías previas a Mis-app y al paquete YunoHost: <code>govulncheck@v1.9.0</code>
+<p>Se aplican las mismas auditorías previas a Mis_app_ha y al paquete YunoHost: <code>govulncheck@v1.9.0</code>
 a nivel de módulo y de llamadas Go, instalación npm sin scripts y
 <code>npm audit --include=dev --audit-level=low</code>. Una vulnerabilidad o un error del
 análisis deja el trabajo fallido. Los comandos para repetirlo están en
-<a href="USO_COMPLETO.html#publicar-el-complemento-en-mis-app">publicación en Mis-app</a>.
+<a href="USO_COMPLETO.html#publicar-el-complemento-en-mis_app_ha">publicación en Mis_app_ha</a>.
 El <a href="USO_COMPLETO.html#publicar-el-paquete-yunohost">publicador YunoHost</a>
 exporta exclusivamente <code>yunohost/</code> a la raíz de su repositorio de distribución,
 después de validar los manifiestos y los binarios de ambas arquitecturas.</p>

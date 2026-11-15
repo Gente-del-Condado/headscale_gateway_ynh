@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.7</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.8</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -96,6 +96,8 @@
                 <li><a href="CATALOGO_YUNOHOST.html" >Mantenimiento YunoHost</a></li>
               
                 <li><a href="MANUAL_WEB.html" >Editar y publicar el manual</a></li>
+              
+                <li><a href="PUBLICACION.html" >Publicación y repositorios</a></li>
               
                 <li><a href="MIGRACION_REPOSITORIO.html" >Git y entregas</a></li>
               
@@ -282,9 +284,11 @@ mantener duplicados editables. La plantilla, estilos y búsqueda residen en
 <code>tools/manual_theme/</code>. <code>tools/check_manual.py</code> comprueba enlaces y anclas del
 resultado HTML. El resultado se genera en <code>builds/manual/</code>, que no se versiona.</p>
 <p>La automatización de GitHub Pages está en <code>.github/workflows/pages.yml</code>;
-requiere activar Pages y la variable de publicación. La comprobación en Forgejo
-se integra en <code>.forgejo/workflows/quality.yml</code>. Ninguna instalación del Gateway
-necesita MkDocs para funcionar.</p></article>
+requiere Pages configurado en los dos destinos públicos. Los flujos de GitHub
+esperan la calidad correcta del SHA vigente de <code>main</code> y publican directamente
+con <code>PUBLICATION_TOKEN</code>. Las Actions de Forgejo están desactivadas; Forgejo
+conserva el origen y replica Git hacia GitHub. Consulta
+<a href="PUBLICACION.html">PUBLICACION.md</a>.</p></article>
       <footer class="page-footer">
         <p>Headscale Gateway · Documentación en español</p>
         <a href="MANUAL_WEB.html">Cómo editar este manual</a>
