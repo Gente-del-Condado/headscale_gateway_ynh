@@ -158,11 +158,13 @@
     <main id="contenido" tabindex="-1">
       <p class="breadcrumb"><a href="index.html">Manual</a><span aria-hidden="true"> / </span>Estado de la siguiente entrega</p>
       <article class="prose"><h1 id="estado-de-desarrollo-y-siguiente-entrega">Estado de desarrollo y siguiente entrega</h1>
-<h2 id="1416-preparación-local">1.4.16: preparación local</h2>
-<p>Esta revisión prepara la continuidad del proyecto y corrige el fallo de Windows
-que bloqueó la entrega 1.4.15. <strong>No está autorizada su subida ni publicación</strong>.
-No se ha creado una etiqueta o release 1.4.16 ni se han cambiado las tiendas,
-los repositorios de distribución o las páginas públicas.</p>
+<h2 id="1416-publicada-y-verificada">1.4.16: publicada y verificada</h2>
+<p>La 1.4.16 se publicó mediante la solicitud #32 de Forgejo y se replicó en
+GitHub con commit <code>4724ff7d449eb526ffc959f926cf4392f884eb00</code>. La
+<a href="https://github.com/Gente-del-Condado/headscale_gateway_releases/actions/runs/43798821660">CI pública</a>
+terminó correctamente, incluida la suite y compilación Windows nativa. Se
+verificaron los seis destinos, ambas webs Pages y 45 descargas anónimas con
+SHA-256. Play Store continúa solo preparado.</p>
 <p>Incluye:</p>
 <ul>
 <li>Contrato de rutas del controlador Linux validado como POSIX también desde
@@ -203,12 +205,23 @@ no quedaron completadas. No se reanudan por el hecho de continuar el desarrollo.
    VM ni credenciales productivas para modificar la documentación o ejecutar Go.</li>
 <li>Para retomar las pruebas detenidas, acordar expresamente el alcance y utilizar
    identidades aisladas. No cambiar recursos de VM ni importar claves productivas.</li>
-<li>Publicar 1.4.16 únicamente cuando el usuario lo pida; entonces seguir
-   <a href="PUBLICACION.html">PUBLICACION.md</a>, comprobar réplica y CI y no mover la etiqueta 1.4.15.</li>
+<li>Para otra versión, seguir <a href="PUBLICACION.html">PUBLICACION.md</a>, comprobar réplica
+   y CI y conservar inmutables las etiquetas y los archivos ya publicados.</li>
 </ol>
 <p>La autenticación OIDC del Gateway y las restricciones OIDC de Headscale son
 funciones distintas. Configurar el laboratorio Dex/Technitium no es una
-condición para ejecutar el motor común ni una función ya validada en esta entrega.</p></article>
+condición para ejecutar el motor común ni una función ya validada en esta entrega.</p>
+<h2 id="mantenimiento-posterior-a-la-1416">Mantenimiento posterior a la 1.4.16</h2>
+<p>Se separa la publicación de los fuentes Electron y sus dependencias en una
+release reutilizable por lock, conservando los enlaces antiguos. Este cambio
+del publicador no recompila ni reemplaza la 1.4.16 y no cambia VERSION. Las
+siguientes entregas de Gateway enlazarán el conjunto verificado en lugar de
+duplicar los archivos grandes.</p>
+<p>El publicador cuenta con un ensayo aislado de la próxima entrega (1.4.17 como
+dato de prueba), una barrera contra adjuntos de terceros mezclados y una
+comprobación pública que evita volver a preparar o subir un conjunto existente.
+El ensayo no cambia VERSION, crea etiquetas ni publica otra aplicación. Las
+guías vigentes se actualizan en ambas webs sin modificar los instaladores.</p></article>
       <footer class="page-footer">
         <p>Headscale Gateway · Gente del Condado · Documentación en español</p>
         <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>
@@ -218,11 +231,13 @@ condición para ejecutar el motor común ni una función ya validada en esta ent
     <aside class="page-toc">
       <nav aria-label="En esta página"><p>En esta página</p><ul>
         
-          <li><a href="#1416-preparación-local">1.4.16: preparación local</a></li>
+          <li><a href="#1416-publicada-y-verificada">1.4.16: publicada y verificada</a></li>
         
           <li><a href="#situación-de-1415">Situación de 1.4.15</a></li>
         
           <li><a href="#qué-debe-hacer-el-siguiente-mantenedor">Qué debe hacer el siguiente mantenedor</a></li>
+        
+          <li><a href="#mantenimiento-posterior-a-la-1416">Mantenimiento posterior a la 1.4.16</a></li>
         
       </ul></nav>
     </aside>

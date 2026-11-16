@@ -158,10 +158,12 @@
     <main id="contenido" tabindex="-1">
       <p class="breadcrumb"><a href="index.html">Manual</a><span aria-hidden="true"> / </span>Validación y límites</p>
       <article class="prose"><h1 id="validación-y-límites">Validación y límites</h1>
-<h2 id="revisión-1416-en-preparación">Revisión 1.4.16 en preparación</h2>
+<h2 id="revisión-1416-publicada">Revisión 1.4.16 publicada</h2>
 <p>La revisión actual limpia resultados locales y documentación, añade controles
 de privacidad y corrige el contrato de rutas del controlador Headscale en
-Windows. No está subida ni publicada. El estado de trabajo y lo pendiente se
+Windows. Fue publicada y el flujo completo de GitHub terminó correctamente,
+con pruebas y compilación Windows nativa, 45 descargas anónimas verificadas y
+los seis destinos y ambas webs Pages comprobados. El estado y lo pendiente se
 mantienen en <a href="ESTADO_DESARROLLO.html">ESTADO_DESARROLLO.md</a>.</p>
 <h3 id="fallo-windows-reproducido-y-corregido">Fallo Windows reproducido y corregido</h3>
 <p>El <a href="https://github.com/Gente-del-Condado/headscale_gateway_releases/actions/runs/43784256540/job/133056107526">trabajo Windows de 1.4.15</a>
@@ -243,7 +245,18 @@ del nuevo Gateway, Technitium, la configuración Dex adicional ni la aceptación
 conjunta de todas las funciones desde la tablet. No se presentan como realizadas.</p>
 <p><strong>Play Store sigue solo preparado.</strong> La distribución Flatpak directa no significa
 aceptación en Flathub. El paquete YunoHost se mantiene para instalar desde su
-repositorio; no se solicitará su inclusión en el catálogo oficial.</p></article>
+repositorio; no se solicitará su inclusión en el catálogo oficial.</p>
+<h2 id="ensayo-de-la-siguiente-publicación-sin-crear-una-versión">Ensayo de la siguiente publicación sin crear una versión</h2>
+<p>El mantenimiento posterior comprueba el reparto real de adjuntos de una entrega
+ficticia 1.4.17 entre las cuatro distribuciones, con datos mínimos y operaciones
+de subida sustituidas por capturas de sus argumentos. Ninguna recibe los fuentes
+de Electron. Se comprueba también que una release de dependencias coincidente
+solo se consulte y que archivos distintos bloqueen la reutilización.</p>
+<p>La comprobación local de la release pública Electron 45.0.0 contrasta el lock,
+los índices, las sumas y los digest de sus diez adjuntos sin credenciales ni
+subidas. La suite general pasa con 100 pruebas Python, además de Go/JS; las
+nueve pruebas del controlador también pasan. No se presenta este ensayo como
+una compilación real o una publicación de Headscale Gateway 1.4.17.</p></article>
       <footer class="page-footer">
         <p>Headscale Gateway · Gente del Condado · Documentación en español</p>
         <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>
@@ -253,11 +266,13 @@ repositorio; no se solicitará su inclusión en el catálogo oficial.</p></artic
     <aside class="page-toc">
       <nav aria-label="En esta página"><p>En esta página</p><ul>
         
-          <li><a href="#revisión-1416-en-preparación">Revisión 1.4.16 en preparación</a></li>
+          <li><a href="#revisión-1416-publicada">Revisión 1.4.16 publicada</a></li>
         
           <li><a href="#evidencia-anterior-que-se-conserva-como-referencia">Evidencia anterior que se conserva como referencia</a></li>
         
           <li><a href="#pruebas-interrumpidas-y-funciones-pendientes">Pruebas interrumpidas y funciones pendientes</a></li>
+        
+          <li><a href="#ensayo-de-la-siguiente-publicación-sin-crear-una-versión">Ensayo de la siguiente publicación sin crear una versión</a></li>
         
       </ul></nav>
     </aside>

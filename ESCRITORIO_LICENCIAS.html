@@ -166,8 +166,13 @@ Linux y Windows. Los instaladores <code>gateway-tray-linux-x64.tar.gz</code> y
 <code>gateway-tray-windows-x64.zip</code> se extraen directamente, sin unir partes.
 Conservan todos los avisos y los fuentes de la aplicación en <code>legal/</code>.
 <code>legal/PUBLIC-SOURCES.json</code> indica las URL públicas, las versiones y las sumas
-exactas de Electron, Chromium, Node y NAN. Descárgalos de la misma release de
-<a href="https://github.com/Gente-del-Condado/headscale_gateway_releases/releases">descargas públicas</a>.
+exactas de Electron, Chromium, Node y NAN. Las nuevas entregas los reutilizan
+desde una release <code>desktop-sources-electron-VERSION-HUELLA</code> del mismo
+<a href="https://github.com/Gente-del-Condado/headscale_gateway_releases/releases">repositorio público</a>.
+La huella incluye el lock completo (también los runtimes) y el formato de
+fragmentación. Un cambio de revisiones selecciona otro conjunto. Esa release
+conserva los archivos de fuentes, parches, índice y sumas y no sustituye la
+release «Latest» de Gateway. La 1.4.16 mantiene intactas sus URL y sus adjuntos.
 Solo Chromium necesita partes por el límite de tamaño de GitHub; su JSON
 indica el orden y la suma del archivo completo. Al redistribuir, conserva
 los avisos y facilita también esos fuentes exactos y sus parches.</p>
@@ -175,6 +180,20 @@ los avisos y facilita también esos fuentes exactos y sus parches.</p>
 formato 1. <code>tools/prepare_public_release.py</code> lo verifica antes de separar los
 fuentes; produce el formato 2 con referencias públicas y comprueba que no ha
 cambiado ningún archivo del runtime. Los archivos originales permanecen intactos.</p>
+<h2 id="elegir-los-fuentes-correctos">Elegir los fuentes correctos</h2>
+<ul>
+<li>Para instalar o actualizar: descarga únicamente el instalador de bandeja de
+  tu sistema; conserva <code>legal/</code> junto al ejecutable.</li>
+<li>Para modificar Gateway-Tray: usa los fuentes propios de la misma versión de
+  Gateway y <code>legal/application-source/</code>.</li>
+<li>Para reconstruir Electron/FFmpeg: sigue el enlace de
+  <code>legal/PUBLIC-SOURCES.json</code>, descarga el conjunto reutilizable exacto y sus
+  sumas. No elijas simplemente la release Electron más reciente.</li>
+</ul>
+<p>Los nombres <code>desktop-sources-…</code> identifican dependencias y no versiones de la
+aplicación. No borres un conjunto mientras haya instaladores que lo referencien.
+La verificación pública solo consulta metadatos, índice y sumas; no necesita
+credenciales ni vuelve a transferir varios GB cuando el conjunto ya existe.</p>
 <h2 id="qué-incluye-el-empaquetado-completo">Qué incluye el empaquetado completo</h2>
 <ul>
 <li><code>LICENSE</code> y <code>LICENSES.chromium.html</code>: avisos originales del runtime concreto,
@@ -271,6 +290,8 @@ facilitan junto con el runtime; no se relicencian como AGPL.</p>
       <nav aria-label="En esta página"><p>En esta página</p><ul>
         
           <li><a href="#descargas-públicas-ligeras">Descargas públicas ligeras</a></li>
+        
+          <li><a href="#elegir-los-fuentes-correctos">Elegir los fuentes correctos</a></li>
         
           <li><a href="#qué-incluye-el-empaquetado-completo">Qué incluye el empaquetado completo</a></li>
         

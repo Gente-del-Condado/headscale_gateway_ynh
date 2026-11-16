@@ -165,20 +165,78 @@ sumas de Headscale Gateway. El principal y su historial permanecen privados:
 GitHub Actions prepara, verifica y publica aquí los archivos de cada entrega.
 No hay sincronización de regreso a Forgejo.</p>
 <h2 id="elegir-la-descarga">Elegir la descarga</h2>
-<p>En <a href="https://github.com/Gente-del-Condado/headscale_gateway_releases/releases">Releases</a>
-separa estas funciones:</p>
-<ul>
-<li><strong>headscale-gateway-linux-…</strong> o paquetes <strong>.deb/.rpm</strong>: Gateway completo, con motor Go y panel web. No son solo la bandeja.</li>
-<li><strong>headscale-gateway-windows-…</strong> y <strong>darwin-…</strong>: motor y herramientas de la plataforma.</li>
-<li><strong>gateway-tray-…</strong>: cliente gráfico opcional; se conecta a un Gateway.</li>
-<li><strong>headscale-gateway-release.apk</strong>: Android con firma estable. Conserva esa firma al actualizar.</li>
-<li><strong>fdroid-unsigned.apk</strong> y <strong>play.aab</strong>: preparación de canales, no envío a las tiendas.</li>
-</ul>
-<p>Los instaladores pequeños de bandeja no requieren unir partes. Los fuentes de
-Electron, Chromium y FFmpeg se descargan aparte desde <strong>la misma release</strong>.
-Solo el archivo grande de fuentes Chromium se divide en <code>.part-01</code>, <code>.part-02</code>,
-…; une sus partes en orden y comprueba el SHA-256 del JSON antes de extraerlo.
-Conserva los avisos y los fuentes correspondientes al redistribuir el programa.</p>
+<p>Abre la <a href="https://github.com/Gente-del-Condado/headscale_gateway_releases/releases/latest">última release de Gateway</a>
+y elige tu sistema y arquitectura. La release de fuentes de Electron es
+independiente y no sustituye «Latest» de la aplicación.</p>
+<table>
+<thead>
+<tr>
+<th scope="col">Quiero</th>
+<th scope="col">Archivo o destino</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gateway completo en Debian/Ubuntu</td>
+<td><code>headscale-gateway_VERSION-1_amd64.deb</code> o <code>…_arm64.deb</code></td>
+</tr>
+<tr>
+<td>Gateway completo en Fedora</td>
+<td><code>headscale-gateway-VERSION-1.x86_64.rpm</code> o <code>…aarch64.rpm</code></td>
+</tr>
+<tr>
+<td>Motor en Windows, Linux o macOS</td>
+<td><code>headscale-gateway-windows-…zip</code>, <code>…linux-…tar.gz</code> o <code>…darwin-…tar.gz</code></td>
+</tr>
+<tr>
+<td>Gateway completo en Linux mediante Flatpak</td>
+<td><code>headscale-gateway-VERSION-x86_64.flatpak</code>; también en <a href="https://github.com/Gente-del-Condado/headscale_gateway_flatpak/releases">su repositorio</a></td>
+</tr>
+<tr>
+<td>Aplicación Android</td>
+<td><code>headscale-gateway-release.apk</code>, con firma estable</td>
+</tr>
+<tr>
+<td>Bandeja opcional de escritorio</td>
+<td><code>gateway-tray-linux-x64.tar.gz</code> o <code>gateway-tray-windows-x64.zip</code>; se conecta a un Gateway</td>
+</tr>
+<tr>
+<td>Código del proyecto</td>
+<td><code>headscale-gateway-fuentes-publicos-VERSION.zip</code></td>
+</tr>
+<tr>
+<td>Fuentes del motor Go</td>
+<td><code>headscale-gateway-go-sources-VERSION.tar.gz</code></td>
+</tr>
+<tr>
+<td>Fuentes específicos Android</td>
+<td><code>headscale-gateway-android-sources-VERSION.zip</code></td>
+</tr>
+<tr>
+<td>Comprobar integridad</td>
+<td><code>SHA256SUMS</code> de la release correspondiente</td>
+</tr>
+</tbody>
+</table>
+<p><code>fdroid-unsigned.apk</code> y <code>play.aab</code> preparan canales de distribución; no son
+la APK firmada para instalar normalmente. Play Store sigue solo preparado.
+Los JSON de validación son informes técnicos, no instaladores.</p>
+<h2 id="fuentes-de-electron-y-dependencias">Fuentes de Electron y dependencias</h2>
+<p>Los archivos <code>chromium-…</code>, <code>electron-…</code>, <code>node-v…</code> y <code>nan-…</code> son fuentes de
+terceros del runtime de la bandeja. <strong>No necesitas descargarlos para instalar
+ni utilizar Gateway.</strong> Para reconstruir o redistribuir la bandeja, usa la
+release <code>desktop-sources-electron-VERSION-HUELLA</code> enlazada en las notas de tu
+entrega y en <code>legal/PUBLIC-SOURCES.json</code> del instalador. Incluye los fuentes
+exactos, parches, instrucciones <code>RECONSTRUIR.md</code>, índice y <code>SHA256SUMS</code>.</p>
+<p>El publicador reutiliza ese conjunto entre versiones Gateway con el mismo
+lock y rechaza incluir otra vez esos archivos entre los instaladores. Si
+cambia Electron o alguna revisión del lock, exige otro conjunto verificado.
+No retires una release de dependencias mientras haya instaladores que la enlacen.</p>
+<p>Los dos instaladores de bandeja son archivos completos: se extraen directamente.
+Solo los fuentes Chromium se dividen por tamaño; une sus <code>.part-01</code>, <code>.part-02</code>,
+… en orden y comprueba la suma completa de su <code>.parts.json</code> antes de extraer.
+La 1.4.16 conserva sus archivos y URL originales; esa duplicación histórica se
+mantiene para no romper sus instaladores. Las siguientes entregas no la repiten.</p>
 <p>El código propio usa AGPL-3.0-only. El cliente usa bibliotecas de FFmpeg bajo
 LGPL-2.1-or-later; sus avisos originales, fuentes exactos y parches de Electron
 están disponibles junto a cada descarga, sin cambiar sus licencias.</p>
@@ -213,6 +271,8 @@ En Android, activa <strong>Conectar aplicaciones</strong> cuando el destino lo r
       <nav aria-label="En esta página"><p>En esta página</p><ul>
         
           <li><a href="#elegir-la-descarga">Elegir la descarga</a></li>
+        
+          <li><a href="#fuentes-de-electron-y-dependencias">Fuentes de Electron y dependencias</a></li>
         
           <li><a href="#paquetes-específicos">Paquetes específicos</a></li>
         
