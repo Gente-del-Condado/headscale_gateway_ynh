@@ -100,7 +100,8 @@ como si fuera una única integración.
 La fuente se desarrolla en el principal privado de
 [Forgejo](https://gentedelcondado.es/forgejo/wolfbelmi88/headscale_gateway), se
 replica en [GitHub](https://github.com/Gente-del-Condado/headscale_gateway) y solo
-se publica después de superar la calidad. Los publicadores no escriben en
+se publica desde el compilador público `headscale_gateway_releases` después
+de superar sus pruebas de seguridad y plataformas. Los publicadores no escriben en
 Forgejo. El servidor se distribuye como aplicación en Mis_app_ha; no está
 incluido en este repositorio de integración.
 
@@ -177,3 +178,10 @@ ni cambia la configuración del Gateway.
 Para cambiar la dirección, utiliza **Reconfigurar** en la integración. Para
 actualizar el código, copia la carpeta de la nueva versión y reinicia Core.
 Conserva la entrada existente para mantener los identificadores de las entidades.
+
+## Qué gestiona esta integración
+
+Este repositorio contiene las entidades de estado, no el motor Go ni otro panel
+para administrar Headscale. La aplicación de Mis_app_ha ejecuta el motor y su
+panel común, que puede utilizar una delegación explícita al controlador del
+coordinador. El token de lectura de las entidades no concede ese permiso.

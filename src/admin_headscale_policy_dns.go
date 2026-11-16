@@ -11,7 +11,15 @@ import (
 )
 
 func (a *adminController) HeadscaleGetPolicy(ctx context.Context) (network.PolicyDocument, error) {
-	client, err := a.headscaleAdmin()
+	if a.runtime.currentConfig().HeadscaleControlMode == "remote" {
+		c, e := a.headscaleControlClient(ctx)
+		if e != nil {
+			return network.PolicyDocument{}, e
+		}
+		defer c.Close()
+		return c.GetPolicy(ctx)
+	}
+	client, err := a.headscaleAdmin(ctx)
 	if err != nil {
 		return network.PolicyDocument{}, err
 	}
@@ -24,7 +32,15 @@ func (a *adminController) HeadscaleGetPolicy(ctx context.Context) (network.Polic
 	return doc, err
 }
 func (a *adminController) HeadscaleSetPolicy(ctx context.Context, text, revision string) (network.PolicyDocument, error) {
-	client, err := a.headscaleAdmin()
+	if a.runtime.currentConfig().HeadscaleControlMode == "remote" {
+		c, e := a.headscaleControlClient(ctx)
+		if e != nil {
+			return network.PolicyDocument{}, e
+		}
+		defer c.Close()
+		return c.SetPolicy(ctx, text, revision)
+	}
+	client, err := a.headscaleAdmin(ctx)
 	if err != nil {
 		return network.PolicyDocument{}, err
 	}

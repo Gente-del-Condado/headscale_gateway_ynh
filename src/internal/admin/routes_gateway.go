@@ -200,10 +200,10 @@ func (s *Server) registerGatewayRoutes(mux routeRegistrar) {
 			problem(w, 400, "caducidad o scopes no válidos")
 			return
 		}
-		possible := map[string]bool{"read": true, "services": true, "network": true, "operations": true}
+		possible := map[string]bool{"read": true, "services": true, "network": true, "operations": true, "headscale-read": true, "headscale-write": true}
 		for _, scope := range req.Scopes {
 			method := http.MethodGet
-			if scope == "operations" {
+			if scope == "operations" || scope == "headscale-write" {
 				method = http.MethodPost
 			}
 			if !possible[scope] || !rolePermits(req.Role, scope, method) {

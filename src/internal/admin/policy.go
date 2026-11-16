@@ -9,15 +9,19 @@ import (
 )
 
 type APIPolicy struct {
-	TokenRead       bool `json:"token_read"`
-	TokenServices   bool `json:"token_services"`
-	TokenSettings   bool `json:"token_settings"`
-	TokenNetwork    bool `json:"token_network"`
-	TokenOperations bool `json:"token_operations"`
-	TokenIdentity   bool `json:"token_identity"`
+	TokenRead           bool `json:"token_read"`
+	TokenServices       bool `json:"token_services"`
+	TokenSettings       bool `json:"token_settings"`
+	TokenNetwork        bool `json:"token_network"`
+	TokenOperations     bool `json:"token_operations"`
+	TokenIdentity       bool `json:"token_identity"`
+	TokenHeadscaleRead  bool `json:"token_headscale_read"`
+	TokenHeadscaleWrite bool `json:"token_headscale_write"`
 }
 
-func DefaultAPIPolicy() APIPolicy { return APIPolicy{true, true, true, true, true, true} }
+func DefaultAPIPolicy() APIPolicy {
+	return APIPolicy{TokenRead: true, TokenServices: true, TokenSettings: true, TokenNetwork: true, TokenOperations: true, TokenIdentity: true}
+}
 
 type APIPolicyManager struct {
 	mu     sync.RWMutex
@@ -65,6 +69,10 @@ func (m *APIPolicyManager) TokenAllowed(cat string) bool {
 		return p.TokenOperations
 	case "identity":
 		return p.TokenIdentity
+	case "headscale-read":
+		return p.TokenHeadscaleRead
+	case "headscale-write":
+		return p.TokenHeadscaleWrite
 	default:
 		return false
 	}
@@ -72,6 +80,11 @@ func (m *APIPolicyManager) TokenAllowed(cat string) bool {
 func routeCategory(r *http.Request) string {
 	path := r.URL.Path
 	switch {
+	case strings.HasPrefix(path, "/api/v1/network/control/"):
+		if r.Method == http.MethodGet {
+			return "headscale-read"
+		}
+		return "headscale-write"
 	case strings.HasPrefix(path, "/api/v1/reference/peer/"):
 		return "settings"
 	case path == "/api/v1/auth/session" || path == "/api/v1/auth/logout":
@@ -107,12 +120,21 @@ func rolePermits(role, category, method string) bool {
 		return true
 	}
 	if role == "viewer" {
+		if category == "headscale-read" {
+			return method == http.MethodGet
+		}
 		if category == "read" && method == http.MethodPost {
 			return true
 		} // cerrar sesión
 		return method == http.MethodGet && (category == "read" || category == "services" || category == "network")
 	}
 	if role == "operator" {
+		if category == "headscale-read" {
+			return method == http.MethodGet
+		}
+		if category == "headscale-write" {
+			return method == http.MethodPost || method == http.MethodPut || method == http.MethodDelete
+		}
 		return (category == "read" || category == "services" || category == "network" || category == "operations") && (category != "operations" || method == http.MethodPost)
 	}
 	return false

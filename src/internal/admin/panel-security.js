@@ -3,7 +3,8 @@
 const exposureFields={
   token_read:'Estado y consultas',token_services:'Servicios y plantillas',
   token_settings:'Configuración general',token_network:'Inventario y diagnóstico de red',
-  token_operations:'Recarga y reinicio',token_identity:'Identidad, MFA y políticas'
+  token_operations:'Recarga y reinicio',token_identity:'Identidad, MFA y políticas',
+  token_headscale_read:'Headscale: lectura delegada del coordinador',token_headscale_write:'Headscale: cambios delegados en DNS, restricciones, nodos, claves y ACL'
 };
 function parseRoleGroups(text){
   const result={};for(const line of text.split(/\r?\n/)){

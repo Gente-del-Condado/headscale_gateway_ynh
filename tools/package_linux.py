@@ -27,6 +27,7 @@ def stage(destination, binary, helper):
         (ROOT/'packaging/linux/native/headscale-gateway.sysusers','usr/lib/sysusers.d/headscale-gateway.conf',0o644),
         (ROOT/'packaging/linux/native/headscale-gateway.tmpfiles','usr/lib/tmpfiles.d/headscale-gateway.conf',0o644),
         (ROOT/'packaging/linux/native/headscale-gateway-configure','usr/bin/headscale-gateway-configure',0o755),
+        (ROOT/'packaging/linux/native/headscale-gateway-setup-headscale','usr/bin/headscale-gateway-setup-headscale',0o755),
         (ROOT/'packaging/linux/native/headscale-gateway-open-admin','usr/bin/headscale-gateway-open-admin',0o755),
         (ROOT/'packaging/linux/native/es.gentedelcondado.HeadscaleGateway.desktop','usr/share/applications/es.gentedelcondado.HeadscaleGateway.desktop',0o644),
         (ROOT/'packaging/flatpak/files/es.gentedelcondado.HeadscaleGateway.png','usr/share/icons/hicolor/128x128/apps/es.gentedelcondado.HeadscaleGateway.png',0o644),
@@ -46,6 +47,12 @@ systemd-sysusers /usr/lib/sysusers.d/headscale-gateway.conf
 systemd-tmpfiles --create /usr/lib/tmpfiles.d/headscale-gateway.conf
 if [ -d /run/systemd/system ]; then
     systemctl daemon-reload
+    for binding in /etc/headscale-gateway-control/*.binding.json; do
+        [ -f "$binding" ] || continue
+        python3 -c 'import json,sys; sys.exit(json.load(open(sys.argv[1])).get("gateway_unit") != "headscale-gateway.service")' "$binding" || continue
+        instance=$(basename "$binding" .binding.json)
+        /usr/bin/headscale-gateway-setup-headscale --instance "$instance" --gateway-binary /usr/libexec/headscale-gateway/headscale-gateway --refresh
+    done
     systemctl try-restart headscale-gateway.service
 fi
 '''
@@ -60,7 +67,15 @@ REMOVE='''#!/bin/sh
 set -eu
 case "${1:-}" in
     remove|0)
-        if [ -d /run/systemd/system ]; then systemctl stop headscale-gateway.service; fi
+        if [ -d /run/systemd/system ]; then
+            systemctl stop headscale-gateway.service
+            for binding in /etc/headscale-gateway-control/*.binding.json; do
+                [ -f "$binding" ] || continue
+        python3 -c 'import json,sys; sys.exit(json.load(open(sys.argv[1])).get("gateway_unit") != "headscale-gateway.service")' "$binding" || continue
+                instance=$(basename "$binding" .binding.json)
+                /usr/bin/headscale-gateway-setup-headscale --instance "$instance" --detach
+            done
+        fi
         ;;
 esac
 '''
@@ -114,6 +129,7 @@ if [ -d /run/systemd/system ]; then systemctl daemon-reload; fi
 %files
 /usr/bin/headscale-gateway
 %attr(0755,root,root) /usr/bin/headscale-gateway-configure
+%attr(0755,root,root) /usr/bin/headscale-gateway-setup-headscale
 %attr(0755,root,root) /usr/bin/headscale-gateway-open-admin
 /usr/share/applications/es.gentedelcondado.HeadscaleGateway.desktop
 /usr/share/icons/hicolor/128x128/apps/es.gentedelcondado.HeadscaleGateway.png

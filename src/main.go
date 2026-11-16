@@ -11,6 +11,7 @@ import (
 	"github.com/gentedelcondado/headscale-gateway/internal/bootstrap"
 	"github.com/gentedelcondado/headscale-gateway/internal/cli"
 	"github.com/gentedelcondado/headscale-gateway/internal/diagnostics"
+	"github.com/gentedelcondado/headscale-gateway/internal/headscalecontrol"
 
 	"github.com/gentedelcondado/headscale-gateway/internal/i18n"
 	"github.com/gentedelcondado/headscale-gateway/internal/state"
@@ -19,6 +20,13 @@ import (
 func main() { runGateway() }
 
 func runGateway() {
+	if len(os.Args) > 1 && os.Args[1] == "headscale-control" {
+		if err := headscalecontrol.RunController(os.Args[2:]); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+		return
+	}
 	// Los subcomandos de diagnóstico se ejecutan sin arrancar tsnet ni el panel.
 	if len(os.Args) > 1 && cli.IsCommand(os.Args[1]) {
 		if err := cli.Run(os.Args[1:]); err != nil {

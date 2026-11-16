@@ -3,6 +3,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 python3 tools/check_repository.py
+python3 tools/check_privacy.py
 python3 tools/check_layout.py
 python3 tools/set_version.py --check
 python3 tools/reference_catalog.py --check

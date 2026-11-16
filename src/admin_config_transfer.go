@@ -30,6 +30,11 @@ func (a *adminController) ExportConfiguration(_ context.Context, secrets bool, p
 		}
 		allowed[k] = v
 	}
+	// Un perfil sin secretos no puede activar una delegación cuyo token se
+	// ha excluido. Conserva el destino para completarlo explícitamente después.
+	if !secrets && allowed["headscale.control.mode"] == "remote" {
+		allowed["headscale.control.mode"] = "disabled"
+	}
 	return configtransfer.Export(allowed, secrets, password)
 }
 

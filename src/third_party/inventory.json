@@ -7066,7 +7066,7 @@
     "ecosystem": "Go",
     "name": "go.yaml.in/yaml/v3",
     "version": "v3.0.5",
-    "linked_server_or_helper": false,
+    "linked_server_or_helper": true,
     "notices": [
       "src/third_party/go/go.yaml.in/yaml/v3@v3.0.5/LICENSE",
       "src/third_party/go/go.yaml.in/yaml/v3@v3.0.5/NOTICE"

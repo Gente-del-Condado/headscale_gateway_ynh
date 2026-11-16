@@ -322,6 +322,10 @@ msgid "80,443 o *"
 msgstr "80,443 or *"
 
 #: src/internal/admin/panel.js
+msgid ": (info.api_key_configured ?"
+msgstr ": (info.api_key_configured ?"
+
+#: src/internal/admin/panel.js
 msgid ": (p?"
 msgstr ": (p?"
 
@@ -561,6 +565,10 @@ msgstr "enable the portal federation module"
 msgid "activa la federación del portal antes de consultar un peer"
 msgstr "enable portal federation before querying a peer"
 
+#: src/admin_headscale_agent.go
+msgid "activa la sincronización de información de nodos en Configuración"
+msgstr "enable node information synchronization in Settings"
+
 #: src/internal/admin/panel-experience.js
 msgid "Activa para Google y proveedores sin claim groups. Si utilizas Dex, conserva este permiso desactivado."
 msgstr "Enable for Google and providers without the groups claim. Keep this disabled when using Dex."
@@ -576,6 +584,10 @@ msgstr "Enable / disable private access"
 #: src/internal/admin/panel.html
 msgid "Activar DEBUG temporal"
 msgstr "Enable temporary DEBUG"
+
+#: src/internal/admin/panel.html
+msgid "Activar MagicDNS"
+msgstr "Enable MagicDNS"
 
 #: src/internal/admin/panel.html
 msgid "Activar notificaciones del navegador"
@@ -670,13 +682,41 @@ msgstr "admin.domain_mode requires admin.enabled=true"
 msgid "admin.subdomain debe ser una única etiqueta DNS válida de hasta 63 caracteres"
 msgstr "admin.subdomain must be a single valid DNS label of up to 63 characters"
 
+#: src/internal/admin/panel.html
+msgid "Administra la red VPN desde su Gateway controlador. Los DNS y certificados de los servicios conservan su gestión independiente."
+msgstr "Manage the VPN network from its controller Gateway. Service DNS and certificates retain their separate management."
+
 #: src/internal/portal/render.go
 msgid "Administración"
 msgstr "Administration"
 
+#: src/internal/admin/panel-headscale-control.js
+msgid "Administración autorizada"
+msgstr "Authorized management"
+
 #: src/internal/admin/routes_headscale_manage.go
 msgid "administración de Headscale no disponible"
 msgstr "Headscale administration unavailable"
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "Administración del coordinador desactivada. Configura el modo local o un Gateway controlador remoto."
+msgstr "Coordinator management is disabled. Configure local mode or a remote controller Gateway."
+
+#: src/admin_schema.go
+msgid "Administración del coordinador Headscale"
+msgstr "Headscale coordinator management"
+
+#: src/admin_headscale_control.go
+msgid "administración del coordinador Headscale desactivada"
+msgstr "Headscale coordinator management disabled"
+
+#: src/internal/admin/routes_headscale_control.go
+msgid "administración Headscale no disponible"
+msgstr "Headscale administration unavailable"
+
+#: src/internal/admin/routes_headscale_control.go
+msgid "administración Headscale reservada al administrador o a una delegación explícita"
+msgstr "Headscale administration is reserved for the administrator or an explicit delegation"
 
 #: src/internal/admin/panel.html
 msgid "Administración local"
@@ -776,6 +816,10 @@ msgstr "CertMagic store: %s"
 msgid "almacén de CA del sistema no reconocido"
 msgstr "unrecognized system CA store"
 
+#: src/admin_headscale_control.go
+msgid "almacén de confianza del controlador no disponible"
+msgstr "controller trust store unavailable"
+
 #: src/desktop/renderer.js
 msgid "Almacén seguro disponible."
 msgstr "Secure storage available."
@@ -825,6 +869,14 @@ msgstr "The loaded revision is checked before writing. Changes are audited; alwa
 msgid "Anuncio LAN no disponible: %v"
 msgstr "LAN advertisement unavailable: %v"
 
+#: src/internal/headscalecontrol/document.go
+msgid "apartado DNS de Headscale no reconocido"
+msgstr "unrecognized Headscale DNS section"
+
+#: src/internal/headscalecontrol/document.go
+msgid "apartado Headscale no editable"
+msgstr "Headscale section is not editable"
+
 #: src/internal/admin/panel-reference.js
 #: src/internal/admin/panel.html
 msgid "API / CLI"
@@ -862,6 +914,14 @@ msgstr "API and panel enabled"
 msgid "Aplicación · gateway.log"
 msgstr "Application · gateway.log"
 
+#: src/internal/admin/panel-headscale-control.js
+msgid "Aplicando los archivos autorizados"
+msgstr "Applying authorized files"
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "Aplicando los cambios revisados; esperando la confirmación del controlador."
+msgstr "Applying reviewed changes; waiting for controller confirmation."
+
 #: src/internal/admin/panel.html
 msgid "Aplicar ajustes para streaming"
 msgstr "Apply streaming settings"
@@ -869,6 +929,10 @@ msgstr "Apply streaming settings"
 #: src/internal/admin/panel.html
 msgid "Aplicar los cambios almacenados en SQLite."
 msgstr "Apply changes saved in SQLite."
+
+#: src/internal/admin/panel.html
+msgid "Aplicar los cambios revisados"
+msgstr "Apply reviewed changes"
 
 #: src/internal/admin/panel.html
 msgid "Aplicar perfil"
@@ -970,6 +1034,18 @@ msgstr "Template JSON file"
 msgid "Archivo de registro"
 msgstr "Log file"
 
+#: src/internal/headscalecontrol/document.go
+msgid "archivo de registros MagicDNS ambiguo"
+msgstr "ambiguous MagicDNS records file"
+
+#: src/internal/headscalecontrol/document.go
+msgid "archivo de registros MagicDNS inválido"
+msgstr "invalid MagicDNS records file"
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "Archivo dinámico autorizado: los cambios de registros se aplican sin reiniciar Headscale."
+msgstr "Authorized dynamic file: record changes are applied without restarting Headscale."
+
 #: src/internal/securebackup/archive.go
 msgid "archivo duplicado"
 msgstr "duplicate file"
@@ -986,6 +1062,10 @@ msgstr "special file: %s"
 #: src/internal/admin/routes_forgejo.go
 msgid "archivo incompleto"
 msgstr "incomplete file"
+
+#: src/internal/headscalecontrol/files_linux.go
+msgid "archivo local inseguro o demasiado grande"
+msgstr "insecure or oversized local file"
 
 #: src/internal/admin/backups.go
 #: src/internal/admin/routes_forgejo.go
@@ -1174,6 +1254,10 @@ msgid "Añadir a origen"
 msgstr "Add to source"
 
 #: src/internal/admin/panel.html
+msgid "Añadir al borrador"
+msgstr "Add to draft"
+
+#: src/internal/admin/panel.html
 msgid "Añadir al grupo"
 msgstr "Add to group"
 
@@ -1263,6 +1347,10 @@ msgstr "Bootstrap unavailable"
 msgid "bootstrap requiere acceso local o proxy autorizado"
 msgstr "bootstrap requires local access or an authorized proxy"
 
+#: src/internal/admin/panel.html
+msgid "Borrador"
+msgstr "Draft"
+
 #: src/internal/policytemplates/templates.go
 msgid "Borrador restrictivo: reemplaza identidades y revisa acceso administrativo antes de aplicar. Requiere soporte Grants en Headscale."
 msgstr "Restrictive draft: replace identities and review administrative access before applying. Requires Grants support in Headscale."
@@ -1346,6 +1434,10 @@ msgstr "CA approved: %s"
 msgid "CA de federación inválida"
 msgstr "invalid federation CA"
 
+#: src/admin_headscale_control.go
+msgid "CA del controlador inválida"
+msgstr "invalid controller CA"
+
 #: src/internal/admin/panel-pki.js
 msgid "CA eliminada del almacén del Gateway. {p0} La CA en memoria se mantiene hasta reiniciar; se generará una nueva si el Gateway la necesita."
 msgstr "CA removed from Gateway storage. {p0} The CA remains in memory until restart; a new one will be generated if the Gateway needs it."
@@ -1368,6 +1460,14 @@ msgstr "Local CA loaded successfully: %s"
 #: src/localca.go
 msgid "CA local creada: %s"
 msgstr "Local CA created: %s"
+
+#: src/internal/headscalecontrol/disk_linux.go
+msgid "CA local de salud inválida"
+msgstr "invalid local health check CA"
+
+#: src/internal/headscalecontrol/disk_linux.go
+msgid "CA local de salud no disponible"
+msgstr "local health check CA unavailable"
 
 #: localca.go
 #: src/localca.go
@@ -1584,6 +1684,34 @@ msgstr "Administrative change recorded."
 msgid "Cambio aplicado en Headscale"
 msgstr "Change applied in Headscale"
 
+#: src/internal/admin/panel-headscale-control.js
+msgid "Cambio aplicado y comprobado"
+msgstr "Change applied and checked"
+
+#: src/internal/headscalecontrol/client.go
+msgid "cambio del controlador no serializable"
+msgstr "controller change cannot be serialized"
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "Cambio en cola"
+msgstr "Change queued"
+
+#: src/internal/headscalecontrol/http.go
+msgid "cambio Headscale ambiguo"
+msgstr "ambiguous Headscale change"
+
+#: src/internal/headscalecontrol/http.go
+msgid "cambio Headscale inválido"
+msgstr "invalid Headscale change"
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "Cambio rechazado"
+msgstr "Change rejected"
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "Cambios aplicados y estado de Headscale comprobado."
+msgstr "Changes applied and Headscale state checked."
+
 #: src/admin_catalog.go
 msgid "cambios no aplicados, catálogo restaurado: %w"
 msgstr "Changes not applied; catalog restored: %w"
@@ -1620,6 +1748,14 @@ msgstr "Cancel"
 msgid "Cancelar edición"
 msgstr "Cancel editing"
 
+#: src/internal/admin/panel.html
+msgid "Cancelar revisión"
+msgstr "Cancel review"
+
+#: src/internal/headscalecontrol/disk_linux.go
+msgid "candidato aislado no serializable"
+msgstr "isolated candidate cannot be serialized"
+
 #: src/internal/admin/panel-pki.js
 msgid "Candidato encontrado"
 msgstr "Candidate found"
@@ -1643,6 +1779,14 @@ msgstr "Loading local TLS certificate: %w"
 #: src/internal/admin/panel.html
 msgid "Cargar plantilla en editor (sin aplicar)"
 msgstr "Load template into editor (do not apply)"
+
+#: src/internal/headscalecontrol/files_linux.go
+msgid "carpeta del controlador con permisos inseguros"
+msgstr "controller directory has insecure permissions"
+
+#: src/internal/headscalecontrol/files_linux.go
+msgid "carpeta del controlador inválida"
+msgstr "invalid controller directory"
 
 #: src/admin_backup_restore_unix.go
 msgid "carpeta temporal de restauración inesperada"
@@ -1967,6 +2111,10 @@ msgstr "Client ID"
 msgid "Client secret"
 msgstr "Client secret"
 
+#: src/internal/admin/panel.html
+msgid "Cliente Tailscale"
+msgstr "Tailscale client"
+
 #: src/admin_network.go
 msgid "cliente tsnet todavía inicializándose: %w"
 msgstr "tsnet client is still initializing: %w"
@@ -2121,6 +2269,10 @@ msgstr "VPN check failed (%d/%d): %v"
 msgid "comprobando directorio %s: %w"
 msgstr "Checking directory %s: %w"
 
+#: src/internal/admin/panel-headscale-control.js
+msgid "Comprobando la recuperación de Headscale"
+msgstr "Checking Headscale recovery"
+
 #: dns_cleanup.go
 #: src/dns_cleanup.go
 msgid "Comprobando registros DNS obsoletos del gateway %s..."
@@ -2142,6 +2294,10 @@ msgstr "Check UFW status and effective rules"
 msgid "Comprobar firewall y permisos"
 msgstr "Check firewall and permissions"
 
+#: src/internal/admin/panel-headscale-control.js
+msgid "Comprueba el nombre completo y la dirección del tipo IPv4 o IPv6 seleccionado."
+msgstr "Check the full name and the address of the selected IPv4 or IPv6 type."
+
 #: src/admin_schema.go
 msgid "Comunicaciones LAN"
 msgstr "LAN communications"
@@ -2149,6 +2305,10 @@ msgstr "LAN communications"
 #: src/internal/admin/panel-experience.js
 msgid "Concede solo los permisos necesarios para la integración. Nunca compartas el token de recuperación."
 msgstr "Grant only the permissions required for the integration. Never share the recovery token."
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "Conectado"
+msgstr "Connected"
 
 #: desktop/main.cjs
 msgid "conectado"
@@ -2199,6 +2359,10 @@ msgstr "Connection refused{p0}"
 msgid "Confiar globalmente en la CA remota de {p0}"
 msgstr "Trust the remote CA of {p0} system-wide"
 
+#: src/internal/headscalecontrol/disk_linux.go
+msgid "configtest rechazó el candidato aislado"
+msgstr "configtest rejected the isolated candidate"
+
 #: src/internal/admin/panel.html
 msgid "Configura"
 msgstr "Configure"
@@ -2239,6 +2403,18 @@ msgstr "Configure a Headscale API key and restart the Gateway"
 msgid "Configuración"
 msgstr "Settings"
 
+#: src/internal/admin/panel-headscale-control.js
+msgid "Configuración actual:"
+msgstr "Current configuration:"
+
+#: src/internal/headscalecontrol/disk_linux.go
+msgid "configuración ajena modificada durante la recuperación"
+msgstr "external configuration changed during recovery"
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "Configuración anterior restaurada"
+msgstr "Previous configuration restored"
+
 #: src/internal/admin/panel.html
 msgid "Configuración de conexión Headscale"
 msgstr "Headscale connection configuration"
@@ -2270,6 +2446,10 @@ msgstr "configuration too large"
 #: src/internal/admin/panel.html
 msgid "Configuración general"
 msgstr "General settings"
+
+#: src/internal/headscalecontrol/document.go
+msgid "configuración Headscale vacía o demasiado grande"
+msgstr "empty or oversized Headscale configuration"
 
 #: src/internal/admin/panel.html
 msgid "Configuración inicial pendiente"
@@ -2334,6 +2514,10 @@ msgstr "Configure connection"
 #: src/internal/admin/panel.html
 msgid "Configurar contraseña de recuperación (mínimo 12 caracteres)"
 msgstr "Set recovery password (at least 12 characters)"
+
+#: src/internal/admin/panel.html
+msgid "Configurar controlador"
+msgstr "Configure controller"
 
 #: src/internal/admin/panel.html
 msgid "Configurar puertos LAN"
@@ -2414,6 +2598,10 @@ msgstr "Proxmox console"
 #: src/internal/admin/auth_ldap.go
 msgid "consulta de grupos LDAP fallida"
 msgstr "LDAP group query failed"
+
+#: src/internal/admin/panel.html
+msgid "Consulta el estado de sincronización."
+msgstr "Check synchronization status."
 
 #: src/internal/admin/panel.html
 msgid "Consulta los nodos reales y selecciona Origen o Destino junto a una IP. También puedes utilizar grupos, etiquetas y alias en las reglas."
@@ -2541,6 +2729,10 @@ msgstr "password and explicit confirmation required"
 msgid "Contrato en el código de esta versión"
 msgstr "Contract in this version's source code"
 
+#: src/admin_schema.go
+msgid "Control de Headscale"
+msgstr "Headscale control"
+
 #: src/internal/admin/panel.html
 msgid "Controla quién puede asignar etiquetas como"
 msgstr "Control who may assign tags such as"
@@ -2558,12 +2750,29 @@ msgid "controlador ACL no disponible"
 msgstr "ACL controller unavailable"
 
 #: src/internal/admin/backups.go
+#: src/internal/admin/routes_headscale_control.go
 msgid "controlador Headscale no disponible"
 msgstr "Headscale controller unavailable"
+
+#: src/admin_schema.go
+msgid "Controlador local instalado"
+msgstr "Installed local controller"
+
+#: src/internal/headscalecontrol/client.go
+msgid "controlador remoto no autorizado"
+msgstr "unauthorized remote controller"
 
 #: src/internal/admin/panel-reference.js
 msgid "cookies.txt y HGW_CSRF deben proceder de tu propia sesión interactiva. Un token Bearer no la sustituye."
 msgstr "cookies.txt and HGW_CSRF must come from your own interactive session. A Bearer token cannot replace it."
+
+#: src/internal/admin/panel.html
+msgid "Coordinador / Ajustes"
+msgstr "Coordinator / Settings"
+
+#: src/internal/admin/panel.html
+msgid "Coordinador Headscale"
+msgstr "Headscale coordinator"
 
 #: src/internal/admin/panel-backups.js
 msgid "Copia cifrada creada"
@@ -2941,6 +3150,14 @@ msgstr "data_dir cannot be empty"
 msgid "data_dir vacío"
 msgstr "empty data_dir"
 
+#: src/internal/admin/panel-headscale-control.js
+msgid "Dato anterior o no visible"
+msgstr "Previous or unavailable observation"
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "Datos antiguos"
+msgstr "Old data"
+
 #: src/internal/securebackup/archive.go
 msgid "datos después del manifiesto"
 msgstr "data after manifest"
@@ -2993,6 +3210,10 @@ msgstr "Leave blank to keep the current value"
 msgid "Dejar vacío para conservar"
 msgstr "Leave blank to keep"
 
+#: src/internal/admin/panel-headscale-control.js
+msgid "Delegación de solo lectura"
+msgstr "Read-only delegation"
+
 #: src/internal/admin/panel.html
 msgid "DELETE"
 msgstr "DELETE"
@@ -3005,10 +3226,18 @@ msgstr "too many tags"
 msgid "demasiadas plantillas"
 msgstr "Too many templates"
 
+#: src/internal/headscalecontrol/model.go
+msgid "demasiadas restricciones OIDC"
+msgstr "too many OIDC restrictions"
+
 #: src/admin_network_prefs.go
 #: src/internal/network/manage.go
 msgid "demasiadas rutas"
 msgstr "too many routes"
+
+#: src/internal/headscalecontrol/model.go
+msgid "demasiados ajustes DNS"
+msgstr "too many DNS settings"
 
 #: src/internal/admin/auth_oidc.go
 msgid "demasiados inicios pendientes"
@@ -3017,6 +3246,10 @@ msgstr "Too many pending sign-ins"
 #: src/internal/admin/routes_identity.go
 msgid "demasiados intentos"
 msgstr "Too many attempts"
+
+#: src/internal/headscalecontrol/model.go
+msgid "demasiados registros MagicDNS"
+msgstr "too many MagicDNS records"
 
 #: src/internal/portal/model.go
 msgid "demasiados servicios en el portal"
@@ -3138,6 +3371,10 @@ msgstr "Download extra-records.json"
 msgid "Descargar referencia JSON"
 msgstr "Download JSON reference"
 
+#: src/internal/admin/panel-headscale-control.js
+msgid "Desconectado"
+msgstr "Disconnected"
+
 #: src/internal/admin/panel.html
 msgid "Desconectados"
 msgstr "Offline"
@@ -3257,6 +3494,14 @@ msgstr "diagnostics unavailable: %v"
 msgid "Diaria"
 msgstr "Daily"
 
+#: src/internal/headscalecontrol/disk_linux.go
+msgid "diario de recuperación inseguro"
+msgstr "insecure recovery journal"
+
+#: src/internal/headscalecontrol/disk_linux.go
+msgid "diario de recuperación inválido"
+msgstr "invalid recovery journal"
+
 #: src/internal/admin/panel.html
 msgid "Dirección"
 msgstr "Address"
@@ -3276,6 +3521,10 @@ msgstr "invalid CA HTTP address: use IP:port between 1 and 65535"
 #: src/internal/admin/panel-experience.js
 msgid "Dirección HTTPS del servidor Headscale, usada para consultar la API y registrar el nodo integrado."
 msgstr "HTTPS address of the Headscale server, used to query its API and register the integrated node."
+
+#: src/internal/admin/panel.html
+msgid "Dirección IP"
+msgstr "IP address"
 
 #: src/admin_schema.go
 msgid "Dirección y puerto HTTP de la CA"
@@ -3348,6 +3597,10 @@ msgstr "Administrative DNS %s: %w"
 #: src/dns_records.go
 msgid "DNS creado: %s A %s"
 msgstr "DNS created: %s A %s"
+
+#: src/internal/admin/panel.html
+msgid "DNS de la Tailnet"
+msgstr "Tailnet DNS"
 
 #: dns_sync.go
 #: src/dns_sync.go
@@ -3459,6 +3712,10 @@ msgstr "Two-factor authentication disabled"
 msgid "Documentación del proveedor"
 msgstr "Provider documentation"
 
+#: src/internal/headscalecontrol/client.go
+msgid "documento del controlador sin revisión o instancia válida"
+msgstr "controller document has no valid revision or instance"
+
 #: src/config_validate.go
 msgid "domain.base_domain no definido"
 msgstr "domain.base_domain is not defined"
@@ -3477,9 +3734,25 @@ msgstr "Domain / CA"
 msgid "Dominio base"
 msgstr "Base domain"
 
+#: src/internal/admin/panel.html
+msgid "Dominio base de MagicDNS"
+msgstr "MagicDNS base domain"
+
+#: src/internal/headscalecontrol/model.go
+msgid "dominio base de MagicDNS inválido"
+msgstr "invalid MagicDNS base domain"
+
 #: src/internal/network/dns_records.go
 msgid "dominio base inválido"
 msgstr "invalid base domain"
+
+#: src/internal/headscalecontrol/model.go
+msgid "dominio de búsqueda inválido o repetido"
+msgstr "invalid or repeated search domain"
+
+#: src/internal/headscalecontrol/model.go
+msgid "dominio OIDC inválido"
+msgstr "invalid OIDC domain"
 
 #: src/internal/admin/panel.js
 msgid "Dominio principal"
@@ -3488,6 +3761,14 @@ msgstr "Main domain"
 #: src/acme_backoff.go
 msgid "dominio principal: %w"
 msgstr "Base domain: %w"
+
+#: src/internal/admin/panel.html
+msgid "Dominios de búsqueda"
+msgstr "Search domains"
+
+#: src/internal/admin/panel.html
+msgid "Dominios de correo permitidos"
+msgstr "Allowed email domains"
 
 #: src/internal/diagnostics/levels.go
 msgid "duración de depuración inválida (1-60 minutos)"
@@ -3607,6 +3888,22 @@ msgstr "The policy file exceeds 100 KiB"
 msgid "El archivo supera 8 MiB"
 msgstr "File exceeds 8 MiB"
 
+#: src/internal/headscalecontrol/controller_linux.go
+msgid "el ayudante local debe iniciarse mediante su servicio privilegiado"
+msgstr "the local helper must be started through its privileged service"
+
+#: src/internal/headscalecontrol/manager.go
+msgid "El cambio fue rechazado y se restauró la configuración anterior."
+msgstr "The change was rejected and the previous configuration was restored."
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "El cambio no se completó."
+msgstr "The change did not complete."
+
+#: src/internal/headscalecontrol/manager.go
+msgid "El cambio no se completó. Consulta el estado local de recuperación del controlador."
+msgstr "The change did not complete. Check the controller's local recovery state."
+
 #: admin_federation.go
 msgid "el candidato ya no está disponible; vuelve a descubrir gateways"
 msgstr "the candidate is no longer available; discover gateways again"
@@ -3663,9 +3960,37 @@ msgstr "The local certificate cannot be parsed"
 msgid "el certificado local todavía no es válido hasta %s"
 msgstr "The local certificate is not valid until %s"
 
+#: src/internal/headscalecontrol/spec.go
+msgid "el controlador no puede compartir archivos de funciones distintas"
+msgstr "the controller cannot share files between different functions"
+
+#: src/admin_headscale_control.go
+msgid "el controlador no tiene una dirección privada verificada"
+msgstr "the controller has no verified private address"
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "El controlador ya no conserva esa operación. Lee su estado actual antes de intentar otro cambio."
+msgstr "The controller no longer retains this operation. Read its current state before trying another change."
+
+#: src/internal/headscalecontrol/model.go
+msgid "el DNS global necesita al menos un resolutor para sustituir al DNS local"
+msgstr "global DNS needs at least one resolver to override local DNS"
+
+#: src/internal/headscalecontrol/document.go
+msgid "el dominio MagicDNS debe ser distinto del dominio del coordinador"
+msgstr "the MagicDNS domain must differ from the coordinator domain"
+
 #: src/desktop_background_linux.go
 msgid "El escritorio ha autorizado segundo plano y arranque de sesión del Gateway"
 msgstr "The desktop has authorized background activity and Gateway startup at login"
+
+#: src/internal/headscalecontrol/disk_linux.go
+msgid "el estado del controlador debe pertenecer a root"
+msgstr "controller state must belong to root"
+
+#: src/internal/headscalecontrol/disk_linux.go
+msgid "el estado del controlador requiere una carpeta privada 0700"
+msgstr "controller state requires a private 0700 directory"
 
 #: src/restart_windows.go
 msgid "el Gateway anterior no terminó dentro de 30 segundos"
@@ -3686,6 +4011,14 @@ msgstr "remote Gateway returned HTTP %d"
 #: src/admin_portal.go
 msgid "el Gateway seleccionado ya no está aprobado"
 msgstr "the selected Gateway is no longer approved"
+
+#: src/admin_headscale_control.go
+msgid "el instalador del anfitrión no ha registrado un controlador Headscale local"
+msgstr "the host installer has not registered a local Headscale controller"
+
+#: src/internal/headscalecontrol/controller_linux.go
+msgid "el listener del controlador se detuvo"
+msgstr "the controller listener stopped"
 
 #: src/internal/admin/routes_gateway.go
 msgid "el modo token requiere mantener token_identity y token_read habilitados"
@@ -3732,6 +4065,10 @@ msgstr "the CA HTTP port must differ from HTTPS and administration"
 msgid "El puerto HTTP interno está reservado al proxy; no es un enlace de acceso directo."
 msgstr "The internal HTTP port is reserved for the proxy; it is not a direct access link."
 
+#: src/internal/headscalecontrol/disk_linux.go
+msgid "el registro requiere propietario root y modo 0600"
+msgstr "registration requires root ownership and mode 0600"
+
 #: src/internal/templatelib/repository.go
 msgid "el repositorio debe ser una URL HTTPS válida, sin credenciales ni fragmentos"
 msgstr "repository must be a valid HTTPS URL without credentials or fragments"
@@ -3760,9 +4097,21 @@ msgstr "The test token stays in memory only while this page is open. Examples ne
 msgid "El token de recuperación funciona aunque Dex no esté disponible. Si lo pierdes, puedes recuperarte por SSH con"
 msgstr "The recovery token works even if Dex is unavailable. If you lose it, recover over SSH using"
 
+#: src/config_validate.go
+msgid "el token delegado del controlador Headscale no tiene el formato esperado"
+msgstr "the delegated Headscale controller token does not have the expected format"
+
 #: src/internal/admin/server.go
 msgid "el token no tiene permiso para el módulo"
 msgstr "This token is not authorized for the module"
+
+#: src/internal/headscalecontrol/client.go
+msgid "el transporte del controlador debe fijar la IP y verificar su nombre TLS sin proxies"
+msgstr "the controller transport must pin the IP and verify its TLS name without proxies"
+
+#: src/internal/admin/routes_headscale_control.go
+msgid "el vínculo local del coordinador no está disponible o no coincide con la URL Headscale"
+msgstr "the local coordinator binding is unavailable or does not match the Headscale URL"
 
 #: src/internal/admin/panel.html
 msgid "elegir una plantilla SOLO la copia al editor. No aplica cambios en Headscale. Comprueba el aviso de cada plantilla y guarda copia de la política anterior."
@@ -3960,6 +4309,10 @@ msgstr "LAN HTTPS listener"
 msgid "escuchando HTTPS LAN en %s: %w"
 msgstr "Listening for LAN HTTPS on %s: %w"
 
+#: src/internal/admin/panel-headscale-control.js
+msgid "Ese registro ya está en el borrador."
+msgstr "That record is already in the draft."
+
 #: src/internal/admin/panel.html
 msgid "Español"
 msgstr "Spanish"
@@ -3967,6 +4320,10 @@ msgstr "Spanish"
 #: src/internal/admin/proxy_schema.go
 msgid "Espera de cabeceras"
 msgstr "Response header timeout"
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "Esperando conexión con el controlador. Solo se consulta el estado; el cambio no se vuelve a enviar."
+msgstr "Waiting for the controller connection. Only the state is queried; the change is not resubmitted."
 
 #: src/internal/admin/routes_pki.go
 msgid "esta operación de confianza requiere sesión interactiva de administrador y CSRF"
@@ -4012,6 +4369,10 @@ msgstr "invalid network status"
 msgid "estado de restauración no disponible"
 msgstr "restore status unavailable"
 
+#: src/internal/admin/panel-headscale-control.js
+msgid "Estado del controlador no reconocido"
+msgstr "Unrecognized controller state"
+
 #: src/internal/admin/panel.html
 msgid "Estado del Gateway"
 msgstr "Gateway status"
@@ -4045,6 +4406,10 @@ msgstr "VPN status"
 msgid "Estado y consultas"
 msgstr "Status and queries"
 
+#: src/internal/headscalecontrol/spec.go
+msgid "estado y socket requieren sus carpetas privadas del controlador"
+msgstr "state and socket require their private controller directories"
+
 #: src/internal/admin/panel-reference.js
 msgid "Estas integraciones se configuran en sus módulos. El probador no reenvía credenciales a proveedores externos."
 msgstr "Configure these integrations in their modules. The tester does not forward credentials to external providers."
@@ -4070,6 +4435,14 @@ msgstr "This token is stored in SQLite with private permissions. Use it for init
 msgid "Esto revocará de inmediato el token de recuperación anterior. ¿Continuar?"
 msgstr "This will immediately revoke the previous recovery token. Continue?"
 
+#: src/internal/admin/panel-headscale-control.js
+msgid "Estos ajustes cambiaron mientras editabas. Conserva tu borrador y vuelve a leer el estado antes de aplicarlo."
+msgstr "These settings changed while you were editing. Keep your draft and read the current state before applying it."
+
+#: src/internal/admin/panel.html
+msgid "Estos ajustes se distribuyen a los clientes que acepten DNS. Los resolutores deben ser accesibles desde esos clientes."
+msgstr "These settings are distributed to clients that accept DNS. The resolvers must be reachable from those clients."
+
 #: src/internal/admin/panel.html
 msgid "Etiqueta"
 msgstr "Tag"
@@ -4085,6 +4458,10 @@ msgstr "invalid tag: %q"
 #: src/internal/admin/panel-policy-visual.js
 msgid "Etiqueta · {p0}"
 msgstr "Tag · {p0}"
+
+#: src/internal/admin/panel.html
+msgid "Etiquetas"
+msgstr "Tags"
 
 #: src/internal/admin/panel.html
 msgid "Etiquetas (separadas por coma, opcional)"
@@ -4164,6 +4541,10 @@ msgstr "Export all templates"
 #: src/internal/admin/panel.html
 msgid "Exposición de la API y permisos"
 msgstr "API exposure and permissions"
+
+#: src/internal/headscalecontrol/disk_linux.go
+msgid "extra_records_path no coincide con el registro local autorizado"
+msgstr "extra_records_path does not match the authorized local registration"
 
 #: src/internal/securebackup/crypto.go
 msgid "fallo de integridad o archivo manipulado"
@@ -4266,6 +4647,10 @@ msgstr "Forgejo did not confirm the encrypted attachment"
 #: src/internal/forgejostore/store.go
 msgid "Forgejo respondió HTTP %d"
 msgstr "Forgejo returned HTTP %d"
+
+#: src/internal/admin/panel-headscale.js
+msgid "form input, form button"
+msgstr "form input, form button"
 
 #: src/internal/admin/proxy-model.js
 msgid "Formato de cabeceras inválido"
@@ -4527,6 +4912,10 @@ msgid "Grupos OIDC admitidos (uno por línea)"
 msgstr "Allowed OIDC groups (one per line)"
 
 #: src/internal/admin/panel.html
+msgid "Grupos permitidos"
+msgstr "Allowed groups"
+
+#: src/internal/admin/panel.html
 msgid "Guarda este token en un gestor de contraseñas. No volverá a mostrarse aquí:"
 msgstr "Save this token in a password manager. It will not be shown here again:"
 
@@ -4662,9 +5051,17 @@ msgstr "Saved global settings are not yet active."
 msgid "Hasta 128 KiB y 1024 × 1024 píxeles."
 msgstr "Up to 128 KiB and 1024 × 1024 pixels."
 
+#: src/internal/admin/panel-headscale-control.js
+msgid "Hay borradores que entran en conflicto con cambios externos; vuelve a leer el estado antes de aplicarlos."
+msgstr "Some drafts conflict with external changes; read the current state before applying them."
+
 #: src/internal/admin/panel-policy-visual.js
 msgid "Hay reglas ACL heredadas. ¿Añadir también esta regla Grant?"
 msgstr "Legacy ACL rules exist. Add this Grant as well?"
+
+#: src/internal/headscalecontrol/disk_linux.go
+msgid "hay una recuperación Headscale pendiente"
+msgstr "a Headscale recovery is pending"
 
 #: src/internal/admin/panel.html
 msgid "Headscale"
@@ -4725,13 +5122,33 @@ msgstr "Headscale Gateway · Administration"
 msgid "Headscale Gateway — configuración centralizada en SQLite\n\nUSO:\n  headscale-gateway [-db /ruta/gateway.sqlite]\n  headscale-gateway [-db /ruta/gateway.sqlite] -reload\n  headscale-gateway -backup /ruta/nueva/copia  (DESHABILITADO: utiliza copias .hgw cifradas)\n  headscale-gateway -db /ruta/gateway.sqlite -restore-backup /ruta/copia (Gateway detenido)\n  headscale-gateway -reset-recovery (rehabilita bootstrap local)\n  headscale-gateway [-log-file /ruta/gateway.log] [-log-max-mb 10] [-log-backups 5]\n  headscale-gateway [--log-level error|warn|info|debug|trace] [--debug|--trace]\n  headscale-gateway logs status [--db ruta/gateway.sqlite]\n  headscale-gateway logs tail [--channel gateway|proxy|admin] [--lines 50] [--dir /ruta/logs]\n  headscale-gateway logs follow [--channel proxy] [--dir /ruta/logs]   (Ctrl+C)\n  headscale-gateway doctor [--db ruta/gateway.sqlite]\n  headscale-gateway --windows-service HeadscaleGateway --db ruta/gateway.sqlite (solo mediante SCM)\n  headscale-gateway version\n  headscale-gateway -help\n\nLinux: ~/.local/share/headscale-gateway/gateway.sqlite para usuario normal;\ncomo root usa /var/lib/headscale-gateway/gateway.sqlite.\nWindows: %LOCALAPPDATA%/HeadscaleGateway/gateway.sqlite, respetando una\ninstalación previa en %ProgramData%/HeadscaleGateway.\nEl primer inicio crea SQLite y sirve el panel local en:\n  http://127.0.0.1:9091/admin/\n\nAJUSTES Y SERVICIOS:\n  Se administran desde el panel y la API. No existe config.yaml.\n  La gestión de identidad, credenciales y roles utiliza la misma SQLite.\n  -reload almacena una solicitud en SQLite, procesada por el servidor.\n\nLOGS E IDIOMAS:\n  Canales independientes: gateway.log, proxy.log, admin.log.\n  Guarda 5 copias rotadas de 10 MiB por canal (configurable).\n  INFO predeterminado. DEBUG/TRACE detallan solicitudes sin cuerpos ni cabeceras.\n  Prioridad nivel: flags > GATEWAY_LOG_LEVEL > SQLite > INFO.\n  En el panel Registros se puede activar DEBUG temporal hasta 60 minutos.\n  CLI doctor/logs solo lee archivos y no inicia la VPN.\n  Los eventos de API y plantillas tienen identificadores HGW-*.\n  GATEWAY_LANG=es (predeterminado) o GATEWAY_LANG=en para los nuevos\n  mensajes de eventos traducidos. El idioma del panel es independiente.\n  Traducciones Poedit: locale/*.po y locale/headscale-gateway.pot.\n\nDATOS EXTERNOS A SQLITE:\n  Tailscale tsnet y CertMagic gestionan su propio estado y certificados.\n  No modifiques manualmente esos archivos. Usa copias consistentes de SQLite.\n  La restauración incluye gateway.sqlite y master.key; no restaura\n  automáticamente las ACL ni la configuración YAML del VPS Headscale.\n  Las copias .hgw actuales están cifradas con contraseña.\n\nRED Y SEGURIDAD:\n  El listener HTTP de administración utiliza loopback por defecto.\n  Para acceso remoto usa HTTPS del Gateway o un proxy HTTPS explícitamente autorizado.\nGATEWAY_BOOTSTRAP_FILE proporciona el mismo contrato de arranque en todas las instalaciones.\n"
 msgstr "Headscale Gateway — centralized SQLite configuration\n\nUSAGE:\n  headscale-gateway [-db /path/gateway.sqlite]\n  headscale-gateway [-db /path/gateway.sqlite] -reload\n  headscale-gateway -backup /path/new/backup  (DISABLED: use encrypted .hgw backups)\n  headscale-gateway -db /path/gateway.sqlite -restore-backup /path/backup (Gateway stopped)\n  headscale-gateway -reset-recovery (re-enables local bootstrap)\n  headscale-gateway [-log-file /path/gateway.log] [-log-max-mb 10] [-log-backups 5]\n  headscale-gateway [--log-level error|warn|info|debug|trace] [--debug|--trace]\n  headscale-gateway logs status [--db path/gateway.sqlite]\n  headscale-gateway logs tail [--channel gateway|proxy|admin] [--lines 50] [--dir /path/logs]\n  headscale-gateway logs follow [--channel proxy] [--dir /path/logs]   (Ctrl+C)\n  headscale-gateway doctor [--db path/gateway.sqlite]\n  headscale-gateway --windows-service HeadscaleGateway --db path/gateway.sqlite (SCM only)\n  headscale-gateway version\n  headscale-gateway -help\n\nLinux: ~/.local/share/headscale-gateway/gateway.sqlite for normal users;\nroot uses /var/lib/headscale-gateway/gateway.sqlite.\nWindows: %LOCALAPPDATA%/HeadscaleGateway/gateway.sqlite, respecting an\nexisting installation in %ProgramData%/HeadscaleGateway.\nFirst startup creates SQLite and serves the local panel at:\n  http://127.0.0.1:9091/admin/\n\nSETTINGS AND SERVICES:\n  Managed through the panel and API. There is no config.yaml.\n  Identity, credentials and roles are managed in the same SQLite database.\n  -reload stores a request in SQLite for the server to process.\n\nLOGS AND LANGUAGES:\n  Independent channels: gateway.log, proxy.log, admin.log.\n  Keeps 5 rotated copies of 10 MiB per channel (configurable).\n  INFORMATION by default. DEBUG/TRACE detail requests without bodies or headers.\n  Level priority: flags > GATEWAY_LOG_LEVEL > SQLite > INFORMATION.\n  The Logs panel can enable temporary debug for up to 60 minutes.\n  CLI doctor/logs only reads files and does not start the VPN.\n  Application events have HGW-* identifiers.\n  GATEWAY_LANG=es (default) or GATEWAY_LANG=en for new translated events.\n  The panel and tray client have separate language preferences.\n  Poedit translations: locale/*.po and locale/headscale-gateway.pot.\n\nDATA OUTSIDE SQLITE:\n  Tailscale tsnet and CertMagic manage their own state and certificates.\n  Do not edit these files manually. Use consistent SQLite backups.\n  Restoration includes gateway.sqlite and master.key; it does not\n  automatically restore ACLs or the Headscale VPS YAML configuration.\n  Current .hgw backups are password-encrypted.\n\nNETWORK AND SECURITY:\n  The administrative HTTP listener uses loopback by default.\n  For remote access, use Gateway HTTPS or an explicitly authorized HTTPS proxy.\n\nGATEWAY_BOOTSTRAP_FILE supplies the same startup contract on every installation.\n"
 
+#: src/internal/headscalecontrol/disk_linux.go
+msgid "Headscale no aceptó el candidato aislado"
+msgstr "Headscale did not accept the isolated candidate"
+
 #: src/internal/admin/panel-headscale.js
 msgid "Headscale no devolvió una clave de registro visible"
 msgstr "Headscale did not return a visible registration key"
 
+#: src/internal/headscalecontrol/controller_linux.go
+msgid "Headscale no está saludable en el destino registrado"
+msgstr "Headscale is not healthy at the registered destination"
+
 #: src/internal/network/policy_dns.go
 msgid "Headscale no pudo recuperar la política ACL (HTTP %d): consulta los logs del servidor y verifica policy.mode, policy.path y si existe una política inicializada: %w"
 msgstr "Headscale could not retrieve the ACL policy (HTTP %d): check server logs, policy.mode, policy.path and whether a policy has been initialized: %w"
+
+#: src/internal/headscalecontrol/disk_linux.go
+msgid "Headscale no recuperó su estado saludable"
+msgstr "Headscale did not return to a healthy state"
+
+#: src/internal/headscalecontrol/document.go
+msgid "Headscale no tiene OIDC configurado"
+msgstr "Headscale has no OIDC configured"
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "Headscale no tiene un proveedor OIDC configurado. Se conserva su configuración actual; estas listas están desactivadas."
+msgstr "Headscale has no OIDC provider configured. Its current configuration is preserved; these lists are disabled."
 
 #: src/internal/admin/backups.go
 msgid "Headscale rechazó la restauración ACL:"
@@ -4776,6 +5193,22 @@ msgstr "headscale.node_name: use 1 to 63 lowercase letters, digits or hyphens, w
 #: src/config_validate.go
 msgid "headscale.url no definido"
 msgstr "headscale.url is not set"
+
+#: src/internal/admin/panel.html
+msgid "Headscale: administración delegada"
+msgstr "Headscale: delegated management"
+
+#: src/internal/admin/panel-security.js
+msgid "Headscale: cambios delegados en DNS, restricciones, nodos, claves y ACL"
+msgstr "Headscale: delegated changes to DNS, restrictions, nodes, keys and ACLs"
+
+#: src/internal/admin/panel.html
+msgid "Headscale: lectura delegada"
+msgstr "Headscale: delegated read access"
+
+#: src/internal/admin/panel-security.js
+msgid "Headscale: lectura delegada del coordinador"
+msgstr "Headscale: delegated coordinator read access"
 
 #: src/internal/admin/panel.html
 msgid "Helper de certificados del sistema"
@@ -4896,6 +5329,10 @@ msgstr "CA fingerprint mismatch"
 #: src/internal/admin/panel-backups.js
 msgid "Huella de integridad SHA-256"
 msgstr "SHA-256 integrity fingerprint"
+
+#: src/admin_schema.go
+msgid "Huella de la CA aprobada del controlador"
+msgstr "Controller approved CA fingerprint"
 
 #: src/internal/pki/system_darwin.go
 #: src/internal/pki/system_windows.go
@@ -5018,6 +5455,14 @@ msgstr "Backup identifier"
 #: src/internal/network/manage.go
 msgid "identificador de nodo inválido"
 msgstr "invalid node identifier"
+
+#: src/internal/headscalecontrol/client.go
+msgid "identificador de operación inválido"
+msgstr "invalid operation ID"
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "Identificador de operación:"
+msgstr "Operation ID:"
 
 #: src/internal/state/sqlite_portable_tokens.go
 #: src/internal/state/sqlite_tokens_linux.go
@@ -5166,6 +5611,10 @@ msgid "Información (recomendado)"
 msgstr "Information (recommended)"
 
 #: src/internal/admin/panel.html
+msgid "Información observada desde el controlador"
+msgstr "Information observed from the controller"
+
+#: src/internal/admin/panel.html
 msgid "Información, advertencias y errores"
 msgstr "Information, warnings and errors"
 
@@ -5304,6 +5753,10 @@ msgstr "Enter the HTTPS URL of the Forgejo repository"
 msgid "introduce solo el origen HTTPS del Gateway (sin rutas, credenciales ni parámetros)"
 msgstr "enter only the Gateway HTTPS origin (without paths, credentials or parameters)"
 
+#: src/internal/admin/panel-headscale-control.js
+msgid "Introduce un dominio completo válido, sin punto final."
+msgstr "Enter a valid full domain without a trailing dot."
+
 #: src/internal/admin/panel-pki.js
 msgid "Introduce un nombre"
 msgstr "Enter a name"
@@ -5384,6 +5837,14 @@ msgstr "Inventory of certificates issued by the current CA. Includes the Gateway
 msgid "Inventario de nodos desde Headscale, transporte observado desde el tsnet del Gateway. Los ajustes de los clientes remotos requieren intervención en cada equipo."
 msgstr "Node inventory from Headscale; transport information observed by the Gateway's tsnet. Remote client settings must be changed on each device."
 
+#: src/admin_network.go
+msgid "inventario de red no reconocido"
+msgstr "unrecognized network inventory"
+
+#: src/internal/admin/routes_headscale_control.go
+msgid "inventario Headscale no disponible"
+msgstr "Headscale inventory unavailable"
+
 #: src/internal/admin/panel-security.js
 msgid "Inventario y diagnóstico de red"
 msgstr "Network inventory and diagnostics"
@@ -5393,6 +5854,10 @@ msgid "Inventario, usuarios, claves, etiquetas, rutas y ACL mediante REST. La cl
 msgstr "Inventory, users, keys, tags, routes and ACLs over REST. The Headscale key is separate from the Gateway token. Available operations depend on the server version."
 
 #: src/internal/admin/panel.html
+msgid "IP"
+msgstr "IP"
+
+#: src/internal/admin/panel.html
 msgid "IP Tailscale"
 msgstr "Tailscale IP"
 
@@ -5400,6 +5865,14 @@ msgstr "Tailscale IP"
 #: src/dns_sync.go
 msgid "IP Tailscale del gateway: %s"
 msgstr "Gateway Tailscale IP: %s"
+
+#: src/internal/admin/panel.html
+msgid "IPv4 (A)"
+msgstr "IPv4 (A)"
+
+#: src/internal/admin/panel.html
+msgid "IPv6 (AAAA)"
+msgstr "IPv6 (AAAA)"
 
 #: src/internal/admin/panel.html
 msgid "Ir a configuración"
@@ -5494,6 +5967,10 @@ msgstr "The local CA public key is not ECDSA"
 msgid "la conexión VPN del Gateway no está lista"
 msgstr "The Gateway VPN connection is not ready"
 
+#: src/internal/headscalecontrol/disk_linux.go
+msgid "la configuración cambió durante la validación"
+msgstr "the configuration changed during validation"
+
 #: src/admin_config_transfer.go
 msgid "la configuración contiene una clave desconocida"
 msgstr "The configuration contains an unknown setting"
@@ -5538,6 +6015,15 @@ msgstr "SQLite backup is incomplete"
 msgid "la copia SQLite no supera PRAGMA quick_check"
 msgstr "SQLite backup fails PRAGMA quick_check"
 
+#: src/internal/admin/panel-headscale.js
+#: src/internal/admin/panel-policy-dns.js
+msgid "La delegación del controlador es de solo lectura."
+msgstr "The controller delegation is read-only."
+
+#: src/internal/admin/routes_headscale_control.go
+msgid "la delegación del controlador ha caducado o fue revocada"
+msgstr "the controller delegation expired or was revoked"
+
 #: src/dns_sync.go
 msgid "la dirección Tailscale obtenida no es IPv4: %s"
 msgstr "The obtained Tailscale address is not IPv4: %s"
@@ -5569,6 +6055,10 @@ msgstr "System-wide certificate installation requires root (Fedora / Debian) or 
 #: src/internal/admin/backups.go
 msgid "la instantánea no contiene una política ACL restaurable"
 msgstr "snapshot does not contain a restorable ACL policy"
+
+#: src/internal/headscalecontrol/disk_linux.go
+msgid "la IP de salud no pertenece al anfitrión"
+msgstr "the health check IP does not belong to this host"
 
 #: src/admin_templates.go
 msgid "la plantilla está utilizada por %s"
@@ -5630,13 +6120,25 @@ msgstr "system-wide CA removal requires root"
 msgid "la ruta de logs debe ser absoluta y no ser la raíz"
 msgstr "log path must be absolute and must not be the root"
 
+#: src/internal/headscalecontrol/controller_linux.go
+msgid "la ruta del socket está ocupada por otro tipo de archivo"
+msgstr "the socket path is occupied by another file type"
+
 #: src/internal/admin/panel.html
 msgid "La ruta es un ejemplo: verifica la ubicación y permisos de tu paquete YunoHost. Headscale supervisa el archivo indicado; el Gateway no tiene acceso a los archivos del VPS simplemente por disponer de una API Key."
 msgstr "This path is an example: verify the location and permissions of your YunoHost package. Headscale watches that file; an API key alone does not grant the Gateway access to VPS files."
 
+#: src/internal/headscalecontrol/spec.go
+msgid "la salud de Headscale requiere una IP local y la ruta /health"
+msgstr "the Headscale health check requires a local IP and the /health path"
+
 #: src/internal/admin/panel.html
 msgid "La selección prepara la petición; solo se envía al pulsar Ejecutar. Las modificaciones necesitan confirmación y conservan los permisos del servidor."
 msgstr "Selecting an operation prepares the request; it is sent only when you click Run. Changes require confirmation and remain subject to server permissions."
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "La sesión administrativa terminó."
+msgstr "The administrative session ended."
 
 #: src/internal/admin/panel-experience.js
 msgid "La sesión ha caducado. Vuelve a iniciar sesión."
@@ -5653,6 +6155,10 @@ msgstr "This request is no longer available. Refresh the inventory."
 #: src/internal/forgejostore/store.go
 msgid "la URL debe incluir el propietario y el repositorio Forgejo"
 msgstr "The URL must include the Forgejo owner and repository"
+
+#: src/internal/headscalecontrol/disk_linux.go
+msgid "la validación aislada requiere SQLite"
+msgstr "isolated validation requires SQLite"
 
 #: src/admin_federation.go
 msgid "LAN HTTP"
@@ -5723,6 +6229,14 @@ msgstr "failed to read ACL: %v"
 #: startup_logging.go
 msgid "leer configuración: %v"
 msgstr "read configuration: %v"
+
+#: src/internal/admin/panel.html
+msgid "Leer estado actual"
+msgstr "Read current state"
+
+#: src/internal/admin/panel.html
+msgid "Leer observador"
+msgstr "Read observer"
 
 #: src/internal/admin/panel.html
 msgid "Leer política de Headscale"
@@ -5922,6 +6436,10 @@ msgid "MagicDNS (exportar)"
 msgstr "MagicDNS (export)"
 
 #: src/internal/admin/panel.html
+msgid "MagicDNS y resolutores"
+msgstr "MagicDNS and resolvers"
+
+#: src/internal/admin/panel.html
 msgid "MagicDNS+"
 msgstr "MagicDNS+"
 
@@ -6031,6 +6549,14 @@ msgstr "Unsupported authentication mode"
 msgid "Modo de certificados"
 msgstr "Certificate mode"
 
+#: src/config_validate.go
+msgid "modo de control Headscale no reconocido"
+msgstr "unrecognized Headscale control mode"
+
+#: src/internal/headscalecontrol/files_linux.go
+msgid "modo inesperado de carpeta del controlador"
+msgstr "unexpected controller directory mode"
+
 #: src/internal/admin/panel.js
 msgid "Modo TLS"
 msgstr "TLS mode"
@@ -6113,6 +6639,10 @@ msgid "name obligatorio"
 msgstr "name is required"
 
 #: src/internal/admin/panel.html
+msgid "Nameservers globales"
+msgstr "Global nameservers"
+
+#: src/internal/admin/panel.html
 msgid "Nameservers y Split DNS"
 msgstr "Nameservers and Split DNS"
 
@@ -6131,6 +6661,10 @@ msgstr "Requires root. Save the public CA as %s and run: sudo %s %s. Verify the 
 #: src/internal/admin/proxy_schema.go
 msgid "Negociación TLS con backend"
 msgstr "TLS handshake with backend"
+
+#: src/admin_headscale_control.go
+msgid "ninguna dirección privada del controlador es accesible"
+msgstr "no private controller address is reachable"
 
 #: src/internal/diagnostics/levels.go
 msgid "nivel de log no válido %q (error|warn|info|debug|trace)"
@@ -6165,11 +6699,16 @@ msgstr "Log level and rotation updated"
 msgid "nivel=%s; modo=%s"
 msgstr "level=%s; mode=%s"
 
+#: src/internal/admin/panel-headscale.js
+msgid "No"
+msgstr "No"
+
 #: src/internal/admin/panel.html
 msgid "No activa automáticamente el reenvío IP del sistema operativo ni aprueba rutas en Headscale."
 msgstr "Does not automatically enable OS IP forwarding or approve routes in Headscale."
 
 #: src/internal/admin/panel-backups.js
+#: src/internal/admin/panel-headscale-control.js
 #: src/internal/admin/panel-pki.js
 #: src/internal/admin/panel-portal.js
 msgid "No disponible"
@@ -6203,6 +6742,10 @@ msgstr "no files to back up"
 msgid "No hay cambios en las rutas."
 msgstr "No route changes."
 
+#: src/internal/headscalecontrol/document.go
+msgid "no hay cambios Headscale"
+msgstr "no Headscale changes"
+
 #: src/internal/admin/panel-backups.js
 msgid "No hay copias cifradas todavía"
 msgstr "No encrypted backups yet"
@@ -6222,6 +6765,10 @@ msgstr "No approved gateways with a configured portal."
 #: src/internal/admin/backups.go
 msgid "no hay instantánea DNS"
 msgstr "no DNS snapshot"
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "No hay permiso de escritura en el controlador."
+msgstr "No write permission on the controller."
 
 #: src/internal/admin/panel-policy-dns.js
 msgid "No hay política ACL en la base de datos. Utiliza Inicializar política antes de editar."
@@ -6299,6 +6846,10 @@ msgstr "no changes provided"
 msgid "no se pudieron exportar las plantillas"
 msgstr "Could not export templates"
 
+#: src/internal/headscalecontrol/document.go
+msgid "no se pudieron preparar los registros MagicDNS"
+msgstr "could not prepare the MagicDNS records"
+
 #: src/internal/admin/routes_identity.go
 msgid "no se pudieron verificar grupos LDAP"
 msgstr "Could not verify LDAP groups"
@@ -6311,9 +6862,21 @@ msgstr "Could not open the log file."
 msgid "no se pudo abrir el archivo de log: %v"
 msgstr "could not open log file: %v"
 
+#: src/internal/headscalecontrol/controller_linux.go
+msgid "no se pudo abrir el bloqueo del controlador"
+msgstr "could not open the controller lock"
+
+#: src/internal/headscalecontrol/controller_linux.go
+msgid "no se pudo abrir el socket del controlador"
+msgstr "could not open the controller socket"
+
 #: admin_ca_http.go
 msgid "No se pudo abrir HTTP de CA en %s; administración sigue disponible: %v"
 msgstr "Could not open CA HTTP on %s; administration remains available: %v"
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "No se pudo actualizar el observador. Se conservan los últimos datos con su fecha."
+msgstr "Could not update the observer. The last data and its observation time are retained."
 
 #: src/internal/admin/panel-policy-visual.js
 msgid "No se pudo actualizar todo el inventario. Comprueba la API key y usa Actualizar identidades. Se conservan los últimos datos."
@@ -6336,9 +6899,17 @@ msgstr "Could not close the previous log: %v"
 msgid "no se pudo comprobar clave"
 msgstr "could not check the key"
 
+#: src/internal/headscalecontrol/controller_linux.go
+msgid "no se pudo comprobar el socket local"
+msgstr "could not check the local socket"
+
 #: src/internal/state/sqlite_restore_linux.go
 msgid "no se pudo comprobar integridad SQLite"
 msgstr "could not check SQLite integrity"
+
+#: src/internal/headscalecontrol/client.go
+msgid "no se pudo conectar con el controlador Headscale"
+msgstr "could not connect to the Headscale controller"
 
 #: src/internal/forgejostore/store.go
 msgid "no se pudo conectar con Forgejo"
@@ -6351,6 +6922,18 @@ msgstr "Could not connect to LDAP TLS"
 #: src/dns_technitium.go
 msgid "No se pudo conectar con Technitium"
 msgstr "Could not connect to Technitium"
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "No se pudo confirmar el resultado. Conserva el identificador y lee el estado del controlador antes de intentar otro cambio."
+msgstr "The result could not be confirmed. Keep the ID and read the controller state before trying another change."
+
+#: src/internal/headscalecontrol/files_linux.go
+msgid "no se pudo conservar el contexto SELinux"
+msgstr "could not preserve the SELinux context"
+
+#: src/admin_headscale_agent.go
+msgid "No se pudo conservar el estado del observador Headscale"
+msgstr "Could not retain the Headscale observer state"
 
 #: acme_backoff.go
 msgid "No se pudo consultar el estado ACME en SQLite; se aplaza el intento un minuto: %v"
@@ -6409,9 +6992,25 @@ msgstr "Could not save status for peer=%s: %v"
 msgid "no se pudo guardar la sesión"
 msgstr "Could not save the session"
 
+#: src/internal/headscalecontrol/manager.go
+msgid "no se pudo identificar la operación"
+msgstr "could not identify the operation"
+
+#: src/internal/headscalecontrol/controller_linux.go
+msgid "no se pudo inicializar el estado privado del controlador"
+msgstr "could not initialize private controller state"
+
+#: src/internal/headscalecontrol/files_linux.go
+msgid "no se pudo leer el archivo local"
+msgstr "could not read the local file"
+
 #: src/internal/admin/backups.go
 msgid "no se pudo leer la ACL actual:"
 msgstr "could not read current ACL:"
+
+#: src/internal/headscalecontrol/manager.go
+msgid "no se pudo leer la configuración local de Headscale"
+msgstr "could not read the local Headscale configuration"
 
 #: src/dns_technitium.go
 msgid "No se pudo leer la respuesta de Technitium"
@@ -6439,6 +7038,10 @@ msgstr "could not persist identity %s: %v"
 msgid "no se pudo preparar el directorio de copias"
 msgstr "Could not prepare the backup directory"
 
+#: src/internal/headscalecontrol/document.go
+msgid "no se pudo preparar el YAML Headscale"
+msgstr "could not prepare the Headscale YAML"
+
 #: src/internal/admin/backups.go
 msgid "no se pudo preparar verificación"
 msgstr "could not prepare verification"
@@ -6451,9 +7054,21 @@ msgstr "Could not restore the saved connection:"
 msgid "No se pudo registrar el acceso directo para notificaciones"
 msgstr "Could not register the notification shortcut"
 
+#: src/internal/headscalecontrol/disk_linux.go
+msgid "no se pudo reiniciar el servicio Headscale"
+msgstr "could not restart the Headscale service"
+
+#: src/internal/headscalecontrol/controller_linux.go
+msgid "no se pudo retirar el socket obsoleto"
+msgstr "could not remove the obsolete socket"
+
 #: src/internal/admin/routes_identity.go
 msgid "no se pudo rotar la credencial"
 msgstr "could not rotate the credential"
+
+#: src/internal/headscalecontrol/controller_linux.go
+msgid "no se pudo validar el registro local del controlador"
+msgstr "could not validate the local controller registration"
 
 #: src/internal/configtransfer/transfer.go
 msgid "no se pudo verificar el archivo cifrado: %w"
@@ -6462,6 +7077,10 @@ msgstr "could not verify encrypted file: %w"
 #: src/internal/admin/backups.go
 msgid "no se pudo verificar integridad/contraseña:"
 msgstr "could not verify integrity/password:"
+
+#: src/internal/headscalecontrol/manager.go
+msgid "no se pudo verificar la identidad del coordinador"
+msgstr "could not verify the coordinator identity"
 
 #: src/restart_windows.go
 msgid "no se puede comprobar el Gateway anterior: %w"
@@ -6525,6 +7144,10 @@ msgstr "Do not request scope"
 msgid "node_id obligatorio"
 msgstr "node_id is required"
 
+#: src/internal/admin/panel.html
+msgid "Nodo"
+msgstr "Node"
+
 #: src/internal/admin/panel-pki.js
 msgid "Nodo candidato · Gateway sin confirmar"
 msgstr "Candidate node · Gateway not confirmed"
@@ -6537,6 +7160,10 @@ msgstr "malformed node: %w"
 msgid "nodo no encontrado o sin IP VPN válida"
 msgstr "Node not found or has no valid VPN IP"
 
+#: src/internal/admin/panel-headscale-control.js
+msgid "Nodos fuera del límite de observación:"
+msgstr "Nodes beyond the observation limit:"
+
 #: src/internal/admin/panel.html
 msgid "Nodos que anuncian rutas todavía no aprobadas por Headscale. Revisa las subredes y confirma cada aprobación."
 msgstr "Nodes advertising routes not yet approved by Headscale. Review the subnets and confirm each approval."
@@ -6548,6 +7175,14 @@ msgstr "Nodes, certificates, logs…"
 #: src/internal/admin/panel.html
 msgid "Nombre"
 msgstr "Name"
+
+#: src/internal/admin/panel.html
+msgid "Nombre completo"
+msgstr "Full name"
+
+#: src/internal/admin/panel.html
+msgid "Nombre completo en minúsculas, sin punto final; distinto del dominio del servidor Headscale."
+msgstr "Full lowercase domain, without a trailing dot; different from the Headscale server domain."
 
 #: src/internal/admin/panel.js
 msgid "Nombre confirmado. Completa la configuración y reinicia el Gateway."
@@ -6564,6 +7199,10 @@ msgstr "Header name"
 #: src/internal/pki/trust.go
 msgid "nombre de Gateway inválido"
 msgstr "invalid Gateway name"
+
+#: src/internal/headscalecontrol/disk_linux.go
+msgid "nombre de instancia inválido"
+msgstr "invalid instance name"
 
 #: src/admin_settings.go
 msgid "nombre de nodo inválido: usa 1..63 letras minúsculas, números o guiones sin repetir"
@@ -6765,6 +7404,22 @@ msgstr "Required for manual backups"
 msgid "Obligatorio salvo en el modo Solo CA local."
 msgstr "Required except in Local CA only mode."
 
+#: src/internal/admin/panel.html
+msgid "Observador de nodos"
+msgstr "Node observer"
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "Observador desactivado"
+msgstr "Observer disabled"
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "Observador disponible"
+msgstr "Observer available"
+
+#: src/internal/admin/routes_headscale_control.go
+msgid "observador Headscale no disponible"
+msgstr "Headscale observer unavailable"
+
 #: src/tailscale.go
 msgid "obteniendo estado de tsnet: %w"
 msgstr "Getting tsnet status: %w"
@@ -6890,6 +7545,10 @@ msgstr "Headscale administrative operation: %s"
 msgid "Operación cancelada o huella no coincidente."
 msgstr "Operation cancelled or fingerprint mismatch."
 
+#: src/internal/admin/panel.html
+msgid "Operación en el coordinador"
+msgstr "Coordinator operation"
+
 #: src/internal/admin/server.go
 msgid "operación fallida"
 msgstr "Operation failed"
@@ -6897,6 +7556,10 @@ msgstr "Operation failed"
 #: src/admin_headscale_manage.go
 msgid "operación Headscale no permitida"
 msgstr "Headscale operation not allowed"
+
+#: src/internal/headscalecontrol/http.go
+msgid "operación no disponible en este proceso"
+msgstr "operation unavailable in this process"
 
 #: src/internal/admin/routes_pki_helper.go
 msgid "operación no permitida"
@@ -6930,6 +7593,10 @@ msgstr "Sort by"
 msgid "Origen"
 msgstr "Source"
 
+#: src/internal/headscalecontrol/spec.go
+msgid "origen API del coordinador inválido"
+msgstr "invalid coordinator API origin"
+
 #: src/internal/pki/peer_http.go
 msgid "origen de CA inválido"
 msgstr "invalid CA origin"
@@ -6938,9 +7605,21 @@ msgstr "invalid CA origin"
 msgid "origen de catálogo inválido"
 msgstr "invalid catalog origin"
 
+#: src/internal/headscalecontrol/document.go
+msgid "origen del coordinador no válido o con credenciales"
+msgstr "invalid coordinator origin or credentials in its URL"
+
 #: src/internal/admin/panel.html
 msgid "Origen HTTPS (opcional)"
 msgstr "HTTPS origin (optional)"
+
+#: src/config_validate.go
+msgid "origen HTTPS del controlador Headscale inválido"
+msgstr "invalid Headscale controller HTTPS origin"
+
+#: src/admin_schema.go
+msgid "Origen HTTPS del Gateway controlador"
+msgstr "Controller Gateway HTTPS origin"
 
 #: src/internal/admin/routes_identity.go
 msgid "origen inválido"
@@ -6958,6 +7637,10 @@ msgstr "Original file time (UTC)"
 #: src/internal/admin/panel.html
 msgid "Oscuro"
 msgstr "Dark"
+
+#: src/admin_schema.go
+msgid "Otro Gateway autorizado"
+msgstr "Another authorized Gateway"
 
 #: src/internal/state/sqlite_linux.go
 #: src/internal/state/sqlite_portable.go
@@ -7354,6 +8037,10 @@ msgstr "API policy saved in SQLite"
 msgid "Política guardada y recuperada de Headscale."
 msgstr "Policy saved and retrieved from Headscale."
 
+#: src/internal/admin/routes_headscale_control.go
+msgid "política Headscale no disponible"
+msgstr "Headscale policy unavailable"
+
 #: src/internal/admin/panel.html
 msgid "Política huJSON (ACLs, Grants, groups, tagOwners, hosts, SSH)"
 msgstr "huJSON policy (ACLs, Grants, groups, tagOwners, hosts, SSH)"
@@ -7578,6 +8265,14 @@ msgstr "scheduled: %v"
 msgid "Prometheus y exporters"
 msgstr "Prometheus and exporters"
 
+#: src/internal/headscalecontrol/disk_linux.go
+msgid "propietario de configuración Headscale inesperado"
+msgstr "unexpected Headscale configuration owner"
+
+#: src/internal/headscalecontrol/disk_linux.go
+msgid "propietario de registros Headscale inesperado"
+msgstr "unexpected Headscale records owner"
+
 #: src/internal/admin/panel.html
 msgid "Propietarios (usuarios o grupos)"
 msgstr "Owners (users or groups)"
@@ -7589,6 +8284,10 @@ msgstr "Tag owners"
 #: src/internal/admin/panel.html
 msgid "Propuesta (sin aplicar)"
 msgstr "Proposed policy (not applied)"
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "Propuesta:"
+msgstr "Proposal:"
 
 #: src/internal/admin/panel.html
 msgid "Proveedor (asistente)"
@@ -7840,6 +8539,10 @@ msgstr "Public only when publishing is enabled"
 msgid "Público; puede requerir activación"
 msgstr "Public; may require activation"
 
+#: src/internal/headscalecontrol/manager.go
+msgid "queda una recuperación local pendiente"
+msgstr "a local recovery remains pending"
+
 #: src/internal/admin/panel-policy-visual.js
 msgid "Quitar"
 msgstr "Remove"
@@ -7855,6 +8558,10 @@ msgstr "Remove favicon"
 #: src/internal/admin/panel.html
 msgid "Quitar logo"
 msgstr "Remove logo"
+
+#: src/internal/admin/panel.html
+msgid "Quién puede autenticarse en Headscale"
+msgstr "Who can authenticate with Headscale"
 
 #: src/internal/admin/panel.js
 msgid "Qué revisar: {p0}"
@@ -7951,9 +8658,41 @@ msgstr "Register pending CA"
 msgid "Registro de contenedores mediante HTTPS"
 msgstr "Container registry over HTTPS"
 
+#: src/internal/headscalecontrol/disk_linux.go
+msgid "registro de recuperación incompatible"
+msgstr "incompatible recovery registration"
+
+#: src/internal/headscalecontrol/disk_linux.go
+msgid "registro del controlador ambiguo"
+msgstr "ambiguous controller registration"
+
+#: src/internal/headscalecontrol/spec.go
+msgid "registro del controlador Headscale inválido"
+msgstr "invalid Headscale controller registration"
+
+#: src/internal/headscalecontrol/disk_linux.go
+msgid "registro del controlador inválido"
+msgstr "invalid controller registration"
+
 #: main.go
 msgid "registro inicializado; archivo=%s"
 msgstr "logging initialized; file=%s"
+
+#: src/internal/headscalecontrol/controller_linux.go
+msgid "registro local root"
+msgstr "local root registration"
+
+#: src/internal/headscalecontrol/model.go
+msgid "registro MagicDNS inválido: solo nombres completos y direcciones A/AAAA"
+msgstr "invalid MagicDNS record: only full names and A/AAAA addresses are supported"
+
+#: src/internal/headscalecontrol/model.go
+msgid "registro MagicDNS repetido"
+msgstr "repeated MagicDNS record"
+
+#: src/internal/admin/panel.html
+msgid "Registro nuevo"
+msgstr "New record"
 
 #: src/internal/admin/panel.html
 msgid "Registros"
@@ -7963,9 +8702,29 @@ msgstr "Logs"
 msgid "Registros A eliminados"
 msgstr "A records deleted"
 
+#: src/internal/admin/panel.html
+msgid "Registros A y AAAA del coordinador. Los registros estáticos se muestran de solo lectura."
+msgstr "Coordinator A and AAAA records. Static records are read-only."
+
+#: src/internal/admin/panel.html
+msgid "Registros adicionales de MagicDNS"
+msgstr "Additional MagicDNS records"
+
+#: src/internal/headscalecontrol/disk_linux.go
+msgid "registros ajenos modificados durante la recuperación"
+msgstr "external records changed during recovery"
+
 #: src/internal/admin/panel-policy-dns.js
 msgid "Registros copiados al portapapeles"
 msgstr "Records copied to clipboard"
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "Registros de solo lectura. El instalador del controlador debe autorizar un archivo extra_records_path para poder modificarlos."
+msgstr "Read-only records. The controller installer must authorize an extra_records_path file before they can be changed."
+
+#: src/internal/admin/panel.html
+msgid "Registros del archivo autorizado de Headscale"
+msgstr "Records in the authorized Headscale file"
 
 #: src/internal/admin/panel.html
 msgid "Registros del Gateway en tiempo real"
@@ -7979,6 +8738,14 @@ msgstr "DNS records in the configured zone; publishing without proxying. ACME us
 msgid "Registros generados. Descárgalos y sincronízalos con el archivo extra_records_path de Headscale."
 msgstr "Records generated. Download and sync them to Headscale’s extra_records_path file."
 
+#: src/internal/headscalecontrol/document.go
+msgid "registros MagicDNS estáticos no reconocidos"
+msgstr "unrecognized static MagicDNS records"
+
+#: src/internal/headscalecontrol/model.go
+msgid "regla Split DNS inválida"
+msgstr "invalid Split DNS rule"
+
 #: src/internal/admin/panel.html
 msgid "Reglas ACL"
 msgstr "ACL rules"
@@ -7991,6 +8758,10 @@ msgstr "Restart the process without running shell commands or entering passwords
 #: src/admin_restart.go
 msgid "reiniciando Gateway: %v"
 msgstr "restarting Gateway: %v"
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "Reiniciando Headscale"
+msgstr "Restarting Headscale"
 
 #: src/internal/admin/panel-experience.js
 msgid "Reiniciando… comprobando disponibilidad del panel."
@@ -8052,6 +8823,10 @@ msgstr "Requires the helper next to the executable and a graphical session on th
 msgid "Requiere PowerShell o CMD como administrador para el almacén de equipo. Comprueba la huella SHA-256:"
 msgstr "Requires PowerShell or CMD as administrator for the machine store. Verify the SHA-256 fingerprint:"
 
+#: src/internal/admin/panel-headscale-control.js
+msgid "Requiere reiniciar Headscale. El controlador comprueba el candidato aislado y restaura la configuración anterior si falla. El Gateway y sus servicios continúan ejecutándose."
+msgstr "Headscale must restart. The controller checks an isolated candidate and restores the previous configuration if it fails. The Gateway and its services continue running."
+
 #: src/internal/admin/routes_gateway_prefs.go
 msgid "requiere sesión interactiva admin"
 msgstr "requires interactive administrator session"
@@ -8059,6 +8834,14 @@ msgstr "requires interactive administrator session"
 #: src/internal/admin/routes_pki.go
 msgid "reservado a administración"
 msgstr "administrators only"
+
+#: src/internal/headscalecontrol/model.go
+msgid "resolutores globales inválidos o repetidos"
+msgstr "invalid or repeated global resolvers"
+
+#: src/internal/headscalecontrol/client.go
+msgid "respuesta ambigua del controlador Headscale"
+msgstr "ambiguous Headscale controller response"
 
 #: src/internal/pki/peer_http.go
 msgid "respuesta de federación demasiado grande"
@@ -8068,6 +8851,14 @@ msgstr "federation response too large"
 #: src/internal/network/manage.go
 msgid "respuesta de Headscale demasiado grande"
 msgstr "Headscale response too large"
+
+#: src/internal/headscalecontrol/client.go
+msgid "respuesta del controlador demasiado grande o incompleta"
+msgstr "controller response too large or incomplete"
+
+#: src/internal/headscalecontrol/client.go
+msgid "respuesta del controlador Headscale no válida"
+msgstr "invalid Headscale controller response"
 
 #: src/internal/templatelib/repository.go
 msgid "respuesta del repositorio demasiado grande"
@@ -8149,6 +8940,10 @@ msgstr "Offline restore"
 msgid "Restauración selectiva completada"
 msgstr "Selective restoration completed"
 
+#: src/internal/admin/panel-headscale-control.js
+msgid "Restaurando la configuración anterior"
+msgstr "Restoring the previous configuration"
+
 #: src/internal/admin/panel-backups.js
 msgid "Restaurar ACL"
 msgstr "Restore ACL"
@@ -8169,6 +8964,18 @@ msgstr "Restore from panel"
 #: src/internal/admin/panel.html
 msgid "Restaurar reinicia el mismo proceso en modo seguro, verifica el cifrado y los SHA-256 y conserva una copia de los ficheros anteriores. ACL y DNS remotos se exportan pero NO se reaplican automáticamente al VPS. La restauración de TODO sustituye el data_dir local."
 msgstr "Restore restarts the same process in safe mode, verifies encryption and SHA-256, and preserves a copy of previous files. Remote ACL and DNS are exported but NOT automatically reapplied to the VPS. Restoring ALL replaces the local data_dir."
+
+#: src/internal/admin/panel.html
+msgid "Restricciones de autenticación OIDC"
+msgstr "OIDC authentication restrictions"
+
+#: src/internal/headscalecontrol/document.go
+msgid "restricciones OIDC de Headscale no reconocidas"
+msgstr "unrecognized Headscale OIDC restrictions"
+
+#: src/internal/headscalecontrol/model.go
+msgid "restricción OIDC vacía, repetida o inválida"
+msgstr "empty, repeated or invalid OIDC restriction"
 
 #: src/internal/admin/panel.html
 msgid "Resultado"
@@ -8215,6 +9022,10 @@ msgstr "OS removal completed."
 msgid "Retirada del SO pendiente: {p0} {p1}"
 msgstr "OS removal pending: {p0} {p1}"
 
+#: src/internal/admin/panel-headscale-control.js
+msgid "Retirar del borrador"
+msgstr "Remove from draft"
+
 #: src/internal/admin/panel-pki.js
 msgid "Retirar del SO"
 msgstr "Remove from OS"
@@ -8231,6 +9042,11 @@ msgstr "OIDC callback"
 msgid "Reutiliza los gateways aprobados en CA y confianza. La consulta verifica HTTPS y usa la identidad tsnet de este Gateway para destinos Tailnet. La conexión de cada visitante puede tener otras ACL."
 msgstr "Reuses gateways approved in CA and trust. Queries verify HTTPS and use this Gateway's tsnet identity for Tailnet destinations. Each visitor's connection may have different ACLs."
 
+#: src/internal/admin/panel.html
+msgid "Reutiliza tsnet del controlador y respeta las ACL. Una versión no disponible o antigua se indica con su fecha; no se instala software en los otros nodos."
+msgstr "Reuses the controller's tsnet and respects ACLs. Unavailable or old versions show their observation time; no software is installed on other nodes."
+
+#: src/internal/admin/panel-headscale.js
 #: src/internal/admin/panel.html
 msgid "Reutilizable"
 msgstr "Reusable"
@@ -8252,6 +9068,10 @@ msgid "Revisa los permisos de entrada de la LAN antes de publicar servicios o ha
 msgstr "Review LAN inbound permissions before publishing services or enabling discovery."
 
 #: src/internal/admin/panel.html
+msgid "Revisar cambios DNS"
+msgstr "Review DNS changes"
+
+#: src/internal/admin/panel.html
 msgid "Revisar cortafuegos en Configuración"
 msgstr "Review firewall in Settings"
 
@@ -8264,8 +9084,20 @@ msgid "Revisar perfil o importar copia"
 msgstr "Review profile or import backup"
 
 #: src/internal/admin/panel.html
+msgid "Revisar registros"
+msgstr "Review records"
+
+#: src/internal/admin/panel.html
+msgid "Revisar restricciones"
+msgstr "Review restrictions"
+
+#: src/internal/admin/panel.html
 msgid "Revisar solicitudes"
 msgstr "Review requests"
+
+#: src/internal/admin/panel.html
+msgid "Revisión antes de aplicar"
+msgstr "Review before applying"
 
 #: src/internal/admin/panel-pki.js
 msgid "Revocar autorización"
@@ -8343,13 +9175,25 @@ msgstr "Path to gateway.sqlite"
 msgid "ruta de log no es un archivo regular: %s"
 msgstr "log path is not a regular file: %s"
 
+#: src/internal/headscalecontrol/spec.go
+msgid "ruta del controlador Headscale inválida"
+msgstr "invalid Headscale controller path"
+
 #: src/internal/forgejostore/store.go
 msgid "ruta del repositorio Forgejo inválida"
 msgstr "Invalid Forgejo repository path"
 
+#: src/internal/headscalecontrol/files_linux.go
+msgid "ruta local no canónica"
+msgstr "non-canonical local path"
+
 #: src/internal/pki/system_linux.go
 msgid "ruta no gestionada"
 msgstr "unmanaged path"
+
+#: src/internal/headscalecontrol/spec.go
+msgid "ruta opcional del controlador Headscale inválida"
+msgstr "invalid optional controller path"
 
 #: src/internal/admin/panel.html
 msgid "Ruta relativa"
@@ -8445,6 +9289,14 @@ msgstr "Gateway will restart. The backup will be fully verified and previous fil
 msgid "se requiere administrador"
 msgstr "administrator required"
 
+#: src/internal/headscalecontrol/http.go
+msgid "se requiere JSON"
+msgstr "JSON is required"
+
+#: src/config_validate.go
+msgid "se requiere la huella SHA-256 de una CA aprobada del controlador"
+msgstr "the SHA-256 fingerprint of an approved controller CA is required"
+
 #: src/internal/portal/model.go
 msgid "se requiere PNG de hasta 1024 por 1024 píxeles"
 msgstr "PNG up to 1024 by 1024 pixels required"
@@ -8453,9 +9305,21 @@ msgstr "PNG up to 1024 by 1024 pixels required"
 msgid "Se requiere un objeto JSON"
 msgstr "A JSON object is required"
 
+#: src/config_validate.go
+msgid "se requiere un token delegado del controlador Headscale"
+msgstr "a delegated Headscale controller token is required"
+
 #: src/internal/pki/trust.go
 msgid "se requiere un único certificado PEM, sin claves privadas"
 msgstr "a single PEM certificate is required, without private keys"
+
+#: src/internal/headscalecontrol/document.go
+msgid "se requiere un único documento YAML Headscale"
+msgstr "a single Headscale YAML document is required"
+
+#: src/admin_headscale_control.go
+msgid "se requiere una CA aprobada y vinculada al Gateway controlador"
+msgstr "an approved CA bound to the controller Gateway is required"
 
 #: src/internal/admin/routes_identity.go
 msgid "se requiere una sesión administrativa interactiva"
@@ -8508,6 +9372,10 @@ msgstr "Select at least one component."
 #: src/internal/admin/panel-forgejo.js
 msgid "Selecciona el archivo que quieres recuperar."
 msgstr "Select the file you want to recover."
+
+#: src/internal/admin/panel.html
+msgid "Selecciona el modo de administración en Configuración → Control de Headscale."
+msgstr "Select the management mode in Settings → Headscale control."
 
 #: src/internal/admin/panel.html
 msgid "Selecciona exactamente lo que deseas proteger. SQLite incluye siempre la clave maestra. «Todo» incluye"
@@ -8697,9 +9565,21 @@ msgstr "Session: {p0}"
 msgid "Sesión: {p0} · conectado"
 msgstr "Session: {p0} · connected"
 
+#: src/admin_schema.go
+msgid "SHA-256 de una CA aprobada en CA y confianza y vinculada al Gateway controlador."
+msgstr "SHA-256 of a CA approved in CA and trust and bound to the controller Gateway."
+
 #: src/internal/admin/panel.html
 msgid "Si activas el descubrimiento LAN entre Gateways, también debes permitir UDP 47991 en la red privada, solo para los equipos de confianza. La sincronización de CA sigue requiriendo aprobación manual."
 msgstr "If you enable LAN discovery between Gateways, also allow UDP 47991 on the private network, restricted to trusted computers. CA synchronization still requires manual approval."
+
+#: src/internal/admin/panel.html
+msgid "Si configuras varios filtros, deben cumplirse todos. Dentro de la lista de grupos basta pertenecer a uno. Estas reglas no conceden el rol administrador del Gateway ni sustituyen la revocación de nodos o claves."
+msgstr "All configured filters must match. Within the groups list, membership of one group is enough. These rules do not grant the Gateway administrator role or replace node or key revocation."
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "Si configuras varios filtros, deben cumplirse todos. Una lista vacía desactiva ese filtro. No concede administración del Gateway ni revoca nodos o claves existentes."
+msgstr "All configured filters must match. An empty list disables that filter. This does not grant Gateway administration or revoke existing nodes or keys."
 
 #: src/internal/admin/panel-experience.js
 msgid "Si Headscale responde, añade la política ACL y los registros DNS como instantáneas. No incluye el YAML del servidor VPS."
@@ -8797,9 +9677,17 @@ msgstr "Direct Syncthing synchronization"
 msgid "sincronización DNS fallida, configuración anterior conservada: %w"
 msgstr "DNS synchronization failed; previous configuration kept: %w"
 
+#: src/internal/admin/panel-headscale-control.js
+msgid "Sincronización en curso"
+msgstr "Synchronization in progress"
+
 #: src/admin_template_transfer.go
 msgid "sincronización finalizada"
 msgstr "synchronization complete"
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "Sincronización parcial; algunos nodos no son visibles para tsnet"
+msgstr "Partial synchronization; some nodes are not visible to tsnet"
 
 #: internal/admin/routes_pki.go
 #: src/internal/admin/routes_pki.go
@@ -8812,8 +9700,13 @@ msgid "Sincronizando DNS del gateway..."
 msgstr "Synchronizing Gateway DNS..."
 
 #: src/internal/admin/panel-pki.js
+#: src/internal/admin/panel.html
 msgid "Sincronizar ahora"
 msgstr "Synchronize now"
+
+#: src/admin_schema.go
+msgid "Sincronizar información de los nodos"
+msgstr "Synchronize node information"
 
 #: src/internal/admin/panel-policy-visual.js
 msgid "Sintaxis huJSON válida. La validación definitiva de las reglas se realiza en Headscale al aplicar."
@@ -8865,6 +9758,10 @@ msgstr "Request reload"
 msgid "Solicitud de recarga enviada; consulte los logs del Gateway para confirmar el resultado"
 msgstr "Reload request sent; check Gateway logs to confirm the result"
 
+#: src/internal/headscalecontrol/client.go
+msgid "solicitud del controlador inválida"
+msgstr "invalid controller request"
+
 #: src/internal/forgejostore/store.go
 msgid "solicitud Forgejo inválida"
 msgstr "Invalid Forgejo request"
@@ -8904,6 +9801,10 @@ msgstr "Only administrators may manage ACL templates"
 #: src/admin_schema.go
 msgid "Solo CA local"
 msgstr "Local CA only"
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "Solo cambia el archivo dinámico de registros; no requiere reiniciar Headscale."
+msgstr "Only the dynamic records file changes; Headscale does not need to restart."
 
 #: src/admin_schema.go
 msgid "Solo el certificado público, nunca administración ni claves privadas. Requiere activar también Publicar CA en CA y confianza. Reinicio requerido."
@@ -8950,6 +9851,18 @@ msgstr "only one file allowed"
 #: src/internal/admin/panel.html
 msgid "Soporte"
 msgstr "Support"
+
+#: src/internal/admin/panel.html
+msgid "Split DNS"
+msgstr "Split DNS"
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "Split DNS: la zona está repetida o no tiene resolutores."
+msgstr "Split DNS: the zone is repeated or has no resolvers."
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "Split DNS: usa una regla por línea con el formato zona = resolutor, resolutor."
+msgstr "Split DNS: use one rule per line with the format zone = resolver, resolver."
 
 #: src/internal/policytemplates/services.go
 msgid "SQL Server"
@@ -9094,6 +10007,14 @@ msgid "Suscripción no activa. Contacta con el administrador del Gateway."
 msgstr "Subscription inactive. Contact the Gateway administrator."
 
 #: src/internal/admin/panel.html
+msgid "Sustituir los resolutores DNS locales de los clientes"
+msgstr "Override the clients' local DNS resolvers"
+
+#: src/internal/admin/panel-headscale.js
+msgid "Sí"
+msgstr "Yes"
+
+#: src/internal/admin/panel.html
 msgid "tag:server, tag:backup"
 msgstr "tag:server, tag:backup"
 
@@ -9199,6 +10120,10 @@ msgid "tipo de copia incompatible"
 msgstr "incompatible backup type"
 
 #: src/internal/admin/panel.html
+msgid "Tipo de dirección"
+msgstr "Address type"
+
+#: src/internal/admin/panel.html
 msgid "Tipo de prueba"
 msgstr "Test type"
 
@@ -9298,6 +10223,10 @@ msgstr "Technitium token"
 #: src/internal/admin/panel-security.js
 msgid "Token delegado creado. Guarda el secreto ahora."
 msgstr "Delegated token created. Save the secret now."
+
+#: src/admin_schema.go
+msgid "Token delegado de administración Headscale"
+msgstr "Delegated Headscale management token"
 
 #: src/admin_schema.go
 msgid "Token independiente, con permisos DNS Edit en esa zona."
@@ -9420,17 +10349,37 @@ msgstr "Single use. Expires 15 minutes from now."
 msgid "Un token necesita tanto un rol permitido como el alcance del módulo, y la API Bearer debe estar habilitada. Las operaciones marcadas como sesión interactiva no aceptan un token en su lugar. Las pruebas se ejecutan una vez, sin reintentos automáticos."
 msgstr "A token needs both an allowed role and the module scope, and the Bearer API must be enabled. Operations marked as interactive session do not accept a token instead. Requests run once, without automatic retries."
 
+#: src/internal/admin/panel-headscale.js
+msgid "Un uso"
+msgstr "Single use"
+
 #: src/internal/admin/panel.html
 msgid "Una asignación por línea:"
 msgstr "One mapping per line:"
+
+#: src/internal/admin/panel.html
+msgid "Una entrada por línea. Una lista vacía desactiva ese filtro. Se conservan el proveedor de identidad y su secreto."
+msgstr "One entry per line. An empty list disables that filter. The identity provider and its secret are preserved."
+
+#: src/internal/admin/panel.html
+msgid "Una IP o URL HTTPS de DNS por línea. Sustituir el DNS local requiere al menos uno."
+msgstr "One IP or HTTPS DNS URL per line. Overriding local DNS requires at least one."
 
 #: src/internal/admin/panel-policy-dns.js
 msgid "Una política {} permite todo el tráfico. ¿Confirmas el cambio?"
 msgstr "An empty {} policy permits all traffic. Confirm this change?"
 
+#: src/internal/admin/panel.html
+msgid "Una regla por línea: zona.example.test = 100.64.0.2, 100.64.0.3"
+msgstr "One rule per line: zona.example.test = 100.64.0.2, 100.64.0.3"
+
 #: src/startup_options.go
 msgid "unexpected startup JSON data"
 msgstr "unexpected startup JSON data"
+
+#: src/internal/admin/panel.html
+msgid "Uno por línea. Permiten completar los nombres cortos."
+msgstr "One per line. Used to complete short names."
 
 #: src/internal/admin/http_options.go
 msgid "unsupported base path header"
@@ -9443,6 +10392,10 @@ msgstr "URL to which the Gateway forwards requests. For remote Home Assistant: h
 #: src/internal/admin/panel.js
 msgid "URL administrativa"
 msgstr "Administration URL"
+
+#: src/admin_schema.go
+msgid "URL de administración privada del Gateway junto a Headscale, sin rutas. La conexión verifica TLS y utiliza sus direcciones LAN o Tailnet."
+msgstr "Private administrative URL of the Gateway alongside Headscale, without paths. The connection verifies TLS and uses its LAN or Tailnet addresses."
 
 #: src/internal/admin/panel.html
 msgid "URL de callback (HTTPS)"
@@ -9475,6 +10428,10 @@ msgstr "Technitium URL"
 #: src/dns_technitium.go
 msgid "URL de Technitium inválida"
 msgstr "Invalid Technitium URL"
+
+#: src/internal/headscalecontrol/document.go
+msgid "URL del coordinador no reconocida"
+msgstr "unrecognized coordinator URL"
 
 #: src/internal/admin/panel.html
 msgid "URL del repositorio"
@@ -9543,6 +10500,7 @@ msgstr "Use helper with system authorization"
 #: src/internal/admin/panel-backups.js
 #: src/internal/admin/panel-experience.js
 #: src/internal/admin/panel-forgejo.js
+#: src/internal/admin/panel-headscale-control.js
 #: src/internal/admin/panel-headscale.js
 #: src/internal/admin/panel-ops.js
 #: src/internal/admin/panel-pki.js
@@ -9559,8 +10517,16 @@ msgid "use strict"
 msgstr "use strict"
 
 #: src/internal/admin/panel.html
+msgid "Uso"
+msgstr "Usage"
+
+#: src/internal/admin/panel.html
 msgid "Uso y consideraciones de seguridad"
 msgstr "Usage and security considerations"
+
+#: src/internal/headscalecontrol/controller_linux.go
+msgid "uso: headscale-control --spec /etc/headscale-gateway-control/instancia.json"
+msgstr "usage: headscale-control --spec /etc/headscale-gateway-control/instancia.json"
 
 #: src/internal/pki/helper.go
 msgid "uso: install|uninstall SHA256 certificado-PEM-base64"
@@ -9590,9 +10556,17 @@ msgstr "User enabled by the configured local or LDAP method."
 msgid "Usuario local"
 msgstr "Local user"
 
+#: src/internal/headscalecontrol/controller_linux.go
+msgid "usuario local no autorizado"
+msgstr "unauthorized local user"
+
 #: src/internal/admin/auth_oidc.go
 msgid "Usuario OIDC no autorizado"
 msgstr "Unauthorized OIDC user"
+
+#: src/internal/headscalecontrol/model.go
+msgid "usuario OIDC: se requiere una dirección de correo completa"
+msgstr "OIDC user: a full email address is required"
 
 #: src/internal/admin/panel.html
 msgid "Usuario propietario (ID; opcional en versiones recientes)"
@@ -9639,6 +10613,10 @@ msgid "Usuarios de Headscale y claves para registrar dispositivos. Los grupos de
 msgstr "Headscale users and device registration keys. Access groups are edited in ACL Rules."
 
 #: src/internal/admin/panel.html
+msgid "Usuarios permitidos (correo completo)"
+msgstr "Allowed users (full email address)"
+
+#: src/internal/admin/panel.html
 msgid "Usuarios y claves"
 msgstr "Users and keys"
 
@@ -9676,6 +10654,10 @@ msgstr "using local CA until the next permitted retry"
 #: src/config_validate.go
 msgid "Validando configuración..."
 msgstr "Validating configuration..."
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "Validando una copia aislada"
+msgstr "Validating an isolated copy"
 
 #: src/internal/admin/panel.html
 msgid "Validar sintaxis / previsualizar"
@@ -9716,6 +10698,10 @@ msgstr "configuration value too large"
 #: src/admin_settings.go
 msgid "valor demasiado largo: %s"
 msgstr "Value too long: %s"
+
+#: src/internal/headscalecontrol/document.go
+msgid "valor Headscale no serializable"
+msgstr "Headscale value cannot be serialized"
 
 #: src/internal/admin/panel-reference.js
 msgid "Valor predeterminado"
@@ -9791,6 +10777,10 @@ msgstr "VPN connected"
 msgid "VPN del Gateway no disponible"
 msgstr "Gateway VPN unavailable"
 
+#: src/admin_headscale_control.go
+msgid "VPN no disponible"
+msgstr "VPN unavailable"
+
 #: src/vpn_supervisor.go
 #: vpn_supervisor.go
 msgid "VPN no disponible: %v"
@@ -9853,9 +10843,21 @@ msgstr "A restart is already scheduled"
 msgid "Ya existe una plantilla con ese ID; elige otro nombre"
 msgstr "A template with this ID already exists; choose a different one"
 
+#: src/internal/headscalecontrol/manager.go
+msgid "ya hay un cambio Headscale en curso"
+msgstr "a Headscale change is already in progress"
+
+#: src/internal/headscalecontrol/controller_linux.go
+msgid "ya hay un controlador para esta instancia"
+msgstr "a controller already exists for this instance"
+
 #: src/admin_portal.go
 msgid "ya hay una actualización de catálogos en curso"
 msgstr "a catalog refresh is already running"
+
+#: src/internal/headscalecontrol/document.go
+msgid "YAML Headscale inválido o ambiguo"
+msgstr "invalid or ambiguous Headscale YAML"
 
 #: src/admin_schema.go
 msgid "Zona DNS"
@@ -9978,6 +10980,10 @@ msgstr "Download and import templates from the repository{p0}?"
 msgid "¿Descargar plantillas a la base de datos? No se aplicarán a Headscale."
 msgstr "Download templates into the database? They will not be applied to Headscale."
 
+#: src/internal/admin/panel-headscale-control.js
+msgid "¿Descartar los borradores y leer la configuración actual?"
+msgstr "Discard drafts and read the current configuration?"
+
 #: src/internal/admin/panel-pki.js
 msgid "¿Eliminar CA pendiente?"
 msgstr "Delete pending CA?"
@@ -10073,6 +11079,14 @@ msgstr "Last query:"
 #: src/internal/admin/panel-backups.js
 msgid "Última copia: {p0} · {p1} · {p2} MiB · {p3} copias disponibles"
 msgstr "Latest backup: {p0} · {p1} · {p2} MiB · {p3} available backups"
+
+#: src/internal/admin/panel.html
+msgid "Última observación"
+msgstr "Last observation"
+
+#: src/internal/admin/panel-headscale-control.js
+msgid "Última sincronización:"
+msgstr "Last synchronization:"
 
 #: src/internal/admin/panel.html
 msgid "Última verificación"

@@ -80,6 +80,8 @@ var ErrNetworkDisabled = errors.New("panel de red desactivado")
 var ErrAlreadyReplied = errors.New("respuesta enviada")
 
 type adminRoleKey struct{}
+type tokenRequestKey struct{}
+type tokenScopesKey struct{}
 
 func (s *Server) isAdminRequest(r *http.Request) bool {
 	return r.Context().Value(adminRoleKey{}) == "admin"
@@ -156,6 +158,7 @@ func (s *Server) recoveryTokenMatches(header string) bool {
 func (s *Server) secure(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		actor, role, tokenAuth := "", "", false
+		var grantedScopes []string
 		header := r.Header.Get("Authorization")
 		if s.recoveryTokenMatches(header) {
 			actor, role, tokenAuth = "recovery-token", "admin", true
@@ -170,6 +173,7 @@ func (s *Server) secure(next http.HandlerFunc) http.HandlerFunc {
 				return
 			}
 			role, actor, tokenAuth = info.Role, "api:"+info.ID, true
+			grantedScopes = append([]string(nil), info.Scopes...)
 			// Los alcances del token siempre limitan el rol; no se confía en alcances del cliente.
 			allowed := false
 			for _, scope := range info.Scopes {
@@ -193,6 +197,8 @@ func (s *Server) secure(next http.HandlerFunc) http.HandlerFunc {
 		}
 		category := routeCategory(r)
 		r = r.WithContext(context.WithValue(r.Context(), adminRoleKey{}, role))
+		r = r.WithContext(context.WithValue(r.Context(), tokenRequestKey{}, tokenAuth))
+		r = r.WithContext(context.WithValue(r.Context(), tokenScopesKey{}, grantedScopes))
 		if r.URL.Path == "/api/v1/auth/session" && tokenAuth {
 			reply(w, 200, map[string]any{"authenticated": true, "user": actor, "role": role}, nil)
 			return

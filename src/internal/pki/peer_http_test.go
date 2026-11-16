@@ -20,12 +20,12 @@ import (
 
 func TestNetworkPlanPrefersTailnetCorrectPortAndPinsLAN(t *testing.T) {
 	u, _ := url.Parse("https://node.test:8443")
-	targets, err := planIPs(u, []string{"192.168.1.71", "100.64.0.13", "127.0.0.1", "8.8.8.8", "100.64.0.13"})
+	targets, err := planIPs(u, []string{"192.168.50.71", "100.64.0.13", "127.0.0.1", "8.8.8.8", "100.64.0.13"})
 	if err != nil || len(targets) != 2 || targets[0].Origin != "https://node.test" || targets[0].IP != "100.64.0.13" || targets[1].Origin != "https://node.test:8443" {
 		t.Fatal(targets, err)
 	}
 	u, _ = url.Parse("https://node.test")
-	targets, _ = planIPs(u, []string{"192.168.1.71"})
+	targets, _ = planIPs(u, []string{"192.168.50.71"})
 	if targets[0].Origin != "https://node.test:8443" {
 		t.Fatal(targets)
 	}
@@ -128,7 +128,7 @@ func TestCAOnlyBootstrapAndNoAutomaticTrust(t *testing.T) {
 func TestCADownloadFallsBackToLANWithoutApproval(t *testing.T) {
 	ca := rootForTest(t, true)
 	order := []string{}
-	targets := []Target{{Origin: "https://node.test", IP: "100.64.0.13", Network: "Tailnet"}, {Origin: "https://node.test:8443", IP: "192.168.1.71", Network: "LAN"}}
+	targets := []Target{{Origin: "https://node.test", IP: "100.64.0.13", Network: "Tailnet"}, {Origin: "https://node.test:8443", IP: "192.168.50.71", Network: "LAN"}}
 	get := func(ctx context.Context, tg Target, path, roots string, pending bool, dial PeerDial, limit int64) ([]byte, error) {
 		order = append(order, tg.Network+" "+tg.Origin)
 		if !pending || roots != "" || path != "/pki/v1/public-ca" {

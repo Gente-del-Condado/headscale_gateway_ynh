@@ -10,14 +10,15 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 DIRECTORIES = {'src', 'android', 'tools', 'tests', 'docs', 'examples',
-               'packaging', 'custom_components', 'addons', 'yunohost', '.forgejo', '.github'}
-ROOT_FILES = {'README.md', 'CONTRIBUTING.md', 'LICENSE', 'NOTICE', 'VERSION',
-              '.gitignore', '.gitattributes', 'hacs.json', 'git-install-manifest.json',
+               'packaging', 'custom_components', 'addons', 'yunohost', '.github'}
+ROOT_FILES = {'README.md', 'CONTRIBUTING.md', 'CHANGELOG.md', 'LICENSE', 'NOTICE', 'VERSION',
+              '.gitignore', '.gitattributes', '.gitleaks.toml', 'hacs.json', 'git-install-manifest.json',
               'build.sh', 'build.ps1', 'AGENTS.md', 'mkdocs.yml', 'requirements-docs.txt'}
 CACHE = {'node_modules', '__pycache__', '.pytest_cache', '.gradle', '.kotlin', '.cxx', '.git', '.cache', '.idea', '.vscode'}
 RELEASE_FILES = {'headscale-gateway-debug.apk', 'headscale-gateway-debug.apk.sha256',
                  'headscale-gateway-release.apk', 'headscale-gateway-release.apk.sha256', 'VALIDACION.txt'}
-PRIVATE_SUFFIXES = ('.sqlite', '.sqlite-wal', '.sqlite-shm', '.key', '.pfx', '.p12', '.jks', '.keystore', '.hgw', '.hgwcfg', '.log', '.license', '.pyc', '.next', '.bak')
+PRIVATE_SUFFIXES = ('.sqlite', '.sqlite-wal', '.sqlite-shm', '.key', '.pfx', '.p12', '.jks', '.keystore', '.hgw', '.hgwcfg', '.log', '.license', '.pyc', '.next', '.bak', '.sqlite3', '.password')
+PRIVATE_NAMES = {'.env', 'credentials.json', 'signing.json', 'tailscaled.state'}
 SECRET = re.compile(rb'hskey-(?:auth|api)-[A-Za-z0-9_-]{20,}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----\s+[A-Za-z0-9+/=\r\n]{100,}-----END')
 
 
@@ -63,7 +64,7 @@ def source_files(include_releases=False):
             continue
         if 'android/src/main/assets/licenses' in str(rel) or rel == Path('android/src/main/assets/avisos.txt'):
             continue
-        if p.name in ('local.properties', '.env', 'master.key') or p.name.startswith('.env.') or p.name.endswith(PRIVATE_SUFFIXES):
+        if p.name in PRIVATE_NAMES or p.name in ('local.properties', 'master.key') or p.name.startswith('.env.') or p.name.endswith(PRIVATE_SUFFIXES):
             raise ValueError('Estado privado dentro de las fuentes: ' + str(rel))
         if rel.parts[0] in ('addons', 'yunohost') and str(rel) not in generated:
             raise ValueError('Archivo instalable ajeno al manifiesto: ' + str(rel))

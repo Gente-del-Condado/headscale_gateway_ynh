@@ -43,6 +43,7 @@
   }));
   $('hs-policy-save').addEventListener('click', () => run(async () => {
     if (!revision || revision === 'missing' || currentRole !== 'admin') return;
+    if(typeof headscaleCanWrite==='function'&&!await headscaleCanWrite())throw Error(translate('La delegación del controlador es de solo lectura.'));
     const policy = $('hs-policy-editor').value;
     if (!policy.trim()) throw Error(translate('No se permite guardar una política vacía'));
     if (new TextEncoder().encode(policy).length > 100 * 1024) throw Error(translate('La política supera 100 KiB'));

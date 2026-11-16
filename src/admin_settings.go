@@ -32,16 +32,18 @@ func (a *adminController) Settings(_ context.Context) (any, error) {
 			values[k] = v
 		}
 	}
-	for _, k := range []string{"headscale.api_key", "dns.technitium.token", "dns.cloudflare.token", "acme.cloudflare.token"} {
+	for k := range secretSettings {
 		values[k] = ""
 	}
 	return values, nil
 }
 
 var allowedSettings = map[string]bool{
-	"headscale.node_name": true,
-	"pki.discovery_port":  true,
-	"pki.http_enabled":    true, "pki.http_listen_addr": true, "pki.allow_http_download": true,
+	"headscale.node_name":    true,
+	"headscale.control.mode": true, "headscale.control.origin": true, "headscale.control.fingerprint": true, "headscale.control.token": true,
+	"headscale.agent.enabled": true,
+	"pki.discovery_port":      true,
+	"pki.http_enabled":        true, "pki.http_listen_addr": true, "pki.allow_http_download": true,
 	"server.listen_addr": true, "domain.base_domain": true, "headscale.url": true,
 	"headscale.api_key": true, "headscale.panel_enabled": true, "dns.provider": true,
 	"dns.zone": true, "dns.technitium.url": true, "dns.technitium.token": true,
@@ -53,7 +55,7 @@ var allowedSettings = map[string]bool{
 	"admin.enabled": true, "admin.listen_addr": true,
 	"admin.domain_mode": true, "admin.subdomain": true,
 }
-var secretSettings = map[string]bool{"headscale.api_key": true, "dns.technitium.token": true, "dns.cloudflare.token": true, "acme.cloudflare.token": true}
+var secretSettings = map[string]bool{"headscale.api_key": true, "dns.technitium.token": true, "dns.cloudflare.token": true, "acme.cloudflare.token": true, "headscale.control.token": true}
 
 func (a *adminController) UpdateSettings(_ context.Context, changes map[string]string) error {
 	a.runtime.transitionMu.Lock()

@@ -8,6 +8,7 @@ func (s *Server) registerAPIRoutes(mux routeRegistrar) {
 	s.registerGatewayPrefsRoutes(mux)
 	s.registerHeadscaleManagementRoutes(mux)
 	s.registerHeadscalePolicyDNSRoutes(mux)
+	s.registerHeadscaleControlRoutes(mux)
 	s.registerPolicyTemplateRoutes(mux)
 	s.registerGatewayRoutes(mux)
 	s.registerConfigurationTransferRoutes(mux)

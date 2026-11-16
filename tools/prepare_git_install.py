@@ -29,7 +29,7 @@ def files_under(directory):
 def input_hashes(root):
     files = [p for p in (root / 'src').glob('*.go') if not p.name.endswith('_test.go')]
     for name in ('src/internal', 'packaging/homeassistant', 'packaging/yunohost',
-                 'packaging/common', 'src/third_party/go', 'src/third_party/go-toolchain'):
+                 'packaging/common', 'packaging/linux/native', 'src/third_party/go', 'src/third_party/go-toolchain'):
         files.extend(p for p in files_under(root / name) if not p.name.endswith(('_test.go', '.test.cjs', '.pyc')))
     files.extend(root / name for name in ('VERSION', 'src/go.mod', 'src/go.sum', 'src/VERSION', 'LICENSE', 'NOTICE',
                  'src/third_party/inventory.json', 'tools/package_platforms.py', 'tools/prepare_git_install.py',

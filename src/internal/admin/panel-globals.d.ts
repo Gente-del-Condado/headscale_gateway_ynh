@@ -1,6 +1,8 @@
 // Tipos para las propiedades creadas por los scripts clásicos del panel.
 // Solo se usan durante el análisis de JavaScript por el editor/TypeScript.
 interface Window {
+  refreshHeadscaleControl?: () => Promise<void>;
+  clearHeadscaleControl?: () => void;
   gatewayURL: (path: string) => string;
   preparePolicyEditor?: () => Promise<void>;
   hgwOriginalACL?: string;

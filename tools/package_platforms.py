@@ -100,6 +100,7 @@ def export(output, archives=True):
         # El icono cuadrado existente sirve también para las fichas de YunoHost.
         shutil.copy2(ROOT / 'packaging/homeassistant/icon.png', ynh / 'doc/logo.png')
         shutil.copy2(ROOT / 'packaging/common/hgw_bootstrap.py', ynh / 'conf/hgw_bootstrap.py')
+        shutil.copy2(ROOT / 'packaging/linux/native/headscale-gateway-setup-headscale', ynh / 'conf/setup-headscale')
         payload = ynh / 'payload'
         payload.mkdir()
         # Los binarios públicos siempre viajan con las mismas fuentes que usa HA.

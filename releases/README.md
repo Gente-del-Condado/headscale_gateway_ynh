@@ -1,40 +1,21 @@
-# Entregas
+# Resultados locales de entrega
 
-Las entregas se generan en carpetas nuevas, sin datos de instalaciones. Esta
-carpeta está ignorada por Git salvo este índice. La versión común es `VERSION`;
-las etiquetas nuevas utilizan `vX.Y.Z` y nunca se mueve una etiqueta publicada.
+Esta carpeta es un destino de trabajo, no una fuente ni un repositorio de
+copias. Solo este README está versionado. Los instaladores actuales se obtienen
+en [las descargas públicas](https://github.com/Gente-del-Condado/headscale_gateway_releases/releases).
 
-```sh
-python3 tools/build_release.py
-python3 tools/package_release.py --output releases/candidate
-python3 tools/package_platforms.py --output releases/plataformas-candidate
-```
+La entrega normal se construye en el compilador público de GitHub desde una
+release estable de Forgejo. No prepara ni almacena los adjuntos en YunoHost.
+Consulta [Publicación](../docs/PUBLICACION.md).
 
-Los servidores cubren Linux, Windows y macOS en amd64/arm64. Para añadir los
-clientes de bandeja Windows/Linux x64, ejecuta antes `npm ci` y
-`npm run pack:all` desde `src/desktop/`. Cada escritorio conserva los fuentes
-correspondientes de Electron/Chromium/FFmpeg, parches, avisos y sumas en `legal/`.
-Estos fuentes ocupan varios GiB: no se retiran para reducir el tamaño de descarga.
-El empaquetador rechaza servidores cuya versión o huella de fuentes sea antigua.
+Para una comprobación local puntual, crea una carpeta nueva en `builds/` y sigue
+la guía de la plataforma. No renombres binarios antiguos para aparentar otra
+versión: los empaquetadores comprueban versión, origen y sumas.
 
-Android utiliza el motor Go común: el APK directo lleva una firma estable,
-el APK para F-Droid queda sin firmar y Play recibe un AAB de subida. Consulta
-[los canales](../packaging/android/README.md). La variante `.lab` y los APK
-`.dev` son solo de pruebas y no forman parte de la entrega estable.
+Los fuentes correspondientes de Electron, Chromium y FFmpeg y sus avisos se
+conservan junto a los instaladores distribuidos. Una copia histórica que debas
+mantener se guarda fuera del árbol de desarrollo, en un archivo protegido.
+Las claves de firma y los datos de instalaciones nunca se guardan aquí.
 
-Antes de adjuntar una entrega, comprueba `SHA256SUMS`, los informes Android,
-los manifiestos y los resultados reales de las pruebas. Si el servidor limita
-los adjuntos, crea un TAR de la entrega completa y usa `tools/split_release.py`;
-publica también sus sumas y las instrucciones para unir las partes en orden.
-No renombres ni dividas archivos a mano sin verificar su reconstrucción.
-
-Las guías de plataforma y los paquetes instalables se mantienen en `packaging/`
-y se generan en `addons/` y `yunohost/`. Los comandos locales de este índice no
-publican ni instalan nada por sí solos. El flujo de main publica Mis_app_ha,
-YunoHost, los fuentes públicos y los manuales después de sus controles.
-
-Las compilaciones grandes se ejecutan en GitHub con **Preparar entrega completa**.
-**Preparar borrador de release** valida sus artefactos y la calidad de `main`,
-incorpora los fuentes actuales y verifica las descargas en el principal privado
-de GitHub. Android se firma con la identidad existente fuera de Actions antes
-de completar la entrega. Consulta [Git y entregas](../docs/MIGRACION_REPOSITORIO.md).
+Preparar, compilar o crear un commit local no autoriza publicar. Si se pide
+preparar sin subir, no se crean etiquetas, releases ni cambios remotos.

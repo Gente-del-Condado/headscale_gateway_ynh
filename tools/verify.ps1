@@ -2,6 +2,10 @@
 $ErrorActionPreference = 'Stop'
 Set-Location (Join-Path $PSScriptRoot '..')
 
+python tools/check_repository.py
+if ($LASTEXITCODE -ne 0) { throw 'Estructura inválida' }
+python tools/check_privacy.py
+if ($LASTEXITCODE -ne 0) { throw 'Revisar privacidad de fuentes' }
 python tools/reference_catalog.py --check
 if ($LASTEXITCODE -ne 0) { throw 'Referencia desactualizada' }
 python tools/check_i18n.py

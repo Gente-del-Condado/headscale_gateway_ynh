@@ -16,7 +16,8 @@ y necesita un Gateway al que conectarse.
 Las fuentes se mantienen en el principal privado de
 [Forgejo](https://gentedelcondado.es/forgejo/wolfbelmi88/headscale_gateway), que
 replica en [GitHub](https://github.com/Gente-del-Condado/headscale_gateway).
-Actions prueba la revisión y publica esta aplicación en la tienda, conservando
+El compilador público `headscale_gateway_releases` lee una release estable de
+Forgejo, prueba su commit exacto y publica esta aplicación en la tienda, conservando
 las demás. No edites la copia generada de la tienda.
 
 Necesita un servidor Headscale existente. Para instalarlo desde tu Forgejo

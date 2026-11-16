@@ -99,6 +99,18 @@ permitir instalar desde un clon privado. Se generan desde `src/` y `packaging/`.
 La plantilla Home Assistant es `config.yaml.in`, que se convierte en
 `config.yaml` dentro del complemento instalable.
 
+## Continuar el desarrollo
+
+Empieza por [la guía para desarrolladores nuevos](docs/EMPEZAR_DESARROLLO.md).
+Explica el entorno mínimo, las pruebas sin credenciales y un panel de laboratorio
+con datos fuera del clon. El [estado de la siguiente entrega](docs/ESTADO_DESARROLLO.md)
+indica qué está preparado, validado o pendiente; el [historial de cambios](CHANGELOG.md)
+no sustituye la comprobación de las releases publicadas.
+
+Los agentes de IA deben leer [AGENTS.md](AGENTS.md), respetar los contratos del
+motor compartido y el alcance autorizado. [Privacidad y limpieza](docs/SEGURIDAD.md)
+explica cómo evitar que datos de instalaciones entren en Git o en las distribuciones.
+
 ## Preparar el desarrollo
 
 Requisitos comunes del motor y sus verificaciones:
@@ -166,3 +178,11 @@ Consulta [licencias](docs/LICENCIAS.md) antes de preparar una distribución.
 
 Autor: **Gente del Condado**. Soporte: [headscale-gateway@gentedelcondado.es](mailto:headscale-gateway@gentedelcondado.es).
 [Manual en línea](https://gente-del-condado.github.io/headscale_gateway_ynh/).
+
+## Administración del coordinador Headscale
+
+El motor y el panel comunes incorporan gestión local o delegada del coordinador:
+DNS de la Tailnet, restricciones OIDC, registros dinámicos y observación de nodos.
+Consulta [Control de Headscale](docs/CONTROL_HEADSCALE.md) para registrar el ayudante
+local, delegar permisos y conocer sus límites. Todas las plataformas comparten la
+interfaz; YunoHost añade su adaptación de instalación.

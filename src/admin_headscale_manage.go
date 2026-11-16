@@ -10,8 +10,15 @@ import (
 	"github.com/gentedelcondado/headscale-gateway/internal/network"
 )
 
-func (a *adminController) headscaleAdmin() (network.HeadscaleAdmin, error) {
+func (a *adminController) headscaleAdmin(ctx context.Context) (network.HeadscaleAdmin, error) {
 	cfg := a.runtime.currentConfig()
+	if cfg.HeadscaleControlMode == "local" {
+		client, e := a.headscaleControlClient(ctx)
+		if e != nil {
+			return network.HeadscaleAdmin{}, e
+		}
+		client.Close()
+	}
 	if !cfg.NetworkPanelEnabled {
 		return network.HeadscaleAdmin{}, admin.ErrNetworkDisabled
 	}
@@ -24,14 +31,30 @@ func (a *adminController) headscaleAdmin() (network.HeadscaleAdmin, error) {
 	return network.HeadscaleAdmin{BaseURL: cfg.HeadscaleURL, APIKey: cfg.HeadscaleAPIKey}, nil
 }
 func (a *adminController) HeadscaleUsers(ctx context.Context) (any, error) {
-	h, err := a.headscaleAdmin()
+	if a.runtime.currentConfig().HeadscaleControlMode == "remote" {
+		c, e := a.headscaleControlClient(ctx)
+		if e != nil {
+			return nil, e
+		}
+		defer c.Close()
+		return c.Users(ctx)
+	}
+	h, err := a.headscaleAdmin(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return h.Users(ctx)
 }
 func (a *adminController) HeadscalePreAuthKeys(ctx context.Context) (any, error) {
-	h, err := a.headscaleAdmin()
+	if a.runtime.currentConfig().HeadscaleControlMode == "remote" {
+		c, e := a.headscaleControlClient(ctx)
+		if e != nil {
+			return nil, e
+		}
+		defer c.Close()
+		return c.PreAuthKeys(ctx)
+	}
+	h, err := a.headscaleAdmin(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +79,15 @@ func (a *adminController) HeadscalePreAuthKeys(ctx context.Context) (any, error)
 	return map[string]any{"preAuthKeys": keys}, nil
 }
 func (a *adminController) HeadscaleManage(ctx context.Context, cmd admin.HeadscaleAction) (any, error) {
-	h, err := a.headscaleAdmin()
+	if a.runtime.currentConfig().HeadscaleControlMode == "remote" {
+		c, e := a.headscaleControlClient(ctx)
+		if e != nil {
+			return nil, e
+		}
+		defer c.Close()
+		return c.Manage(ctx, cmd)
+	}
+	h, err := a.headscaleAdmin(ctx)
 	if err != nil {
 		return nil, err
 	}

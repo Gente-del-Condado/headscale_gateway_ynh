@@ -105,7 +105,7 @@ app.whenReady().then(async()=>{try{
 
  await win.webContents.executeJavaScript(`(async()=>{
  const tick=()=>new Promise(r=>setTimeout(r,200));let writes=[];
- api=async(p,m,b)=>{if(p==='pki/discover')return {candidates:[{name:'Windows',endpoint:'https://windows.example',targets:[{network:'Tailnet',ip:'100.64.0.13'},{network:'LAN',ip:'192.168.1.71'}]}]};if(p==='pki/discover/download'){writes.push({p,m,b});return [{endpoint:'https://windows.example',anchor:{fingerprint:'f'.repeat(64),approved:false}}]};if(p==='pki')return {peers:[{name:'Windows',endpoint:'https://windows.example',fingerprint:'f'.repeat(64),approved:false}]};return {}};
+ api=async(p,m,b)=>{if(p==='pki/discover')return {candidates:[{name:'Windows',endpoint:'https://windows.example',targets:[{network:'Tailnet',ip:'100.64.0.13'},{network:'LAN',ip:'192.168.50.71'}]}]};if(p==='pki/discover/download'){writes.push({p,m,b});return [{endpoint:'https://windows.example',anchor:{fingerprint:'f'.repeat(64),approved:false}}]};if(p==='pki')return {peers:[{name:'Windows',endpoint:'https://windows.example',fingerprint:'f'.repeat(64),approved:false}]};return {}};
  document.querySelector('[data-tab=pki]').click();await tick();document.getElementById('pki-lan-discover').click();await tick();
  const list=document.getElementById('pki-discovery');if(!list.textContent.includes('Tailnet 100.64.0.13'))throw Error('missing network plan');
  list.querySelector('button').click();await tick();

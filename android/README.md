@@ -1,7 +1,7 @@
 # Headscale Gateway para Android
 
-La entrega común **1.4.14** utiliza el motor Go compartido y `versionCode`
-`10040140`. GitHub Actions construye el APK directo con la firma estable, el
+La entrega común **1.4.16** utiliza el motor Go compartido y `versionCode`
+`10040160`. GitHub Actions construye el APK directo con la firma estable, el
 APK F-Droid sin firma y el AAB validado. Play Store continúa solo preparado;
 no se crea una ficha ni se envía la aplicación a las tiendas.
 
@@ -281,3 +281,10 @@ En Android, activa **Conectar aplicaciones** cuando el destino lo requiera.
 
 Autor: **Gente del Condado**. Soporte: [headscale-gateway@gentedelcondado.es](mailto:headscale-gateway@gentedelcondado.es).
 [Manual en línea](https://gente-del-condado.github.io/headscale_gateway_ynh/).
+
+## Gestión del coordinador desde Android
+
+El portal del motor Go compartido incluye **Coordinador / Ajustes**. Android puede
+usar una delegación HTTPS de lectura o escritura al Gateway junto a Headscale,
+con CA aprobada y token específico. No instala un controlador privilegiado en
+Android ni un segundo túnel VPN. Consulta el [manual del controlador](https://gente-del-condado.github.io/headscale_gateway_ynh/CONTROL_HEADSCALE.html).

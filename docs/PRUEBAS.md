@@ -1,5 +1,13 @@
 # Plan de regresión y despliegue seguro
 
+## Primeras comprobaciones sin instalaciones reales
+
+Empieza con `python3 -B tools/check_privacy.py` y `bash tools/verify.sh`.
+Para la gestión del coordinador, ejecuta `go -C src test ./internal/headscalecontrol`.
+El contrato de rutas Linux debe pasar también en el ejecutable de pruebas de
+Windows; no se omite esa prueba con una etiqueta de compilación. Los resultados
+actuales y sus límites están en [VERIFICACION_FINAL.md](VERIFICACION_FINAL.md).
+
 ## Validación local antes de enviar a Forgejo
 
 En Linux con systemd, ejecuta las comprobaciones en este equipo antes de subir

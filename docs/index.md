@@ -35,7 +35,7 @@ Publica tu primer servicio, prepara DNS y certificados y aprende a recuperar el 
 ### Mantener el código
 Localiza cada componente, ejecuta las pruebas y prepara una actualización reproducible.
 
-[Estructura](ESTRUCTURA.md) · [Arquitectura](ARQUITECTURA.md) · [Contribuir](../CONTRIBUTING.md)
+[Primera contribución](EMPEZAR_DESARROLLO.md) · [Estructura](ESTRUCTURA.md) · [Estado de desarrollo](ESTADO_DESARROLLO.md)
 </section>
 <section markdown="1">
 ### Continuar con otra IA

@@ -24,15 +24,20 @@ type Config struct {
 	CloudflareACMEZoneID string
 	CloudflareACMEToken  string
 
-	NodeName            string // Nombre solicitado; Headscale decide el definitivo.
-	NodeNamePending     bool   // Solo instalaciones nuevas exigen confirmación inicial.
-	HeadscaleURL        string
-	HeadscaleAPIKey     string
-	NetworkPanelEnabled bool
-	ACMEEmail           string
-	ACMEAgreeToTerms    bool
-	DataDir             string
-	DatabasePath        string // Ruta absoluta del catálogo: estado ACME y configuración
+	NodeName                    string // Nombre solicitado; Headscale decide el definitivo.
+	NodeNamePending             bool   // Solo instalaciones nuevas exigen confirmación inicial.
+	HeadscaleURL                string
+	HeadscaleAPIKey             string
+	HeadscaleControlMode        string
+	HeadscaleControlOrigin      string
+	HeadscaleControlFingerprint string
+	HeadscaleControlToken       string
+	HeadscaleAgentEnabled       bool
+	NetworkPanelEnabled         bool
+	ACMEEmail                   string
+	ACMEAgreeToTerms            bool
+	DataDir                     string
+	DatabasePath                string // Ruta absoluta del catálogo: estado ACME y configuración
 
 	// Vista inmutable de los servicios SQLite para el motor de proxy/DNS.
 	Services          map[string]string

@@ -7,12 +7,20 @@ const hsTags = text => String(text || '').split(',').map(s => s.trim()).filter(B
 const hsBtn = (caption, callback, secondary = false) => {
   const b = document.createElement('button'); b.type = 'button';
   b.textContent = hsTr(caption); if (secondary) b.className = 'secondary';
+  b.disabled = !hsAdminCanWrite;
   b.addEventListener('click', () => run(callback)); return b;
 };
 const hsField = (form, name) => /** @type {HTMLInputElement} */ (form.elements.namedItem(name));
 const hsValue = value => value == null ? '—' : String(value);
+let hsAdminCanWrite = true;
+async function headscaleCanWrite() {
+  if(currentRole!=='admin')return false;
+  if(typeof settings!=='undefined'&&settings['headscale.control.mode']==='remote')return (await api('network/control/info')).can_write===true;
+  return true;
+}
 async function headscaleAction(command, message) {
   if (currentRole !== 'admin') throw Error(hsTr('Operación reservada a administradores'));
+  if(!await headscaleCanWrite())throw Error(hsTr('La delegación del controlador es de solo lectura.'));
   const result = await api('network/admin/action', 'POST', command);
   if (result?.dns_cleanup) {
     const status = hsEl('headscale-node-action-status');
@@ -35,6 +43,8 @@ async function refreshHeadscaleAdmin() {
   const section = hsEl('headscale-management');
   section.hidden = currentRole !== 'admin';
   if (section.hidden) return;
+  hsAdminCanWrite = await headscaleCanWrite();
+  section.querySelectorAll('form input, form button').forEach(control=>{control.disabled=!hsAdminCanWrite;});
   const messages = [];
   const [users, keys] = await Promise.allSettled([
     api('network/admin/users'), api('network/admin/keys')
@@ -66,7 +76,9 @@ async function refreshHeadscaleAdmin() {
       const id = String(key.id ?? '');
       const owner = key.user?.name || key.user?.id || '—';
       const date = key.expiration ? new Date(key.expiration).toLocaleString(window.gatewayLanguage?.() || 'es') : '—';
-      hsRow(keyRows, [id, owner, date], [
+      const expiry=key.expiration?new Date(key.expiration).valueOf():NaN;
+      const state=Number.isFinite(expiry)&&expiry<Date.now()?'Caducada':key.used&&!key.reusable?'Usada':'Disponible';
+      hsRow(keyRows, [id, owner, date, key.reusable?hsTr('Reutilizable'):hsTr('Un uso'),key.ephemeral?hsTr('Sí'):hsTr('No'),(key.aclTags||key.acl_tags||[]).join(', '),hsTr(state)], [
         hsBtn('Caducar', async () => {
           if (!confirm(hsTr('¿Caducar esta clave de registro?') + ' #' + id)) return;
           await headscaleAction({action:'key.expire', id}, 'Clave caducada');

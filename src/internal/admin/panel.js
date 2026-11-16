@@ -71,6 +71,8 @@ async function refresh() {
     await refreshAuthSettings();
     await loadExposure();
   }
+  el('headscale-control-nav').hidden=!isAdmin;
+  if(!isAdmin&&typeof window.clearHeadscaleControl==='function')window.clearHeadscaleControl();
   el('settings-nav').hidden=!isAdmin;
   el('auth-nav').hidden=!isAdmin;
   el('exposure-nav').hidden=!isAdmin;
@@ -545,6 +547,8 @@ el('bootstrap-use').addEventListener('click',()=>run(async()=>{
   await showApp();
 }));
 el('logout').addEventListener('click',()=>run(async()=>{
+  if(typeof window.clearHeadscaleControl==='function')window.clearHeadscaleControl();
+  el('headscale-new-key').textContent='';el('headscale-new-key-wrap').hidden=true;
   el('recovery-token-value').textContent='';el('recovery-result').hidden=true;
   try {await api('auth/logout','POST',{});}catch{}
   token='';csrf='';
@@ -652,6 +656,7 @@ document.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click',
   notice('');
   if (b.dataset.tab === 'network') run(refreshNetwork);
   if (b.dataset.tab === 'headscale-users') run(refreshHeadscaleAdmin);
+  if (b.dataset.tab === 'headscale-control'&&typeof window.refreshHeadscaleControl==='function') run(window.refreshHeadscaleControl);
   if (b.dataset.tab === 'overview' && currentRole==='admin') run(refreshBackupOverview);
   if (b.dataset.tab === 'templates') run(loadTemplateEditor);
   if (b.dataset.tab === 'exposure') run(async()=>{await loadExposure();await loadAudit();await loadAPITokens();});
@@ -754,7 +759,7 @@ async function initializeNetwork() {
   if (!info.enabled) return;
   el('network-info').textContent = 'Headscale: ' + info.headscale_url +
     ' · Gateway tsnet: ' + info.gateway_vpn_state +
-    (info.api_key_configured ? ' · API key configurada' : ' · Falta API key');
+    (info.headscale_control_mode==='remote' ? ' · Administración delegada a otro Gateway' : (info.api_key_configured ? ' · API key configurada' : ' · Falta API key'));
   const connected=info.gateway_vpn_state==='Running';
   el('network-login').textContent=connected?'Pausar · Gateway tsnet':info.manually_paused||info.gateway_vpn_state==='Stopped'?'Reconectar · Gateway tsnet':'Conectar · Gateway tsnet';
   const pauseBlocked=connected&&info.pause_allowed===false;

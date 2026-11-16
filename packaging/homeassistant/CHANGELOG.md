@@ -1,3 +1,15 @@
+# 1.4.16
+
+- Corrige el contrato de rutas del controlador Linux al validar desde Windows.
+- Guías, privacidad y mantenimiento de todas las plataformas revisados; publicador público único.
+- Conserva las funciones y datos del motor común y la gestión Headscale incorporada en 1.4.15.
+
+# 1.4.15
+
+- Gestión local o delegada de DNS de la Tailnet, restricciones OIDC y observación de nodos.
+- Revisión previa, recuperación de cambios y separación de privilegios del controlador.
+- La distribución pública de esta versión intermedia quedó bloqueada por el trabajo Windows.
+
 # 1.4.14
 
 - Dominio principal destacado y enlaces directos HTTP/HTTPS en Resumen/Estado del panel común.

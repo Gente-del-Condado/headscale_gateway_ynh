@@ -6,8 +6,10 @@ import
 "github.com/gentedelcondado/headscale-gateway/internal/diagnostics"
 
 import (
+	"encoding/hex"
 	"fmt"
 	"github.com/gentedelcondado/headscale-gateway/internal/admin"
+	"github.com/gentedelcondado/headscale-gateway/internal/pki"
 
 	"net"
 	"net/url"
@@ -16,6 +18,9 @@ import (
 )
 
 func validateConfig(cfg Config) error {
+	if err := validateHeadscaleControlConfig(cfg); err != nil {
+		return err
+	}
 	if cfg.NodeName != "" && !validRequestedNodeName(cfg.NodeName) {
 		return fmt.Errorf("headscale.node_name: usa de 1 a 63 letras minúsculas, números o guiones, sin guiones consecutivos ni al principio o final")
 	}
@@ -335,6 +340,30 @@ func validateConfig(cfg Config) error {
 		Emit("gateway", diagnostics.InfoLevel, "HGW-CONFIG-VALIDATE-002", "Configuración validada correctamente (%d servicios)", len(cfg.Services))
 
 	return nil
+}
+
+func validateHeadscaleControlConfig(cfg Config) error {
+	switch cfg.HeadscaleControlMode {
+	case "", "disabled", "local":
+		return nil
+	case "remote":
+		if _, err := pki.PeerURL(cfg.HeadscaleControlOrigin); err != nil {
+			return fmt.Errorf("origen HTTPS del controlador Headscale inválido")
+		}
+		fingerprint, err := hex.DecodeString(cfg.HeadscaleControlFingerprint)
+		if err != nil || len(fingerprint) != 32 || cfg.HeadscaleControlFingerprint != strings.ToLower(cfg.HeadscaleControlFingerprint) {
+			return fmt.Errorf("se requiere la huella SHA-256 de una CA aprobada del controlador")
+		}
+		if len(cfg.HeadscaleControlToken) != 68 || !strings.HasPrefix(cfg.HeadscaleControlToken, "hgk_") {
+			return fmt.Errorf("se requiere un token delegado del controlador Headscale")
+		}
+		if _, err := hex.DecodeString(cfg.HeadscaleControlToken[4:]); err != nil {
+			return fmt.Errorf("el token delegado del controlador Headscale no tiene el formato esperado")
+		}
+		return nil
+	default:
+		return fmt.Errorf("modo de control Headscale no reconocido")
+	}
 }
 
 // validateURL comprueba que una URL utilizada por el Gateway

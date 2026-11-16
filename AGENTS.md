@@ -1,121 +1,122 @@
-# Continuar el proyecto
+# Continuar Headscale Gateway
 
-Esta guía es el punto de entrada para programadores y asistentes de IA. Lee
-`README.md`, `docs/ESTRUCTURA.md` y la guía del componente antes de modificarlo.
-Comprueba `git status`, el último commit y las instrucciones locales al empezar.
+Punto de entrada para desarrolladores y agentes de IA. Antes de editar, lee
+`README.md`, `docs/ESTRUCTURA.md`, `docs/ESTADO_DESARROLLO.md` y la guía del
+componente. Para preparar el entorno por primera vez, sigue
+`docs/EMPEZAR_DESARROLLO.md`. Comprueba `git status`, rama, último commit,
+remotos e instrucciones locales. Respeta los cambios ajenos y el alcance pedido.
 
-## Qué estamos manteniendo
+## Arquitectura y fuentes
 
-Headscale Gateway comparte un motor Go entre instalación directa, Home
-Assistant, YunoHost y Android. El motor, el panel y el cliente de bandeja viven
-en `src/`. Android adapta el ciclo de vida y el túnel desde `android/src/`.
-El proyecto se desarrolla principalmente en español.
+El motor Go y el panel de `src/` son comunes a Linux, Windows, macOS, Android,
+Home Assistant y YunoHost. Android adapta ciclo de vida y túnel en `android/src/`.
+Los instaladores se mantienen en `packaging/`. No crees otro servidor o API
+para una plataforma. El proyecto se desarrolla principalmente en español.
 
-El código propio tiene la licencia indicada en `LICENSE`. Conserva los avisos,
-licencias, nombres y procedencia de terceros. Las dependencias originales se
-mantienen en su idioma. `src/third_party/` contiene avisos, no un vendor de Go.
-
-## Dónde editar
-
-| Trabajo | Fuente | Comprobación principal |
+| Área | Fuente | Comprobación |
 | --- | --- | --- |
-| Arranque y recarga | `src/main.go`, `startup_*.go`, `runtime_*.go` | Pruebas Go y despliegue aislado |
-| Proxy y DNS | `src/proxy*.go`, `src/dns_*.go` | Pruebas de transporte, propiedad y limpieza DNS |
-| Panel y API | `src/internal/admin/` | Go, pruebas JS, referencia e i18n |
-| SQLite y secretos | `src/internal/state/` | Restauración, concurrencia y migraciones |
-| Copias y perfiles | `src/internal/securebackup/`, `src/internal/configtransfer/`, `src/admin_backup_restore_*` | Integridad, permisos y compatibilidad |
-| Integración Home Assistant | `custom_components/headscale_gateway/` | Suite `tests/homeassistant/` |
-| Complemento Home Assistant | `packaging/homeassistant/` | Pruebas Python y contenedor |
-| Paquete YunoHost | `packaging/yunohost/` | Pruebas Python, nginx/NSS y aceptación en VM |
-| Android | `android/src/`, `src/mobile_android.go` | Motor de ambas arquitecturas, Lint e instrumentación |
-| Bandeja | `src/desktop/` | `npm test` y pruebas visuales específicas |
-| Manual | `docs/`, documentación de plataforma, `mkdocs.yml` | Compilación estricta y enlaces HTML |
+| Arranque y recarga | `src/main.go`, `startup_*.go`, `runtime_*.go` | Go y despliegue aislado |
+| Proxy y DNS | `src/proxy*.go`, `src/dns_*.go` | Transporte, propiedad y limpieza DNS |
+| Panel y API | `src/internal/admin/` | Go, JS, referencia e i18n |
+| Persistencia | `src/internal/state/` | Migración, restauración y concurrencia |
+| Copias y perfiles | `src/internal/securebackup/`, `configtransfer/`, `src/admin_backup_restore_*` | Integridad, permisos y compatibilidad |
+| Coordinador Headscale | `src/internal/headscalecontrol/`, `src/admin_headscale_*` | Revisión, rollback, permisos y clientes Windows/Linux |
+| Entidades HA | `custom_components/headscale_gateway/` | `tests/homeassistant/` |
+| Aplicación HA | `packaging/homeassistant/` | Python y contenedor |
+| Paquete YunoHost | `packaging/yunohost/` | Python, nginx/NSS y aceptación aislada |
+| Android | `android/src/`, `src/mobile_android.go` | Motores de ambas arquitecturas, Lint e instrumentación |
+| Bandeja | `src/desktop/` | `npm test` y comprobación visual pertinente |
+| Manual | `docs/`, documentos de plataforma, `mkdocs.yml` | MkDocs estricto y enlaces HTML |
+| Publicación | `packaging/releases/automation/` y sus workflows | Pruebas del controlador y destinos permitidos |
 
-`packaging/homeassistant/config.yaml.in` es una plantilla. El generador la
-convierte en `addons/headscale_gateway/config.yaml`. Mantén el sufijo `.in` para
-que Home Assistant descubra un único complemento dentro del repositorio.
+`addons/` y `yunohost/` son instaladores generados y versionados. Edita las
+fuentes y ejecuta `python3 -B tools/prepare_git_install.py`; el manifiesto detecta
+modificaciones manuales. Mantén `packaging/homeassistant/config.yaml.in` como
+plantilla: el archivo descubrible es `addons/headscale_gateway/config.yaml`.
 
-`addons/` y `yunohost/` se generan y están versionados porque se instalan desde
-Git privado. Cambia la fuente en `packaging/` o `src/` y ejecuta
-`python3 tools/prepare_git_install.py`. El manifiesto comprueba ambos árboles.
+## Contratos obligatorios
 
-## Contratos que debe respetar cualquier cambio
-
-- SQLite es la fuente de configuración persistente. El archivo de arranque
-  aporta opciones del proceso y valores iniciales del instalador.
-- Actualizar conserva credenciales, MFA, identidad VPN, claves y datos.
-- Un solo proceso utiliza cada base de datos y cada identidad tsnet.
-- El panel, la API y los formatos de copia son comunes a todas las plataformas.
-- La sesión web, el rol, los alcances Bearer y CSRF tienen comprobaciones distintas.
-  Una IP loopback o una cabecera recibida por sí sola no acredita un administrador.
-- DNS solo elimina registros dentro del ámbito de propiedad del Gateway.
+- SQLite es la configuración persistente; el arranque aporta opciones del proceso
+  y valores iniciales. Actualizar conserva credenciales, MFA, identidad VPN,
+  certificados, claves y datos.
+- Un solo proceso utiliza cada base y cada identidad tsnet. Nunca pruebes con
+  la SQLite de una instalación activa.
+- Sesión web, rol, alcances Bearer, exposición API y CSRF son comprobaciones
+  distintas. Loopback o una cabecera recibida no acreditan un administrador.
+- El controlador local de Headscale se vincula como administrador del anfitrión;
+  un perfil importado no concede privilegios locales. Los demás Gateway usan
+  delegación explícita, TLS verificado y alcances limitados. No hay reenvío en cadena.
+- Las rutas de un contrato remoto pertenecen al sistema de destino: las rutas
+  Linux del actuador no se interpretan con `filepath` del cliente Windows.
+- DNS elimina solo registros dentro de la propiedad del Gateway. Un fallo de
+  limpieza no se oculta ni autoriza a borrar registros ajenos.
 - La restauración valida la carpeta temporal antes de programar su limpieza.
-- Los transportes del proxy conservan la escritura del cuerpo en respuestas 101.
-- Los errores y registros excluyen tokens, contraseñas y claves privadas.
-- La comprobación de i18n es de solo lectura. Extraer y comprobar son órdenes separadas.
-
-## Cómo escribir y documentar
-
-Usa nombres descriptivos, funciones pequeñas y los componentes existentes.
-Escribe los comentarios del código propio en español. Explica la finalidad,
-las precondiciones, los límites de confianza y las decisiones de concurrencia
-cuando aporten información que el código no muestre por sí solo. Conserva los
-identificadores públicos y las directivas de herramientas como `//go:build`.
-
-Documenta nuevas rutas, parámetros, migraciones, formatos y cambios de uso en
-la misma modificación. Añade pruebas cuando el comportamiento nuevo o el fallo
-corregido las necesite. Para un cambio solo documental comprueba el manual,
-los enlaces y las sumas, sin inventar resultados de ejecución del producto.
-
-Los textos de Home Assistant y YunoHost se editan en `packaging/`. El manual
-web los incorpora automáticamente desde allí. La configuración de navegación
-está en `mkdocs.yml`, la presentación en `tools/manual_theme/` y la integración
-con documentos externos en `tools/manual_hooks.py`.
+  Los transportes del proxy conservan la escritura del cuerpo en respuestas 101.
+- Errores, informes y logs excluyen tokens, contraseñas y claves privadas.
+- Conserva `LICENSE`, `NOTICE`, procedencia y avisos de terceros. No retires los
+  fuentes correspondientes necesarios para redistribuir Electron o FFmpeg.
+- No cambies RAM, CPU, red, certificados o servicios de una VM por iniciativa
+  propia para resolver un fallo de pruebas. Distingue un fallo del laboratorio
+  de un fallo del producto. Una petición de detener revoca el trabajo de pruebas.
 
 ## Secuencia de trabajo
 
-1. Revisa el estado y los cambios ajenos. Delimita los archivos que vas a editar.
-2. Lee el recorrido normal del componente y sus pruebas existentes.
-3. Modifica las fuentes y actualiza sus comentarios y documentación.
-4. Si cambian rutas o mensajes, ejecuta los generadores de referencia e i18n.
-5. Si cambian fuentes del motor o plantillas, regenera los paquetes instalables.
-6. Ejecuta las comprobaciones correspondientes y registra sus resultados reales.
-7. Actualiza `CONTENIDO.sha256` al preparar los archivos del commit.
-8. Guarda un commit nuevo. Sube por SSH cuando esté autorizado y verifica las referencias.
+1. Delimita el cambio, lee el recorrido existente y reproduce el fallo pertinente.
+2. Edita fuentes y documenta comportamiento, rutas, parámetros y migraciones.
+   Usa comentarios propios en español cuando expliquen finalidad o confianza;
+   conserva identificadores públicos, `//go:build` y textos originales de terceros.
+3. Añade pruebas del comportamiento y de sus fallos cuando cambie la lógica.
+   Compilar para otra plataforma no equivale a ejecutar allí sus pruebas.
+4. Si cambian rutas o mensajes, genera referencia e i18n y verifica por separado:
 
-```bash
+```sh
 python3 -B tools/reference_catalog.py
 python3 -B tools/extract_i18n.py
 python3 -B tools/check_i18n.py
-python3 -B tools/prepare_git_install.py
-bash tools/verify.sh
 ```
 
-Para el manual, instala `requirements-docs.txt` en un entorno virtual y ejecuta
-`python -m mkdocs build --strict`, seguido de
-`python3 tools/check_manual.py builds/manual`. Consulta `docs/MANUAL_WEB.md`.
+5. Regenera instaladores si cambian motor, versión o plantillas. Ejecuta las
+   comprobaciones necesarias, con paralelismo acotado en equipos limitados:
 
-## Versiones y publicación
+```sh
+python3 -B tools/prepare_git_install.py
+GOMAXPROCS=2 GOFLAGS=-p=2 bash tools/verify.sh
+python3 -B tools/check_privacy.py
+```
 
-`VERSION` es la versión del motor y de los paquetes. Se gestiona con
-`python3 tools/set_version.py X.Y.Z`. El proyecto utiliza tres componentes
-numéricos para los manifiestos. Las etiquetas Git identifican commits.
-`v0.1.0.1` fue una prueba de actualización documental, con motor `1.4.4`.
-Elige una política de versiones explícita antes de cambiar esa numeración.
+6. Para el manual, instala `requirements-docs.txt` en un entorno externo al clon;
+   ejecuta `python -m mkdocs build --strict` y
+   `python3 tools/check_manual.py builds/manual`. Consulta `docs/MANUAL_WEB.md`.
+   Home Assistant y YunoHost se documentan en `packaging/`; el manual los incorpora
+   con `tools/manual_hooks.py`, sin duplicar páginas editables.
+7. Revisa diferencias y archivos nuevos. Actualiza `CONTENIDO.sha256` después
+   de preparar el índice. Guarda un commit nuevo y registra resultados reales,
+   límites y cómo repetirlos. No presentes una prueba interrumpida como completada.
 
-Las etiquetas ya publicadas pertenecen a su commit original. Los cambios
-posteriores se guardan en commits nuevos. Comprueba la rama, el remoto y la
-etiqueta antes de publicar. El repositorio se sube por SSH. El manual de GitHub
-Pages se habilita por separado siguiendo `docs/MANUAL_WEB.md`.
+## Versiones, publicación y autorización
 
-## Limpieza y datos de prueba
+`VERSION` identifica motor y paquetes, con formato `X.Y.Z`. Usa
+`python3 tools/set_version.py X.Y.Z` y regenera los instaladores. Las etiquetas
+publicadas son inmutables; una corrección posterior pertenece a otro commit.
 
-Genera compilaciones en `bin/`, `builds/`, `releases/` o una carpeta temporal.
-Mantén cachés y entornos virtuales fuera de las fuentes. Revisa qué contiene
-un directorio antes de borrarlo. Los binarios de `yunohost/payload/` y el archivo
-`addons/headscale_gateway/source.tar.gz` son necesarios para los instaladores.
+El flujo vigente es Forgejo privado → espejo GitHub privado → compilador público
+`headscale_gateway_releases` → distribuciones, tiendas y manuales. El controlador
+lee una release estable de Forgejo y el commit etiquetado. Un push a main no
+publica por sí solo. Las Actions de Forgejo no forman parte de este recorrido.
+GitHub no devuelve commits, estados ni paquetes a Forgejo. Lee
+`docs/PUBLICACION.md` antes de tocar automatización.
 
-Mantén bases de datos, perfiles, claves, credenciales y datos de instalaciones
-fuera de Git. Utiliza nombres y direcciones ficticios en pruebas y capturas.
-Antes de finalizar, revisa diferencias, archivos generados y estado de Git.
-Explica qué se verificó, qué queda pendiente y cómo repetir la comprobación.
+Sube por SSH solo cuando esté autorizado. `main` requiere una solicitud de fusión
+en Forgejo. No retires sus protecciones ni fuerces un push para evitar esa vía.
+Verifica las referencias remotas después de subir. Si se pide preparar sin
+subir, no hagas push, no crees etiquetas o releases y no modifiques destinos
+públicos ni sus secretos. Actualizar las fuentes del manual no implica publicar
+GitHub Pages de inmediato.
+
+## Datos y limpieza
+
+`builds/`, `bin/` y las entregas locales son resultados, no fuentes. Revisa su
+contenido y procesos antes de retirarlos. Conserva fuera del clon las claves
+SSH, firma Android, bases, copias, perfiles y diagnósticos privados. Usa nombres,
+redes e identidades ficticios en tests y capturas. Nunca extraigas secretos de
+Actions ni los pegues en informes. Sigue `docs/SEGURIDAD.md` para auditar y limpiar.

@@ -17,6 +17,7 @@ import (
 )
 
 type Node struct {
+	PublicKey       string   `json:"-"` // Solo vincula metadatos locales a la identidad vigente.
 	ID              string   `json:"id"`
 	Name            string   `json:"name"`
 	GivenName       string   `json:"given_name,omitempty"`
@@ -112,6 +113,7 @@ func List(ctx context.Context, baseURL, apiKey string) (Inventory, error) {
 	}
 	for _, raw := range body.Nodes {
 		var v struct {
+			NodeKey         string          `json:"nodeKey"`
 			ID              json.RawMessage `json:"id"`
 			Name            string          `json:"name"`
 			GivenName       string          `json:"givenName"`
@@ -131,6 +133,7 @@ func List(ctx context.Context, baseURL, apiKey string) (Inventory, error) {
 			return result, fmt.Errorf("nodo mal formado: %w", err)
 		}
 		n := Node{ID: stringID(v.ID), Name: v.Name, GivenName: v.GivenName, User: userLabel(v.User), IPAddresses: nonNil(v.IPAddresses), Online: v.Online, LastSeen: v.LastSeen, CreatedAt: v.CreatedAt, Expiry: v.Expiry, RegisterMethod: v.RegisterMethod, Tags: nonNil(v.Tags), ApprovedRoutes: nonNil(v.ApprovedRoutes), AvailableRoutes: nonNil(v.AvailableRoutes), SubnetRoutes: nonNil(v.SubnetRoutes)}
+		n.PublicKey = v.NodeKey
 		result.Nodes = append(result.Nodes, n)
 		if n.Online {
 			result.Online++

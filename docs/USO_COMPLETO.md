@@ -419,7 +419,7 @@ HGW_REFERENCE_EXPORT=/tmp/hgw-reference-catalog.json go -C src test ./internal/a
 src/desktop/node_modules/electron/dist/electron src/tools/gui-linux-check/panel.cjs
 ```
 
-Las CI están en `.forgejo/workflows/quality.yml` y `.github/workflows/quality.yml`. Las pruebas automatizadas usan datos temporales y servidores simulados; no necesitan tus claves de producción. La comprobación de dos gateways reales y del almacén privilegiado del SO se realiza por separado.
+La CI del espejo está en `.github/workflows/quality.yml`; el compilador público se mantiene en `packaging/releases/.github/workflows/`. Forgejo conserva el origen y no ejecuta estas pruebas. Las pruebas automatizadas usan datos temporales y servidores simulados; no necesitan tus claves de producción. La comprobación de dos gateways reales y del almacén privilegiado del SO se realiza por separado.
 
 En ambos servidores, cada `push` y cada `pull_request` ejecuta también el trabajo
 **Seguridad de dependencias**, con las mismas auditorías Go y npm descritas a

@@ -16,7 +16,7 @@ reemplazan por otros de contenido diferente.
 Desde la entrega 1.4.9, el control de
 [headscale_gateway_releases](https://github.com/Gente-del-Condado/headscale_gateway_releases/actions)
 compila en runners públicos estándar. Así no depende de la cuota de ejecución
-del espejo privado. Los publicadores anteriores del espejo están desactivados para evitar
+del espejo privado. Los publicadores antiguos del espejo se retiraron del árbol actual para evitar
 entregas duplicadas; la comprobación de calidad de pull requests se conserva.
 Lee la API de Forgejo con un token limitado y descarga solo
 el árbol de fuentes de la etiqueta publicada; no copia el historial privado.
@@ -96,7 +96,8 @@ Consulta [Debian y Fedora](LINUX_NATIVO.md), [Flatpak](FLATPAK.md) y
 consola y panel web. No se solicita inclusión en Flathub ni en el catálogo
 YunoHost. **Play Store continúa solo preparado**: el AAB no se envía a la tienda.
 
-Los informes del laboratorio real YunoHost 1.4.7~ynh2 se conservan. Las pruebas
+Los resultados históricos del laboratorio real YunoHost se conservan en sus
+commits y notas; los informes privados se archivan fuera del árbol de desarrollo. Las pruebas
 nginx/NSS en contenedor son complementarias; no equivalen a repetir package_check
 o la actualización de una instalación real con datos y secretos. No ejecutes
 máquinas virtuales ni compilaciones grandes en el Linux del usuario.

@@ -1,0 +1,12 @@
+title = "Headscale Gateway: auditoría de secretos"
+[extend]
+useDefault = true
+
+# Son valores SHA-256 de archivos en manifiestos comprobados por los generadores.
+# No se excluye el resto del JSON ni se permiten tokens de 64 caracteres en código.
+[[allowlists]]
+description = "Solo líneas SHA-256 de los dos manifiestos generados"
+condition = "AND"
+paths = ['''(^|[/\\])(git-install-manifest\.json|yunohost[/\\]build-manifest\.json)$''']
+regexTarget = "line"
+regexes = ['''^\s*"[^"\n]+": "[0-9a-f]{64}",?\s*$''']

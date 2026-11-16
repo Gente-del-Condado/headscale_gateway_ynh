@@ -20,12 +20,11 @@ class RepositoryContractTest(unittest.TestCase):
         repositories = {url.rsplit('/', 1)[1] for url in urls}
         self.assertEqual(len(repositories), 1)
         repository = repositories.pop()
-        package_flow = (ROOT / '.github/workflows/publish-yunohost.yml').read_text()
-        docs_flow = (ROOT / '.github/workflows/pages.yml').read_text()
-        self.assertIn('Descargar ' + repository + ' de GitHub', package_flow)
-        self.assertNotIn('ssh://forgejo@', package_flow)
-        self.assertIn('repository: ' + repository, docs_flow)
-        self.assertNotIn('ssh://forgejo@', docs_flow)
+        publisher = (ROOT / 'packaging/releases/automation/publish_public.py').read_text()
+        destinations = (ROOT / 'packaging/releases/automation/forgejo_source.py').read_text()
+        self.assertIn(repository, destinations)
+        self.assertIn('tools/publish_yunohost_repo.py', publisher)
+        self.assertIn("gh-pages", publisher)
 
     def test_one_release_version_for_all_packages(self):
         version = (ROOT / 'VERSION').read_text().strip()

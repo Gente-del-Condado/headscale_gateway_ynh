@@ -26,11 +26,11 @@ se mantienen porque son contratos del Gateway, no funciones inventadas de YunoHo
 ## Publicación automática
 
 Forgejo es el origen privado del proyecto; GitHub es su espejo privado.
-Después de superar **Calidad multiplataforma** para el `main` vigente, GitHub
-Actions verifica los paquetes generados y publica directamente los tres recursos
-públicos `server-vX.Y.Z` en `headscale_gateway_ynh`: binarios amd64 y arm64 y
-`source.tar.gz` con sus fuentes completos. Verifica las sumas mediante descarga
-sin credenciales antes de actualizar el paquete instalable. Una release existente
+El compilador público `headscale_gateway_releases` lee una release estable de
+Forgejo, descarga su commit exacto y ejecuta seguridad y pruebas de plataforma.
+Después publica los recursos `server-vX.Y.Z` en `headscale_gateway_ynh`: binarios
+amd64 y arm64 y `source.tar.gz` con los fuentes completos. Comprueba sumas mediante
+descarga anónima antes de actualizar el paquete instalable. Una release existente
 se verifica sin reemplazar archivos; una discrepancia detiene la publicación.
 
 El repositorio público contiene únicamente el paquete YunoHost y sus recursos.
@@ -75,3 +75,12 @@ limita a administradores, SSOwat redirige antes al SSO (302) a quien no tiene se
 
 No estar en el catálogo genera avisos de catálogo; no se manipulan para obtener
 una puntuación. Compilar arm64 no acredita instalarlo en un dispositivo arm64.
+
+## Revisión actual
+
+La 1.4.16 prepara limpieza y documentación y corrige la validación de rutas del
+controlador en Windows. No se atribuye una nueva aceptación completa de esa
+revisión en YunoHost. En la 1.4.15 se comprobaron actualización y restauración real
+con datos y secretos conservados. La prueba posterior de instalación limpia
+con la tablet se detuvo; Technitium y la configuración Dex adicional quedaron
+pendientes. Consulta el estado y los límites de la entrega en el manual común.

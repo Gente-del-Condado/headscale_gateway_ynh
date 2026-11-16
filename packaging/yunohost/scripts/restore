@@ -30,5 +30,6 @@ ynh_restore "/etc/systemd/system/$app.service"
 systemctl daemon-reload
 systemctl enable "$app.service" --quiet
 hgw_register_service
+hgw_refresh_headscale_control ../settings/conf/setup-headscale restore
 ynh_systemctl --service="$app" --action=start
 ynh_systemctl --service=nginx --action=reload

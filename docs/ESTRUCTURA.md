@@ -69,9 +69,20 @@ mantener duplicados editables. La plantilla, estilos y búsqueda residen en
 `tools/manual_theme/`. `tools/check_manual.py` comprueba enlaces y anclas del
 resultado HTML. El resultado se genera en `builds/manual/`, que no se versiona.
 
-La automatización de GitHub Pages está en `.github/workflows/pages.yml`;
-requiere Pages configurado en los dos destinos públicos. Los flujos de GitHub
-esperan la calidad correcta del SHA vigente de `main` y publican directamente
-con `PUBLICATION_TOKEN`. Las Actions de Forgejo están desactivadas; Forgejo
-conserva el origen y replica Git hacia GitHub. Consulta
-[PUBLICACION.md](PUBLICACION.md).
+El control de publicación se mantiene en `packaging/releases/automation/` y
+`packaging/releases/.github/workflows/`. Se exporta al repositorio público
+`headscale_gateway_releases`, que lee releases estables de Forgejo y publica
+las distribuciones y ambos manuales. Los workflows de la raíz del principal
+comprueban el espejo y sus pull requests; no hay otro publicador ni jobs de
+Forgejo en este árbol. Consulta [PUBLICACION.md](PUBLICACION.md).
+
+Para empezar sin contexto previo, lee [EMPEZAR_DESARROLLO.md](EMPEZAR_DESARROLLO.md).
+[ESTADO_DESARROLLO.md](ESTADO_DESARROLLO.md) contiene la situación de la siguiente
+entrega; no deben guardarse credenciales ni accesos privados en esa página.
+`tools/check_privacy.py` revisa las fuentes sin imprimir los valores detectados.
+
+El control del coordinador vive en `src/internal/headscalecontrol/`; el motor
+común lo adapta en `src/admin_headscale_control.go` y comparte el observador
+de `src/admin_headscale_agent.go`. El registro privilegiado de systemd se crea
+explícitamente con `packaging/linux/native/headscale-gateway-setup-headscale`.
+Consulta [CONTROL_HEADSCALE.md](CONTROL_HEADSCALE.md) antes de modificarlo.

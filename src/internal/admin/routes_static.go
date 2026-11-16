@@ -10,31 +10,32 @@ import (
 	"github.com/gentedelcondado/headscale-gateway/internal/i18n"
 )
 
-//go:embed http-paths.js panel.html panel.css panel.js panel-security.js panel-templates.js panel-experience.js panel-headscale.js panel-policy-dns.js panel-policy-visual.js panel-ops.js panel-backups.js panel-forgejo.js panel-pki.js panel-portability.js panel-portal.js panel-reference.js i18n.js proxy-model.js
+//go:embed http-paths.js panel.html panel.css panel.js panel-security.js panel-templates.js panel-experience.js panel-headscale.js panel-headscale-control.js panel-policy-dns.js panel-policy-visual.js panel-ops.js panel-backups.js panel-forgejo.js panel-pki.js panel-portability.js panel-portal.js panel-reference.js i18n.js proxy-model.js
 var assets embed.FS
 
 type webAsset struct{ file, mime string }
 
 var webAssets = map[string]webAsset{
-	"/admin/http-paths.js":          {"http-paths.js", "text/javascript; charset=utf-8"},
-	"/admin/panel-reference.js":     {"panel-reference.js", "text/javascript; charset=utf-8"},
-	"/admin/panel-portal.js":        {"panel-portal.js", "text/javascript; charset=utf-8"},
-	"/admin/panel.html":             {"panel.html", "text/html; charset=utf-8"},
-	"/admin/panel.css":              {"panel.css", "text/css; charset=utf-8"},
-	"/admin/proxy-model.js":         {"proxy-model.js", "text/javascript; charset=utf-8"},
-	"/admin/panel.js":               {"panel.js", "text/javascript; charset=utf-8"},
-	"/admin/panel-headscale.js":     {"panel-headscale.js", "text/javascript; charset=utf-8"},
-	"/admin/panel-policy-dns.js":    {"panel-policy-dns.js", "text/javascript; charset=utf-8"},
-	"/admin/panel-policy-visual.js": {"panel-policy-visual.js", "text/javascript; charset=utf-8"},
-	"/admin/panel-security.js":      {"panel-security.js", "text/javascript; charset=utf-8"},
-	"/admin/panel-experience.js":    {"panel-experience.js", "text/javascript; charset=utf-8"},
-	"/admin/panel-templates.js":     {"panel-templates.js", "text/javascript; charset=utf-8"},
-	"/admin/panel-backups.js":       {"panel-backups.js", "text/javascript; charset=utf-8"},
-	"/admin/panel-forgejo.js":       {"panel-forgejo.js", "text/javascript; charset=utf-8"},
-	"/admin/panel-portability.js":   {"panel-portability.js", "text/javascript; charset=utf-8"},
-	"/admin/panel-pki.js":           {"panel-pki.js", "text/javascript; charset=utf-8"},
-	"/admin/panel-ops.js":           {"panel-ops.js", "text/javascript; charset=utf-8"},
-	"/admin/i18n.js":                {"i18n.js", "text/javascript; charset=utf-8"},
+	"/admin/panel-headscale-control.js": {"panel-headscale-control.js", "text/javascript; charset=utf-8"},
+	"/admin/http-paths.js":              {"http-paths.js", "text/javascript; charset=utf-8"},
+	"/admin/panel-reference.js":         {"panel-reference.js", "text/javascript; charset=utf-8"},
+	"/admin/panel-portal.js":            {"panel-portal.js", "text/javascript; charset=utf-8"},
+	"/admin/panel.html":                 {"panel.html", "text/html; charset=utf-8"},
+	"/admin/panel.css":                  {"panel.css", "text/css; charset=utf-8"},
+	"/admin/proxy-model.js":             {"proxy-model.js", "text/javascript; charset=utf-8"},
+	"/admin/panel.js":                   {"panel.js", "text/javascript; charset=utf-8"},
+	"/admin/panel-headscale.js":         {"panel-headscale.js", "text/javascript; charset=utf-8"},
+	"/admin/panel-policy-dns.js":        {"panel-policy-dns.js", "text/javascript; charset=utf-8"},
+	"/admin/panel-policy-visual.js":     {"panel-policy-visual.js", "text/javascript; charset=utf-8"},
+	"/admin/panel-security.js":          {"panel-security.js", "text/javascript; charset=utf-8"},
+	"/admin/panel-experience.js":        {"panel-experience.js", "text/javascript; charset=utf-8"},
+	"/admin/panel-templates.js":         {"panel-templates.js", "text/javascript; charset=utf-8"},
+	"/admin/panel-backups.js":           {"panel-backups.js", "text/javascript; charset=utf-8"},
+	"/admin/panel-forgejo.js":           {"panel-forgejo.js", "text/javascript; charset=utf-8"},
+	"/admin/panel-portability.js":       {"panel-portability.js", "text/javascript; charset=utf-8"},
+	"/admin/panel-pki.js":               {"panel-pki.js", "text/javascript; charset=utf-8"},
+	"/admin/panel-ops.js":               {"panel-ops.js", "text/javascript; charset=utf-8"},
+	"/admin/i18n.js":                    {"i18n.js", "text/javascript; charset=utf-8"},
 }
 
 func (s *Server) registerStaticRoutes(mux routeRegistrar) {

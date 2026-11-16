@@ -469,7 +469,7 @@
         "scopes"
       ],
       "query": [],
-      "code": "mux.HandleFunc(\"POST /api/v1/api/tokens\", s.secure(func(w http.ResponseWriter, r *http.Request) {\n\t\tif s.database == nil {\n\t\t\tproblem(w, 503, \"SQLite no disponible\")\n\t\t\treturn\n\t\t}\n\t\tvar req struct {\n\t\t\tLabel  string   `json:\"label\"`\n\t\t\tRole   string   `json:\"role\"`\n\t\t\tScopes []string `json:\"scopes\"`\n\t\t\tDays   int      `json:\"days\"`\n\t\t}\n\t\tif !decode(w, r, &req) {\n\t\t\treturn\n\t\t}\n\t\tif req.Role != \"viewer\" && req.Role != \"operator\" {\n\t\t\tproblem(w, 400, \"los tokens delegados solo pueden ser viewer u operator\")\n\t\t\treturn\n\t\t}\n\t\tif req.Days < 1 || req.Days > 365 || len(req.Scopes) == 0 {\n\t\t\tproblem(w, 400, \"caducidad o scopes no válidos\")\n\t\t\treturn\n\t\t}\n\t\tpossible := map[string]bool{\"read\": true, \"services\": true, \"network\": true, \"operations\": true}\n\t\tfor _, scope := range req.Scopes {\n\t\t\tmethod := http.MethodGet\n\t\t\tif scope == \"operations\" {\n\t\t\t\tmethod = http.MethodPost\n\t\t\t}\n\t\t\tif !possible[scope] || !rolePermits(req.Role, scope, method) {\n\t\t\t\tproblem(w, 400, \"módulo no válido para el rol\")\n\t\t\t\treturn\n\t\t\t}\n\t\t}\n\t\ttoken, info, err := s.database.NewToken(req.Label, req.Role, req.Scopes, time.Duration(req.Days)*24*time.Hour)\n\t\tif err != nil {\n\t\t\tproblem(w, 400, err.Error())\n\t\t\treturn\n\t\t}\n\t\treply(w, 201, map[string]any{\"token\": token, \"info\": info}, nil)\n\t}))",
+      "code": "mux.HandleFunc(\"POST /api/v1/api/tokens\", s.secure(func(w http.ResponseWriter, r *http.Request) {\n\t\tif s.database == nil {\n\t\t\tproblem(w, 503, \"SQLite no disponible\")\n\t\t\treturn\n\t\t}\n\t\tvar req struct {\n\t\t\tLabel  string   `json:\"label\"`\n\t\t\tRole   string   `json:\"role\"`\n\t\t\tScopes []string `json:\"scopes\"`\n\t\t\tDays   int      `json:\"days\"`\n\t\t}\n\t\tif !decode(w, r, &req) {\n\t\t\treturn\n\t\t}\n\t\tif req.Role != \"viewer\" && req.Role != \"operator\" {\n\t\t\tproblem(w, 400, \"los tokens delegados solo pueden ser viewer u operator\")\n\t\t\treturn\n\t\t}\n\t\tif req.Days < 1 || req.Days > 365 || len(req.Scopes) == 0 {\n\t\t\tproblem(w, 400, \"caducidad o scopes no válidos\")\n\t\t\treturn\n\t\t}\n\t\tpossible := map[string]bool{\"read\": true, \"services\": true, \"network\": true, \"operations\": true, \"headscale-read\": true, \"headscale-write\": true}\n\t\tfor _, scope := range req.Scopes {\n\t\t\tmethod := http.MethodGet\n\t\t\tif scope == \"operations\" || scope == \"headscale-write\" {\n\t\t\t\tmethod = http.MethodPost\n\t\t\t}\n\t\t\tif !possible[scope] || !rolePermits(req.Role, scope, method) {\n\t\t\t\tproblem(w, 400, \"módulo no válido para el rol\")\n\t\t\t\treturn\n\t\t\t}\n\t\t}\n\t\ttoken, info, err := s.database.NewToken(req.Label, req.Role, req.Scopes, time.Duration(req.Days)*24*time.Hour)\n\t\tif err != nil {\n\t\t\tproblem(w, 400, err.Error())\n\t\t\treturn\n\t\t}\n\t\treply(w, 201, map[string]any{\"token\": token, \"info\": info}, nil)\n\t}))",
       "session": false,
       "admin": false
     },
@@ -532,9 +532,129 @@
       "session": true,
       "admin": true
     },
+    "GET /api/v1/network/control/agent": {
+      "source": "src/internal/admin/routes_headscale_control.go",
+      "line": 63,
+      "fields": [],
+      "query": [],
+      "code": "mux.HandleFunc(\"GET /api/v1/network/control/agent\", gate(func(w http.ResponseWriter, r *http.Request, _ HeadscaleControlController) {\n\t\tc, ok := s.controller.(HeadscaleAgentController)\n\t\tif !ok {\n\t\t\tproblem(w, 501, \"observador Headscale no disponible\")\n\t\t\treturn\n\t\t}\n\t\tv, e := c.HeadscaleAgentState(r.Context())\n\t\tfinish(w, 200, v, e)\n\t}))",
+      "session": false,
+      "admin": true
+    },
+    "POST /api/v1/network/control/agent/sync": {
+      "source": "src/internal/admin/routes_headscale_control.go",
+      "line": 72,
+      "fields": [],
+      "query": [],
+      "code": "mux.HandleFunc(\"POST /api/v1/network/control/agent/sync\", gate(func(w http.ResponseWriter, r *http.Request, _ HeadscaleControlController) {\n\t\tc, ok := s.controller.(HeadscaleAgentController)\n\t\tif !ok {\n\t\t\tproblem(w, 501, \"observador Headscale no disponible\")\n\t\t\treturn\n\t\t}\n\t\tv, e := c.HeadscaleAgentSync(r.Context())\n\t\tfinish(w, 202, v, e)\n\t}))",
+      "session": false,
+      "admin": true
+    },
+    "GET /api/v1/network/control/info": {
+      "source": "src/internal/admin/routes_headscale_control.go",
+      "line": 81,
+      "fields": [],
+      "query": [],
+      "code": "mux.HandleFunc(\"GET /api/v1/network/control/info\", gate(func(w http.ResponseWriter, r *http.Request, c HeadscaleControlController) {\n\t\tv, e := c.HeadscaleControlInfo(r.Context())\n\t\tif token, _ := r.Context().Value(tokenRequestKey{}).(bool); token {\n\t\t\twrite := s.recoveryTokenMatches(r.Header.Get(\"Authorization\"))\n\t\t\tfor _, scope := range r.Context().Value(tokenScopesKey{}).([]string) {\n\t\t\t\tif scope == \"headscale-write\" {\n\t\t\t\t\twrite = true\n\t\t\t\t}\n\t\t\t}\n\t\t\tv.CanWrite = v.CanWrite && write && rolePermits(r.Context().Value(adminRoleKey{}).(string), \"headscale-write\", http.MethodPost) && s.policy != nil && s.policy.TokenAllowed(\"headscale-write\")\n\t\t\tv.CanSyncAgent = v.CanSyncAgent && write && rolePermits(r.Context().Value(adminRoleKey{}).(string), \"headscale-write\", http.MethodPost) && s.policy != nil && s.policy.TokenAllowed(\"headscale-write\")\n\t\t}\n\t\tfinish(w, 200, v, e)\n\t}))",
+      "session": false,
+      "admin": true
+    },
+    "GET /api/v1/network/control/document": {
+      "source": "src/internal/admin/routes_headscale_control.go",
+      "line": 95,
+      "fields": [],
+      "query": [],
+      "code": "mux.HandleFunc(\"GET /api/v1/network/control/document\", gate(func(w http.ResponseWriter, r *http.Request, c HeadscaleControlController) {\n\t\tv, e := c.HeadscaleControlDocument(r.Context())\n\t\tfinish(w, 200, v, e)\n\t}))",
+      "session": false,
+      "admin": true
+    },
+    "POST /api/v1/network/control/preview": {
+      "source": "src/internal/admin/routes_headscale_control.go",
+      "line": 99,
+      "fields": [],
+      "query": [],
+      "code": "mux.HandleFunc(\"POST /api/v1/network/control/preview\", gate(func(w http.ResponseWriter, r *http.Request, c HeadscaleControlController) {\n\t\tvar change headscalecontrol.Change\n\t\tif !decodeLimit(w, r, &change, headscalecontrol.MaxDocument) {\n\t\t\treturn\n\t\t}\n\t\tv, e := c.HeadscaleControlPreview(r.Context(), change)\n\t\tfinish(w, 200, v, e)\n\t}))",
+      "session": false,
+      "admin": true
+    },
+    "POST /api/v1/network/control/apply": {
+      "source": "src/internal/admin/routes_headscale_control.go",
+      "line": 107,
+      "fields": [],
+      "query": [],
+      "code": "mux.HandleFunc(\"POST /api/v1/network/control/apply\", gate(func(w http.ResponseWriter, r *http.Request, c HeadscaleControlController) {\n\t\tvar change headscalecontrol.Change\n\t\tif !decodeLimit(w, r, &change, headscalecontrol.MaxDocument) {\n\t\t\treturn\n\t\t}\n\t\tv, e := c.HeadscaleControlApply(r.Context(), change)\n\t\tfinish(w, 202, v, e)\n\t}))",
+      "session": false,
+      "admin": true
+    },
+    "GET /api/v1/network/control/operations/{id}": {
+      "source": "src/internal/admin/routes_headscale_control.go",
+      "line": 115,
+      "fields": [],
+      "query": [],
+      "code": "mux.HandleFunc(\"GET /api/v1/network/control/operations/{id}\", gate(func(w http.ResponseWriter, r *http.Request, c HeadscaleControlController) {\n\t\tv, e := c.HeadscaleControlOperation(r.Context(), r.PathValue(\"id\"))\n\t\tvar upstream *headscalecontrol.HTTPError\n\t\tif errors.As(e, &upstream) {\n\t\t\tif upstream.StatusCode == 404 {\n\t\t\t\tproblem(w, 404, \"la operación ya no está en este proceso; lee el estado actual del controlador antes de continuar\")\n\t\t\t\treturn\n\t\t\t}\n\t\t\tif upstream.StatusCode == 401 || upstream.StatusCode == 403 {\n\t\t\t\tproblem(w, 403, \"la delegación del controlador ha caducado o fue revocada\")\n\t\t\t\treturn\n\t\t\t}\n\t\t}\n\t\tfinish(w, 200, v, e)\n\t}))\n\t// La administración delegada reutiliza los mismos controladores tipados\n\t// que el panel local, sin publicar un proxy HTTP o CLI de propósito general.\n\tmanagement := func(w http.ResponseWriter) (HeadscaleManagementController, bool) {\n\t\tc, ok := s.controller.(HeadscaleManagementController)\n\t\tif !ok {\n\t\t\tproblem(w, 501, \"administración Headscale no disponible\")\n\t\t}\n\t\treturn c, ok\n\t}",
+      "session": false,
+      "admin": true
+    },
+    "GET /api/v1/network/control/headscale/users": {
+      "source": "src/internal/admin/routes_headscale_control.go",
+      "line": 139,
+      "fields": [],
+      "query": [],
+      "code": "mux.HandleFunc(\"GET /api/v1/network/control/headscale/users\", gate(func(w http.ResponseWriter, r *http.Request, _ HeadscaleControlController) {\n\t\tif c, ok := management(w); ok {\n\t\t\tv, e := c.HeadscaleUsers(r.Context())\n\t\t\tfinish(w, 200, v, e)\n\t\t}\n\t}))",
+      "session": false,
+      "admin": true
+    },
+    "GET /api/v1/network/control/headscale/keys": {
+      "source": "src/internal/admin/routes_headscale_control.go",
+      "line": 145,
+      "fields": [],
+      "query": [],
+      "code": "mux.HandleFunc(\"GET /api/v1/network/control/headscale/keys\", gate(func(w http.ResponseWriter, r *http.Request, _ HeadscaleControlController) {\n\t\tif c, ok := management(w); ok {\n\t\t\tv, e := c.HeadscalePreAuthKeys(r.Context())\n\t\t\tfinish(w, 200, v, e)\n\t\t}\n\t}))",
+      "session": false,
+      "admin": true
+    },
+    "POST /api/v1/network/control/headscale/action": {
+      "source": "src/internal/admin/routes_headscale_control.go",
+      "line": 151,
+      "fields": [],
+      "query": [],
+      "code": "mux.HandleFunc(\"POST /api/v1/network/control/headscale/action\", gate(func(w http.ResponseWriter, r *http.Request, _ HeadscaleControlController) {\n\t\tif c, ok := management(w); ok {\n\t\t\tvar action network.HeadscaleAction\n\t\t\tif !decode(w, r, &action) {\n\t\t\t\treturn\n\t\t\t}\n\t\t\tv, e := c.HeadscaleManage(r.Context(), action)\n\t\t\tfinish(w, 200, v, e)\n\t\t}\n\t}))",
+      "session": false,
+      "admin": true
+    },
+    "GET /api/v1/network/control/headscale/nodes": {
+      "source": "src/internal/admin/routes_headscale_control.go",
+      "line": 161,
+      "fields": [],
+      "query": [],
+      "code": "mux.HandleFunc(\"GET /api/v1/network/control/headscale/nodes\", gate(func(w http.ResponseWriter, r *http.Request, _ HeadscaleControlController) {\n\t\tc, ok := s.controller.(NetworkController)\n\t\tif !ok {\n\t\t\tproblem(w, 501, \"inventario Headscale no disponible\")\n\t\t\treturn\n\t\t}\n\t\tv, e := c.NetworkNodes(r.Context())\n\t\tfinish(w, 200, v, e)\n\t}))",
+      "session": false,
+      "admin": true
+    },
+    "GET /api/v1/network/control/headscale/policy": {
+      "source": "src/internal/admin/routes_headscale_control.go",
+      "line": 170,
+      "fields": [],
+      "query": [],
+      "code": "mux.HandleFunc(\"GET /api/v1/network/control/headscale/policy\", gate(func(w http.ResponseWriter, r *http.Request, _ HeadscaleControlController) {\n\t\tc, ok := s.controller.(HeadscalePolicyDNSController)\n\t\tif !ok {\n\t\t\tproblem(w, 501, \"política Headscale no disponible\")\n\t\t\treturn\n\t\t}\n\t\tv, e := c.HeadscaleGetPolicy(r.Context())\n\t\tfinish(w, 200, v, e)\n\t}))",
+      "session": false,
+      "admin": true
+    },
+    "PUT /api/v1/network/control/headscale/policy": {
+      "source": "src/internal/admin/routes_headscale_control.go",
+      "line": 179,
+      "fields": [
+        "policy",
+        "revision"
+      ],
+      "query": [],
+      "code": "mux.HandleFunc(\"PUT /api/v1/network/control/headscale/policy\", gate(func(w http.ResponseWriter, r *http.Request, _ HeadscaleControlController) {\n\t\tc, ok := s.controller.(HeadscalePolicyDNSController)\n\t\tif !ok {\n\t\t\tproblem(w, 501, \"política Headscale no disponible\")\n\t\t\treturn\n\t\t}\n\t\tvar change struct {\n\t\t\tPolicy   string `json:\"policy\"`\n\t\t\tRevision string `json:\"revision\"`\n\t\t}\n\t\tif !decodeLimit(w, r, &change, 101<<10) {\n\t\t\treturn\n\t\t}\n\t\tv, e := c.HeadscaleSetPolicy(r.Context(), change.Policy, change.Revision)\n\t\tfinish(w, 200, v, e)\n\t}))\n}",
+      "session": false,
+      "admin": true
+    },
     "GET /api/v1/network/admin/users": {
       "source": "src/internal/admin/routes_headscale_manage.go",
-      "line": 42,
+      "line": 33,
       "fields": [],
       "query": [],
       "code": "mux.HandleFunc(\"GET /api/v1/network/admin/users\", onlyAdmin(func(w http.ResponseWriter, r *http.Request, c HeadscaleManagementController) {\n\t\tdata, err := c.HeadscaleUsers(r.Context())\n\t\tif err != nil {\n\t\t\tproblem(w, 502, err.Error())\n\t\t\treturn\n\t\t}\n\t\treply(w, 200, data, nil)\n\t}))",
@@ -543,7 +663,7 @@
     },
     "GET /api/v1/network/admin/keys": {
       "source": "src/internal/admin/routes_headscale_manage.go",
-      "line": 50,
+      "line": 41,
       "fields": [],
       "query": [],
       "code": "mux.HandleFunc(\"GET /api/v1/network/admin/keys\", onlyAdmin(func(w http.ResponseWriter, r *http.Request, c HeadscaleManagementController) {\n\t\tdata, err := c.HeadscalePreAuthKeys(r.Context())\n\t\tif err != nil {\n\t\t\tproblem(w, 502, err.Error())\n\t\t\treturn\n\t\t}\n\t\treply(w, 200, data, nil)\n\t}))",
@@ -552,7 +672,7 @@
     },
     "POST /api/v1/network/admin/action": {
       "source": "src/internal/admin/routes_headscale_manage.go",
-      "line": 58,
+      "line": 49,
       "fields": [],
       "query": [],
       "code": "mux.HandleFunc(\"POST /api/v1/network/admin/action\", onlyAdmin(func(w http.ResponseWriter, r *http.Request, c HeadscaleManagementController) {\n\t\tvar action HeadscaleAction\n\t\tif !decode(w, r, &action) {\n\t\t\treturn\n\t\t}\n\t\tdata, err := c.HeadscaleManage(r.Context(), action)\n\t\tif err != nil {\n\t\t\tproblem(w, 400, err.Error())\n\t\t\treturn\n\t\t}\n\t\treply(w, 200, data, nil)\n\t}))\n}",
@@ -1011,7 +1131,7 @@
     },
     "GET /admin/": {
       "source": "src/internal/admin/routes_static.go",
-      "line": 48,
+      "line": 49,
       "fields": [],
       "query": [],
       "code": "mux.HandleFunc(\"GET /admin/\", func(w http.ResponseWriter, r *http.Request) {\n\t\t// En ServeMux, /admin/ también actúa como ruta comodín para cualquier\n\t\t// subruta que no coincida con otra regla explícita. No debemos devolver\n\t\t// el HTML del panel cuando se solicita una URL inexistente.\n\t\tif r.URL.Path != \"/admin/\" {\n\t\t\thttp.NotFound(w, r)\n\t\t\treturn\n\t\t}\n\t\ts.asset(w, r, \"panel.html\", \"text/html; charset=utf-8\")\n\t})\n\tfor path, resource := range webAssets {\n\t\tresource := resource\n\t\tmux.HandleFunc(\"GET \"+path, func(w http.ResponseWriter, r *http.Request) {\n\t\t\ts.asset(w, r, resource.file, resource.mime)\n\t\t})\n\t}",
@@ -1020,7 +1140,7 @@
     },
     "GET /admin/locales/levels": {
       "source": "src/internal/admin/routes_static.go",
-      "line": 64,
+      "line": 65,
       "fields": [],
       "query": [],
       "code": "mux.HandleFunc(\"GET /admin/locales/levels\", func(w http.ResponseWriter, r *http.Request) {\n\t\tlabels := map[string]string{}\n\t\tfor _, lang := range i18n.Codes() {\n\t\t\tfor source, code := range map[string]string{\"ERROR\": \"error\", \"ADVERTENCIA\": \"warn\", \"INFORMACIÓN\": \"info\", \"DEPURACIÓN\": \"debug\", \"TRAZA\": \"trace\"} {\n\t\t\t\tlabels[i18n.Translate(lang, source)] = code\n\t\t\t}\n\t\t}\n\t\treply(w, http.StatusOK, labels, nil)\n\t})",
@@ -1029,7 +1149,7 @@
     },
     "GET /admin/locales": {
       "source": "src/internal/admin/routes_static.go",
-      "line": 73,
+      "line": 74,
       "fields": [],
       "query": [],
       "code": "mux.HandleFunc(\"GET /admin/locales\", func(w http.ResponseWriter, r *http.Request) {\n\t\treply(w, http.StatusOK, i18n.Codes(), nil)\n\t})",
@@ -1038,7 +1158,7 @@
     },
     "GET /admin/locales/{filename}": {
       "source": "src/internal/admin/routes_static.go",
-      "line": 76,
+      "line": 77,
       "fields": [],
       "query": [],
       "code": "mux.HandleFunc(\"GET /admin/locales/{filename}\", func(w http.ResponseWriter, r *http.Request) {\n\t\tlang, ok := strings.CutSuffix(r.PathValue(\"filename\"), \".json\")\n\t\tif !ok {\n\t\t\thttp.NotFound(w, r)\n\t\t\treturn\n\t\t}\n\t\tdata, err := i18n.Data(lang)\n\t\tif err != nil {\n\t\t\thttp.NotFound(w, r)\n\t\t\treturn\n\t\t}\n\t\tw.Header().Set(\"Content-Type\", \"application/json; charset=utf-8\")\n\t\t_, _ = w.Write(data)\n\t})\n}\n\nfunc (s *Server) asset(w http.ResponseWriter, r *http.Request, name, mime string) {\n\tdata, e := assets.ReadFile(name)\n\tif e != nil {\n\t\tproblem(w, 500, \"asset no disponible\")\n\t\treturn\n\t}\n\tw.Header().Set(\"Content-Type\", mime)\n\t_, _ = w.Write(data)\n}",

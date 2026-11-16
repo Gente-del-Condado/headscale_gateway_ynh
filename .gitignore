@@ -49,3 +49,12 @@ issuer.pub
 .DS_Store
 .directory
 Thumbs.db
+
+# Datos y perfiles locales: mantenerlos fuera del clon también si están ignorados.
+/private/
+/secrets/
+/backups/
+/profiles/
+/state/
+*.sqlite3
+*.password

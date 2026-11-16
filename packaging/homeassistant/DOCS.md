@@ -265,3 +265,12 @@ En una instalación nueva, el panel común pide confirmar o editar el nombre
 propuesto antes de conectar a Headscale. La propuesta del instalador no sustituye
 esa elección. Headscale asigna el nombre definitivo y resuelve duplicados. Las
 actualizaciones conservan el nombre, la identidad, las credenciales y los datos.
+
+## Administrar un coordinador Headscale
+
+El complemento utiliza el mismo motor y portal que las otras plataformas. En
+**Coordinador / Ajustes** puede consultar o gestionar DNS de la Tailnet, filtros
+OIDC y observaciones de nodos mediante una delegación explícita al Gateway que
+controla Headscale. No necesita privilegios nuevos del anfitrión Home Assistant.
+Confiar en su CA no concede administración; configura además un token de lectura
+o escritura específico. Consulta el [manual del controlador](https://gente-del-condado.github.io/headscale_gateway_ynh/CONTROL_HEADSCALE.html).

@@ -1,0 +1,290 @@
+#!/usr/bin/env python3
+"""Registra explícitamente un controlador local sin elevar el portal del Gateway."""
+import argparse
+import json
+import os
+from pathlib import Path
+import pwd
+import re
+import stat
+import subprocess
+import tempfile
+import time
+import socket
+import http.client
+
+NAME = re.compile(r'[a-zA-Z0-9][a-zA-Z0-9_.-]{0,100}\Z')
+UNIT = re.compile(r'[a-zA-Z0-9][a-zA-Z0-9_.@-]{0,120}\.service\Z')
+PATH = re.compile(r'/[a-zA-Z0-9_./@-]+\Z')
+REGISTRY = Path('/etc/headscale-gateway-control')
+EXEC = Path('/usr/local/libexec/headscale-gateway-control')
+
+
+def command(*arguments):
+    return subprocess.check_output(arguments, text=True, stderr=subprocess.DEVNULL).strip()
+
+
+def safe_path(value):
+    # Estas rutas se interpolan también en unidades systemd: no admiten expansión.
+    if not PATH.fullmatch(value) or str(Path(value)) != value or '..' in Path(value).parts:
+        raise ValueError('Ruta local no canónica o con caracteres no admitidos')
+    return value
+
+
+def private_dir(path, mode=0o700):
+    path = Path(path)
+    for item in reversed([path, *path.parents]):
+        if str(item) == '/':
+            continue
+        try:
+            info = item.lstat()
+        except FileNotFoundError:
+            item.mkdir(mode=mode if item == path else 0o755)
+            info = item.lstat()
+        if not stat.S_ISDIR(info.st_mode) or info.st_uid != 0 or info.st_mode & 0o022:
+            raise ValueError('Una carpeta administrativa permite escritura ajena o es un enlace')
+    path.chmod(mode)
+
+
+def atomic_write(path, content, mode):
+    path = Path(path)
+    if path.is_symlink():
+        raise ValueError('No se sustituye un enlace administrativo')
+    fd, temporary = tempfile.mkstemp(prefix='.hgw-', dir=path.parent)
+    try:
+        with os.fdopen(fd, 'wb') as output:
+            output.write(content)
+            output.flush()
+            os.fsync(output.fileno())
+        os.chmod(temporary, mode)
+        os.chown(temporary, 0, 0)
+        os.replace(temporary, path)
+        directory = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
+        try:
+            os.fsync(directory)
+        finally:
+            os.close(directory)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
+
+
+def ready(socket_path):
+    # La unidad activa por sí sola no demuestra que el ayudante haya recuperado
+    # su diario y pueda leer el documento. No se imprime la respuesta privada.
+    class Connection(http.client.HTTPConnection):
+        def connect(self):
+            self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+            self.sock.settimeout(2)
+            self.sock.connect(socket_path)
+    deadline = time.monotonic() + 120
+    while time.monotonic() < deadline:
+        client = Connection('headscale-controller')
+        try:
+            client.request('GET', '/document')
+            response = client.getresponse()
+            body = response.read((1 << 20) + 1)
+            if response.status == 200 and len(body) <= 1 << 20 and len(json.loads(body).get('revision', '')) == 64:
+                return
+        except (OSError, ValueError, http.client.HTTPException):
+            pass
+        finally:
+            client.close()
+        time.sleep(.25)
+    raise ValueError('El controlador no terminó la recuperación o no pudo leer Headscale')
+
+
+def render_unit(spec, executable):
+    writable = sorted({str(Path(spec['config_path']).parent), spec['state_dir'],
+                       str(Path(spec['socket_path']).parent),
+                       *([str(Path(spec['records_path']).parent)] if spec.get('records_path') else [])})
+    return f'''[Unit]
+Description=Control local de Headscale ({spec['instance']})
+Wants={spec['unit']}
+After={spec['unit']}
+
+[Service]
+Type=simple
+User=root
+Group=root
+ExecStart={executable} headscale-control --spec {REGISTRY}/{spec['instance']}.json
+Restart=on-failure
+RestartSec=10s
+TimeoutStopSec=300s
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictRealtime=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6 AF_NETLINK
+ReadWritePaths={' '.join(writable)}
+
+[Install]
+WantedBy=multi-user.target
+'''
+
+
+def validate_selection(spec, gateway_unit):
+    if not NAME.fullmatch(spec['instance']) or not UNIT.fullmatch(spec['unit']) or not UNIT.fullmatch(gateway_unit):
+        raise ValueError('Identificador o unidad no admitidos')
+    if spec['unit'] == gateway_unit:
+        raise ValueError('Headscale y Gateway requieren unidades distintas')
+    for key in ('binary', 'config_path', 'records_path', 'health_ca'):
+        if spec.get(key):
+            safe_path(spec[key])
+    if spec['allowed_uid'] <= 0 or spec['headscale_uid'] <= 0 or spec['headscale_gid'] <= 0:
+        raise ValueError('Los servicios Headscale y Gateway deben usar usuarios sin privilegios')
+    if spec['allowed_uid'] == spec['headscale_uid']:
+        raise ValueError('El portal y Headscale deben usar identidades separadas')
+    if spec['state_dir'] != '/var/lib/headscale-gateway-control/' + spec['instance'] or spec['socket_path'] != '/run/headscale-gateway-control/' + spec['instance'] + '/control.sock':
+        raise ValueError('Registro fuera de las carpetas reservadas')
+    from urllib.parse import urlsplit
+    if spec.get('api_origin'):
+        origin = urlsplit(spec['api_origin'])
+        if origin.scheme not in ('http', 'https') or not origin.hostname or origin.username or origin.password or origin.query or origin.fragment or origin.path not in ('', '/'):
+            raise ValueError('Origen API Headscale no admitido')
+    import ipaddress
+    health = urlsplit(spec['health_url'])
+    ipaddress.ip_address(health.hostname)
+    if health.scheme not in ('http', 'https') or health.path != '/health' or health.username or health.password or health.query or health.fragment:
+        raise ValueError('La comprobación de salud requiere una IP local y /health')
+    # El ayudante Go comprueba además que la IP pertenece al anfitrión.
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--instance', required=True)
+    parser.add_argument('--gateway-binary')
+    parser.add_argument('--disable', action='store_true', help='Revocar el vínculo; conservar configuración y recuperación de Headscale')
+    parser.add_argument('--detach', action='store_true', help='Suspender el vínculo al retirar el paquete, sin borrar su selección')
+    parser.add_argument('--reattach', action='store_true', help='Recuperar un vínculo suspendido al restaurar el paquete, junto con --refresh')
+    parser.add_argument('--enable', action='store_true', help='Reactivar explícitamente un registro desactivado, junto con --refresh')
+    parser.add_argument('--gateway-unit')
+    parser.add_argument('--headscale-unit')
+    parser.add_argument('--headscale-binary')
+    parser.add_argument('--config')
+    parser.add_argument('--records', default='')
+    parser.add_argument('--health-url')
+    parser.add_argument('--api-origin', default='', help='Origen API explícito si difiere del server_url de Headscale')
+    parser.add_argument('--health-ca', default='')
+    parser.add_argument('--refresh', action='store_true', help='Conservar la selección existente y renovar solo el ejecutable')
+    parser.add_argument('--restart-gateway', action='store_true')
+    args = parser.parse_args()
+    if os.geteuid() != 0:
+        parser.error('Ejecuta esta herramienta como administrador del anfitrión')
+    if not NAME.fullmatch(args.instance):
+        parser.error('Identificador no admitido')
+    if (args.enable or args.reattach) and (not args.refresh or args.disable or args.detach):
+        parser.error('La reactivación requiere --refresh y no admite retirar el vínculo')
+    if args.disable and args.detach:
+        parser.error('--disable y --detach son excluyentes')
+    enabled = True
+    detached = False
+    private_dir(REGISTRY)
+    registry = REGISTRY / (args.instance + '.json')
+    binding = REGISTRY / (args.instance + '.binding.json')
+    if args.refresh or args.disable or args.detach:
+        for path in (registry, binding):
+            info = path.lstat()
+            if not stat.S_ISREG(info.st_mode) or info.st_uid != 0 or info.st_mode & 0o077:
+                raise ValueError('El registro previo no es privado de root')
+        spec = json.loads(registry.read_text())
+        previous = json.loads(binding.read_text())
+        gateway_unit = previous['gateway_unit']
+        if not isinstance(previous.get('enabled', True), bool) or not isinstance(previous.get('detached', False), bool):
+            raise ValueError('Estado de activación inválido')
+        enabled = previous.get('enabled', True) or args.enable
+        detached = previous.get('detached', False) and not (args.reattach or args.enable)
+    else:
+        if registry.exists() or binding.exists():
+            raise ValueError('Ya existe el registro; utiliza --refresh para actualizarlo')
+        if not all((args.gateway_unit, args.headscale_unit, args.headscale_binary, args.config, args.health_url)):
+            parser.error('Selecciona explícitamente ambas unidades, binario y configuración Headscale y URL de salud')
+        gateway_unit = args.gateway_unit
+        if not UNIT.fullmatch(gateway_unit) or not UNIT.fullmatch(args.headscale_unit):
+            parser.error('Unidad no admitida')
+        gateway_user = command('/usr/bin/systemctl', 'show', gateway_unit, '--property=User', '--value')
+        headscale_user = command('/usr/bin/systemctl', 'show', args.headscale_unit, '--property=User', '--value')
+        gateway = pwd.getpwnam(gateway_user)
+        headscale = pwd.getpwnam(headscale_user)
+        spec = dict(instance=args.instance, allowed_uid=gateway.pw_uid,
+                    headscale_uid=headscale.pw_uid, headscale_gid=headscale.pw_gid,
+                    binary=args.headscale_binary, config_path=args.config, records_path=args.records,
+                    state_dir='/var/lib/headscale-gateway-control/' + args.instance,
+                    socket_path='/run/headscale-gateway-control/' + args.instance + '/control.sock',
+                    api_origin=args.api_origin, unit=args.headscale_unit, health_url=args.health_url, health_ca=args.health_ca)
+    validate_selection(spec, gateway_unit)
+    service = 'headscale-gateway-control-' + args.instance + '.service'
+    if args.disable or args.detach:
+        subprocess.run(['/usr/bin/systemctl', 'disable', '--now', service], check=True)
+        dropin = Path('/etc/systemd/system') / (gateway_unit + '.d') / '50-headscale-control.conf'
+        if dropin.exists() and not dropin.is_symlink():
+            dropin.unlink()
+        subprocess.run(['/usr/bin/systemctl', 'daemon-reload'], check=True)
+        atomic_write(binding, (json.dumps({'gateway_unit': gateway_unit, 'enabled': enabled if args.detach else False, 'detached': args.detach}) + '\n').encode(), 0o600)
+        print('HEADSCALE_CONTROL_DESACTIVADO_OK: registros y recuperación conservados; no se toca Headscale')
+        return
+    if not args.gateway_binary:
+        parser.error('Selecciona --gateway-binary')
+    gateway_user = command('/usr/bin/systemctl', 'show', gateway_unit, '--property=User', '--value')
+    headscale_user = command('/usr/bin/systemctl', 'show', spec['unit'], '--property=User', '--value')
+    gateway, headscale = pwd.getpwnam(gateway_user), pwd.getpwnam(headscale_user)
+    spec.update(allowed_uid=gateway.pw_uid, headscale_uid=headscale.pw_uid, headscale_gid=headscale.pw_gid)
+    validate_selection(spec, gateway_unit)
+    # Nunca se ejecuta como root el binario modificable por el usuario del portal.
+    source = os.open(args.gateway_binary, os.O_RDONLY | os.O_NOFOLLOW)
+    try:
+        info = os.fstat(source)
+        if not stat.S_ISREG(info.st_mode) or info.st_size > 512 * 1024 * 1024:
+            raise ValueError('El motor seleccionado no es un ejecutable regular admitido')
+        with os.fdopen(os.dup(source), 'rb') as stream:
+            binary = stream.read()
+        if not binary.startswith(b'\x7fELF'):
+            raise ValueError('Selecciona el motor Go de Linux')
+    finally:
+        os.close(source)
+    executable_dir = EXEC / args.instance
+    private_dir(executable_dir, 0o755)
+    private_dir(Path(spec['state_dir']))
+    private_dir(Path(spec['socket_path']).parent, 0o711)
+    executable = executable_dir / 'headscale-gateway'
+    service = 'headscale-gateway-control-' + args.instance + '.service'
+    # systemd espera a que termine cualquier transacción antes de sustituir el motor.
+    subprocess.run(['/usr/bin/systemctl', 'stop', service], check=True, stdout=subprocess.DEVNULL) if Path('/etc/systemd/system', service).exists() else None
+    atomic_write(executable, binary, 0o755)
+    atomic_write(registry, (json.dumps(spec, indent=2) + '\n').encode(), 0o600)
+    atomic_write(binding, (json.dumps({'gateway_unit': gateway_unit, 'enabled': enabled, 'detached': detached}) + '\n').encode(), 0o600)
+    atomic_write(Path('/etc/systemd/system') / service, render_unit(spec, executable).encode(), 0o644)
+    dropin = Path('/etc/systemd/system') / (gateway_unit + '.d')
+    private_dir(dropin, 0o755)
+    if enabled and not detached:
+        atomic_write(dropin / '50-headscale-control.conf', f'[Unit]\nWants={service}\nAfter={service}\n\n[Service]\nEnvironment=HGW_HEADSCALE_CONTROL_SOCKET={spec["socket_path"]}\n'.encode(), 0o644)
+    subprocess.run(['/usr/bin/systemctl', 'daemon-reload'], check=True)
+    if not enabled or detached:
+        print('HEADSCALE_CONTROL_ACTUALIZADO_DESACTIVADO_OK: se conserva el vínculo inactivo')
+        return
+    subprocess.run(['/usr/bin/systemctl', 'enable', '--now', service], check=True)
+    subprocess.run(['/usr/bin/systemctl', 'is-active', '--quiet', service], check=True)
+    ready(spec['socket_path'])
+    if args.restart_gateway:
+        subprocess.run(['/usr/bin/systemctl', 'try-restart', gateway_unit], check=True)
+    print('HEADSCALE_CONTROL_REGISTRADO_OK')
+    print('Selecciona «Local» en Ajustes → Control de Headscale. No se cambian credenciales ni datos.')
+    if not args.restart_gateway:
+        print('Reinicia el servicio Gateway para cargar el vínculo local: ' + gateway_unit)
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except (ValueError, OSError, subprocess.CalledProcessError, KeyError) as error:
+        # No imprimir salidas de configtest ni contenido del registro privado.
+        raise SystemExit('No se ha completado el registro del controlador: ' + type(error).__name__)

@@ -31,6 +31,7 @@ func (a *adminController) NetworkInfo(ctx context.Context) (any, error) {
 	cfg := a.runtime.currentConfig()
 	info := map[string]any{"enabled": cfg.NetworkPanelEnabled, "headscale_url": cfg.HeadscaleURL, "api_key_configured": cfg.HeadscaleAPIKey != "", "gateway_vpn_state": "offline", "capabilities": map[string]bool{"inventory": true, "ping": true, "remote_client_preferences": false, "headscale_route_approval": true}}
 	info["pause_allowed"] = ctx.Value(ingressContextKey{}) != true
+	info["headscale_control_mode"] = cfg.HeadscaleControlMode
 	if ctx.Value(ingressContextKey{}) == true {
 		info["pause_block_reason"] = pauseFromVPNMessage
 	}
@@ -90,7 +91,24 @@ func (a *adminController) NetworkNodes(ctx context.Context) (any, error) {
 	}
 	ctx, cancel := context.WithTimeout(ctx, 18*time.Second)
 	defer cancel()
-	inventory, err := network.List(ctx, cfg.HeadscaleURL, cfg.HeadscaleAPIKey)
+	var inventory network.Inventory
+	var err error
+	if cfg.HeadscaleControlMode == "remote" {
+		client, e := a.headscaleControlClient(ctx)
+		if e != nil {
+			return nil, e
+		}
+		defer client.Close()
+		inventory, err = client.Nodes(ctx)
+		inventory.Source = "headscale-controller"
+		// Las métricas de conectividad que se muestran aquí siguen siendo las
+		// observadas por ESTE Gateway; no se atribuye tráfico del controlador.
+		for i := range inventory.Nodes {
+			inventory.Nodes[i].Peer = nil
+		}
+	} else {
+		inventory, err = network.List(ctx, cfg.HeadscaleURL, cfg.HeadscaleAPIKey)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -150,9 +168,13 @@ func (a *adminController) NetworkPing(ctx context.Context, nodeID, mode string) 
 	}
 	ctx, cancel := context.WithTimeout(ctx, 14*time.Second)
 	defer cancel()
-	inv, err := network.List(ctx, cfg.HeadscaleURL, cfg.HeadscaleAPIKey)
+	result, err := a.NetworkNodes(ctx)
 	if err != nil {
 		return nil, err
+	}
+	inv, ok := result.(network.Inventory)
+	if !ok {
+		return nil, errors.New("inventario de red no reconocido")
 	}
 	var target netip.Addr
 	for _, n := range inv.Nodes {

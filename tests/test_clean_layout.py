@@ -39,6 +39,17 @@ class CleanLayoutTest(unittest.TestCase):
             self.assertIn('src/main.go', files)
             self.assertFalse(any(name.endswith('private.key') for name in files))
 
+    def test_export_rejects_credentials_and_private_state_in_source_folders(self):
+        for name in ('credentials.json', 'signing.json', 'tailscaled.state', 'private.sqlite3', 'release.password', '.env.production'):
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                (root/'git-install-manifest.json').write_text(json.dumps({'outputs': {}}))
+                (root/'src').mkdir()
+                (root/'src'/name).write_text('fixture')
+                with patch.object(repository_archive, 'ROOT', root):
+                    with self.assertRaisesRegex(ValueError, 'Estado privado'):
+                        list(source_files())
+
     def test_translation_check_leaves_generated_files_untouched(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

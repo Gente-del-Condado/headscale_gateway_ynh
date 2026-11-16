@@ -14,17 +14,20 @@ import (
 	"net"
 	"net/http"
 	"sync"
+	"sync/atomic"
 	"time"
 )
 
 func (a *adminController) ClearProxyConnections() { clearIdleProxyConnections() }
 
 type adminController struct {
-	configPath string
-	runtime    *gatewayRuntime
-	vpn        *vpnState
-	provider   DNSProvider
-	started    time.Time
+	configPath   string
+	runtime      *gatewayRuntime
+	vpn          *vpnState
+	provider     DNSProvider
+	started      time.Time
+	agentMu      sync.Mutex
+	agentRunning atomic.Bool
 }
 
 func startAdministration(cfg Config, dbPath string, runtime *gatewayRuntime, vpn *vpnState, provider DNSProvider) error {
@@ -115,6 +118,7 @@ func startAdministration(cfg Config, dbPath string, runtime *gatewayRuntime, vpn
 	syncCtx, syncCancel := context.WithCancel(context.Background())
 	go handler.RunPKISynchronizer(syncCtx)
 	go controller.portalRefreshLoop(syncCtx)
+	go controller.headscaleAgentLoop(syncCtx)
 	go controller.portalDiscoveryLoop(syncCtx, db, cfg.LocalListenAddr)
 	adminHandler := handler.Handler()
 

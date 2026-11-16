@@ -59,11 +59,16 @@ nav:
       - Acceso al Git privado: INSTALACION_PRIVADA.md
       - Plataformas y contratos: PLATAFORMAS.md
   - Administrar:
+      - Coordinador Headscale: CONTROL_HEADSCALE.md
       - Red, puertos y CA: RED_Y_CA_LAN.md
       - Confianza y federación: CA-FEDERACION.md
       - Recuperar el acceso: RECUPERAR_ACCESO.md
       - Resolver problemas: SOLUCION_PROBLEMAS.md
   - Desarrollar:
+      - Empezar a desarrollar: EMPEZAR_DESARROLLO.md
+      - Estado de la siguiente entrega: ESTADO_DESARROLLO.md
+      - Privacidad y limpieza: SEGURIDAD.md
+      - Cambios: CAMBIOS.md
       - Estructura del proyecto: ESTRUCTURA.md
       - Arquitectura y flujos: ARQUITECTURA.md
       - Guía de contribución: DESARROLLO.md

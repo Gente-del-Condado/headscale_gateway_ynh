@@ -20,7 +20,9 @@ func initialSettings() map[string]string {
 		"server.listen_addr": "0.0.0.0:8443", "domain.base_domain": "",
 		"headscale.node_name": "",
 		"headscale.url":       "", "headscale.panel_enabled": "true", "headscale.api_key": "",
-		"dns.provider": "none", "dns.zone": "", "dns.technitium.url": "", "dns.technitium.token": "",
+		"headscale.control.mode": "disabled", "headscale.control.origin": "", "headscale.control.fingerprint": "", "headscale.control.token": "",
+		"headscale.agent.enabled": "false",
+		"dns.provider":            "none", "dns.zone": "", "dns.technitium.url": "", "dns.technitium.token": "",
 		"dns.cloudflare.zone_id": "", "dns.cloudflare.token": "", "acme.cloudflare.zone_id": "",
 		"acme.cloudflare.token": "", "acme.dns_provider": "none", "acme.email": "", "acme.agree_to_terms": "false",
 		"certificates.mode": "force-local", "certificates.renew_before": "720h",
@@ -110,6 +112,10 @@ func configFromSettings(dbPath string, values map[string]string, db *state.Store
 	if err != nil {
 		return Config{}, err
 	}
+	agentEnabled, err := boolSetting("headscale.agent.enabled", false)
+	if err != nil {
+		return Config{}, err
+	}
 	networkEnabled, err := boolSetting("headscale.panel_enabled", true)
 	if err != nil {
 		return Config{}, err
@@ -148,7 +154,10 @@ func configFromSettings(dbPath string, values map[string]string, db *state.Store
 		CloudflareDNSToken: get("dns.cloudflare.token"), CloudflareACMEZoneID: get("acme.cloudflare.zone_id"),
 		CloudflareACMEToken: get("acme.cloudflare.token"), HeadscaleURL: get("headscale.url"),
 		HeadscaleAPIKey: get("headscale.api_key"), NetworkPanelEnabled: networkEnabled,
-		ACMEEmail: get("acme.email"), ACMEAgreeToTerms: agreeToTerms, DataDir: filepath.Dir(dbPath), DatabasePath: dbPath,
+		HeadscaleControlMode: get("headscale.control.mode"), HeadscaleControlOrigin: get("headscale.control.origin"),
+		HeadscaleControlFingerprint: get("headscale.control.fingerprint"), HeadscaleControlToken: get("headscale.control.token"),
+		HeadscaleAgentEnabled: agentEnabled,
+		ACMEEmail:             get("acme.email"), ACMEAgreeToTerms: agreeToTerms, DataDir: filepath.Dir(dbPath), DatabasePath: dbPath,
 		LocalListenAddr: get("server.listen_addr"), AdminEnabled: adminEnabled,
 		AdminListenAddr: get("admin.listen_addr"), AdminDomainMode: get("admin.domain_mode"),
 		AdminSubdomain: get("admin.subdomain"), CertificateMode: get("certificates.mode"),

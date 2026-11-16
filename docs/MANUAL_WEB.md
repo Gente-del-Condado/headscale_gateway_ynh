@@ -58,25 +58,28 @@ Las capturas se mantienen según [CAPTURAS.md](CAPTURAS.md).
 
 ## GitHub Pages
 
-El principal privado `headscale_gateway` de Forgejo se replica al principal
-privado de GitHub. Después de superar **Calidad multiplataforma**, **Manual web**
-construye el HTML, comprueba sus enlaces y lo publica directamente en `gh-pages`
-de los dos repositorios públicos:
+El principal privado de Forgejo se replica al espejo privado de GitHub. El
+compilador público `headscale_gateway_releases` obtiene la release estable y
+construye el manual desde sus fuentes, valida los enlaces y publica el mismo
+HTML en `gh-pages` de estos dos destinos:
 
 - [Manual YunoHost](https://gente-del-condado.github.io/headscale_gateway_ynh/).
 - [Manual Home Assistant](https://gente-del-condado.github.io/headscale_gateway_ha/).
 
-Ambas webs contienen el mismo manual. En cada destino, **Settings → Pages**
-debe publicar desde la rama `gh-pages`, carpeta `/`. El principal no necesita
-Pages ni permisos `pages: write` o `id-token: write`. Tampoco utiliza las antiguas
-claves de escritura en Forgejo ni las variables `PUBLISH_DOCS` y
-`PUBLISH_PUBLIC_DOCS`. La credencial es `PUBLICATION_TOKEN`, limitada a Contents
-en las distribuciones públicas; consulta [Publicación](PUBLICACION.md).
+En ambos repositorios, **Settings → Pages** debe utilizar `gh-pages`, carpeta
+`/`. El principal privado no necesita Pages. El publicador conserva el historial
+de `gh-pages`, no sustituye `main` del paquete y utiliza `PUBLICATION_TOKEN`
+limitado a los destinos públicos. No escribe en Forgejo.
 
-Los pull requests solo construyen y comprueban el manual, sin acceder a esa
-credencial. La publicación toma el SHA que superó las pruebas y descarta
-revisiones que ya no sean main al comenzar. Conserva el historial de gh-pages;
-no modifica la rama del paquete ni incluye el historial privado.
+El controlador tiene además una actualización documental que toma las guías
+del `main` de Forgejo y las combina con los fuentes de una release completada.
+Su código vive en `packaging/releases/`; consulta [PUBLICACION.md](PUBLICACION.md).
+Los pull requests y las comprobaciones locales no publican ni reciben el token.
+
+**Preparar sin subir** significa editar las fuentes, compilar en local y revisar
+el HTML. No actualiza las webs públicas ni autoriza un push a sus ramas. Para
+publicar después, sigue el recorrido autorizado de la entrega; no uses recetas
+antiguas con claves de escritura a repositorios derivados de Forgejo.
 
 Al renombrar repositorios, actualiza los enlaces a Pages: GitHub no redirige
 los sitios de proyecto aunque sí redirija la URL del repositorio.

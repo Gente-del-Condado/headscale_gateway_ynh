@@ -2,22 +2,13 @@ package admin
 
 import (
 	"context"
+	"github.com/gentedelcondado/headscale-gateway/internal/network"
 	"net/http"
 )
 
 // HeadscaleAction solo acepta comandos de la lista permitida del Gateway,
 // nunca URL ni métodos HTTP arbitrarios elegidos por el navegador.
-type HeadscaleAction struct {
-	Action    string   `json:"action"`
-	ID        string   `json:"id,omitempty"`
-	Name      string   `json:"name,omitempty"`
-	User      string   `json:"user,omitempty"`
-	Routes    []string `json:"routes,omitempty"`
-	Tags      []string `json:"tags,omitempty"`
-	Reusable  bool     `json:"reusable,omitempty"`
-	Ephemeral bool     `json:"ephemeral,omitempty"`
-	Hours     int      `json:"hours,omitempty"`
-}
+type HeadscaleAction = network.HeadscaleAction
 type HeadscaleManagementController interface {
 	HeadscaleUsers(context.Context) (any, error)
 	HeadscalePreAuthKeys(context.Context) (any, error)

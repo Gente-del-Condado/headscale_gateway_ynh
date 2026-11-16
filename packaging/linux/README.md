@@ -5,8 +5,8 @@ auxiliares. Gateway-Tray es un cliente opcional y no es necesario para usar el
 servidor. Las descargas y sus fuentes están en
 [headscale_gateway_releases](https://github.com/Gente-del-Condado/headscale_gateway_releases/releases).
 
-Instala el archivo de tu arquitectura con `sudo apt install ./headscale-gateway_1.4.14-1_amd64.deb`
-o `sudo dnf install ./headscale-gateway-1.4.14-1.x86_64.rpm`.
+Instala el archivo de tu arquitectura con `sudo apt install ./headscale-gateway_1.4.16-1_amd64.deb`
+o `sudo dnf install ./headscale-gateway-1.4.16-1.x86_64.rpm`.
 El paquete crea un usuario de servicio sin acceso interactivo. La primera
 instalación no arranca ni expone el panel sin configurar una cuenta:
 
@@ -84,3 +84,11 @@ muestra las instrucciones iniciales; no crea credenciales ni eleva permisos por
 su cuenta. El paquete no habilita un servicio sin cuenta administrativa. Tras
 configurarla y activar la unidad con las órdenes anteriores, el servicio arranca
 con el sistema y se reinicia tras un fallo. Cerrar el navegador no lo detiene.
+
+## Controlador Headscale opcional
+
+El panel compartido puede gestionar DNS de la Tailnet, restricciones OIDC y
+observación de nodos. El paquete incluye `headscale-gateway-setup-headscale` para
+registrar un ayudante local separado del servicio sin privilegios. También puede
+actuar como cliente remoto desde otras plataformas. No se activa automáticamente.
+Consulta [Control de Headscale](https://gente-del-condado.github.io/headscale_gateway_ynh/CONTROL_HEADSCALE.html).

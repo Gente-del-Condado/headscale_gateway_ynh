@@ -220,3 +220,15 @@ button.danger{background:#b42338!important;color:white} .grid>*,#headscale-manag
 .pki-discovery-entry details{margin-top:10px}.pki-discovery-entry summary{cursor:pointer}
 .pki-discovery-entry pre{max-height:180px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;padding:10px;background:#101827;color:#d7e3f2;border-radius:5px}
 .pki-discovery-entry pre:focus-visible{outline:2px solid #38bdf8;outline-offset:2px}
+
+/* Formularios del coordinador: foco visible, errores tras interacción y
+   registro de progreso con texto además del color. */
+[data-page="headscale-control"] fieldset {min-inline-size:0; margin-block:1rem; padding:1rem; border:1px solid var(--border,#64748b); border-radius:.5rem;}
+[data-page="headscale-control"] legend {padding-inline:.4rem; font-weight:600;}
+[data-page="headscale-control"] textarea {inline-size:100%; max-inline-size:100%; min-block-size:6rem; resize:vertical;}
+[data-page="headscale-control"] :is(input,textarea):focus-visible {outline:3px solid var(--accent,#60a5fa); outline-offset:2px;}
+[data-page="headscale-control"] :is(:user-invalid,[aria-invalid="true"]) {border-color:#e11d48;}
+[data-page="headscale-control"] .network-diagnostic {white-space:pre-wrap; overflow-wrap:anywhere; max-block-size:26rem; overflow:auto;}
+.hsc-operation-log {padding-inline-start:1.5rem; line-height:1.8;}
+
+#hsc-record-form input[type="radio"] {display:inline-block; width:1.1rem; height:1.1rem; max-width:1.1rem; min-height:0; padding:0; margin:0; flex:0 0 auto;}
