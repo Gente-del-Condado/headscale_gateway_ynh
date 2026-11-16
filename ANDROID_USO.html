@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.13</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.14</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -148,8 +148,8 @@
     <main id="contenido" tabindex="-1">
       <p class="breadcrumb"><a href="index.html">Manual</a><span aria-hidden="true"> / </span>Android</p>
       <article class="prose"><h1 id="headscale-gateway-para-android">Headscale Gateway para Android</h1>
-<p>La entrega común <strong>1.4.12</strong> utiliza el motor Go compartido y <code>versionCode</code>
-<code>10040120</code>. GitHub Actions construye el APK directo con la firma estable, el
+<p>La entrega común <strong>1.4.14</strong> utiliza el motor Go compartido y <code>versionCode</code>
+<code>10040140</code>. GitHub Actions construye el APK directo con la firma estable, el
 APK F-Droid sin firma y el AAB validado. Play Store continúa solo preparado;
 no se crea una ficha ni se envía la aplicación a las tiendas.</p>
 <p>Aplicación experimental con el motor completo del proyecto, panel administrativo
@@ -340,6 +340,11 @@ sesión del panel y el rechazo del adaptador sin credenciales. Incluye una
 prueba opcional con un Headscale y otro nodo temporales, TCP, UDP y MagicDNS.
 Consulta <a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/blob/upstream-source/android/PRUEBAS.md">los pasos del laboratorio</a>. La APK de pruebas
 instrumentadas se construye aparte y no se distribuye como aplicación.</p>
+<p>La instrumentación de laboratorio acepta <code>basedomain</code> para usar el mismo dominio
+privado que los otros Gateways del ensayo; si se omite, utiliza <code>lab.example.test</code>.
+Este parámetro solo existe en el APK de pruebas aislado.
+<code>pingpeers=true</code> exige comprobar tráfico hacia al menos otros tres Gateways.
+La CA y la clave efímera se transmiten al proceso hijo Go solo durante este ensayo.</p>
 <p>Waydroid requiere desactivar temporalmente su suspensión automática durante
 las pruebas largas, y restaurar el valor previo al terminarlas. No se borran
 sus datos ni se desinstalan otras aplicaciones. Una prueba de túnel exige
@@ -349,16 +354,27 @@ en <a href="ANDROID.html">la documentación Android</a>. La versión sigue siend
 experimental hasta validar también un teléfono físico, reconexión Wi-Fi/datos,
 suspensión, IPv6 y proveedores DNS/ACME reales.</p>
 <p>Consulta <a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/blob/upstream-source/android/TERCEROS.md">los componentes reutilizados y sus avisos</a>.</p>
-<h2 id="autor-y-soporte">Autor y soporte</h2>
-<p>Autor: <strong>Gente del Condado</strong>. Soporte: <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>.
-<a href="https://gente-del-condado.github.io/headscale_gateway_ynh/">Manual en línea</a>.</p>
 <h2 id="nombre-propuesto-antes-de-conectar">Nombre propuesto antes de conectar</h2>
 <p>El primer formulario del panel propone el nombre del dispositivo Android (o su
 modelo si no está disponible) y permite editarlo antes de iniciar tsnet. No pide
 permisos de Bluetooth para obtenerlo. Headscale decide el nombre definitivo y
 resuelve los duplicados; se conserva la identidad VPN al actualizar. Una
 instalación existente conserva el nombre que ya tenía. Importar un perfil no
-copia el nombre del dispositivo de origen ni confirma la propuesta local.</p></article>
+copia el nombre del dispositivo de origen ni confirma la propuesta local.</p>
+<h2 id="encontrar-el-portal-y-la-administración">Encontrar el portal y la administración</h2>
+<p>En <strong>Resumen → Estado</strong>, <strong>Dominio principal</strong> aparece primero y enlaza al
+portal de servicios de este Gateway. La <strong>URL administrativa</strong> abre el panel;
+<strong>Servidor Headscale</strong> corresponde al coordinador VPN. Las direcciones web
+completas son enlaces y conservan su puerto y ruta. Se abren en otra pestaña
+o en el navegador del dispositivo. Sin un dominio confirmado se muestra
+<strong>Pendiente de conexión</strong>, sin crear un enlace ficticio.</p>
+<p>El navegador necesita resolver ese DNS, alcanzar la red correspondiente y
+confiar en su certificado. Ingress o el SSO de YunoHost permiten administrar
+el Gateway, pero no dan por sí solos conectividad del navegador a la Tailnet.
+En Android, activa <strong>Conectar aplicaciones</strong> cuando el destino lo requiera.</p>
+<h2 id="autor-y-soporte">Autor y soporte</h2>
+<p>Autor: <strong>Gente del Condado</strong>. Soporte: <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>.
+<a href="https://gente-del-condado.github.io/headscale_gateway_ynh/">Manual en línea</a>.</p></article>
       <footer class="page-footer">
         <p>Headscale Gateway · Gente del Condado · Documentación en español</p>
         <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>
@@ -388,9 +404,11 @@ copia el nombre del dispositivo de origen ni confirma la propuesta local.</p></a
         
           <li><a href="#verificación-y-límites">Verificación y límites</a></li>
         
-          <li><a href="#autor-y-soporte">Autor y soporte</a></li>
-        
           <li><a href="#nombre-propuesto-antes-de-conectar">Nombre propuesto antes de conectar</a></li>
+        
+          <li><a href="#encontrar-el-portal-y-la-administración">Encontrar el portal y la administración</a></li>
+        
+          <li><a href="#autor-y-soporte">Autor y soporte</a></li>
         
       </ul></nav>
     </aside>

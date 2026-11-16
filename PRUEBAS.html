@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.13</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.14</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -171,6 +171,32 @@ La prueba local necesita PowerShell como administrador y un paquete Windows
 compilado de las mismas fuentes. Crea su propio servicio y directorios con
 nombres únicos; no sustituye una instalación existente y los retira al terminar.
 GitHub mantiene las comprobaciones y la publicación de los destinos públicos.</p>
+<h2 id="aceptación-en-vm-y-red-de-laboratorio">Aceptación en VM y red de laboratorio</h2>
+<p>Prepara una identidad SSH propia por VM y comprueba primero el acceso
+administrativo sin interacción. Windows necesita una sesión SSH con token de
+administrador; YunoHost requiere sudo no interactivo y Home Assistant OS acceso
+al host, separado del complemento de terminal. Conserva RAM y CPU; valida las
+plataformas de una en una y apágalas tras guardar sus informes.</p>
+<p>Para los enlaces del panel Windows prepara la página con las mismas fuentes:</p>
+<pre tabindex="0"><code class="language-bash">python3 tools/prepare_status_links_lab.py --output builds/status-links-windows
+</code></pre>
+<p>Transfiere esa carpeta al laboratorio y pasa <code>-StatusFixture</code> a
+<code>tools/check_windows_service.ps1</code>. Edge utiliza un perfil temporal y comunica
+el resultado por loopback; el comprobador no depende de capturar su salida de
+consola. Elimina solo el perfil y los servicios que haya creado este ensayo.</p>
+<p>Cuando las aceptaciones individuales pasen, comprueba los Gateways contra un
+Headscale oficial independiente, con CA propia y DERP/STUN locales si los
+clientes no disponen de Internet. Conserva las CA individuales de los Gateways.
+Verifica primero tráfico TSMP entre los nodos y después HTTPS con nombre y CA
+correctos. No desactives la validación TLS para obtener un resultado favorable.
+El rango de prueba, las identidades y los datos deben estar separados de las
+instalaciones habituales; no es necesario cambiar el DNS de producción.</p>
+<p>La instrumentación Android debe dirigirse exclusivamente a <code>.lab</code>. Acepta
+<code>basedomain</code> para compartir el dominio de ensayo y <code>pingpeers=true</code> para exigir
+respuestas de al menos otros tres Gateways antes de comprobar el servicio HTTPS.
+Las credenciales efímeras se proporcionan por un canal privado, sin imprimirlas
+en registros ni conservarlas en Git. Consulta los resultados y límites concretos
+en <a href="VERIFICACION_FINAL.html">Validación y límites</a>.</p>
 <h2 id="automatizadas">Automatizadas</h2>
 <pre tabindex="0"><code class="language-bash">./tools/verify.sh       # Linux/macOS: go -C src test, vet, build, JS y HTML
 # o en PowerShell:
@@ -228,6 +254,8 @@ ACME y DNS del ensayo son locales.</p></article>
       <nav aria-label="En esta página"><p>En esta página</p><ul>
         
           <li><a href="#validación-local-antes-de-enviar-a-forgejo">Validación local antes de enviar a Forgejo</a></li>
+        
+          <li><a href="#aceptación-en-vm-y-red-de-laboratorio">Aceptación en VM y red de laboratorio</a></li>
         
           <li><a href="#automatizadas">Automatizadas</a></li>
         

@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.13</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.14</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -156,6 +156,11 @@ disponibles; si el token caduca o se revoca, solicita renovar las credenciales.<
 <p>Esta integración no instala ni arranca el servidor Gateway. Puede consultar
 una instalación directa, el complemento de Home Assistant o una instalación
 de YunoHost mediante un acceso administrativo alcanzable desde Core.</p>
+<h2 id="abrir-los-servicios-del-gateway">Abrir los servicios del Gateway</h2>
+<p>Esta integración consulta el motor; no contiene su panel. En el panel del
+Gateway al que se conecta, abre <strong>Resumen → Estado → Dominio principal</strong>
+para visitar el portal de servicios. La URL administrativa es un acceso
+diferente. El navegador necesita conectividad y DNS hacia ese destino.</p>
 <h2 id="instalar-desde-el-repositorio-individual">Instalar desde el repositorio individual</h2>
 <p>Añade <a href="https://github.com/Gente-del-Condado/headscale_gateway_ha">headscale_gateway_ha</a>
 como repositorio personalizado de tipo <strong>Integración</strong> en HACS/Marketplace.
@@ -343,6 +348,8 @@ Conserva la entrada existente para mantener los identificadores de las entidades
     </main>
     <aside class="page-toc">
       <nav aria-label="En esta página"><p>En esta página</p><ul>
+        
+          <li><a href="#abrir-los-servicios-del-gateway">Abrir los servicios del Gateway</a></li>
         
           <li><a href="#instalar-desde-el-repositorio-individual">Instalar desde el repositorio individual</a></li>
         

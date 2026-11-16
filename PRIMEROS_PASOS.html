@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.13</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.14</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -217,6 +217,17 @@
 <li>En <strong>Sistema → Acceso / Identidad</strong>, revisa los métodos de acceso y los roles que vas a utilizar.</li>
 </ol>
 <p>El listener administrativo y los listeners de servicios tienen funciones diferentes. El acceso por Ingress o SSO permite configurar el motor antes de que su VPN esté conectada.</p>
+<h2 id="encontrar-el-portal-y-la-administración">Encontrar el portal y la administración</h2>
+<p>En <strong>Resumen → Estado</strong>, <strong>Dominio principal</strong> aparece primero y enlaza al
+portal de servicios de este Gateway. La <strong>URL administrativa</strong> abre el panel;
+<strong>Servidor Headscale</strong> corresponde al coordinador VPN. Las direcciones web
+completas son enlaces y conservan su puerto y ruta. Se abren en otra pestaña
+o en el navegador del dispositivo. Sin un dominio confirmado se muestra
+<strong>Pendiente de conexión</strong>, sin crear un enlace ficticio.</p>
+<p>El navegador necesita resolver ese DNS, alcanzar la red correspondiente y
+confiar en su certificado. Ingress o el SSO de YunoHost permiten administrar
+el Gateway, pero no dan por sí solos conectividad del navegador a la Tailnet.
+En Android, activa <strong>Conectar aplicaciones</strong> cuando el destino lo requiera.</p>
 <h2 id="publica-un-servicio-de-prueba">Publica un servicio de prueba</h2>
 <ol>
 <li>Comprueba desde el anfitrión del Gateway que el destino responde.</li>
@@ -269,6 +280,8 @@ sus registros. No se eliminan automáticamente registros al borrar usuarios.</p>
           <li><a href="#abre-el-panel-por-primera-vez">Abre el panel por primera vez</a></li>
         
           <li><a href="#configura-y-conecta">Configura y conecta</a></li>
+        
+          <li><a href="#encontrar-el-portal-y-la-administración">Encontrar el portal y la administración</a></li>
         
           <li><a href="#publica-un-servicio-de-prueba">Publica un servicio de prueba</a></li>
         

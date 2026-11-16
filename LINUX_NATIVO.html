@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.13</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.14</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -152,8 +152,8 @@
 auxiliares. Gateway-Tray es un cliente opcional y no es necesario para usar el
 servidor. Las descargas y sus fuentes están en
 <a href="https://github.com/Gente-del-Condado/headscale_gateway_releases/releases">headscale_gateway_releases</a>.</p>
-<p>Instala el archivo de tu arquitectura con <code>sudo apt install ./headscale-gateway_1.4.13-1_amd64.deb</code>
-o <code>sudo dnf install ./headscale-gateway-1.4.13-1.x86_64.rpm</code>.
+<p>Instala el archivo de tu arquitectura con <code>sudo apt install ./headscale-gateway_1.4.14-1_amd64.deb</code>
+o <code>sudo dnf install ./headscale-gateway-1.4.14-1.x86_64.rpm</code>.
 El paquete crea un usuario de servicio sin acceso interactivo. La primera
 instalación no arranca ni expone el panel sin configurar una cuenta:</p>
 <pre tabindex="0"><code class="language-sh">sudo -u headscale-gateway headscale-gateway-configure --admin miadministrador
@@ -186,6 +186,17 @@ entre dos procesos. El paquete no modifica la confianza CA del sistema ni SELinu
 <p>Las comprobaciones de instalación, actualización y conservación se ejecutan en
 contenedores Debian y Fedora en GitHub. No sustituyen una aceptación real con
 systemd, SELinux y la red de tu equipo.</p>
+<h2 id="encontrar-el-portal-y-la-administración">Encontrar el portal y la administración</h2>
+<p>En <strong>Resumen → Estado</strong>, <strong>Dominio principal</strong> aparece primero y enlaza al
+portal de servicios de este Gateway. La <strong>URL administrativa</strong> abre el panel;
+<strong>Servidor Headscale</strong> corresponde al coordinador VPN. Las direcciones web
+completas son enlaces y conservan su puerto y ruta. Se abren en otra pestaña
+o en el navegador del dispositivo. Sin un dominio confirmado se muestra
+<strong>Pendiente de conexión</strong>, sin crear un enlace ficticio.</p>
+<p>El navegador necesita resolver ese DNS, alcanzar la red correspondiente y
+confiar en su certificado. Ingress o el SSO de YunoHost permiten administrar
+el Gateway, pero no dan por sí solos conectividad del navegador a la Tailnet.
+En Android, activa <strong>Conectar aplicaciones</strong> cuando el destino lo requiera.</p>
 <h2 id="autor-y-soporte">Autor y soporte</h2>
 <p>Autor: <strong>Gente del Condado</strong>. Soporte: <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>.
 <a href="https://gente-del-condado.github.io/headscale_gateway_ynh/">Manual en línea</a>.</p>
@@ -213,6 +224,8 @@ con el sistema y se reinicia tras un fallo. Cerrar el navegador no lo detiene.</
     </main>
     <aside class="page-toc">
       <nav aria-label="En esta página"><p>En esta página</p><ul>
+        
+          <li><a href="#encontrar-el-portal-y-la-administración">Encontrar el portal y la administración</a></li>
         
           <li><a href="#autor-y-soporte">Autor y soporte</a></li>
         
