@@ -130,13 +130,14 @@ Para otra instancia, sustituye `headscale_gateway` por su identificador real,
 como `headscale_gateway__2`. Mantén la copia de seguridad automática de YunoHost.
 No reemplaces a mano el ejecutable del servicio.
 
-El paquete público se genera desde el proyecto principal: Forgejo replica el
-proyecto a GitHub, Actions comprueba la seguridad y publica exclusivamente
-`yunohost/` en el repositorio de paquete de Forgejo, que se replica a GitHub.
-Las modificaciones se hacen en `packaging/yunohost/` del proyecto principal y
-se regeneran con `python3 tools/prepare_git_install.py`; no se edita a mano el
-repositorio de distribución. Publicar un paquete no actualiza por sí solo los
-servidores instalados: ejecuta la actualización de YunoHost cuando corresponda.
+El paquete se desarrolla en el principal privado de Forgejo, que se replica
+al espejo privado de GitHub. El compilador público `headscale_gateway_releases`
+lee una release estable de Forgejo, comprueba seguridad y plataformas y publica
+exclusivamente el paquete YunoHost en `headscale_gateway_ynh`, junto a sus recursos
+públicos. No existe un derivado YunoHost en Forgejo ni se escribe de vuelta allí.
+Edita `packaging/yunohost/` del principal y regenera `yunohost/`; no edites la
+copia pública. Publicar el repositorio no actualiza tu servidor: realiza la
+actualización desde YunoHost cuando corresponda.
 
 Después de actualizar, abre el panel, revisa la versión, prueba un servicio y
 comprueba que conserva su identidad VPN. Si aparece un error, consulta el
@@ -233,3 +234,15 @@ En una instalación nueva, el panel común pide confirmar o editar el nombre
 propuesto antes de conectar a Headscale. La propuesta del instalador no sustituye
 esa elección. Headscale asigna el nombre definitivo y resuelve duplicados. Las
 actualizaciones conservan el nombre, la identidad, las credenciales y los datos.
+
+## Administración del coordinador Headscale
+
+El motor y el portal comunes incluyen DNS de la Tailnet, restricciones OIDC y
+observador de nodos. Para controlar el Headscale del mismo anfitrión, un
+administrador debe registrar el ayudante mediante `conf/setup-headscale` del
+paquete, con instancia `ynh-IDENTIFICADOR_APP` y las unidades y rutas reales.
+El portal conserva su cuenta sin privilegios. Las actualizaciones refrescan el
+motor protegido de un controlador ya registrado; las copias no conceden este
+privilegio en un anfitrión nuevo. Otros Gateway pueden utilizar una delegación
+HTTPS explícita de lectura o escritura. No cambia el DNS-01 ni los certificados
+de los servicios. Sigue el [manual del controlador](https://gente-del-condado.github.io/headscale_gateway_ynh/CONTROL_HEADSCALE.html).

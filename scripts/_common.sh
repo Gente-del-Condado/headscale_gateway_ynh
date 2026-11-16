@@ -62,3 +62,15 @@ hgw_install_logo() {
         yunohost user permission update "$app.main" --logo="$logo"
     fi
 }
+
+# El controlador es opcional y se registra explícitamente por SSH. Su selección
+# local no viaja en perfiles ni concede privilegios al restaurar en otro equipo.
+hgw_refresh_headscale_control() {
+    local instance="ynh-$app"
+    local extra=()
+    if [[ "${2:-}" == restore ]]; then extra+=(--reattach); fi
+    if [[ -f "/etc/headscale-gateway-control/$instance.json" ]]; then
+        python3 "${1:-../conf/setup-headscale}" --instance "$instance" \
+            --gateway-binary "$install_dir/headscale-gateway" --refresh "${extra[@]}"
+    fi
+}
