@@ -28,7 +28,7 @@ def public_repository(identity):
     return data['full_name']
 
 
-def publish_files(repository,tag,files,notes):
+def publish_files(repository,tag,files,notes,latest=None,reuse=False):
     expected={p.name:digest(p) for p in files}
     query=subprocess.run(['gh','api',f'repos/{repository}/releases/tags/{tag}'],capture_output=True,text=True)
     if query.returncode==0:release=json.loads(query.stdout)
@@ -39,7 +39,8 @@ def publish_files(repository,tag,files,notes):
         if drafts:release=drafts[0]
         else:
             head=json.loads(gh('api',f'repos/{repository}/git/ref/heads/main'))['object']['sha']
-            release=json.loads(gh('api',f'repos/{repository}/releases','--method','POST','-f','tag_name='+tag,'-f','target_commitish='+head,'-f','name=Headscale Gateway '+tag,'-f','body='+notes,'-F','draft=true'))
+            options=[] if latest is None else ['-f','make_latest='+str(latest).lower()]
+            release=json.loads(gh('api',f'repos/{repository}/releases','--method','POST','-f','tag_name='+tag,'-f','target_commitish='+head,'-f','name=Headscale Gateway '+tag,'-f','body='+notes,'-F','draft=true',*options))
     if release['tag_name']!=tag or release['prerelease']:raise ValueError('La release no coincide con la entrega estable')
     actual={a['name']:a for a in release['assets']}
     if set(actual)-set(expected):raise ValueError('La release contiene archivos inesperados; no se modifica')
@@ -56,7 +57,18 @@ def publish_files(repository,tag,files,notes):
                 downloaded=Path(temporary)/path.name
                 if digest(downloaded)!=expected[path.name]:raise ValueError('Descarga de borrador incorrecta')
                 downloaded.unlink()
-        gh('release','edit',tag,'--repo',repository,'--draft=false')
+        options=[] if latest is None else ['--latest='+str(latest).lower()]
+        gh('release','edit',tag,'--repo',repository,'--draft=false',*options)
+    if reuse and not release['draft']:
+        # Un conjunto inmutable ya publicado se contrasta con los digest de GitHub.
+        # La lectura anónima del índice y sumas confirma acceso sin repetir GB.
+        for path in files:
+            if path.name in ('DESKTOP-SOURCES.json', 'SHA256SUMS'):
+                with urllib.request.urlopen(f'https://github.com/{repository}/releases/download/{tag}/{path.name}',timeout=60) as response:
+                    if response.status!=200 or hashlib.file_digest(response,'sha256').hexdigest()!=expected[path.name]:
+                        raise ValueError('Índice reutilizable no accesible o alterado')
+        print('FUENTES_PUBLICADAS_REUTILIZADAS: '+tag,flush=True)
+        return {'repository':repository,'tag':tag,'reused':True}
     records=[]
     for path in files:
         url=f'https://github.com/{repository}/releases/download/{tag}/{path.name}'
@@ -102,7 +114,9 @@ def main():
         'yunohost':{f'headscale-gateway-yunohost-{version}.zip'},
         'homeassistant':{f'headscale-gateway-homeassistant-{version}.zip',f'headscale-gateway-hacs-{version}.zip'}}
     sources={f'headscale-gateway-go-sources-{version}.tar.gz',f'headscale-gateway-fuentes-publicos-{version}.zip'}
-    general={p.name for p in payload.iterdir() if p.is_file()}-{'SHA256SUMS'}-set.union(*platforms.values())
+    from desktop_sources import gateway_files
+    lock=json.loads((ROOT/'packaging/desktop/electron-sources.lock.json').read_text())
+    general={p.name for p in gateway_files(payload,lock)}-set.union(*platforms.values())
     groups={'general':general,'yunohost':platforms['yunohost']|sources,'homeassistant':platforms['homeassistant']|sources,'flatpak':sources}
     # El helper recibe GH_TOKEN del entorno efímero; el token no se escribe en URLs.
     gh('auth','setup-git')
@@ -134,11 +148,18 @@ def main():
             notes=(f'Headscale Gateway {version}: distribución pública de {group}.\n\n'
                 'El principal y su historial siguen privados. Los instaladores y fuentes correspondientes se distribuyen aquí sin autenticación.\n\n'
                 'Gateway completo: paquetes del motor Go con panel web. Gateway-Tray es un cliente opcional y sus instaladores no requieren unir partes. '
-                'Solo los fuentes Chromium se dividen: une .part-* en orden y comprueba su JSON. '
-                'El software usa FFmpeg bajo LGPL-2.1-or-later; fuentes exactos, parches y avisos están junto a los instaladores en headscale_gateway_releases.\n\n'
+                'Los fuentes de Electron/Chromium/FFmpeg se reutilizan desde la release de dependencias enlazada; solo Chromium usa partes. '
+                'El software usa FFmpeg bajo LGPL-2.1-or-later; fuentes exactos, parches y avisos se enlazan desde cada instalador y esta release.\n\n'
                 'Manuales: https://gente-del-condado.github.io/headscale_gateway_ynh/ y https://gente-del-condado.github.io/headscale_gateway_ha/.\n\n'
                 'Android conserva la firma estable. El AAB de Play Store solo está preparado; no se envía a Play Store. '
                 'Flatpak se distribuye directamente, sin solicitud ni aceptación en Flathub.\n')
+            from desktop_sources import references
+            dependencies=references(json.loads((ROOT/'packaging/desktop/electron-sources.lock.json').read_text()))
+            notes+='Fuentes de Electron y dependencias: '+dependencies['release']+'\n\n'
+            notes+='### Instaladores y fuentes de Gateway\n\n'
+            for path in files:
+                if path.name.endswith(('.zip','.tar.gz','.rpm','.deb','.flatpak','.apk','.aab')) or path.name=='SHA256SUMS':
+                    notes+='- ['+path.name+'](https://github.com/'+repo+'/releases/download/'+tag+'/'+path.name+')\n'
             reports.append(publish_files(repo,tag,files,notes))
     (ROOT/'public-release-verification.json').write_text(json.dumps(reports,indent=2)+'\n')
     print('PUBLICACION_PUBLICA_OK: cuatro destinos y todas sus descargas anónimas verificadas')

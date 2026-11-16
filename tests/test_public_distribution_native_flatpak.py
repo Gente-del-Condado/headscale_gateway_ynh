@@ -40,8 +40,9 @@ class PublicDistributionTest(unittest.TestCase):
                 result=prepare_public_release.detach_sources(fixture.runtime,'linux',output,'https://example.invalid/releases/v1/')
             self.assertEqual(result['runtime_files'],before['runtime_files'])
             self.assertFalse((fixture.runtime/'legal/sources').exists())
-            self.assertEqual(prepare_public_release.digest(output/'source.tar.xz'),fixture.lock['sources'][0]['sha256'])
-            self.assertEqual(result['external_sources'][0]['download'],'https://example.invalid/releases/v1/source.tar.xz')
+            self.assertEqual(prepare_public_release.digest(output/'desktop-sources/source.tar.xz'),fixture.lock['sources'][0]['sha256'])
+            self.assertIn('/releases/download/desktop-sources-electron-45.0.0-',result['external_sources'][0]['download'])
+            self.assertNotIn('/releases/v1/',result['external_sources'][0]['download'])
             self.assertTrue((fixture.runtime/'legal/LICENSES.chromium.html').exists())
         finally:fixture.doCleanups();fixture.temp.cleanup()
 

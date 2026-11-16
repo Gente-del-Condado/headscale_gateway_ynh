@@ -5,7 +5,7 @@ name: Actualizar guía de publicación tras la entrega
     types: [completed]
   push:
     branches: [main]
-    paths: ['automation/manual-publication.md', '.github/workflows/manual-current.yml']
+    paths: ['automation/manual-*.md', '.github/workflows/manual-current.yml']
 permissions:
   contents: read
 concurrency:
@@ -37,6 +37,13 @@ jobs:
         if: steps.release.outputs.build == 'false' && steps.release.outputs.source_sha != ''
         run: |
           cp automation/manual-publication.md source/docs/PUBLICACION.md
+          cp automation/manual-downloads.md source/packaging/releases/README.md
+          cp automation/manual-desktop.md source/packaging/desktop/README.md
+          cp automation/manual-licenses.md source/docs/LICENCIAS.md
+          cp automation/manual-project-readme.md source/README.md
+          cp automation/manual-state.md source/docs/ESTADO_DESARROLLO.md
+          cp automation/manual-changes.md source/CHANGELOG.md
+          cp automation/manual-verification.md source/docs/VERIFICACION_FINAL.md
           python3 -m venv "$RUNNER_TEMP/docs-env"
           "$RUNNER_TEMP/docs-env/bin/pip" install -r source/requirements-docs.txt
           cd source

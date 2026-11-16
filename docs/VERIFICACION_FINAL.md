@@ -1,10 +1,22 @@
 # Validación y límites
 
-## Revisión 1.4.16 en preparación
+## Preparación de 1.4.17
+
+Comprobaciones locales completadas: `tools/verify.sh` (100 pruebas Python,
+Go, JavaScript, vet y compilación), 9 pruebas del controlador, generados y
+versiones coherentes, privacidad y manual estricto (50 páginas, 3167 enlaces).
+La consulta anónima confirmó el conjunto Electron existente con el mismo lock,
+sin subidas. Las compilaciones nativas y la publicación final se verifican en
+el flujo público; estos controles locales no equivalen a una nueva prueba en VM.
+Play Store permanece solo preparado.
+
+## Revisión 1.4.16 publicada
 
 La revisión actual limpia resultados locales y documentación, añade controles
 de privacidad y corrige el contrato de rutas del controlador Headscale en
-Windows. No está subida ni publicada. El estado de trabajo y lo pendiente se
+Windows. Fue publicada y el flujo completo de GitHub terminó correctamente,
+con pruebas y compilación Windows nativa, 45 descargas anónimas verificadas y
+los seis destinos y ambas webs Pages comprobados. El estado y lo pendiente se
 mantienen en [ESTADO_DESARROLLO.md](ESTADO_DESARROLLO.md).
 
 ### Fallo Windows reproducido y corregido
@@ -75,3 +87,17 @@ conjunta de todas las funciones desde la tablet. No se presentan como realizadas
 **Play Store sigue solo preparado.** La distribución Flatpak directa no significa
 aceptación en Flathub. El paquete YunoHost se mantiene para instalar desde su
 repositorio; no se solicitará su inclusión en el catálogo oficial.
+
+## Ensayo de la siguiente publicación sin crear una versión
+
+El mantenimiento posterior comprueba el reparto real de adjuntos de una entrega
+ficticia 1.4.17 entre las cuatro distribuciones, con datos mínimos y operaciones
+de subida sustituidas por capturas de sus argumentos. Ninguna recibe los fuentes
+de Electron. Se comprueba también que una release de dependencias coincidente
+solo se consulte y que archivos distintos bloqueen la reutilización.
+
+La comprobación local de la release pública Electron 45.0.0 contrasta el lock,
+los índices, las sumas y los digest de sus diez adjuntos sin credenciales ni
+subidas. La suite general pasa con 100 pruebas Python, además de Go/JS; las
+nueve pruebas del controlador también pasan. No se presenta este ensayo como
+una compilación real o una publicación de Headscale Gateway 1.4.17.

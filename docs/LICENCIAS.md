@@ -84,14 +84,18 @@ en `src/internal/acmednstechnitium/UPSTREAM.md`.
 ## Distribución del runtime de escritorio
 
 Cada paquete de escritorio incorpora un directorio `legal/` con los avisos
-originales de Electron/Chromium, los fuentes completos de Electron, Chromium
-(incluido FFmpeg), Node y NAN, los parches de Electron, las instrucciones de
-construcción y los fuentes del cliente de bandeja. Se conserva cada licencia
+originales de Electron/Chromium, las instrucciones de construcción y los fuentes
+del cliente de bandeja. El paquete completo incluye además los fuentes de
+Electron, Chromium (con FFmpeg), Node y NAN y los parches de Electron; las
+descargas ligeras los enlazan desde `PUBLIC-SOURCES.json`. Las nuevas entregas
+usan una release de dependencias reutilizable, identificada por el lock completo,
+sin quitar los avisos del runtime ni modificar archivos publicados de la 1.4.16. Se conserva cada licencia
 MPL/LGPL/MIT/BSD de terceros; la AGPL-3.0-only cubre el código propio.
 
 El conjunto se fija en `packaging/desktop/electron-sources.lock.json`: Electron
 45.0.0, Chromium 156.0.8078.48 y Node 24.22.0. La primera preparación descarga
-unos 4,5 GB fuera de Git y los incorpora físicamente a cada distribución.
+unos 4,5 GB fuera de Git. El empaquetado completo los incorpora físicamente;
+las descargas ligeras conservan los avisos y enlazan la release reutilizable.
 Los archivos originales del runtime se contrastan con el ZIP oficial; en
 Windows se admite el cambio de iconos/metadatos PE manteniendo el código.
 El manifiesto registra sus sumas y el generador de entregas rechaza archivos

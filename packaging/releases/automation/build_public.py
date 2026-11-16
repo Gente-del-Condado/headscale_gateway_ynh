@@ -41,6 +41,7 @@ def build(root, output, android):
     from package_linux import build as build_linux
     from prepare_flatpak import prepare as prepare_flatpak
     from publish_public_sources import snapshot
+    from desktop_sources import gateway_files
 
     # Solo incorporar Android después de comprobar todas las sumas de su constructor.
     expected = {}
@@ -90,6 +91,7 @@ def build(root, output, android):
         zip_tree(output / f'headscale-gateway-fuentes-publicos-{version}.zip', tree, 'headscale-gateway/')
     shutil.copy2(root / 'yunohost/payload/source.tar.gz', output / f'headscale-gateway-go-sources-{version}.tar.gz')
     prepare_flatpak(output / 'flatpak-source')
+    gateway_files(output, json.loads((root / 'packaging/desktop/electron-sources.lock.json').read_text()))
     (output / 'SHA256SUMS').write_text(''.join(digest(path) + '  ' + path.name + '\n' for path in sorted(output.iterdir()) if path.is_file()))
     print('INSTALADORES_PUBLICOS_PREPARADOS: ' + version, flush=True)
 

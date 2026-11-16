@@ -1,6 +1,24 @@
 # Cambios de Headscale Gateway
 
-## 1.4.16 — preparada, sin publicar
+## 1.4.17
+
+- Publicación de mantenimiento: conserva el motor y la firma Android existentes.
+- Separa los fuentes de Electron de los instaladores y reutiliza el conjunto verificado por lock.
+- Actualiza versiones de todos los paquetes y las guías de descarga.
+
+### Comprobación de reutilización y guía de descargas
+
+- Ensayo de una siguiente entrega que no publica versiones ni mezcla archivos de Electron.
+- Comprobación pública sin credenciales que omite preparar y subir conjuntos existentes.
+- README y manuales vigentes distinguen instaladores, fuentes propios y dependencias.
+
+### Mantenimiento del publicador después de 1.4.16
+
+- Fuentes de Electron y dependencias en una release reutilizable por lock.
+- Los instaladores nuevos enlazan los fuentes exactos sin duplicar los archivos grandes.
+- Se conservan todos los adjuntos, firmas y URL de la 1.4.16.
+
+## 1.4.16 — publicada
 
 - Corrige la validación de rutas del controlador Headscale en clientes y pruebas
   Windows: el contrato del actuador Linux utiliza siempre rutas POSIX.

@@ -34,6 +34,28 @@ reglas, permisos y recuperación están en [Publicación](docs/PUBLICACION.md).
 Una release estable nueva en Forgejo se detecta en la consulta horaria del
 control público y activa la compilación y publicación sin lanzar flujos a mano.
 
+## Qué descargar
+
+| Necesidad | Descarga |
+| --- | --- |
+| Gateway completo en PC | [Última release de Gateway](https://github.com/Gente-del-Condado/headscale_gateway_releases/releases/latest): DEB/RPM para Debian/Fedora, Flatpak o archivos del motor para Windows/Linux/macOS |
+| Android | `headscale-gateway-release.apk` de esa release, con la firma estable |
+| Bandeja opcional | `gateway-tray-linux-x64.tar.gz` o `gateway-tray-windows-x64.zip`; requiere un Gateway en funcionamiento |
+| Fuentes del proyecto | `headscale-gateway-fuentes-publicos-VERSION.zip` y `headscale-gateway-go-sources-VERSION.tar.gz` de la misma entrega |
+| Fuentes de Electron y dependencias | Release `desktop-sources-electron-VERSION-HUELLA`, enlazada desde las notas y `legal/PUBLIC-SOURCES.json` de la bandeja |
+
+Para instalar no necesitas descargar Chromium, Electron, Node ni NAN por
+separado. Sus fuentes corresponden al runtime de la bandeja y se conservan
+para reconstrucción y redistribución. El motor Go, Android, YunoHost, Home
+Assistant y Flatpak no necesitan instalar esa bandeja. Comprueba el
+`SHA256SUMS` de la release que contiene cada archivo. Los instaladores de la
+bandeja se extraen directamente; solo los fuentes Chromium usan partes.
+
+Las futuras entregas reutilizan el mismo conjunto mientras coincida el lock.
+La 1.4.16 conserva sus adjuntos y enlaces originales por compatibilidad. Más
+detalles en la [guía de descargas](packaging/releases/README.md) y en
+[fuentes y licencias de escritorio](packaging/desktop/README.md).
+
 ## Leer el manual
 
 Manual web público: [YunoHost](https://gente-del-condado.github.io/headscale_gateway_ynh/)

@@ -27,3 +27,7 @@ aceptación necesitan dispositivos o entornos aislados preparados expresamente.
 No se ejecutan contra instalaciones productivas ni se obtienen permisos nuevos
 por estar un equipo conectado. Los datos y las claves de prueba se guardan fuera
 del clon; `builds/` se utiliza para resultados reproducibles sin secretos.
+
+`check_release_reuse.py` comprueba por lecturas públicas si el lock Electron
+ya tiene fuentes distribuibles; no usa tokens ni sube archivos. El publicador
+se detiene si detecta fuentes de terceros mezclados con los adjuntos Gateway.

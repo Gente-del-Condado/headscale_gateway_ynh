@@ -1,11 +1,21 @@
 # Estado de desarrollo y siguiente entrega
 
-## 1.4.16: preparación local
+## 1.4.17: entrega de mantenimiento
 
-Esta revisión prepara la continuidad del proyecto y corrige el fallo de Windows
-que bloqueó la entrega 1.4.15. **No está autorizada su subida ni publicación**.
-No se ha creado una etiqueta o release 1.4.16 ni se han cambiado las tiendas,
-los repositorios de distribución o las páginas públicas.
+La entrega incorpora la separación y reutilización de fuentes de Electron y las
+guías de descargas actualizadas. Conserva el motor común y la firma Android.
+La publicación exige la solicitud de fusión en Forgejo y todas las comprobaciones
+del compilador público; la versión declarada no acredita por sí sola su resultado.
+Play Store permanece solo preparado.
+
+## 1.4.16: publicada y verificada
+
+La 1.4.16 se publicó mediante la solicitud #32 de Forgejo y se replicó en
+GitHub con commit `4724ff7d449eb526ffc959f926cf4392f884eb00`. La
+[CI pública](https://github.com/Gente-del-Condado/headscale_gateway_releases/actions/runs/43798821660)
+terminó correctamente, incluida la suite y compilación Windows nativa. Se
+verificaron los seis destinos, ambas webs Pages y 45 descargas anónimas con
+SHA-256. Play Store continúa solo preparado.
 
 Incluye:
 
@@ -52,9 +62,23 @@ no quedaron completadas. No se reanudan por el hecho de continuar el desarrollo.
    VM ni credenciales productivas para modificar la documentación o ejecutar Go.
 3. Para retomar las pruebas detenidas, acordar expresamente el alcance y utilizar
    identidades aisladas. No cambiar recursos de VM ni importar claves productivas.
-4. Publicar 1.4.16 únicamente cuando el usuario lo pida; entonces seguir
-   [PUBLICACION.md](PUBLICACION.md), comprobar réplica y CI y no mover la etiqueta 1.4.15.
+4. Para otra versión, seguir [PUBLICACION.md](PUBLICACION.md), comprobar réplica
+   y CI y conservar inmutables las etiquetas y los archivos ya publicados.
 
 La autenticación OIDC del Gateway y las restricciones OIDC de Headscale son
 funciones distintas. Configurar el laboratorio Dex/Technitium no es una
 condición para ejecutar el motor común ni una función ya validada en esta entrega.
+
+## Mantenimiento posterior a la 1.4.16
+
+Se separa la publicación de los fuentes Electron y sus dependencias en una
+release reutilizable por lock, conservando los enlaces antiguos. Este cambio
+del publicador no recompila ni reemplaza la 1.4.16 y no cambia VERSION. Las
+siguientes entregas de Gateway enlazarán el conjunto verificado en lugar de
+duplicar los archivos grandes.
+
+El publicador cuenta con un ensayo aislado de la próxima entrega (1.4.17 como
+dato de prueba), una barrera contra adjuntos de terceros mezclados y una
+comprobación pública que evita volver a preparar o subir un conjunto existente.
+El ensayo no cambia VERSION, crea etiquetas ni publica otra aplicación. Las
+guías vigentes se actualizan en ambas webs sin modificar los instaladores.

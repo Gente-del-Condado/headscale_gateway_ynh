@@ -104,3 +104,12 @@ Comprueba también el aspecto en un navegador de escritorio y uno estrecho,
 el menú mediante teclado, una búsqueda y los ejemplos. Las pruebas de enlaces
 verifican los archivos y fragmentos internos del HTML generado. Las referencias
 a servicios externos deben revisarse cuando cambien los procedimientos que describen.
+
+## Guías de descarga vigentes
+
+El controlador conserva copias derivadas de los README del principal, descargas
+y escritorio y de las guías de publicación y licencias. `manual-current.yml`
+las superpone al árbol de documentación de la última entrega completada y vuelve
+a validar el manual. Así ambas webs explican los fuentes reutilizables sin
+recompilar ni reemplazar los instaladores. Las fuentes editables permanecen en
+este principal; esas copias no se editan por separado.

@@ -13,7 +13,7 @@ import zipfile
 from desktop_compliance import verify as verify_complete
 from package_release import write_archive
 from publish_public_sources import snapshot
-from split_release import split
+import desktop_sources
 from package_linux import build as build_linux
 from prepare_flatpak import prepare as prepare_flatpak
 
@@ -42,39 +42,19 @@ def safe_extract(archive,destination):
         archive.extractall(destination,filter='data')
 
 
-def detach_sources(runtime,platform,output,base_url):
+def detach_sources(runtime,platform,output,base_url=None):
     runtime,output=Path(runtime),Path(output)
     manifest=verify_complete(runtime,platform)
-    records=[]
-    for record in manifest['lock']['sources']:
-        source=runtime/'legal/sources'/record['name']
-        if source.stat().st_size!=record['size'] or digest(source)!=record['sha256']:
-            raise ValueError('Fuente no correspondiente al runtime')
-        if record['size']>2000000000:
-            folder=output/(record['name']+'.parts')
-            if not folder.exists():split(source,folder,record['name'],1500000000)
-            parts=json.loads((folder/'parts.json').read_text())
-            if parts['sha256']!=record['sha256']:raise ValueError('Fragmentos de otros fuentes')
-            names=[p['name'] for p in parts['parts']]
-            for part in parts['parts']:
-                if digest(folder/part['name'])!=part['sha256']:raise ValueError('Fragmento alterado')
-            part_manifest=output/(record['name']+'.parts.json')
-            part_manifest.write_text(json.dumps(parts,indent=2)+'\n')
-            records.append(dict(record,download_parts=[base_url+n for n in names],parts_manifest=base_url+part_manifest.name))
-        else:
-            target=output/record['name']
-            if target.exists():
-                if digest(target)!=record['sha256']:raise ValueError('Se intenta reemplazar una fuente diferente')
-            else:shutil.copy2(source,target)
-            records.append(dict(record,download=base_url+target.name))
+    shared = desktop_sources.prepare(runtime/'legal/sources', manifest['lock'], output/'desktop-sources')
+    records = shared['sources']
     # Solo cambia el árbol de trabajo extraído: los originales ya publicados no se tocan.
     shutil.rmtree(runtime/'legal/sources')
-    (runtime/'legal/PUBLIC-SOURCES.json').write_text(json.dumps({'release':base_url.rsplit('/download/',1)[0], 'sources':records},indent=2)+'\n')
+    (runtime/'legal/PUBLIC-SOURCES.json').write_text(json.dumps({'release':shared['release'], 'sources':records},indent=2)+'\n')
     (runtime/'legal/README.md').write_text('''# Fuentes correspondientes y avisos
 
 Este paquete ligero conserva todos los avisos y los fuentes del cliente propio.
 Los fuentes completos de Electron, Chromium (incluido FFmpeg), Node y NAN se
-publican junto al instalador, en la misma release. PUBLIC-SOURCES.json contiene
+publican en una release reutilizable de dependencias. PUBLIC-SOURCES.json contiene
 sus versiones, enlaces públicos y SHA-256 exactos. Solo Chromium requiere unir
 sus partes en orden. Los fuentes son comunes a Linux y Windows y no se duplican.
 

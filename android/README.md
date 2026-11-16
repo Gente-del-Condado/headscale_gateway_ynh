@@ -1,7 +1,7 @@
 # Headscale Gateway para Android
 
-La entrega común **1.4.16** utiliza el motor Go compartido y `versionCode`
-`10040160`. GitHub Actions construye el APK directo con la firma estable, el
+La entrega común **1.4.17** utiliza el motor Go compartido y `versionCode`
+`10040170`. GitHub Actions construye el APK directo con la firma estable, el
 APK F-Droid sin firma y el AAB validado. Play Store continúa solo preparado;
 no se crea una ficha ni se envía la aplicación a las tiendas.
 

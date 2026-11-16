@@ -10,8 +10,13 @@ Linux y Windows. Los instaladores `gateway-tray-linux-x64.tar.gz` y
 `gateway-tray-windows-x64.zip` se extraen directamente, sin unir partes.
 Conservan todos los avisos y los fuentes de la aplicación en `legal/`.
 `legal/PUBLIC-SOURCES.json` indica las URL públicas, las versiones y las sumas
-exactas de Electron, Chromium, Node y NAN. Descárgalos de la misma release de
-[descargas públicas](https://github.com/Gente-del-Condado/headscale_gateway_releases/releases).
+exactas de Electron, Chromium, Node y NAN. Las nuevas entregas los reutilizan
+desde una release `desktop-sources-electron-VERSION-HUELLA` del mismo
+[repositorio público](https://github.com/Gente-del-Condado/headscale_gateway_releases/releases).
+La huella incluye el lock completo (también los runtimes) y el formato de
+fragmentación. Un cambio de revisiones selecciona otro conjunto. Esa release
+conserva los archivos de fuentes, parches, índice y sumas y no sustituye la
+release «Latest» de Gateway. La 1.4.16 mantiene intactas sus URL y sus adjuntos.
 Solo Chromium necesita partes por el límite de tamaño de GitHub; su JSON
 indica el orden y la suma del archivo completo. Al redistribuir, conserva
 los avisos y facilita también esos fuentes exactos y sus parches.
@@ -20,6 +25,21 @@ El empaquetado original completo descrito a continuación usa el manifiesto de
 formato 1. `tools/prepare_public_release.py` lo verifica antes de separar los
 fuentes; produce el formato 2 con referencias públicas y comprueba que no ha
 cambiado ningún archivo del runtime. Los archivos originales permanecen intactos.
+
+## Elegir los fuentes correctos
+
+- Para instalar o actualizar: descarga únicamente el instalador de bandeja de
+  tu sistema; conserva `legal/` junto al ejecutable.
+- Para modificar Gateway-Tray: usa los fuentes propios de la misma versión de
+  Gateway y `legal/application-source/`.
+- Para reconstruir Electron/FFmpeg: sigue el enlace de
+  `legal/PUBLIC-SOURCES.json`, descarga el conjunto reutilizable exacto y sus
+  sumas. No elijas simplemente la release Electron más reciente.
+
+Los nombres `desktop-sources-…` identifican dependencias y no versiones de la
+aplicación. No borres un conjunto mientras haya instaladores que lo referencien.
+La verificación pública solo consulta metadatos, índice y sumas; no necesita
+credenciales ni vuelve a transferir varios GB cuando el conjunto ya existe.
 
 ## Qué incluye el empaquetado completo
 

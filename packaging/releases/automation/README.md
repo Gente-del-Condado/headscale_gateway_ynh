@@ -84,3 +84,48 @@ el proxy SSO de YunoHost y la aceptación del servicio nativo en un Windows
 desechable. Las pruebas del SCM solo se activan dentro de ese runner, nunca al
 hacer `go test` en el PC del usuario. La publicación estable mantiene su circuito
 independiente y sus comprobaciones obligatorias.
+
+## Fuentes reutilizables de escritorio
+
+Las nuevas versiones separan los archivos grandes en una release
+`desktop-sources-electron-VERSION-HUELLA` del mismo repositorio público. La huella
+procede del lock completo y de la fragmentación; la publicación rechaza cambios
+de contenido y conserva «Latest» para la aplicación. La 1.4.16 no pierde archivos.
+
+Durante la exportación de mantenimiento se copian también:
+
+- `tools/desktop_sources.py` → `automation/desktop_sources.py`.
+- `tools/split_release.py` → `automation/split_release.py`.
+- `tools/publish_public_release.py` → `automation/publish_public_release.py`.
+- `packaging/desktop/electron-sources.lock.json` → `automation/desktop-sources.lock.json`.
+
+El workflow `desktop-sources.yml` prepara el primer conjunto en un runner
+público, reutilizando los archivos verificables de la 1.4.16 sin editarlos. Para
+un futuro lock ausente en aquella release obtiene fuentes upstream por HTTPS y
+exige los tamaños y SHA-256 fijados. Las publicaciones normales preparan el
+conjunto desde los fuentes del runtime, lo contrastan y reutilizan la release
+existente sin volver a subir GB. La primera publicación verifica las descargas
+anónimas completas; las reutilizaciones comprueban los digest de todos los
+adjuntos y descargan anónimamente índice y sumas. Un fallo bloquea instaladores.
+
+## Comprobar la siguiente entrega sin publicarla
+
+El ensayo `test_desktop_sources.py` prepara datos mínimos de una entrega
+hipotética 1.4.17: ejecuta el particionador real de las cuatro distribuciones y
+comprueba que los adjuntos de Electron quedan fuera. Las pruebas de reutilización
+impiden cualquier subida o edición cuando la release existente coincide.
+
+`tools/check_release_reuse.py --lock packaging/desktop/electron-sources.lock.json`
+consulta la release real sin tokens ni escrituras, contrasta lock, índice,
+fragmentos y digest de todos los adjuntos y lee sus sumas. Se exporta como
+`automation/check_release_reuse.py`, junto con `tests/test_desktop_sources.py`
+como `automation/test_desktop_sources.py`. El workflow omite la etapa que recibe
+PUBLICATION_TOKEN si el conjunto ya existe. No descarga otra vez los archivos
+grandes ni crea una nueva versión Gateway para comprobarlo.
+
+Las copias derivadas para el manual son `manual-project-readme.md` (README
+principal), `manual-downloads.md` (README de releases), `manual-desktop.md`
+(README de escritorio), `manual-licenses.md` y `manual-publication.md` (guías
+correspondientes de docs/). También se exportan `manual-state.md`,
+`manual-changes.md` y `manual-verification.md` desde el estado, changelog y
+validación vigentes. Se copian desde Forgejo al actualizar el control.
