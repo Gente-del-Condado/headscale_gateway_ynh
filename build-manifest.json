@@ -1,5 +1,5 @@
 {
-  "version": "1.4.16",
+  "version": "1.4.17",
   "commercial": false,
   "sources": {
     "acme_account_consent.go": "399861e44c23cdffc7de7fe62fc9953785703b438e829457acecdbe5de9018a5",
@@ -228,7 +228,7 @@
     "go.sum": "729e38a0e2c7f8af295acfd9171078d16c47112cd81bd0f18acf26b32c01fb2a",
     "LICENSE": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
     "NOTICE": "c4a60c630a5843795b9c088bcdc31b57d596fabb2502d4a3cfb36720b1c64c6e",
-    "VERSION": "62e9e409084d9d767a124930610276b72639404c21d5e1327530166f68d5f70c",
+    "VERSION": "d84eee9e1d60b833d2535fe0b3fa958bd91dc96d3621d7e46f8e5894d4b7601b",
     "SOURCE.md": "c2f4c6454cae5c8b2e5415eff663309d118e06abc01fcadb04d20fb52f52f895",
     "vendor/filippo.io/edwards25519/LICENSE": "2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067",
     "vendor/filippo.io/edwards25519/README.md": "39760d8b144d127d4b3be241cf93f7c12fbc1d0b6d3ac4e2da8f0ba68a3b1532",
@@ -5235,7 +5235,7 @@
     "vendor/tailscale.com/wgengine/wglog/wglog.go": "e670e28878ec8b5805c97ac8559f6c60c533b08cf94c252b66b556f0a180f595"
   },
   "binaries": {
-    "headscale-gateway-linux-amd64": "28f223b1324c0446b5a95ceb06edcc081d52e2c611faa082602f256ac5e3d022",
-    "headscale-gateway-linux-arm64": "3f1ce0c9c978a372e846a234f101166606f9e2cd3c6afa5327638a26e9f77946"
+    "headscale-gateway-linux-amd64": "ae9e33eb5259823cace2d89d99a1a91c600052899e09ce17f198aeba699ac37d",
+    "headscale-gateway-linux-arm64": "ae10cfe15fc3bf1737991207b694556894e68c49721e6336f6e27b973965cfe8"
   }
 }
