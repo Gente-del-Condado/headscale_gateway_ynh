@@ -1,6 +1,6 @@
 ﻿# Aceptación en un runner desechable o una VM indicada expresamente con -LocalLab.
 # Los servicios y directorios de prueba tienen nombres únicos y se retiran al terminar.
-param([Parameter(Mandatory=$true)][string]$Package,[Parameter(Mandatory=$true)][string]$Root,[switch]$LocalLab)
+param([Parameter(Mandatory=$true)][string]$Package,[Parameter(Mandatory=$true)][string]$Root,[switch]$LocalLab,[string]$StatusFixture)
 $ErrorActionPreference='Stop'
 if (-not $LocalLab -and ($env:GITHUB_ACTIONS -ne 'true' -or -not $env:RUNNER_TEMP -or $env:RUNNER_ENVIRONMENT -ne 'github-hosted')) { throw 'Se requiere el runner desechable de GitHub o -LocalLab en una VM de pruebas.' }
 $name='HeadscaleGatewayTest'+$PID
@@ -65,6 +65,7 @@ try {
     if ($service.ProcessId -eq $previous) { throw 'El reinicio del panel no pasó por SCM.' }
     $menu=Join-Path ([Environment]::GetFolderPath('CommonPrograms')) $name
     if (-not (Test-Path (Join-Path $menu 'Headscale Gateway.url'))) { throw 'Falta el acceso de Inicio.' }
+    if ($StatusFixture) { & (Join-Path $PSScriptRoot 'check_status_links_windows.ps1') -Fixture $StatusFixture -Root $Root }
     Write-Host 'WINDOWS_SCM_OK: instalación, actualización, datos, clave, configuración, recuperación y reinicio del panel.'
  } catch {
     $state=Get-CimInstance Win32_Service -Filter "Name='$name'" -ErrorAction SilentlyContinue

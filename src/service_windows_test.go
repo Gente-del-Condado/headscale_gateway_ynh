@@ -64,7 +64,12 @@ func TestWindowsServiceInstallerInDisposableRunner(t *testing.T) {
 	if out, err := build.CombinedOutput(); err != nil {
 		t.Fatalf("build: %s %v", out, err)
 	}
-	cmd := exec.Command("powershell.exe", "-NoProfile", "-NonInteractive", "-File", "../tools/check_windows_service.ps1", "-Package", packageDir, "-Root", root)
+	fixture := filepath.Join(root, "status-links")
+	prepare := exec.Command("python", "../tools/prepare_status_links_lab.py", "--output", fixture)
+	if out, err := prepare.CombinedOutput(); err != nil {
+		t.Fatalf("preparar enlaces: %s %v", out, err)
+	}
+	cmd := exec.Command("powershell.exe", "-NoProfile", "-NonInteractive", "-File", "../tools/check_windows_service.ps1", "-Package", packageDir, "-Root", root, "-StatusFixture", fixture)
 	if out, err := cmd.CombinedOutput(); err != nil {
 		t.Fatalf("SCM acceptance: %s %v", out, err)
 	} else {

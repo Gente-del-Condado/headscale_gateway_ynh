@@ -5,8 +5,8 @@ auxiliares. Gateway-Tray es un cliente opcional y no es necesario para usar el
 servidor. Las descargas y sus fuentes están en
 [headscale_gateway_releases](https://github.com/Gente-del-Condado/headscale_gateway_releases/releases).
 
-Instala el archivo de tu arquitectura con `sudo apt install ./headscale-gateway_1.4.13-1_amd64.deb`
-o `sudo dnf install ./headscale-gateway-1.4.13-1.x86_64.rpm`.
+Instala el archivo de tu arquitectura con `sudo apt install ./headscale-gateway_1.4.14-1_amd64.deb`
+o `sudo dnf install ./headscale-gateway-1.4.14-1.x86_64.rpm`.
 El paquete crea un usuario de servicio sin acceso interactivo. La primera
 instalación no arranca ni expone el panel sin configurar una cuenta:
 
@@ -45,6 +45,20 @@ entre dos procesos. El paquete no modifica la confianza CA del sistema ni SELinu
 Las comprobaciones de instalación, actualización y conservación se ejecutan en
 contenedores Debian y Fedora en GitHub. No sustituyen una aceptación real con
 systemd, SELinux y la red de tu equipo.
+
+## Encontrar el portal y la administración
+
+En **Resumen → Estado**, **Dominio principal** aparece primero y enlaza al
+portal de servicios de este Gateway. La **URL administrativa** abre el panel;
+**Servidor Headscale** corresponde al coordinador VPN. Las direcciones web
+completas son enlaces y conservan su puerto y ruta. Se abren en otra pestaña
+o en el navegador del dispositivo. Sin un dominio confirmado se muestra
+**Pendiente de conexión**, sin crear un enlace ficticio.
+
+El navegador necesita resolver ese DNS, alcanzar la red correspondiente y
+confiar en su certificado. Ingress o el SSO de YunoHost permiten administrar
+el Gateway, pero no dan por sí solos conectividad del navegador a la Tailnet.
+En Android, activa **Conectar aplicaciones** cuando el destino lo requiera.
 
 ## Autor y soporte
 

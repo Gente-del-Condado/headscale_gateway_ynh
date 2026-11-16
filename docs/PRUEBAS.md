@@ -29,6 +29,40 @@ compilado de las mismas fuentes. Crea su propio servicio y directorios con
 nombres únicos; no sustituye una instalación existente y los retira al terminar.
 GitHub mantiene las comprobaciones y la publicación de los destinos públicos.
 
+## Aceptación en VM y red de laboratorio
+
+Prepara una identidad SSH propia por VM y comprueba primero el acceso
+administrativo sin interacción. Windows necesita una sesión SSH con token de
+administrador; YunoHost requiere sudo no interactivo y Home Assistant OS acceso
+al host, separado del complemento de terminal. Conserva RAM y CPU; valida las
+plataformas de una en una y apágalas tras guardar sus informes.
+
+Para los enlaces del panel Windows prepara la página con las mismas fuentes:
+
+```bash
+python3 tools/prepare_status_links_lab.py --output builds/status-links-windows
+```
+
+Transfiere esa carpeta al laboratorio y pasa `-StatusFixture` a
+`tools/check_windows_service.ps1`. Edge utiliza un perfil temporal y comunica
+el resultado por loopback; el comprobador no depende de capturar su salida de
+consola. Elimina solo el perfil y los servicios que haya creado este ensayo.
+
+Cuando las aceptaciones individuales pasen, comprueba los Gateways contra un
+Headscale oficial independiente, con CA propia y DERP/STUN locales si los
+clientes no disponen de Internet. Conserva las CA individuales de los Gateways.
+Verifica primero tráfico TSMP entre los nodos y después HTTPS con nombre y CA
+correctos. No desactives la validación TLS para obtener un resultado favorable.
+El rango de prueba, las identidades y los datos deben estar separados de las
+instalaciones habituales; no es necesario cambiar el DNS de producción.
+
+La instrumentación Android debe dirigirse exclusivamente a `.lab`. Acepta
+`basedomain` para compartir el dominio de ensayo y `pingpeers=true` para exigir
+respuestas de al menos otros tres Gateways antes de comprobar el servicio HTTPS.
+Las credenciales efímeras se proporcionan por un canal privado, sin imprimirlas
+en registros ni conservarlas en Git. Consulta los resultados y límites concretos
+en [Validación y límites](VERIFICACION_FINAL.md).
+
 ## Automatizadas
 
 ```bash

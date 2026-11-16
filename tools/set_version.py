@@ -6,8 +6,32 @@ from pathlib import Path
 import re
 import tomllib
 from yunohost_metadata import readme as yunohost_readme
+from android_version import release_version
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def mobile_documents(root, check=False):
+    """Las versiones visibles de las guías proceden del mismo cálculo que la APK."""
+    label, code = release_version(root)
+    replacements = {
+        'android/README.md': [(r'La entrega común \*\*[^*]+\*\* utiliza el motor Go compartido y `versionCode`\n`[0-9]+`',
+                               f'La entrega común **{label}** utiliza el motor Go compartido y `versionCode`\n`{code}`')],
+        'packaging/android/play/PUBLICACION.md': [(r'(?m)^# Preparación de Google Play · .+$', f'# Preparación de Google Play · {label}'),
+            (r'(?m)^- Versión: `[^`]+`; versionCode: `[0-9]+`;', f'- Versión: `{label}`; versionCode: `{code}`;')],
+    }
+    for relative, changes in replacements.items():
+        path = root / relative
+        original = text = path.read_text()
+        for pattern, value in changes:
+            text, count = re.subn(pattern, lambda _: value, text)
+            if count != 1:
+                raise ValueError('No se reconoce la versión de la guía: ' + relative)
+        if check:
+            if original != text:
+                raise ValueError('Versión documental obsoleta: ' + relative)
+        else:
+            path.write_text(text)
 
 
 def main():
@@ -32,6 +56,7 @@ def main():
         assert json.loads(desktop_lock.read_text())['version'] == version
         assert json.loads(desktop_lock.read_text())['packages']['']['version'] == version
         assert (ROOT / 'packaging/yunohost/README.md').read_text() == yunohost_readme(ROOT)
+        mobile_documents(ROOT, check=True)
     else:
         previous = (ROOT / 'VERSION').read_text().strip()
         # Los ejemplos instalables deben acompañar a la versión de sus paquetes.
@@ -50,6 +75,7 @@ def main():
         lock['version'] = lock['packages']['']['version'] = version
         desktop_lock.write_text(json.dumps(lock, indent=2) + '\n')
         (ROOT / 'packaging/yunohost/README.md').write_text(yunohost_readme(ROOT))
+        mobile_documents(ROOT)
     print('Release version: ' + version)
 
 

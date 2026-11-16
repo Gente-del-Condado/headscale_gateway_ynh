@@ -26,7 +26,7 @@ Descarga el archivo `.flatpak` de la release pública correspondiente, comprueba
 su suma e instala:
 
 ```sh
-flatpak install --user ./headscale-gateway-1.4.13-x86_64.flatpak
+flatpak install --user ./headscale-gateway-1.4.14-x86_64.flatpak
 flatpak run es.gentedelcondado.HeadscaleGateway
 ```
 
@@ -43,7 +43,7 @@ IA: no se presenta como apto para solicitar inclusión ni se envía una solicitu
 
 ## Construcción
 
-El manifiesto toma binarios 1.4.13 verificados de los recursos públicos YunoHost.
+El manifiesto toma binarios 1.4.14 verificados de los recursos públicos YunoHost.
 Los fuentes completos del motor y sus dependencias están en `source.tar.gz`
 de esa misma release; los fuentes completos del proyecto se publican aparte.
 No reconstruye ni modifica el motor para Flatpak. `flatpak-builder` construye el
@@ -51,6 +51,20 @@ paquete dentro de su sandbox; las pruebas se ejecutan en GitHub, no en el Linux
 habitual del mantenedor.
 
 [Manual](https://gente-del-condado.github.io/headscale_gateway_ynh/).
+
+## Encontrar el portal y la administración
+
+En **Resumen → Estado**, **Dominio principal** aparece primero y enlaza al
+portal de servicios de este Gateway. La **URL administrativa** abre el panel;
+**Servidor Headscale** corresponde al coordinador VPN. Las direcciones web
+completas son enlaces y conservan su puerto y ruta. Se abren en otra pestaña
+o en el navegador del dispositivo. Sin un dominio confirmado se muestra
+**Pendiente de conexión**, sin crear un enlace ficticio.
+
+El navegador necesita resolver ese DNS, alcanzar la red correspondiente y
+confiar en su certificado. Ingress o el SSO de YunoHost permiten administrar
+el Gateway, pero no dan por sí solos conectividad del navegador a la Tailnet.
+En Android, activa **Conectar aplicaciones** cuando el destino lo requiera.
 
 ## Autor y soporte
 

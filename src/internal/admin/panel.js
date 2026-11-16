@@ -92,25 +92,62 @@ async function refresh() {
   el('connection').textContent=window.tr("Sesión: {p0}", {p0:(currentRole)});
 }
 
+// El estado viene del motor, pero nunca se convierte en HTML. Solo se admiten
+// enlaces HTTP(S) completos, sin credenciales ni caracteres de control.
+function statusLinkURL(key, value) {
+  if (typeof value !== 'string' || !value || /[\u0000-\u0020\u007f]/.test(value)) return '';
+  const domain = key === 'domain';
+  if (domain && /[\/?#@:\\]/.test(value)) return '';
+  if (!domain && !/^https?:\/\//i.test(value)) return '';
+  try {
+    const url = new URL(domain ? 'https://' + value + '/' : value);
+    if (!['http:', 'https:'].includes(url.protocol) || !url.hostname || url.username || url.password) return '';
+    return url.href;
+  } catch { return ''; }
+}
+
 function renderStatus(data) {
   el("about-version").textContent = data.version || "—";
   el('setup-banner').hidden = !data.setup_required;
   el('setup-message').textContent = data.setup_message || '';
   el('reload').disabled = !!data.setup_required;
   const dl = el('status');
+  // El refresco automático no debe expulsar el foco del enlace que se estaba
+  // utilizando con teclado. No se toma el foco si estaba fuera de este listado.
+  const focusedKey = dl.contains(document.activeElement) ? document.activeElement.dataset.statusKey : '';
   dl.replaceChildren();
-  for (const [key, value] of Object.entries(data)) {
+  const entries = [['domain', data.domain || ''], ...Object.entries(data).filter(([key]) => key !== 'domain')];
+  for (const [key, value] of entries) {
     const dt = document.createElement('dt');
     const labels={lan_https_active:'HTTPS LAN disponible',ca_http_port:'Puerto HTTP de CA activo',subscription:tr('Suscripción'),node:'Nodo',domain:'Dominio',services_active:'Servicios activos',vpn_connected:'VPN conectada',vpn_state:'Estado VPN',certificate_mode:'Modo TLS',certificate_source:'Certificado',dns_provider:'Proveedor DNS',headscale_url:'Servidor Headscale',uptime_seconds:'Tiempo en servicio',boot_id:'Inicio del proceso',data_dir:'Directorio de datos',admin_domain_mode:'Acceso al panel',admin_domain_url:'URL administrativa',admin_oidc_callback:'Retorno OIDC',vpn_identity_confirmed:'Identidad VPN confirmada',setup_required:'Configuración pendiente',setup_message:'Configuración',acme_retry_after_utc:'Próximo intento ACME'};
-    dt.textContent = labels[key]||key.replaceAll('_',' ');
+    dt.textContent = key === 'domain' ? tr('Dominio principal') : labels[key]||key.replaceAll('_',' ');
     const dd = document.createElement('dd');
+    if (key === 'domain') { dt.className = 'status-primary-label'; dd.className = 'status-primary-value'; }
     if(key==='subscription') {
       const states={disabled:tr('Módulo desactivado'),active:tr('Activa'),grace:tr('Periodo de gracia'),expired:tr('Caducada'),missing:tr('Pendiente de activación'),configuration_error:tr('Error de configuración'),invalid:tr('Licencia inválida'),not_yet_valid:tr('Todavía no válida'),missing_feature:tr('Función no incluida')};
       dd.textContent=tr(states[value.state]||value.state)+(value.instance_id?' · ID: '+value.instance_id:'')+(value.expires_at?' · '+new Date(value.expires_at*1000).toLocaleString():'');
       dl.append(dt,dd);continue;
     }
-    dd.textContent = typeof value==='boolean'?(value?'Sí':'No'):key==='uptime_seconds'?`${Math.floor(Number(value)/3600)} h ${Math.floor(Number(value)%3600/60)} min`:key==='boot_id'?new Date(value).toLocaleString():String(value);
+    const href = statusLinkURL(key, value);
+    if (href) {
+      const link = document.createElement('a');
+      link.href = href; link.textContent = href; link.target = '_blank';
+      link.rel = 'noopener noreferrer'; link.className = 'status-web-link';
+      link.dataset.statusKey = key;
+      dd.append(link);
+    } else {
+      dd.textContent = key === 'domain' && !value ? tr('Pendiente de conexión') : typeof value==='boolean'?(value?'Sí':'No'):key==='uptime_seconds'?`${Math.floor(Number(value)/3600)} h ${Math.floor(Number(value)%3600/60)} min`:key==='boot_id'?new Date(value).toLocaleString():String(value);
+    }
+    if (key === 'domain') {
+      const help = document.createElement('small');
+      help.textContent = tr('Portal principal de servicios; la administración tiene su propio enlace.');
+      dd.append(help);
+    }
     dl.append(dt, dd);
+  }
+  if (focusedKey) {
+    const link = [...dl.querySelectorAll('a[data-status-key]')].find(node => node.dataset.statusKey === focusedKey);
+    if (link) link.focus({preventScroll:true});
   }
 }
 

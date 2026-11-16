@@ -195,7 +195,10 @@ public final class MainActivity extends Activity {
             @Override public boolean shouldOverrideUrlLoading(WebView view,WebResourceRequest request) {
                 Uri url=request.getUrl();if(url.toString().startsWith(RuntimeState.base(MainActivity.this)+"/"))return false;
                 if(request.isForMainFrame() && "mailto:headscale-gateway@gentedelcondado.es".equals(url.toString())) {contactSupport();return true;}
-                if(request.isForMainFrame() && "https".equals(url.getScheme()))try {startActivity(new Intent(Intent.ACTION_VIEW,url));}catch(Exception e){showError(e);}
+                // HTTP LAN solo sale al navegador tras un toque explícito. No se
+                // permite contenido mixto ni se relaja la validación TLS del panel.
+                boolean externalWeb="https".equals(url.getScheme()) || (request.hasGesture() && "http".equals(url.getScheme()));
+                if(request.isForMainFrame() && externalWeb)try {startActivity(new Intent(Intent.ACTION_VIEW,url));}catch(Exception e){showError(e);}
                 return true;
             }
             @Override public void onPageStarted(WebView view,String url,android.graphics.Bitmap icon) {downloads.trust(null);loading.setVisibility(View.VISIBLE);}

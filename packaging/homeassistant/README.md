@@ -32,6 +32,20 @@ opcionales y sirven para configurar una cuenta separada para el acceso directo.
 El complemento se publica como estable en la tienda de Home Assistant. Consulta
 `DOCS.md` para conocer los requisitos de red, las copias y la recuperación.
 
+## Encontrar el portal y la administración
+
+En **Resumen → Estado**, **Dominio principal** aparece primero y enlaza al
+portal de servicios de este Gateway. La **URL administrativa** abre el panel;
+**Servidor Headscale** corresponde al coordinador VPN. Las direcciones web
+completas son enlaces y conservan su puerto y ruta. Se abren en otra pestaña
+o en el navegador del dispositivo. Sin un dominio confirmado se muestra
+**Pendiente de conexión**, sin crear un enlace ficticio.
+
+El navegador necesita resolver ese DNS, alcanzar la red correspondiente y
+confiar en su certificado. Ingress o el SSO de YunoHost permiten administrar
+el Gateway, pero no dan por sí solos conectividad del navegador a la Tailnet.
+En Android, activa **Conectar aplicaciones** cuando el destino lo requiera.
+
 ## Autor y soporte
 
 Autor: **Gente del Condado**. Soporte: [headscale-gateway@gentedelcondado.es](mailto:headscale-gateway@gentedelcondado.es).

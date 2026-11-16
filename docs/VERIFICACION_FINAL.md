@@ -1,5 +1,60 @@
 # Validación y límites conocidos
 
+## Validación local del candidato 1.4.14
+
+El 15 de noviembre de 2026 se comprobó el panel compartido en Windows 11 LTSC,
+YunoHost y Home Assistant OS, manteniendo la RAM y CPU de las VM. Se apagó
+cada VM al terminar su primera aceptación y se volvió a encender para la prueba
+conjunta de red. Debian queda pendiente; Fedora se probó con un motor aislado.
+
+Windows pasó el servicio LocalService real, instalación, actualización con datos,
+credenciales, configuración y clave maestra conservados, recuperación tras fallo,
+reinicio desde el panel y acceso del menú Inicio. Edge verificó el dominio
+principal, enlaces HTTP/HTTPS y conservación del foco. La prueba del navegador
+utiliza una página con el renderizador real y datos ficticios; el servicio se
+prueba con su panel y API reales.
+
+YunoHost 12.1.42 con SSOwat 12.1.1 pasó instalación, actualización forzada del
+mismo candidato, copia/restauración y recuperación automática. Se conservaron
+configuración, datos, clave maestra y secreto del proxy. Se comprobó el SSO real
+con un administrador temporal, CSRF y rechazo de cabeceras de identidad enviadas
+directamente al backend. Los recursos del candidato se sirvieron localmente con
+sus sumas verificadas; los scripts de instalación fueron los del paquete.
+
+Home Assistant OS 18.4, Supervisor 2026.11.0 y Core 2026.11.1 pasaron instalación
+local, Ingress real con identidad administradora, reconstrucción de imagen y
+copia/restauración parcial, conservando configuración, datos y clave maestra.
+La imagen se compiló con el Dockerfile del paquete y se entregó por un registro
+OCI temporal mediante SSH. El ejemplar de laboratorio utiliza un slug separado.
+Los navegadores de ambas plataformas comprobaron también los enlaces del panel
+instalado, sustituyendo solo la respuesta de estado para probar URL ficticias.
+
+Se instaló el DEB oficial de Headscale 0.29.7, con suma comprobada, en YunoHost.
+El coordinador de ensayo usa HTTPS con una CA RSA de laboratorio y DERP/STUN
+locales. Windows no validó la CA Ed25519 inicial del ensayo; se reemitió con RSA.
+Las CA propias de los Gateways se conservaron. No se cambiaron los DNS, rutas ni
+certificados de instalaciones habituales. Windows, YunoHost, Home Assistant y
+Fedora intercambiaron tráfico TSMP en ambos sentidos y sus portales respondieron
+por HTTPS con la CA individual y el nombre TLS verificados.
+
+La tablet USB con APK `.lab` 1.4.14 pasó arranque, sesión normal, navegación,
+conexión a Headscale, ping TSMP hacia los cuatro Gateways y recepción de una
+petición HTTPS desde otro nodo con CA verificada. La clave maestra se conservó
+entre repeticiones. La instrumentación propaga explícitamente el entorno Java
+que hereda el proceso Go; `Os.setenv` solo no actualizaba esa caché. Se prueba
+el motor del Gateway: en esta ejecución no se activó la VPN de aplicaciones del
+teléfono. La preparación del cliente espera tráfico VPN antes de comprobar
+HTTPS, pues `tsnet.Up` no acredita que la ruta hacia un peer ya esté lista.
+
+El coordinador queda como instalación de laboratorio: sus claves de alta y API
+caducan en 24 horas, su certificado en 30 días y su CA en 90 días. Las
+identidades y datos de los Gateways son persistentes. Los informes de esta
+aceptación se guardan localmente en `builds/1414-platform-lab/` y
+`builds/windows-links-1414/`; no contienen claves privadas de distribución.
+La verificación general pasó 92 pruebas Python, las suites Go y JavaScript,
+vet y compilación. El manual se compiló en modo estricto y se comprobaron sus
+45 páginas HTML y 2.628 enlaces locales. Play Store continúa solo preparado.
+
 ## Validación local del candidato 1.4.13
 
 Revisión del 15 de noviembre de 2026, anterior a la publicación estable. La

@@ -1,3 +1,9 @@
+# 1.4.14
+
+- Dominio principal destacado y enlaces directos HTTP/HTTPS en Resumen/Estado del panel común.
+- Conserva el foco al refrescar el estado; Android abre también los enlaces HTTP LAN mediante un toque explícito.
+- README y manuales distinguen portal de servicios, administración y servidor Headscale; las versiones documentales Android y Play se verifican automáticamente.
+
 # 1.4.13
 
 - Certificados: conserva CertMagic y DNS-01 sin cargar el servidor Caddy; mantiene TXT ajenos y protege los tokens en errores de ACME.

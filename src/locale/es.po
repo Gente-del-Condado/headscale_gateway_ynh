@@ -3481,6 +3481,10 @@ msgstr "Dominio base"
 msgid "dominio base inválido"
 msgstr "dominio base inválido"
 
+#: src/internal/admin/panel.js
+msgid "Dominio principal"
+msgstr "Dominio principal"
+
 #: src/acme_backoff.go
 msgid "dominio principal: %w"
 msgstr "dominio principal: %w"
@@ -6673,6 +6677,7 @@ msgid "non-loopback HTTP requires explicit trusted proxies"
 msgstr "non-loopback HTTP requires explicit trusted proxies"
 
 #: src/internal/admin/panel-reference.js
+#: src/internal/admin/panel.js
 #: src/internal/portal/render.go
 msgid "noopener noreferrer"
 msgstr "noopener noreferrer"
@@ -7063,6 +7068,10 @@ msgstr "Pega aquí el token"
 msgid "Pendiente de activación"
 msgstr "Pendiente de activación"
 
+#: src/internal/admin/panel.js
+msgid "Pendiente de conexión"
+msgstr "Pendiente de conexión"
+
 #: src/internal/admin/panel-pki.js
 msgid "Pendiente de verificar"
 msgstr "Pendiente de verificar"
@@ -7427,6 +7436,10 @@ msgstr "Portal guardado. Los cambios ya están aplicados."
 #: src/internal/admin/routes_portal.go
 msgid "portal no disponible"
 msgstr "portal no disponible"
+
+#: src/internal/admin/panel.js
+msgid "Portal principal de servicios; la administración tiene su propio enlace."
+msgstr "Portal principal de servicios; la administración tiene su propio enlace."
 
 #: src/internal/admin/panel-reference.js
 #: src/internal/admin/panel.html

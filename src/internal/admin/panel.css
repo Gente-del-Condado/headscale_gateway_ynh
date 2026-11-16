@@ -118,6 +118,14 @@ a.button-link:hover{background:#0369a1}
 .log-line.log-info{color:#cbd5e1}
 .inline-help{padding:0;margin-left:5px;display:inline-grid;place-items:center;width:22px;height:22px;border:1px solid #60a5fa;border-radius:50%;font-size:.78rem;background:#1e3a5f;color:#e0f2fe;vertical-align:middle}
 [hidden]{display:none!important}
+/* El dominio principal se reconoce por su etiqueta y subrayado, no solo color. */
+#status .status-primary-label{font-weight:750;color:var(--text)}
+#status .status-primary-value{padding-bottom:12px;min-width:0}
+#status .status-primary-value small{display:block;margin-top:4px}
+#status .status-web-link{display:inline-block;min-height:24px;color:var(--accent);text-decoration:underline;text-underline-offset:.2em;overflow-wrap:anywhere;max-width:100%}
+#status .status-primary-value a{font-weight:750;font-size:1.08em}
+#status .status-web-link:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px}
+@media(pointer:coarse){#status .status-web-link{min-height:32px;padding-block:4px}}
 :where(button,a,input,select,textarea,summary):focus-visible{outline:2px solid #7dd3fc;outline-offset:3px}
 main,.card,section,fieldset{min-width:0}
 pre,code{overflow-wrap:anywhere}

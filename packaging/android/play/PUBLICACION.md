@@ -1,10 +1,10 @@
-# Preparación de Google Play · 1.4.9
+# Preparación de Google Play · 1.4.14
 
-Estado: AAB preparado; no se ha creado una cuenta ni publicado una aplicación.
+Estado: canal preparado para generar y validar el AAB; sin envío a Play Store.
 La revisión de Google y las pruebas exigidas a la cuenta son pasos externos.
 
 - Identificador: `org.headscalegateway.android`.
-- Versión: `1.4.9`; versionCode: `10040090`; min SDK 24; target SDK 36.
+- Versión: `1.4.14`; versionCode: `10040140`; min SDK 24; target SDK 36.
 - Arquitecturas: arm64-v8a y x86_64; bibliotecas alineadas a 16 KiB.
 - AAB: `builds/android/headscale-gateway-play.aab`.
 - Privacidad pública: https://gente-del-condado.github.io/headscale_gateway_ynh/PRIVACIDAD_ANDROID.html

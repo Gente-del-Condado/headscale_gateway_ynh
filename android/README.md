@@ -1,7 +1,7 @@
 # Headscale Gateway para Android
 
-La entrega común **1.4.12** utiliza el motor Go compartido y `versionCode`
-`10040120`. GitHub Actions construye el APK directo con la firma estable, el
+La entrega común **1.4.14** utiliza el motor Go compartido y `versionCode`
+`10040140`. GitHub Actions construye el APK directo con la firma estable, el
 APK F-Droid sin firma y el AAB validado. Play Store continúa solo preparado;
 no se crea una ficha ni se envía la aplicación a las tiendas.
 
@@ -236,6 +236,12 @@ prueba opcional con un Headscale y otro nodo temporales, TCP, UDP y MagicDNS.
 Consulta [los pasos del laboratorio](PRUEBAS.md). La APK de pruebas
 instrumentadas se construye aparte y no se distribuye como aplicación.
 
+La instrumentación de laboratorio acepta `basedomain` para usar el mismo dominio
+privado que los otros Gateways del ensayo; si se omite, utiliza `lab.example.test`.
+Este parámetro solo existe en el APK de pruebas aislado.
+`pingpeers=true` exige comprobar tráfico hacia al menos otros tres Gateways.
+La CA y la clave efímera se transmiten al proceso hijo Go solo durante este ensayo.
+
 Waydroid requiere desactivar temporalmente su suspensión automática durante
 las pruebas largas, y restaurar el valor previo al terminarlas. No se borran
 sus datos ni se desinstalan otras aplicaciones. Una prueba de túnel exige
@@ -248,11 +254,6 @@ suspensión, IPv6 y proveedores DNS/ACME reales.
 
 Consulta [los componentes reutilizados y sus avisos](TERCEROS.md).
 
-## Autor y soporte
-
-Autor: **Gente del Condado**. Soporte: [headscale-gateway@gentedelcondado.es](mailto:headscale-gateway@gentedelcondado.es).
-[Manual en línea](https://gente-del-condado.github.io/headscale_gateway_ynh/).
-
 ## Nombre propuesto antes de conectar
 
 El primer formulario del panel propone el nombre del dispositivo Android (o su
@@ -261,3 +262,22 @@ permisos de Bluetooth para obtenerlo. Headscale decide el nombre definitivo y
 resuelve los duplicados; se conserva la identidad VPN al actualizar. Una
 instalación existente conserva el nombre que ya tenía. Importar un perfil no
 copia el nombre del dispositivo de origen ni confirma la propuesta local.
+
+## Encontrar el portal y la administración
+
+En **Resumen → Estado**, **Dominio principal** aparece primero y enlaza al
+portal de servicios de este Gateway. La **URL administrativa** abre el panel;
+**Servidor Headscale** corresponde al coordinador VPN. Las direcciones web
+completas son enlaces y conservan su puerto y ruta. Se abren en otra pestaña
+o en el navegador del dispositivo. Sin un dominio confirmado se muestra
+**Pendiente de conexión**, sin crear un enlace ficticio.
+
+El navegador necesita resolver ese DNS, alcanzar la red correspondiente y
+confiar en su certificado. Ingress o el SSO de YunoHost permiten administrar
+el Gateway, pero no dan por sí solos conectividad del navegador a la Tailnet.
+En Android, activa **Conectar aplicaciones** cuando el destino lo requiera.
+
+## Autor y soporte
+
+Autor: **Gente del Condado**. Soporte: [headscale-gateway@gentedelcondado.es](mailto:headscale-gateway@gentedelcondado.es).
+[Manual en línea](https://gente-del-condado.github.io/headscale_gateway_ynh/).

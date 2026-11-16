@@ -22,6 +22,21 @@ public final class SmokeInstrumentation extends Instrumentation {
         runOnMainSync(()->((android.webkit.WebView)activity.findViewById(R.id.panel_webview)).evaluateJavascript(code,result->{value.set(result);complete.countDown();}));
         require(complete.await(15,java.util.concurrent.TimeUnit.SECONDS),"El WebView no responde");return value.get();
     }
+    // Os.setenv cambia libc, pero ProcessBuilder copia la caché de entorno Java.
+    // Solo este proceso de instrumentación .lab actualiza esa caché para que
+    // el hijo Go reciba la CA y la clave efímera, sin hooks en la aplicación.
+    @SuppressWarnings("unchecked")
+    private void childEnvironment(String name,String value) throws Exception {
+        require(context.getPackageName().endsWith(".lab"),"El entorno de prueba exige la APK aislada");
+        android.system.Os.setenv(name,value,true);
+        if(!value.equals(new ProcessBuilder().environment().get(name))) {
+            java.util.Map<String,String> environment=System.getenv();
+            java.lang.reflect.Field field=environment.getClass().getDeclaredField("m");
+            field.setAccessible(true);
+            ((java.util.Map<String,String>)field.get(environment)).put(name,value);
+        }
+        require(value.equals(new ProcessBuilder().environment().get(name)),"El proceso hijo no heredaría el entorno del ensayo");
+    }
     private void capture(String name) throws Exception {
         if(!arguments.getString("capture","false").equals("true"))return;
         Thread.sleep(400);
@@ -134,12 +149,14 @@ public final class SmokeInstrumentation extends Instrumentation {
         Bundle result=new Bundle();
         try {
             context=getTargetContext();
-            if(arguments.getString("functional","false").equals("true") && !context.getPackageName().endsWith(".lab"))throw new AssertionError("Las pruebas funcionales requieren la APK de laboratorio aislada");
+            boolean labWork=arguments.getString("functional","false").equals("true") || arguments.getString("statuslinks","false").equals("true")
+                || arguments.containsKey("headscale") || arguments.containsKey("ca") || arguments.containsKey("authkey") || arguments.getString("pingpeers","false").equals("true");
+            if(labWork && !context.getPackageName().endsWith(".lab"))throw new AssertionError("Las pruebas funcionales requieren la APK de laboratorio aislada");
             if(Build.VERSION.SDK_INT>=33)getUiAutomation().grantRuntimePermission(context.getPackageName(),android.Manifest.permission.POST_NOTIFICATIONS);
             verifyRoutes();
             // Solo el proceso instrumentado hereda la clave efímera del laboratorio.
-            if(arguments.containsKey("ca")) {File ca=new File(RuntimeState.root(context),"headscale-lab.crt");RuntimeState.write(ca,arguments.getString("ca"));android.system.Os.setenv("SSL_CERT_FILE",ca.getPath(),true);}
-            if(arguments.containsKey("authkey")) android.system.Os.setenv("TS_AUTHKEY",arguments.getString("authkey"),true);
+            if(arguments.containsKey("ca")) {File ca=new File(RuntimeState.root(context),"headscale-lab.crt");RuntimeState.write(ca,arguments.getString("ca"));childEnvironment("SSL_CERT_FILE",ca.getPath());}
+            if(arguments.containsKey("authkey")) childEnvironment("TS_AUTHKEY",arguments.getString("authkey"));
             if(arguments.containsKey("diagnostic")) {
                 File log=new File(RuntimeState.root(context),"engine.log");
                 byte[] bytes=new byte[8192]; int count;
@@ -162,17 +179,27 @@ public final class SmokeInstrumentation extends Instrumentation {
             HttpURLConnection denied=(HttpURLConnection)new URL("http://127.0.0.1:"+RuntimeState.prefs(context).getInt("control_port",0)+"/state").openConnection();
             require(denied.getResponseCode()==403,"El adaptador aceptó una petición sin credencial");denied.disconnect();
             api("GET","/api/v1/status",null);
+            if(arguments.getString("statuslinks","false").equals("true")) {
+                new StatusLinksChecks(this).run();
+                phase(new JSONObject().put("phase","passed").put("detail","Dominio principal, enlaces HTTP/HTTPS, toque y foco verificados"));
+                result.putString("stream","ENLACES_ANDROID_OK: panel común, dominio principal, navegación externa HTTP/HTTPS mediante toque real y foco conservado. Sin cambios de configuración ni VPN.\n");
+                finish(-1,result);return;
+            }
             mobileInterface();
             String headscale=arguments.getString("headscale","");
             if(!headscale.isEmpty()) {
-                JSONObject settings=new JSONObject().put("headscale.url",headscale).put("headscale.api_key",arguments.getString("apikey","")).put("domain.base_domain","lab.example.test")
+                JSONObject settings=new JSONObject().put("headscale.url",headscale).put("headscale.api_key",arguments.getString("apikey","")).put("domain.base_domain",arguments.getString("basedomain","lab.example.test"))
                     .put("certificates.mode","force-local").put("dns.provider","none").put("acme.dns_provider","none")
                     .put("admin.domain_mode","tailnet").put("server.listen_addr","127.0.0.1:18443");
                 api("PUT","/api/v1/config",new JSONObject().put("changes",settings));
                 api("POST","/api/v1/system/restart",new JSONObject());
                 Thread.sleep(4000);
                 cookie="";csrf="";login();
-                api("POST","/api/v1/services",new JSONObject().put("name","prueba").put("backend","http://127.0.0.1:18081"));
+                // Repetir el laboratorio conserva sus datos: no duplica el servicio propio.
+                JSONArray services=api("GET","/api/v1/services",null).getJSONArray("items");
+                boolean hasService=false;
+                for(int i=0;i<services.length();i++)if(services.getJSONObject(i).optString("name").equals("prueba"))hasService=true;
+                if(!hasService)api("POST","/api/v1/services",new JSONObject().put("name","prueba").put("backend","http://127.0.0.1:18081"));
                 deadline=System.currentTimeMillis()+180000; boolean connected=false;
                 while(System.currentTimeMillis()<deadline) {
                     try {
@@ -184,6 +211,20 @@ public final class SmokeInstrumentation extends Instrumentation {
                     Thread.sleep(1000);
                 }
                 require(connected,"El nodo Android no conectó a Headscale");
+                if(arguments.getString("pingpeers","false").equals("true")) {
+                    JSONObject own=api("GET","/api/v1/status",null);
+                    JSONArray peers=api("GET","/api/v1/network/nodes",null).getJSONArray("nodes");
+                    int checked=0;
+                    for(int i=0;i<peers.length();i++) {
+                        JSONObject peer=peers.getJSONObject(i);
+                        if(peer.optString("name").equals(own.optString("node")) || !peer.optBoolean("online",false))continue;
+                        JSONObject ping=api("POST","/api/v1/network/ping",new JSONObject().put("node_id",peer.getString("id")).put("mode","tsmp"));
+                        require(ping.optString("error","").isEmpty(),"No responde el Gateway de laboratorio "+peer.optString("name"));
+                        checked++;
+                    }
+                    require(checked>=3,"Faltan los Gateways de Windows, YunoHost y Home Assistant en el ensayo");
+                    phase(new JSONObject().put("phase","peers_verified").put("count",checked));
+                }
                 // Un servicio de la aplicación permite comprobar el proxy HTTPS desde otro nodo.
                 ServerSocket backend=new ServerSocket(18081,4,InetAddress.getByName("127.0.0.1"));
                 AtomicBoolean completed=new AtomicBoolean();

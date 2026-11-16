@@ -10,6 +10,13 @@ Esta integración no instala ni arranca el servidor Gateway. Puede consultar
 una instalación directa, el complemento de Home Assistant o una instalación
 de YunoHost mediante un acceso administrativo alcanzable desde Core.
 
+## Abrir los servicios del Gateway
+
+Esta integración consulta el motor; no contiene su panel. En el panel del
+Gateway al que se conecta, abre **Resumen → Estado → Dominio principal**
+para visitar el portal de servicios. La URL administrativa es un acceso
+diferente. El navegador necesita conectividad y DNS hacia ese destino.
+
 ## Instalar desde el repositorio individual
 
 Añade [headscale_gateway_ha](https://github.com/Gente-del-Condado/headscale_gateway_ha)

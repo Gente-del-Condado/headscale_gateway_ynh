@@ -48,6 +48,21 @@ Con el túnel abierto, visita `http://127.0.0.1:9091/admin/` en tu ordenador. La
 
 El listener administrativo y los listeners de servicios tienen funciones diferentes. El acceso por Ingress o SSO permite configurar el motor antes de que su VPN esté conectada.
 
+
+## Encontrar el portal y la administración
+
+En **Resumen → Estado**, **Dominio principal** aparece primero y enlaza al
+portal de servicios de este Gateway. La **URL administrativa** abre el panel;
+**Servidor Headscale** corresponde al coordinador VPN. Las direcciones web
+completas son enlaces y conservan su puerto y ruta. Se abren en otra pestaña
+o en el navegador del dispositivo. Sin un dominio confirmado se muestra
+**Pendiente de conexión**, sin crear un enlace ficticio.
+
+El navegador necesita resolver ese DNS, alcanzar la red correspondiente y
+confiar en su certificado. Ingress o el SSO de YunoHost permiten administrar
+el Gateway, pero no dan por sí solos conectividad del navegador a la Tailnet.
+En Android, activa **Conectar aplicaciones** cuando el destino lo requiera.
+
 ## Publica un servicio de prueba
 
 1. Comprueba desde el anfitrión del Gateway que el destino responde.
