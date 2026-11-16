@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.14</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.16</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -76,6 +76,8 @@
             
               <p class="nav-group">Administrar</p>
               <ul>
+                <li><a href="CONTROL_HEADSCALE.html" >Coordinador Headscale</a></li>
+              
                 <li><a href="RED_Y_CA_LAN.html" >Red, puertos y CA</a></li>
               
                 <li><a href="CA-FEDERACION.html" >Confianza y federación</a></li>
@@ -89,6 +91,14 @@
             
               <p class="nav-group">Desarrollar</p>
               <ul>
+                <li><a href="EMPEZAR_DESARROLLO.html" >Empezar a desarrollar</a></li>
+              
+                <li><a href="ESTADO_DESARROLLO.html" >Estado de la siguiente entrega</a></li>
+              
+                <li><a href="SEGURIDAD.html" >Privacidad y limpieza</a></li>
+              
+                <li><a href="CAMBIOS.html" >Cambios</a></li>
+              
                 <li><a href="ESTRUCTURA.html" >Estructura del proyecto</a></li>
               
                 <li><a href="ARQUITECTURA.html" >Arquitectura y flujos</a></li>
@@ -148,6 +158,12 @@
     <main id="contenido" tabindex="-1">
       <p class="breadcrumb"><a href="index.html">Manual</a><span aria-hidden="true"> / </span>Pruebas</p>
       <article class="prose"><h1 id="plan-de-regresión-y-despliegue-seguro">Plan de regresión y despliegue seguro</h1>
+<h2 id="primeras-comprobaciones-sin-instalaciones-reales">Primeras comprobaciones sin instalaciones reales</h2>
+<p>Empieza con <code>python3 -B tools/check_privacy.py</code> y <code>bash tools/verify.sh</code>.
+Para la gestión del coordinador, ejecuta <code>go -C src test ./internal/headscalecontrol</code>.
+El contrato de rutas Linux debe pasar también en el ejecutable de pruebas de
+Windows; no se omite esa prueba con una etiqueta de compilación. Los resultados
+actuales y sus límites están en <a href="VERIFICACION_FINAL.html">VERIFICACION_FINAL.md</a>.</p>
 <h2 id="validación-local-antes-de-enviar-a-forgejo">Validación local antes de enviar a Forgejo</h2>
 <p>En Linux con systemd, ejecuta las comprobaciones en este equipo antes de subir
 un candidato. Las tareas van en secuencia, con un límite conjunto de 3 GiB de
@@ -252,6 +268,8 @@ ACME y DNS del ensayo son locales.</p></article>
     </main>
     <aside class="page-toc">
       <nav aria-label="En esta página"><p>En esta página</p><ul>
+        
+          <li><a href="#primeras-comprobaciones-sin-instalaciones-reales">Primeras comprobaciones sin instalaciones reales</a></li>
         
           <li><a href="#validación-local-antes-de-enviar-a-forgejo">Validación local antes de enviar a Forgejo</a></li>
         

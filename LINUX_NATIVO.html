@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.14</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.16</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -76,6 +76,8 @@
             
               <p class="nav-group">Administrar</p>
               <ul>
+                <li><a href="CONTROL_HEADSCALE.html" >Coordinador Headscale</a></li>
+              
                 <li><a href="RED_Y_CA_LAN.html" >Red, puertos y CA</a></li>
               
                 <li><a href="CA-FEDERACION.html" >Confianza y federación</a></li>
@@ -89,6 +91,14 @@
             
               <p class="nav-group">Desarrollar</p>
               <ul>
+                <li><a href="EMPEZAR_DESARROLLO.html" >Empezar a desarrollar</a></li>
+              
+                <li><a href="ESTADO_DESARROLLO.html" >Estado de la siguiente entrega</a></li>
+              
+                <li><a href="SEGURIDAD.html" >Privacidad y limpieza</a></li>
+              
+                <li><a href="CAMBIOS.html" >Cambios</a></li>
+              
                 <li><a href="ESTRUCTURA.html" >Estructura del proyecto</a></li>
               
                 <li><a href="ARQUITECTURA.html" >Arquitectura y flujos</a></li>
@@ -152,8 +162,8 @@
 auxiliares. Gateway-Tray es un cliente opcional y no es necesario para usar el
 servidor. Las descargas y sus fuentes están en
 <a href="https://github.com/Gente-del-Condado/headscale_gateway_releases/releases">headscale_gateway_releases</a>.</p>
-<p>Instala el archivo de tu arquitectura con <code>sudo apt install ./headscale-gateway_1.4.14-1_amd64.deb</code>
-o <code>sudo dnf install ./headscale-gateway-1.4.14-1.x86_64.rpm</code>.
+<p>Instala el archivo de tu arquitectura con <code>sudo apt install ./headscale-gateway_1.4.16-1_amd64.deb</code>
+o <code>sudo dnf install ./headscale-gateway-1.4.16-1.x86_64.rpm</code>.
 El paquete crea un usuario de servicio sin acceso interactivo. La primera
 instalación no arranca ni expone el panel sin configurar una cuenta:</p>
 <pre tabindex="0"><code class="language-sh">sudo -u headscale-gateway headscale-gateway-configure --admin miadministrador
@@ -215,7 +225,13 @@ incluido un puerto local personalizado. Si aún no está configurado o activo,
 muestra las instrucciones iniciales; no crea credenciales ni eleva permisos por
 su cuenta. El paquete no habilita un servicio sin cuenta administrativa. Tras
 configurarla y activar la unidad con las órdenes anteriores, el servicio arranca
-con el sistema y se reinicia tras un fallo. Cerrar el navegador no lo detiene.</p></article>
+con el sistema y se reinicia tras un fallo. Cerrar el navegador no lo detiene.</p>
+<h2 id="controlador-headscale-opcional">Controlador Headscale opcional</h2>
+<p>El panel compartido puede gestionar DNS de la Tailnet, restricciones OIDC y
+observación de nodos. El paquete incluye <code>headscale-gateway-setup-headscale</code> para
+registrar un ayudante local separado del servicio sin privilegios. También puede
+actuar como cliente remoto desde otras plataformas. No se activa automáticamente.
+Consulta <a href="https://gente-del-condado.github.io/headscale_gateway_ynh/CONTROL_HEADSCALE.html">Control de Headscale</a>.</p></article>
       <footer class="page-footer">
         <p>Headscale Gateway · Gente del Condado · Documentación en español</p>
         <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>
@@ -232,6 +248,8 @@ con el sistema y se reinicia tras un fallo. Cerrar el navegador no lo detiene.</
           <li><a href="#elegir-arquitectura-e-instalar-en-fedora">Elegir arquitectura e instalar en Fedora</a></li>
         
           <li><a href="#servicio-y-menú-de-aplicaciones">Servicio y menú de aplicaciones</a></li>
+        
+          <li><a href="#controlador-headscale-opcional">Controlador Headscale opcional</a></li>
         
       </ul></nav>
     </aside>

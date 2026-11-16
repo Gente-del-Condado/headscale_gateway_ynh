@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Manual de instalación, administración y desarrollo de Headscale Gateway.">
+  <title>Empezar a desarrollar · Headscale Gateway</title>
+  <link rel="stylesheet" href="assets/manual.css">
+  <script src="assets/search-data.js" defer></script>
+  <script src="assets/manual.js" defer></script>
+</head>
+<body data-base=".">
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="site-header">
+    <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
+    <div class="header-links"><span>Manual · 1.4.16</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <details id="manual-menu" open>
+        <summary>Índice del manual</summary>
+        <search>
+          <label for="manual-search">Buscar en el manual</label>
+          <input id="manual-search" type="search" placeholder="Copias, DNS, instalación…" aria-controls="search-results">
+          <p id="search-status" role="status"></p>
+          <ul id="search-results" hidden></ul>
+        </search>
+        <nav aria-label="Temas del manual">
+          
+            
+              <a class="nav-home" href="index.html" >Inicio</a>
+            
+          
+            
+              <p class="nav-group">Empezar</p>
+              <ul>
+                <li><a href="PRIMEROS_PASOS.html" >Primeros pasos</a></li>
+              
+                <li><a href="USO_COMPLETO.html" >Manual de uso</a></li>
+              
+                <li><a href="EJEMPLOS.html" >Ejemplos completos</a></li>
+              
+                <li><a href="CAPTURAS.html" >Capturas del panel</a></li>
+              </ul>
+            
+          
+            
+              <p class="nav-group">Instalar</p>
+              <ul>
+                <li><a href="DESCARGAS_PUBLICAS.html" >Descargas públicas</a></li>
+              
+                <li><a href="LINUX_NATIVO.html" >Debian y Fedora</a></li>
+              
+                <li><a href="WINDOWS_SERVICIO.html" >Servicio de Windows</a></li>
+              
+                <li><a href="FLATPAK.html" >Flatpak</a></li>
+              
+                <li><a href="HOME_ASSISTANT.html" >Home Assistant</a></li>
+              
+                <li><a href="INTEGRACION_HA.html" >Entidades en Home Assistant</a></li>
+              
+                <li><a href="YUNOHOST.html" >YunoHost</a></li>
+              
+                <li><a href="ANDROID_USO.html" >Android</a></li>
+              
+                <li><a href="PRIVACIDAD_ANDROID.html" >Privacidad Android</a></li>
+              
+                <li><a href="ANDROID_CANALES.html" >Canales Android</a></li>
+              
+                <li><a href="INSTALACION_PRIVADA.html" >Acceso al Git privado</a></li>
+              
+                <li><a href="PLATAFORMAS.html" >Plataformas y contratos</a></li>
+              </ul>
+            
+          
+            
+              <p class="nav-group">Administrar</p>
+              <ul>
+                <li><a href="CONTROL_HEADSCALE.html" >Coordinador Headscale</a></li>
+              
+                <li><a href="RED_Y_CA_LAN.html" >Red, puertos y CA</a></li>
+              
+                <li><a href="CA-FEDERACION.html" >Confianza y federación</a></li>
+              
+                <li><a href="RECUPERAR_ACCESO.html" >Recuperar el acceso</a></li>
+              
+                <li><a href="SOLUCION_PROBLEMAS.html" >Resolver problemas</a></li>
+              </ul>
+            
+          
+            
+              <p class="nav-group">Desarrollar</p>
+              <ul>
+                <li><a href="EMPEZAR_DESARROLLO.html" aria-current="page">Empezar a desarrollar</a></li>
+              
+                <li><a href="ESTADO_DESARROLLO.html" >Estado de la siguiente entrega</a></li>
+              
+                <li><a href="SEGURIDAD.html" >Privacidad y limpieza</a></li>
+              
+                <li><a href="CAMBIOS.html" >Cambios</a></li>
+              
+                <li><a href="ESTRUCTURA.html" >Estructura del proyecto</a></li>
+              
+                <li><a href="ARQUITECTURA.html" >Arquitectura y flujos</a></li>
+              
+                <li><a href="DESARROLLO.html" >Guía de contribución</a></li>
+              
+                <li><a href="CONTINUIDAD.html" >Continuar con otra IA</a></li>
+              
+                <li><a href="ANDROID_FDROID.html" >Publicar en F-Droid</a></li>
+              
+                <li><a href="ANDROID_PLAY.html" >Preparar Google Play</a></li>
+              
+                <li><a href="CATALOGO_YUNOHOST.html" >Mantenimiento YunoHost</a></li>
+              
+                <li><a href="MANUAL_WEB.html" >Editar y publicar el manual</a></li>
+              
+                <li><a href="PUBLICACION.html" >Publicación y repositorios</a></li>
+              
+                <li><a href="MIGRACION_REPOSITORIO.html" >Git y entregas</a></li>
+              
+                <li><a href="PRUEBAS.html" >Pruebas</a></li>
+              </ul>
+            
+          
+            
+              <p class="nav-group">Referencia</p>
+              <ul>
+                <li><a href="MODELOS_API.html" >Modelos de la API</a></li>
+              
+                <li><a href="API_CLI.html" >Guía API y CLI</a></li>
+              
+                <li><a href="PORTAL_Y_FEDERACION.html" >Portal y federación</a></li>
+              
+                <li><a href="HELPER_CA.html" >Helper de certificados</a></li>
+              
+                <li><a href="IDIOMAS_Y_REGISTROS.html" >Idiomas y registros</a></li>
+              
+                <li><a href="ANDROID.html" >Android por dentro</a></li>
+              
+                <li><a href="FEDERACION_WINDOWS.html" >Prueba entre Windows y Linux</a></li>
+              
+                <li><a href="LEEME_BINARIOS.html" >Paquetes de ejecutables</a></li>
+              
+                <li><a href="VERIFICACION_FINAL.html" >Validación y límites</a></li>
+              
+                <li><a href="LICENCIAS.html" >Licencias</a></li>
+              
+                <li><a href="ESCRITORIO_LICENCIAS.html" >Fuentes del escritorio</a></li>
+              
+                <li><a href="SUSCRIPCIONES.html" >Activación comercial</a></li>
+              </ul>
+            
+          
+        </nav>
+      </details>
+    </aside>
+    <main id="contenido" tabindex="-1">
+      <p class="breadcrumb"><a href="index.html">Manual</a><span aria-hidden="true"> / </span>Empezar a desarrollar</p>
+      <article class="prose"><h1 id="empezar-a-desarrollar">Empezar a desarrollar</h1>
+<p>Esta guía permite preparar un entorno y hacer un primer cambio sin conocer
+el historial del proyecto. No necesitas acceso a servidores, tokens ni una
+clave de firma para ejecutar las pruebas generales.</p>
+<h2 id="qué-vas-a-modificar">Qué vas a modificar</h2>
+<p>Headscale coordina los nodos VPN. Gateway ejecuta un nodo, publica servicios
+HTTPS y ofrece el panel administrativo. El motor está en <code>src/</code>, el panel común
+en <code>src/internal/admin/</code> y las adaptaciones de instalación en <code>packaging/</code>.
+La <a href="ESTRUCTURA.html">tabla de fuentes</a> indica dónde editar cada componente.</p>
+<p>No confundas la aplicación Home Assistant, que ejecuta el servidor, con su
+integración, que consulta siete entidades. El paquete YunoHost tampoco instala
+Headscale: necesita un coordinador existente. La nueva gestión del coordinador
+requiere registrar expresamente un controlador; consulta <a href="CONTROL_HEADSCALE.html">su guía</a>.</p>
+<h2 id="requisitos">Requisitos</h2>
+<table>
+<thead>
+<tr>
+<th scope="col">Trabajo</th>
+<th scope="col">Herramientas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Motor y pruebas generales</td>
+<td>Git, Go de <code>src/go.mod</code>, Python 3.11 o posterior, Node.js 22</td>
+</tr>
+<tr>
+<td>Manual</td>
+<td>Entorno Python con <code>requirements-docs.txt</code></td>
+</tr>
+<tr>
+<td>Bandeja</td>
+<td>Node.js y dependencias de <code>src/desktop/package-lock.json</code></td>
+</tr>
+<tr>
+<td>Android</td>
+<td>JDK 17, Gradle 8.13, SDK API 36 y NDK declarados en <code>android/build.gradle</code></td>
+</tr>
+<tr>
+<td>Contenedores y VM</td>
+<td>Solo para la aceptación específica de esa plataforma</td>
+</tr>
+</tbody>
+</table>
+<p>Los gestores descargan dependencias la primera vez. Mantén sus cachés fuera de
+las fuentes. En un equipo limitado, utiliza <code>GOMAXPROCS=2</code>, <code>GOFLAGS=-p=2</code> y,
+si lo necesitas, <code>GOMEMLIMIT=2GiB</code>; no cambies los recursos de una VM sin acordarlo.</p>
+<h2 id="primer-recorrido-comprobar-sin-instalar">Primer recorrido: comprobar sin instalar</h2>
+<p>Desde la raíz del clon:</p>
+<pre tabindex="0"><code class="language-sh">git status --short
+git log -1 --oneline
+python3 -B tools/check_repository.py
+python3 -B tools/check_privacy.py
+GOMAXPROCS=2 GOFLAGS=-p=2 go -C src test ./internal/headscalecontrol ./internal/admin
+</code></pre>
+<p>Las pruebas usan datos ficticios y carpetas temporales. Para comprobar el
+repositorio completo, ejecuta <code>GOMAXPROCS=2 GOFLAGS=-p=2 bash tools/verify.sh</code>.
+Consulta <a href="PRUEBAS.html">PRUEBAS.md</a> si una comprobación necesita herramientas adicionales.</p>
+<h2 id="abrir-un-panel-de-desarrollo-aislado">Abrir un panel de desarrollo aislado</h2>
+<p>Estos comandos son para Linux. Utilizan otro directorio de datos y una cuenta
+propia, sin acceder a la SQLite de una aplicación instalada. La contraseña se
+introduce de forma oculta en la terminal:</p>
+<pre tabindex="0"><code class="language-sh">mkdir -p builds/dev
+GOMAXPROCS=2 GOFLAGS=-p=2 go -C src build -o ../builds/dev/headscale-gateway .
+HGW_DEV_ROOT=&quot;${XDG_STATE_HOME:-$HOME/.local/state}/headscale-gateway-dev&quot;
+python3 tools/configure.py \
+  --data-dir &quot;$HGW_DEV_ROOT/data&quot; \
+  --config-dir &quot;$HGW_DEV_ROOT/config&quot; \
+  --listen 127.0.0.1:19091 \
+  --admin desarrollo
+GATEWAY_BOOTSTRAP_FILE=&quot;$HGW_DEV_ROOT/config/startup.json&quot; \
+  builds/dev/headscale-gateway --db &quot;$HGW_DEV_ROOT/data/gateway/gateway.sqlite&quot;
+</code></pre>
+<p>Abre <code>http://127.0.0.1:19091/admin/</code>. El usuario es <code>desarrollo</code> y la contraseña
+es la elegida en el comando anterior. Detén el proceso con Ctrl+C. No hace falta
+conectar una VPN para trabajar en partes del panel o ejecutar las pruebas.
+Si configuras una Tailnet, crea una identidad y credenciales exclusivas del laboratorio.</p>
+<p>Un segundo proceso no puede utilizar esa misma base ni su identidad VPN. Para
+otra instalación, elige otra carpeta y otro puerto. No guardes los datos de
+este ejemplo dentro del repositorio.</p>
+<h2 id="hacer-un-primer-cambio">Hacer un primer cambio</h2>
+<ol>
+<li>Crea una rama desde <code>main</code> y empieza por un cambio pequeño: texto, enlace o
+   una validación cubierta por una prueba.</li>
+<li>Edita la fuente, no su copia generada. Para YunoHost y la aplicación HA,
+   utiliza <code>packaging/</code>. Para las entidades, <code>custom_components/</code>.</li>
+<li>Actualiza la guía que describe ese comportamiento en la misma modificación.</li>
+<li>Ejecuta las comprobaciones del componente; si cambias mensajes o rutas,
+   regenera referencia e i18n. Regenera los paquetes cuando corresponda.</li>
+<li>Revisa <code>git diff</code>, la auditoría de privacidad y los archivos preparados.
+   <a href="DESARROLLO.html">CONTRIBUTING.md</a> explica el commit y sus sumas.</li>
+</ol>
+<h2 id="encontrar-una-respuesta">Encontrar una respuesta</h2>
+<table>
+<thead>
+<tr>
+<th scope="col">Necesidad</th>
+<th scope="col">Documento</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Qué archivo editar</td>
+<td><a href="ESTRUCTURA.html">Estructura</a></td>
+</tr>
+<tr>
+<td>Cómo interactúan las piezas</td>
+<td><a href="ARQUITECTURA.html">Arquitectura</a></td>
+</tr>
+<tr>
+<td>Contratos y trabajo con agentes</td>
+<td><a href="CONTINUIDAD.html">AGENTS.md</a></td>
+</tr>
+<tr>
+<td>Situación de la próxima entrega</td>
+<td><a href="ESTADO_DESARROLLO.html">Estado de desarrollo</a></td>
+</tr>
+<tr>
+<td>Reproducir las comprobaciones</td>
+<td><a href="PRUEBAS.html">Pruebas</a></td>
+</tr>
+<tr>
+<td>No publicar datos privados</td>
+<td><a href="SEGURIDAD.html">Privacidad del repositorio</a></td>
+</tr>
+<tr>
+<td>Generar el sitio de documentación</td>
+<td><a href="MANUAL_WEB.html">Manual web</a></td>
+</tr>
+<tr>
+<td>Flujo entre repositorios</td>
+<td><a href="PUBLICACION.html">Publicación</a></td>
+</tr>
+</tbody>
+</table></article>
+      <footer class="page-footer">
+        <p>Headscale Gateway · Gente del Condado · Documentación en español</p>
+        <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>
+        <a href="MANUAL_WEB.html">Cómo editar este manual</a>
+      </footer>
+    </main>
+    <aside class="page-toc">
+      <nav aria-label="En esta página"><p>En esta página</p><ul>
+        
+          <li><a href="#qué-vas-a-modificar">Qué vas a modificar</a></li>
+        
+          <li><a href="#requisitos">Requisitos</a></li>
+        
+          <li><a href="#primer-recorrido-comprobar-sin-instalar">Primer recorrido: comprobar sin instalar</a></li>
+        
+          <li><a href="#abrir-un-panel-de-desarrollo-aislado">Abrir un panel de desarrollo aislado</a></li>
+        
+          <li><a href="#hacer-un-primer-cambio">Hacer un primer cambio</a></li>
+        
+          <li><a href="#encontrar-una-respuesta">Encontrar una respuesta</a></li>
+        
+      </ul></nav>
+    </aside>
+  </div>
+</body>
+</html>

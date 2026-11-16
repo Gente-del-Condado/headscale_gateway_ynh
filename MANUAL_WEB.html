@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.14</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.16</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -76,6 +76,8 @@
             
               <p class="nav-group">Administrar</p>
               <ul>
+                <li><a href="CONTROL_HEADSCALE.html" >Coordinador Headscale</a></li>
+              
                 <li><a href="RED_Y_CA_LAN.html" >Red, puertos y CA</a></li>
               
                 <li><a href="CA-FEDERACION.html" >Confianza y federación</a></li>
@@ -89,6 +91,14 @@
             
               <p class="nav-group">Desarrollar</p>
               <ul>
+                <li><a href="EMPEZAR_DESARROLLO.html" >Empezar a desarrollar</a></li>
+              
+                <li><a href="ESTADO_DESARROLLO.html" >Estado de la siguiente entrega</a></li>
+              
+                <li><a href="SEGURIDAD.html" >Privacidad y limpieza</a></li>
+              
+                <li><a href="CAMBIOS.html" >Cambios</a></li>
+              
                 <li><a href="ESTRUCTURA.html" >Estructura del proyecto</a></li>
               
                 <li><a href="ARQUITECTURA.html" >Arquitectura y flujos</a></li>
@@ -235,24 +245,26 @@ por los paquetes se presentan también como páginas navegables.</p>
 textos alternativos en las imágenes y un solo título de primer nivel por página.
 Las capturas se mantienen según <a href="CAPTURAS.html">CAPTURAS.md</a>.</p>
 <h2 id="github-pages">GitHub Pages</h2>
-<p>El principal privado <code>headscale_gateway</code> de Forgejo se replica al principal
-privado de GitHub. Después de superar <strong>Calidad multiplataforma</strong>, <strong>Manual web</strong>
-construye el HTML, comprueba sus enlaces y lo publica directamente en <code>gh-pages</code>
-de los dos repositorios públicos:</p>
+<p>El principal privado de Forgejo se replica al espejo privado de GitHub. El
+compilador público <code>headscale_gateway_releases</code> obtiene la release estable y
+construye el manual desde sus fuentes, valida los enlaces y publica el mismo
+HTML en <code>gh-pages</code> de estos dos destinos:</p>
 <ul>
 <li><a href="https://gente-del-condado.github.io/headscale_gateway_ynh/">Manual YunoHost</a>.</li>
 <li><a href="https://gente-del-condado.github.io/headscale_gateway_ha/">Manual Home Assistant</a>.</li>
 </ul>
-<p>Ambas webs contienen el mismo manual. En cada destino, <strong>Settings → Pages</strong>
-debe publicar desde la rama <code>gh-pages</code>, carpeta <code>/</code>. El principal no necesita
-Pages ni permisos <code>pages: write</code> o <code>id-token: write</code>. Tampoco utiliza las antiguas
-claves de escritura en Forgejo ni las variables <code>PUBLISH_DOCS</code> y
-<code>PUBLISH_PUBLIC_DOCS</code>. La credencial es <code>PUBLICATION_TOKEN</code>, limitada a Contents
-en las distribuciones públicas; consulta <a href="PUBLICACION.html">Publicación</a>.</p>
-<p>Los pull requests solo construyen y comprueban el manual, sin acceder a esa
-credencial. La publicación toma el SHA que superó las pruebas y descarta
-revisiones que ya no sean main al comenzar. Conserva el historial de gh-pages;
-no modifica la rama del paquete ni incluye el historial privado.</p>
+<p>En ambos repositorios, <strong>Settings → Pages</strong> debe utilizar <code>gh-pages</code>, carpeta
+<code>/</code>. El principal privado no necesita Pages. El publicador conserva el historial
+de <code>gh-pages</code>, no sustituye <code>main</code> del paquete y utiliza <code>PUBLICATION_TOKEN</code>
+limitado a los destinos públicos. No escribe en Forgejo.</p>
+<p>El controlador tiene además una actualización documental que toma las guías
+del <code>main</code> de Forgejo y las combina con los fuentes de una release completada.
+Su código vive en <code>packaging/releases/</code>; consulta <a href="PUBLICACION.html">PUBLICACION.md</a>.
+Los pull requests y las comprobaciones locales no publican ni reciben el token.</p>
+<p><strong>Preparar sin subir</strong> significa editar las fuentes, compilar en local y revisar
+el HTML. No actualiza las webs públicas ni autoriza un push a sus ramas. Para
+publicar después, sigue el recorrido autorizado de la entrega; no uses recetas
+antiguas con claves de escritura a repositorios derivados de Forgejo.</p>
 <p>Al renombrar repositorios, actualiza los enlaces a Pages: GitHub no redirige
 los sitios de proyecto aunque sí redirija la URL del repositorio.</p>
 <h2 id="alojarlo-junto-a-forgejo">Alojarlo junto a Forgejo</h2>

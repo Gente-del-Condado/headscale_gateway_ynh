@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.14</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.16</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -76,6 +76,8 @@
             
               <p class="nav-group">Administrar</p>
               <ul>
+                <li><a href="CONTROL_HEADSCALE.html" >Coordinador Headscale</a></li>
+              
                 <li><a href="RED_Y_CA_LAN.html" >Red, puertos y CA</a></li>
               
                 <li><a href="CA-FEDERACION.html" >Confianza y federación</a></li>
@@ -89,6 +91,14 @@
             
               <p class="nav-group">Desarrollar</p>
               <ul>
+                <li><a href="EMPEZAR_DESARROLLO.html" >Empezar a desarrollar</a></li>
+              
+                <li><a href="ESTADO_DESARROLLO.html" >Estado de la siguiente entrega</a></li>
+              
+                <li><a href="SEGURIDAD.html" >Privacidad y limpieza</a></li>
+              
+                <li><a href="CAMBIOS.html" >Cambios</a></li>
+              
                 <li><a href="ESTRUCTURA.html" >Estructura del proyecto</a></li>
               
                 <li><a href="ARQUITECTURA.html" >Arquitectura y flujos</a></li>
@@ -182,7 +192,7 @@ reemplazan por otros de contenido diferente.</p>
 <p>Desde la entrega 1.4.9, el control de
 <a href="https://github.com/Gente-del-Condado/headscale_gateway_releases/actions">headscale_gateway_releases</a>
 compila en runners públicos estándar. Así no depende de la cuota de ejecución
-del espejo privado. Los publicadores anteriores del espejo están desactivados para evitar
+del espejo privado. Los publicadores antiguos del espejo se retiraron del árbol actual para evitar
 entregas duplicadas; la comprobación de calidad de pull requests se conserva.
 Lee la API de Forgejo con un token limitado y descarga solo
 el árbol de fuentes de la etiqueta publicada; no copia el historial privado.</p>
@@ -252,7 +262,8 @@ deben actualizarse expresamente.</p>
 <a href="DESCARGAS_PUBLICAS.html">descargas públicas</a>. Flatpak distribuye el motor completo,
 consola y panel web. No se solicita inclusión en Flathub ni en el catálogo
 YunoHost. <strong>Play Store continúa solo preparado</strong>: el AAB no se envía a la tienda.</p>
-<p>Los informes del laboratorio real YunoHost 1.4.7~ynh2 se conservan. Las pruebas
+<p>Los resultados históricos del laboratorio real YunoHost se conservan en sus
+commits y notas; los informes privados se archivan fuera del árbol de desarrollo. Las pruebas
 nginx/NSS en contenedor son complementarias; no equivalen a repetir package_check
 o la actualización de una instalación real con datos y secretos. No ejecutes
 máquinas virtuales ni compilaciones grandes en el Linux del usuario.</p>

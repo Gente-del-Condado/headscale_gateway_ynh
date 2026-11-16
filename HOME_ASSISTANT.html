@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.14</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.16</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -76,6 +76,8 @@
             
               <p class="nav-group">Administrar</p>
               <ul>
+                <li><a href="CONTROL_HEADSCALE.html" >Coordinador Headscale</a></li>
+              
                 <li><a href="RED_Y_CA_LAN.html" >Red, puertos y CA</a></li>
               
                 <li><a href="CA-FEDERACION.html" >Confianza y federación</a></li>
@@ -89,6 +91,14 @@
             
               <p class="nav-group">Desarrollar</p>
               <ul>
+                <li><a href="EMPEZAR_DESARROLLO.html" >Empezar a desarrollar</a></li>
+              
+                <li><a href="ESTADO_DESARROLLO.html" >Estado de la siguiente entrega</a></li>
+              
+                <li><a href="SEGURIDAD.html" >Privacidad y limpieza</a></li>
+              
+                <li><a href="CAMBIOS.html" >Cambios</a></li>
+              
                 <li><a href="ESTRUCTURA.html" >Estructura del proyecto</a></li>
               
                 <li><a href="ARQUITECTURA.html" >Arquitectura y flujos</a></li>
@@ -401,7 +411,14 @@ instrucciones de compilación. Los avisos de terceros se conservan en <code>noti
 En una instalación nueva, el panel común pide confirmar o editar el nombre
 propuesto antes de conectar a Headscale. La propuesta del instalador no sustituye
 esa elección. Headscale asigna el nombre definitivo y resuelve duplicados. Las
-actualizaciones conservan el nombre, la identidad, las credenciales y los datos.</p></article>
+actualizaciones conservan el nombre, la identidad, las credenciales y los datos.</p>
+<h2 id="administrar-un-coordinador-headscale">Administrar un coordinador Headscale</h2>
+<p>El complemento utiliza el mismo motor y portal que las otras plataformas. En
+<strong>Coordinador / Ajustes</strong> puede consultar o gestionar DNS de la Tailnet, filtros
+OIDC y observaciones de nodos mediante una delegación explícita al Gateway que
+controla Headscale. No necesita privilegios nuevos del anfitrión Home Assistant.
+Confiar en su CA no concede administración; configura además un token de lectura
+o escritura específico. Consulta el <a href="https://gente-del-condado.github.io/headscale_gateway_ynh/CONTROL_HEADSCALE.html">manual del controlador</a>.</p></article>
       <footer class="page-footer">
         <p>Headscale Gateway · Gente del Condado · Documentación en español</p>
         <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>
@@ -436,6 +453,8 @@ actualizaciones conservan el nombre, la identidad, las credenciales y los datos.
           <li><a href="#licencia-y-fuentes">Licencia y fuentes</a></li>
         
           <li><a href="#autor-soporte-y-nombre-del-nodo">Autor, soporte y nombre del nodo</a></li>
+        
+          <li><a href="#administrar-un-coordinador-headscale">Administrar un coordinador Headscale</a></li>
         
       </ul></nav>
     </aside>

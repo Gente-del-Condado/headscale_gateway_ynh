@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.14</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.16</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -76,6 +76,8 @@
             
               <p class="nav-group">Administrar</p>
               <ul>
+                <li><a href="CONTROL_HEADSCALE.html" >Coordinador Headscale</a></li>
+              
                 <li><a href="RED_Y_CA_LAN.html" >Red, puertos y CA</a></li>
               
                 <li><a href="CA-FEDERACION.html" >Confianza y federación</a></li>
@@ -89,6 +91,14 @@
             
               <p class="nav-group">Desarrollar</p>
               <ul>
+                <li><a href="EMPEZAR_DESARROLLO.html" >Empezar a desarrollar</a></li>
+              
+                <li><a href="ESTADO_DESARROLLO.html" >Estado de la siguiente entrega</a></li>
+              
+                <li><a href="SEGURIDAD.html" >Privacidad y limpieza</a></li>
+              
+                <li><a href="CAMBIOS.html" >Cambios</a></li>
+              
                 <li><a href="ESTRUCTURA.html" >Estructura del proyecto</a></li>
               
                 <li><a href="ARQUITECTURA.html" >Arquitectura y flujos</a></li>
@@ -244,13 +254,14 @@ sudo yunohost app upgrade headscale_gateway --file &quot;$HOME/headscale-gateway
 <p>Para otra instancia, sustituye <code>headscale_gateway</code> por su identificador real,
 como <code>headscale_gateway__2</code>. Mantén la copia de seguridad automática de YunoHost.
 No reemplaces a mano el ejecutable del servicio.</p>
-<p>El paquete público se genera desde el proyecto principal: Forgejo replica el
-proyecto a GitHub, Actions comprueba la seguridad y publica exclusivamente
-<code>yunohost/</code> en el repositorio de paquete de Forgejo, que se replica a GitHub.
-Las modificaciones se hacen en <code>packaging/yunohost/</code> del proyecto principal y
-se regeneran con <code>python3 tools/prepare_git_install.py</code>; no se edita a mano el
-repositorio de distribución. Publicar un paquete no actualiza por sí solo los
-servidores instalados: ejecuta la actualización de YunoHost cuando corresponda.</p>
+<p>El paquete se desarrolla en el principal privado de Forgejo, que se replica
+al espejo privado de GitHub. El compilador público <code>headscale_gateway_releases</code>
+lee una release estable de Forgejo, comprueba seguridad y plataformas y publica
+exclusivamente el paquete YunoHost en <code>headscale_gateway_ynh</code>, junto a sus recursos
+públicos. No existe un derivado YunoHost en Forgejo ni se escribe de vuelta allí.
+Edita <code>packaging/yunohost/</code> del principal y regenera <code>yunohost/</code>; no edites la
+copia pública. Publicar el repositorio no actualiza tu servidor: realiza la
+actualización desde YunoHost cuando corresponda.</p>
 <p>Después de actualizar, abre el panel, revisa la versión, prueba un servicio y
 comprueba que conserva su identidad VPN. Si aparece un error, consulta el
 registro de la operación YunoHost antes de intentar una reinstalación.</p>
@@ -345,7 +356,17 @@ terceros se conservan en <code>doc/third_party/</code> del repositorio y <code>n
 En una instalación nueva, el panel común pide confirmar o editar el nombre
 propuesto antes de conectar a Headscale. La propuesta del instalador no sustituye
 esa elección. Headscale asigna el nombre definitivo y resuelve duplicados. Las
-actualizaciones conservan el nombre, la identidad, las credenciales y los datos.</p></article>
+actualizaciones conservan el nombre, la identidad, las credenciales y los datos.</p>
+<h2 id="administración-del-coordinador-headscale">Administración del coordinador Headscale</h2>
+<p>El motor y el portal comunes incluyen DNS de la Tailnet, restricciones OIDC y
+observador de nodos. Para controlar el Headscale del mismo anfitrión, un
+administrador debe registrar el ayudante mediante <code>conf/setup-headscale</code> del
+paquete, con instancia <code>ynh-IDENTIFICADOR_APP</code> y las unidades y rutas reales.
+El portal conserva su cuenta sin privilegios. Las actualizaciones refrescan el
+motor protegido de un controlador ya registrado; las copias no conceden este
+privilegio en un anfitrión nuevo. Otros Gateway pueden utilizar una delegación
+HTTPS explícita de lectura o escritura. No cambia el DNS-01 ni los certificados
+de los servicios. Sigue el <a href="https://gente-del-condado.github.io/headscale_gateway_ynh/CONTROL_HEADSCALE.html">manual del controlador</a>.</p></article>
       <footer class="page-footer">
         <p>Headscale Gateway · Gente del Condado · Documentación en español</p>
         <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>
@@ -384,6 +405,8 @@ actualizaciones conservan el nombre, la identidad, las credenciales y los datos.
           <li><a href="#licencia-y-fuentes">Licencia y fuentes</a></li>
         
           <li><a href="#autor-soporte-y-nombre-del-nodo">Autor, soporte y nombre del nodo</a></li>
+        
+          <li><a href="#administración-del-coordinador-headscale">Administración del coordinador Headscale</a></li>
         
       </ul></nav>
     </aside>

@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.14</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.16</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -76,6 +76,8 @@
             
               <p class="nav-group">Administrar</p>
               <ul>
+                <li><a href="CONTROL_HEADSCALE.html" >Coordinador Headscale</a></li>
+              
                 <li><a href="RED_Y_CA_LAN.html" >Red, puertos y CA</a></li>
               
                 <li><a href="CA-FEDERACION.html" >Confianza y federación</a></li>
@@ -89,6 +91,14 @@
             
               <p class="nav-group">Desarrollar</p>
               <ul>
+                <li><a href="EMPEZAR_DESARROLLO.html" >Empezar a desarrollar</a></li>
+              
+                <li><a href="ESTADO_DESARROLLO.html" >Estado de la siguiente entrega</a></li>
+              
+                <li><a href="SEGURIDAD.html" >Privacidad y limpieza</a></li>
+              
+                <li><a href="CAMBIOS.html" >Cambios</a></li>
+              
                 <li><a href="ESTRUCTURA.html" >Estructura del proyecto</a></li>
               
                 <li><a href="ARQUITECTURA.html" >Arquitectura y flujos</a></li>
@@ -169,11 +179,11 @@ antes de que el sistema de copias copie el archivo de datos. Estas adaptaciones
 se mantienen porque son contratos del Gateway, no funciones inventadas de YunoHost.</p>
 <h2 id="publicación-automática">Publicación automática</h2>
 <p>Forgejo es el origen privado del proyecto; GitHub es su espejo privado.
-Después de superar <strong>Calidad multiplataforma</strong> para el <code>main</code> vigente, GitHub
-Actions verifica los paquetes generados y publica directamente los tres recursos
-públicos <code>server-vX.Y.Z</code> en <code>headscale_gateway_ynh</code>: binarios amd64 y arm64 y
-<code>source.tar.gz</code> con sus fuentes completos. Verifica las sumas mediante descarga
-sin credenciales antes de actualizar el paquete instalable. Una release existente
+El compilador público <code>headscale_gateway_releases</code> lee una release estable de
+Forgejo, descarga su commit exacto y ejecuta seguridad y pruebas de plataforma.
+Después publica los recursos <code>server-vX.Y.Z</code> en <code>headscale_gateway_ynh</code>: binarios
+amd64 y arm64 y <code>source.tar.gz</code> con los fuentes completos. Comprueba sumas mediante
+descarga anónima antes de actualizar el paquete instalable. Una release existente
 se verifica sin reemplazar archivos; una discrepancia detiene la publicación.</p>
 <p>El repositorio público contiene únicamente el paquete YunoHost y sus recursos.
 No existe un repositorio derivado en Forgejo ni un espejo de vuelta desde GitHub.
@@ -208,7 +218,14 @@ del motor rechazó con 403 los accesos anónimos y las cabeceras de identidad
 falsificadas, incluso por loopback. Si el permiso principal de YunoHost se
 limita a administradores, SSOwat redirige antes al SSO (302) a quien no tiene sesión.</p>
 <p>No estar en el catálogo genera avisos de catálogo; no se manipulan para obtener
-una puntuación. Compilar arm64 no acredita instalarlo en un dispositivo arm64.</p></article>
+una puntuación. Compilar arm64 no acredita instalarlo en un dispositivo arm64.</p>
+<h2 id="revisión-actual">Revisión actual</h2>
+<p>La 1.4.16 prepara limpieza y documentación y corrige la validación de rutas del
+controlador en Windows. No se atribuye una nueva aceptación completa de esa
+revisión en YunoHost. En la 1.4.15 se comprobaron actualización y restauración real
+con datos y secretos conservados. La prueba posterior de instalación limpia
+con la tablet se detuvo; Technitium y la configuración Dex adicional quedaron
+pendientes. Consulta el estado y los límites de la entrega en el manual común.</p></article>
       <footer class="page-footer">
         <p>Headscale Gateway · Gente del Condado · Documentación en español</p>
         <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>
@@ -225,6 +242,8 @@ una puntuación. Compilar arm64 no acredita instalarlo en un dispositivo arm64.<
           <li><a href="#rechazo-anterior-y-límites">Rechazo anterior y límites</a></li>
         
           <li><a href="#comprobaciones">Comprobaciones</a></li>
+        
+          <li><a href="#revisión-actual">Revisión actual</a></li>
         
       </ul></nav>
     </aside>

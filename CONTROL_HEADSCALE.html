@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Manual de instalación, administración y desarrollo de Headscale Gateway.">
+  <title>Coordinador Headscale · Headscale Gateway</title>
+  <link rel="stylesheet" href="assets/manual.css">
+  <script src="assets/search-data.js" defer></script>
+  <script src="assets/manual.js" defer></script>
+</head>
+<body data-base=".">
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="site-header">
+    <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
+    <div class="header-links"><span>Manual · 1.4.16</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <details id="manual-menu" open>
+        <summary>Índice del manual</summary>
+        <search>
+          <label for="manual-search">Buscar en el manual</label>
+          <input id="manual-search" type="search" placeholder="Copias, DNS, instalación…" aria-controls="search-results">
+          <p id="search-status" role="status"></p>
+          <ul id="search-results" hidden></ul>
+        </search>
+        <nav aria-label="Temas del manual">
+          
+            
+              <a class="nav-home" href="index.html" >Inicio</a>
+            
+          
+            
+              <p class="nav-group">Empezar</p>
+              <ul>
+                <li><a href="PRIMEROS_PASOS.html" >Primeros pasos</a></li>
+              
+                <li><a href="USO_COMPLETO.html" >Manual de uso</a></li>
+              
+                <li><a href="EJEMPLOS.html" >Ejemplos completos</a></li>
+              
+                <li><a href="CAPTURAS.html" >Capturas del panel</a></li>
+              </ul>
+            
+          
+            
+              <p class="nav-group">Instalar</p>
+              <ul>
+                <li><a href="DESCARGAS_PUBLICAS.html" >Descargas públicas</a></li>
+              
+                <li><a href="LINUX_NATIVO.html" >Debian y Fedora</a></li>
+              
+                <li><a href="WINDOWS_SERVICIO.html" >Servicio de Windows</a></li>
+              
+                <li><a href="FLATPAK.html" >Flatpak</a></li>
+              
+                <li><a href="HOME_ASSISTANT.html" >Home Assistant</a></li>
+              
+                <li><a href="INTEGRACION_HA.html" >Entidades en Home Assistant</a></li>
+              
+                <li><a href="YUNOHOST.html" >YunoHost</a></li>
+              
+                <li><a href="ANDROID_USO.html" >Android</a></li>
+              
+                <li><a href="PRIVACIDAD_ANDROID.html" >Privacidad Android</a></li>
+              
+                <li><a href="ANDROID_CANALES.html" >Canales Android</a></li>
+              
+                <li><a href="INSTALACION_PRIVADA.html" >Acceso al Git privado</a></li>
+              
+                <li><a href="PLATAFORMAS.html" >Plataformas y contratos</a></li>
+              </ul>
+            
+          
+            
+              <p class="nav-group">Administrar</p>
+              <ul>
+                <li><a href="CONTROL_HEADSCALE.html" aria-current="page">Coordinador Headscale</a></li>
+              
+                <li><a href="RED_Y_CA_LAN.html" >Red, puertos y CA</a></li>
+              
+                <li><a href="CA-FEDERACION.html" >Confianza y federación</a></li>
+              
+                <li><a href="RECUPERAR_ACCESO.html" >Recuperar el acceso</a></li>
+              
+                <li><a href="SOLUCION_PROBLEMAS.html" >Resolver problemas</a></li>
+              </ul>
+            
+          
+            
+              <p class="nav-group">Desarrollar</p>
+              <ul>
+                <li><a href="EMPEZAR_DESARROLLO.html" >Empezar a desarrollar</a></li>
+              
+                <li><a href="ESTADO_DESARROLLO.html" >Estado de la siguiente entrega</a></li>
+              
+                <li><a href="SEGURIDAD.html" >Privacidad y limpieza</a></li>
+              
+                <li><a href="CAMBIOS.html" >Cambios</a></li>
+              
+                <li><a href="ESTRUCTURA.html" >Estructura del proyecto</a></li>
+              
+                <li><a href="ARQUITECTURA.html" >Arquitectura y flujos</a></li>
+              
+                <li><a href="DESARROLLO.html" >Guía de contribución</a></li>
+              
+                <li><a href="CONTINUIDAD.html" >Continuar con otra IA</a></li>
+              
+                <li><a href="ANDROID_FDROID.html" >Publicar en F-Droid</a></li>
+              
+                <li><a href="ANDROID_PLAY.html" >Preparar Google Play</a></li>
+              
+                <li><a href="CATALOGO_YUNOHOST.html" >Mantenimiento YunoHost</a></li>
+              
+                <li><a href="MANUAL_WEB.html" >Editar y publicar el manual</a></li>
+              
+                <li><a href="PUBLICACION.html" >Publicación y repositorios</a></li>
+              
+                <li><a href="MIGRACION_REPOSITORIO.html" >Git y entregas</a></li>
+              
+                <li><a href="PRUEBAS.html" >Pruebas</a></li>
+              </ul>
+            
+          
+            
+              <p class="nav-group">Referencia</p>
+              <ul>
+                <li><a href="MODELOS_API.html" >Modelos de la API</a></li>
+              
+                <li><a href="API_CLI.html" >Guía API y CLI</a></li>
+              
+                <li><a href="PORTAL_Y_FEDERACION.html" >Portal y federación</a></li>
+              
+                <li><a href="HELPER_CA.html" >Helper de certificados</a></li>
+              
+                <li><a href="IDIOMAS_Y_REGISTROS.html" >Idiomas y registros</a></li>
+              
+                <li><a href="ANDROID.html" >Android por dentro</a></li>
+              
+                <li><a href="FEDERACION_WINDOWS.html" >Prueba entre Windows y Linux</a></li>
+              
+                <li><a href="LEEME_BINARIOS.html" >Paquetes de ejecutables</a></li>
+              
+                <li><a href="VERIFICACION_FINAL.html" >Validación y límites</a></li>
+              
+                <li><a href="LICENCIAS.html" >Licencias</a></li>
+              
+                <li><a href="ESCRITORIO_LICENCIAS.html" >Fuentes del escritorio</a></li>
+              
+                <li><a href="SUSCRIPCIONES.html" >Activación comercial</a></li>
+              </ul>
+            
+          
+        </nav>
+      </details>
+    </aside>
+    <main id="contenido" tabindex="-1">
+      <p class="breadcrumb"><a href="index.html">Manual</a><span aria-hidden="true"> / </span>Coordinador Headscale</p>
+      <article class="prose"><h1 id="administrar-headscale-desde-gateway">Administrar Headscale desde Gateway</h1>
+<p>El motor Go y el portal compartido incorporan <strong>Headscale → Coordinador / Ajustes</strong>.
+La misma interfaz sirve en Linux, Windows, Android, Home Assistant y YunoHost.
+El controlador que modifica el servicio Headscale se registra explícitamente en
+su anfitrión Linux; los demás Gateway pueden utilizar una delegación remota.
+Instalar el paquete YunoHost no activa ese privilegio automáticamente.</p>
+<p>La gestión existente de servicios, proxy, certificados, DNS-01, copias, usuarios,
+nodos, rutas, claves de registro y ACL se conserva. Los ajustes DNS siguientes
+pertenecen a la Tailnet: no sustituyen los registros de Technitium ni alteran los
+certificados de cada Gateway. Conserva Headplane hasta comprobar la nueva gestión
+con tu configuración; evita editar el mismo archivo simultáneamente desde ambos.</p>
+<h2 id="funciones">Funciones</h2>
+<ul>
+<li>MagicDNS, dominio base, resolutores globales, Split DNS y dominios de búsqueda.</li>
+<li>Sustituir los resolutores locales de los clientes que aceptan DNS de la Tailnet.</li>
+<li>Registros adicionales A y AAAA: archivo dinámico autorizado sin reinicio;
+  registros incluidos directamente en YAML de solo lectura.</li>
+<li>Restricciones OIDC por dominios de correo, grupos y usuarios, conservando el
+  proveedor, sus credenciales y el resto de la configuración.</li>
+<li>Usuarios y claves de registro con caducidad, reutilización, condición efímera,
+  etiquetas y revocación. El secreto se muestra solo al crear la clave.</li>
+<li>Observador opcional que reutiliza tsnet del controlador para consultar sistema,
+  versión del cliente y conectividad. No instala agentes en los demás nodos.</li>
+</ul>
+<p>Las listas OIDC configuradas se combinan mediante <strong>Y</strong>. Dentro de la lista de
+los grupos permitidos basta pertenecer a uno. Vaciar una lista desactiva ese filtro.
+No concede el rol administrador del Gateway, no revoca nodos ya registrados y no
+invalida claves de registro existentes. Conserva un acceso administrativo al
+anfitrión para recuperar una restricción errónea.</p>
+<h2 id="registrar-el-controlador-local">Registrar el controlador local</h2>
+<p>Requiere systemd, un Headscale con SQLite y cuentas de servicio distintas para
+Headscale y Gateway, ambas sin privilegios. La validación aislada se ha diseñado
+para Headscale 0.29. No admite configurar desde el portal rutas, órdenes ni unidades
+arbitrarias. Selecciona los valores reales del anfitrión como administrador:</p>
+<pre tabindex="0"><code class="language-sh">sudo headscale-gateway-setup-headscale \
+  --instance native \
+  --gateway-binary /usr/libexec/headscale-gateway/headscale-gateway \
+  --gateway-unit headscale-gateway.service \
+  --headscale-unit headscale.service \
+  --headscale-binary /usr/bin/headscale \
+  --config /etc/headscale/config.yaml \
+  --health-url http://127.0.0.1:8080/health \
+  --restart-gateway
+</code></pre>
+<p>La URL Headscale configurada en el Gateway debe coincidir con <code>server_url</code> del
+coordinador seleccionado. Si utilizas intencionadamente otro origen API para
+esa misma instancia, regístralo mediante <code>--api-origin</code>. El vínculo se comprueba
+también durante el seguimiento de las operaciones para evitar mezclar ajustes
+de un coordinador con nodos de otro.</p>
+<p>La IP de salud debe pertenecer al anfitrión y alcanzar directamente el Headscale
+seleccionado. Usa HTTPS si ese listener lo requiere y añade <code>--health-ca</code> con su
+CA local cuando no utilice una CA pública. Nunca se omite la verificación TLS ni
+se siguen redirecciones. Añade <code>--records /ruta/records.json</code> solo si ese archivo
+ya existe y coincide con <code>dns.extra_records_path</code> del YAML. No combines
+<code>extra_records</code> y <code>extra_records_path</code>: Headscale no lo admite. El instalador no
+migra ni vacía registros existentes.</p>
+<p>El registro root queda en <code>/etc/headscale-gateway-control/</code>. El servicio
+<code>headscale-gateway-control-INSTANCIA.service</code> ejecuta una copia del motor propiedad
+de root, separada del ejecutable modificable por la cuenta de la aplicación.
+El portal conserva su usuario sin privilegios. Se comunica mediante un socket
+Unix privado con comprobación del UID; no se abre un puerto administrativo nuevo.</p>
+<p>En el panel, selecciona <strong>Configuración → Control de Headscale → Controlador local
+instalado</strong>, guarda y reinicia el Gateway. Conserva la URL y clave API Headscale
+que ya utilizas para usuarios, nodos y claves. No se generan credenciales nuevas
+ni se cambia la identidad VPN durante el registro del controlador.</p>
+<h3 id="yunohost">YunoHost</h3>
+<p>La herramienta se incluye como <code>conf/setup-headscale</code> en el paquete publicado.
+Desde una copia comprobada de ese paquete, ejecútala con <code>sudo python3</code>, usando
+<code>--instance ynh-headscale_gateway</code>, <code>--gateway-unit headscale_gateway.service</code> y
+el binario instalado <code>/var/www/headscale_gateway/headscale-gateway</code>. Adapta el
+identificador si tienes varias instancias. Selecciona la unidad, usuario y rutas
+reales del Headscale instalado: no presupongas que está en <code>/etc/headscale</code>.</p>
+<p>La actualización del paquete renueva la copia root del motor cuando encuentra
+ese registro local. La restauración en el mismo anfitrión lo conserva y refresca.
+Una copia del Gateway no concede privilegios automáticamente en otro servidor:
+allí registra de nuevo el controlador después de restaurar Headscale. Las copias
+del Gateway no sustituyen una copia independiente de la base, configuración y
+claves de Headscale.</p>
+<h2 id="delegar-en-otro-gateway">Delegar en otro Gateway</h2>
+<ol>
+<li>En el controlador, habilita la URL administrativa de la Tailnet
+   (<code>admin.domain_mode=tailnet</code>) y utiliza su origen <code>https://admin.NODO.DOMINIO</code>.
+   La URL de YunoHost con SSO y una ruta como <code>/gateway/</code> conserva su acceso de
+   sesión; no sirve como origen de esta delegación Bearer. Activa explícitamente
+   la exposición Bearer del módulo en
+   <strong>API / Permisos</strong>: lectura de Headscale y, solo si lo necesitas, escritura.</li>
+<li>Crea un token de rol <code>viewer</code> con <code>headscale-read</code> para consultar, o de rol
+   <code>operator</code> con <code>headscale-read</code> y <code>headscale-write</code> para gestionar. Usa una
+   caducidad apropiada. Los tokens antiguos de «Red» no heredan estos permisos.</li>
+<li>En el Gateway cliente, aprueba y verifica la CA del controlador en <strong>CA y
+   confianza</strong>. Esa confianza TLS por sí sola no autoriza la administración.</li>
+<li>Selecciona <strong>Otro Gateway autorizado</strong>; introduce su origen HTTPS privado sin
+   rutas, la huella SHA-256 de la CA aprobada y el token delegado. Guarda y reinicia.</li>
+</ol>
+<p>El token se almacena cifrado y no se devuelve al navegador. Solo se conecta con
+el origen aprobado mediante direcciones privadas y TLS verificado; no se siguen
+redirecciones ni se utilizan proxies del entorno. Un controlador remoto no puede
+reenviar la delegación a un tercer Gateway. Revoca el token en el controlador para
+retirar el acceso. El token no concede configuración del Gateway, identidad ni MFA.
+Los servicios y comprobaciones de conectividad del Gateway cliente siguen usando
+su propia conexión VPN.</p>
+<h2 id="revisar-aplicar-y-recuperar">Revisar, aplicar y recuperar</h2>
+<p>Cada formulario prepara un cambio tipado sobre una revisión de los archivos.
+<strong>Revisar</strong> muestra únicamente los campos admitidos y su impacto. <strong>Aplicar</strong> inicia
+una operación identificada; cerrar el navegador no cancela una escritura iniciada.
+Una revisión antigua se rechaza para evitar sobrescribir una edición posterior.</p>
+<p>Antes de tocar el coordinador, <code>headscale configtest</code> se ejecuta sin privilegios
+sobre una copia temporal con base y claves nuevas. Nunca abre la base activa ni
+su identidad Noise/DERP. DNS y OIDC requieren reinicio real de Headscale: SIGHUP
+no recarga esos apartados en Headscale 0.29. Los registros dinámicos no lo requieren.</p>
+<p>El ayudante guarda un diario root antes de escribir, conserva propietarios,
+permisos y contexto SELinux, y comprueba <code>/health</code> después de aplicar. Si falla,
+restaura el estado anterior. Si no puede recuperarlo, conserva el diario y bloquea
+nuevas operaciones para una recuperación local. Si detecta una modificación ajena
+no la sobrescribe. No elimines <code>/var/lib/headscale-gateway-control/</code> durante una
+recuperación pendiente.</p>
+<p>El seguimiento del navegador consulta el resultado y nunca vuelve a enviar una
+mutación por perder la conexión. El historial de operaciones es acotado y reside
+en el proceso; tras reiniciarlo puede desaparecer su identificador. En ese caso,
+lee el estado actual antes de repetir un cambio. El diario de recuperación sí es
+persistente y se procesa antes de aceptar operaciones al arrancar.</p>
+<h2 id="observador-y-límites">Observador y límites</h2>
+<p>Activa <strong>Sincronizar información de nodos</strong> en Configuración. El panel actualiza
+el resultado de la sincronización sin necesitar una recarga manual y suspende
+las consultas del observador cuando su apartado deja de estar visible. Actualiza cada minuto
+mediante la API Headscale y <code>WhoIs</code> de tsnet, respetando las ACL y la visibilidad del
+controlador. Si un nodo no es visible, conserva el último dato con su fecha y lo
+marca como antiguo; nunca presenta una versión antigua como una observación nueva.
+La identidad se correlaciona con el ID y la clave pública del nodo. Un nodo
+eliminado o recreado no hereda datos del anterior. Se limita a 512 observaciones y
+muestra cuántos nodos quedan fuera del límite. No expone tokens de notificaciones,
+identificadores de registros ni el objeto completo Hostinfo.</p>
+<p>No gestiona todavía el alta inicial de un proveedor OIDC ni sus secretos. El
+editor ACL existente conserva los modos admitidos por la API Headscale; una
+política almacenada en archivo requiere administración de ese archivo en el
+anfitrión. Este módulo no convierte Headscale en un servicio distribuido ni cambia
+la arquitectura de certificados del Gateway.</p>
+<p>Para revocar el vínculo local:</p>
+<pre tabindex="0"><code class="language-sh">sudo headscale-gateway-setup-headscale --instance native --disable
+</code></pre>
+<p>Se detiene el ayudante y se retira el vínculo del servicio Gateway; reinicia ese
+Gateway para actualizar su entorno. Se conservan Headscale, sus datos, el registro
+y cualquier diario de recuperación. La desinstalación de los paquetes revoca los
+vínculos correspondientes sin borrar los datos del coordinador.</p>
+<h2 id="api-del-módulo">API del módulo</h2>
+<p>Las rutas comparten autenticación de sesión, rol y CSRF con el portal. Bearer
+requiere además exposición explícita y los alcances del módulo. Solo un Gateway
+con vínculo local activo acepta delegaciones entrantes.</p>
+<table>
+<thead>
+<tr>
+<th scope="col">Método y ruta bajo <code>/api/v1/network/control</code></th>
+<th scope="col">Permiso Bearer</th>
+<th scope="col">Contenido</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /info</code></td>
+<td><code>headscale-read</code></td>
+<td>Modo y capacidades efectivas para ese token</td>
+</tr>
+<tr>
+<td><code>GET /document</code></td>
+<td><code>headscale-read</code></td>
+<td>Revisión, DNS, filtros OIDC y registros admitidos</td>
+</tr>
+<tr>
+<td><code>POST /preview</code></td>
+<td><code>headscale-write</code></td>
+<td>Propuesta sin escritura ni reinicio</td>
+</tr>
+<tr>
+<td><code>POST /apply</code></td>
+<td><code>headscale-write</code></td>
+<td>Acepta una operación; responde <code>202</code> con su ID</td>
+</tr>
+<tr>
+<td><code>GET /operations/{id}</code></td>
+<td><code>headscale-read</code></td>
+<td>Estado, fechas y error saneado de la operación</td>
+</tr>
+<tr>
+<td><code>GET /agent</code></td>
+<td><code>headscale-read</code></td>
+<td>Observaciones, antigüedad y límites</td>
+</tr>
+<tr>
+<td><code>POST /agent/sync</code></td>
+<td><code>headscale-write</code></td>
+<td>Solicita sincronización, sin esperar a terminar</td>
+</tr>
+<tr>
+<td><code>GET /headscale/users</code></td>
+<td><code>headscale-read</code></td>
+<td>Usuarios del coordinador</td>
+</tr>
+<tr>
+<td><code>GET /headscale/keys</code></td>
+<td><code>headscale-read</code></td>
+<td>Claves de registro sin secretos</td>
+</tr>
+<tr>
+<td><code>GET /headscale/nodes</code></td>
+<td><code>headscale-read</code></td>
+<td>Inventario de nodos</td>
+</tr>
+<tr>
+<td><code>POST /headscale/action</code></td>
+<td><code>headscale-write</code></td>
+<td>Catálogo cerrado de acciones existentes</td>
+</tr>
+<tr>
+<td><code>GET /headscale/policy</code></td>
+<td><code>headscale-read</code></td>
+<td>Política ACL existente</td>
+</tr>
+<tr>
+<td><code>PUT /headscale/policy</code></td>
+<td><code>headscale-write</code></td>
+<td>Actualización ACL admitida por la API Headscale</td>
+</tr>
+</tbody>
+</table>
+<p>Las propuestas incluyen <code>revision</code> y al menos uno de <code>dns</code>, <code>oidc</code> o <code>records</code>.
+Cada apartado enviado reemplaza sus campos tipados completos; omitir un apartado
+lo conserva. No se aceptan campos desconocidos. Una revisión antigua, un cambio
+vacío, una operación activa o un candidato inválido se rechazan con <code>409</code>.
+El documento nunca contiene el YAML completo, credenciales OIDC ni rutas locales.</p>
+<p>Ejemplo de registros, usando la revisión obtenida inmediatamente antes:</p>
+<pre tabindex="0"><code class="language-json">{
+  &quot;revision&quot;: &quot;REVISION_SHA256_DEL_DOCUMENTO&quot;,
+  &quot;records&quot;: [
+    {&quot;name&quot;: &quot;fotos.pc1.intra.example.test&quot;, &quot;type&quot;: &quot;A&quot;, &quot;value&quot;: &quot;100.64.0.7&quot;}
+  ]
+}
+</code></pre>
+<p>El identificador de operación tiene 32 caracteres hexadecimales. Los estados son
+<code>queued</code>, <code>validating</code>, <code>applying</code>, <code>restarting</code>, <code>checking</code>, <code>rolling_back</code> y los
+terminales <code>completed</code>, <code>failed</code>, <code>rolled_back</code> o <code>recovery_required</code>.
+<code>finished_at</code> identifica el resultado terminal. Un ID desconocido devuelve <code>404</code>;
+no implica que el cambio no se haya aplicado. No reintentes automáticamente
+<code>POST /apply</code> después de perder una respuesta.</p>
+<p>Una actualización no reactiva un vínculo desactivado. Para reactivarlo de forma
+explícita utiliza <code>--refresh --enable</code>, seleccionando de nuevo el binario del
+Gateway, y reinicia el Gateway para cargar su vínculo.</p>
+<p>La retirada de un paquete suspende el vínculo (<code>--detach</code>) y conserva la selección
+local. Restaurar una copia YunoHost en ese anfitrión solicita <code>--reattach</code>; esto
+no anula una revocación explícita hecha con <code>--disable</code>. Una instalación nueva o
+una actualización ordinaria no recuperan por su cuenta un vínculo suspendido.</p>
+<p>Al exportar un perfil sin secretos se conserva el destino remoto, pero el modo
+de control queda desactivado: podrás introducir un token y activarlo de forma
+explícita en destino. Los perfiles con secretos conservan la delegación cifrada;
+la CA del controlador también debe aprobarse en el almacén de confianza local.</p>
+<p>Registra un único controlador local por instancia de Headscale. Los demás
+Gateway utilizan el modo remoto. No edites simultáneamente esos mismos campos
+desde Headplane u otro editor: la revisión detecta cambios previos, pero no
+sustituye la coordinación entre administradores durante una aplicación.</p>
+<h2 id="validación-de-esta-entrega">Validación de esta entrega</h2>
+<p>La revisión 1.4.15 se comprobó el 16 de noviembre de 2026 con Headscale 0.29.7
+y YunoHost 12.1.42 en una segunda instancia aislada del Gateway. Se verificaron:</p>
+<ul>
+<li>Instalación del paquete 1.4.14 y actualización a 1.4.15, conservando SQLite,
+  credenciales cifradas, clave maestra, CA privada e identidad VPN.</li>
+<li>Copia YunoHost, eliminación de la instancia de prueba y restauración real: se
+  recuperan los datos y el vínculo local, sin reiniciar la instancia original.</li>
+<li>DNS global/dividido, búsqueda, restricciones OIDC y registros dinámicos;
+  revisión previa, conflicto de revisión, rechazo de candidatos y rollback.</li>
+<li>Registro OIDC real con un proveedor ficticio: usuario autorizado aceptado y
+  usuario fuera de las restricciones rechazado. Claves de registro de un solo
+  uso, reutilizables y efímeras, con creación, revocación y listado sin secretos.</li>
+<li>Delegación entre dos Gateway por la Tailnet con TLS verificado; token de
+  lectura sin capacidad de escritura y token de escritura limitado al módulo.</li>
+<li>Panel autenticado mediante SSO, controles de sesión/CSRF/alcances, observador
+  de nodos y presentación de escritorio y móvil en navegador real.</li>
+<li>Reactivación, revocación explícita, retirada y restauración del vínculo del
+  controlador; diario de recuperación y protección frente a cambios externos.</li>
+</ul>
+<p>Las suites Go, Python y JavaScript y la compilación estricta del manual forman
+parte de la comprobación local. Se comprobaron también la compilación Windows
+y los motores Android ARM64 y x86_64. Esto no equivale a una nueva aceptación
+completa del instalador Windows ni de la APK en un dispositivo físico.</p>
+<p>El actuador local requiere Linux con systemd, Headscale 0.29 y SQLite. El modo
+remoto utiliza el motor común en todas las plataformas. Los datos del observador
+pueden no estar disponibles para nodos desconectados o sin respuesta WhoIs; se
+muestra su antigüedad y no se inventa información. La gestión ACL conserva las
+limitaciones de la API Headscale: el archivo de políticas local no se convierte
+a modo base de datos automáticamente.</p></article>
+      <footer class="page-footer">
+        <p>Headscale Gateway · Gente del Condado · Documentación en español</p>
+        <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>
+        <a href="MANUAL_WEB.html">Cómo editar este manual</a>
+      </footer>
+    </main>
+    <aside class="page-toc">
+      <nav aria-label="En esta página"><p>En esta página</p><ul>
+        
+          <li><a href="#funciones">Funciones</a></li>
+        
+          <li><a href="#registrar-el-controlador-local">Registrar el controlador local</a></li>
+        
+          <li><a href="#delegar-en-otro-gateway">Delegar en otro Gateway</a></li>
+        
+          <li><a href="#revisar-aplicar-y-recuperar">Revisar, aplicar y recuperar</a></li>
+        
+          <li><a href="#observador-y-límites">Observador y límites</a></li>
+        
+          <li><a href="#api-del-módulo">API del módulo</a></li>
+        
+          <li><a href="#validación-de-esta-entrega">Validación de esta entrega</a></li>
+        
+      </ul></nav>
+    </aside>
+  </div>
+</body>
+</html>

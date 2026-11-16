@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.14</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.16</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -76,6 +76,8 @@
             
               <p class="nav-group">Administrar</p>
               <ul>
+                <li><a href="CONTROL_HEADSCALE.html" >Coordinador Headscale</a></li>
+              
                 <li><a href="RED_Y_CA_LAN.html" >Red, puertos y CA</a></li>
               
                 <li><a href="CA-FEDERACION.html" >Confianza y federación</a></li>
@@ -89,6 +91,14 @@
             
               <p class="nav-group">Desarrollar</p>
               <ul>
+                <li><a href="EMPEZAR_DESARROLLO.html" >Empezar a desarrollar</a></li>
+              
+                <li><a href="ESTADO_DESARROLLO.html" >Estado de la siguiente entrega</a></li>
+              
+                <li><a href="SEGURIDAD.html" >Privacidad y limpieza</a></li>
+              
+                <li><a href="CAMBIOS.html" >Cambios</a></li>
+              
                 <li><a href="ESTRUCTURA.html" >Estructura del proyecto</a></li>
               
                 <li><a href="ARQUITECTURA.html" >Arquitectura y flujos</a></li>
@@ -147,206 +157,93 @@
     </aside>
     <main id="contenido" tabindex="-1">
       <p class="breadcrumb"><a href="index.html">Manual</a><span aria-hidden="true"> / </span>Validación y límites</p>
-      <article class="prose"><h1 id="validación-y-límites-conocidos">Validación y límites conocidos</h1>
-<h2 id="validación-local-del-candidato-1414">Validación local del candidato 1.4.14</h2>
-<p>El 15 de noviembre de 2026 se comprobó el panel compartido en Windows 11 LTSC,
-YunoHost y Home Assistant OS, manteniendo la RAM y CPU de las VM. Se apagó
-cada VM al terminar su primera aceptación y se volvió a encender para la prueba
-conjunta de red. Debian queda pendiente; Fedora se probó con un motor aislado.</p>
-<p>Windows pasó el servicio LocalService real, instalación, actualización con datos,
-credenciales, configuración y clave maestra conservados, recuperación tras fallo,
-reinicio desde el panel y acceso del menú Inicio. Edge verificó el dominio
-principal, enlaces HTTP/HTTPS y conservación del foco. La prueba del navegador
-utiliza una página con el renderizador real y datos ficticios; el servicio se
-prueba con su panel y API reales.</p>
-<p>YunoHost 12.1.42 con SSOwat 12.1.1 pasó instalación, actualización forzada del
-mismo candidato, copia/restauración y recuperación automática. Se conservaron
-configuración, datos, clave maestra y secreto del proxy. Se comprobó el SSO real
-con un administrador temporal, CSRF y rechazo de cabeceras de identidad enviadas
-directamente al backend. Los recursos del candidato se sirvieron localmente con
-sus sumas verificadas; los scripts de instalación fueron los del paquete.</p>
-<p>Home Assistant OS 18.4, Supervisor 2026.11.0 y Core 2026.11.1 pasaron instalación
-local, Ingress real con identidad administradora, reconstrucción de imagen y
-copia/restauración parcial, conservando configuración, datos y clave maestra.
-La imagen se compiló con el Dockerfile del paquete y se entregó por un registro
-OCI temporal mediante SSH. El ejemplar de laboratorio utiliza un slug separado.
-Los navegadores de ambas plataformas comprobaron también los enlaces del panel
-instalado, sustituyendo solo la respuesta de estado para probar URL ficticias.</p>
-<p>Se instaló el DEB oficial de Headscale 0.29.7, con suma comprobada, en YunoHost.
-El coordinador de ensayo usa HTTPS con una CA RSA de laboratorio y DERP/STUN
-locales. Windows no validó la CA Ed25519 inicial del ensayo; se reemitió con RSA.
-Las CA propias de los Gateways se conservaron. No se cambiaron los DNS, rutas ni
-certificados de instalaciones habituales. Windows, YunoHost, Home Assistant y
-Fedora intercambiaron tráfico TSMP en ambos sentidos y sus portales respondieron
-por HTTPS con la CA individual y el nombre TLS verificados.</p>
-<p>La tablet USB con APK <code>.lab</code> 1.4.14 pasó arranque, sesión normal, navegación,
-conexión a Headscale, ping TSMP hacia los cuatro Gateways y recepción de una
-petición HTTPS desde otro nodo con CA verificada. La clave maestra se conservó
-entre repeticiones. La instrumentación propaga explícitamente el entorno Java
-que hereda el proceso Go; <code>Os.setenv</code> solo no actualizaba esa caché. Se prueba
-el motor del Gateway: en esta ejecución no se activó la VPN de aplicaciones del
-teléfono. La preparación del cliente espera tráfico VPN antes de comprobar
-HTTPS, pues <code>tsnet.Up</code> no acredita que la ruta hacia un peer ya esté lista.</p>
-<p>El coordinador queda como instalación de laboratorio: sus claves de alta y API
-caducan en 24 horas, su certificado en 30 días y su CA en 90 días. Las
-identidades y datos de los Gateways son persistentes. Los informes de esta
-aceptación se guardan localmente en <code>builds/1414-platform-lab/</code> y
-<code>builds/windows-links-1414/</code>; no contienen claves privadas de distribución.
-La verificación general pasó 92 pruebas Python, las suites Go y JavaScript,
-vet y compilación. El manual se compiló en modo estricto y se comprobaron sus
-45 páginas HTML y 2.628 enlaces locales. Play Store continúa solo preparado.</p>
-<h2 id="validación-local-del-candidato-1413">Validación local del candidato 1.4.13</h2>
-<p>Revisión del 15 de noviembre de 2026, anterior a la publicación estable. La
-validación local con contenedores ha superado 91 pruebas de repositorio, las
-pruebas Go y JavaScript, vet, compilación, auditorías Go y npm sin
-vulnerabilidades detectadas, actualización con credenciales y clave estables,
-integridad SQLite y manual estricto (45 páginas y 2.615 enlaces locales).
-Home Assistant pasa Ingress, SSO, CSRF y rechazo de cabeceras suplantadas;
-YunoHost pasa nginx/NSS, SSO, raíz/subruta, revocación y conservación de clave.
-Esta última prueba es de contenedor y no sustituye una instalación completa en VM.</p>
-<p>En Windows 11 LTSC se ha validado el servicio LocalService real: instalación,
-actualización con contraseña, configuración, datos y clave conservados,
-recuperación tras terminar deliberadamente el proceso y reinicio desde el panel.
-El fallo inicial tenía dos causas: el registro automático del SCM al importar
-el adaptador Caddy de Technitium y los permisos heredados de archivos al
-actualizar. Se utiliza ahora únicamente el proveedor libdns MIT, con procedencia
-y licencia conservadas, y se espera al cierre del proceso antes de sustituirlo.
-Tailscale estaba detenido por decisión del usuario; esta ejecución no certifica
-la coexistencia con Tailscale activo. El panel local no necesita Internet.</p>
-<p>CertMagic sigue gestionando ACME. Pebble 2.10.3 y un DNS local de laboratorio
-han validado emisión y renovación del nodo y su comodín, cadena y nombres TLS,
-clave de cuenta conservada, retirada de TXT propios y conservación de un TXT
-manual antiguo. La primera cuenta exige aceptación explícita sin consola; las
-cuentas guardadas renuevan aunque falte la opción nueva. Se comprueba además
-que los errores del proveedor no exponen el token. No se han tocado registros
-DNS ni certificados de producción.</p>
-<p>La APK directa mantiene la firma estable, target API 36 y los dos motores
-arm64-v8a/x86_64 con alineación ELF de 16 KiB. Incluye LICENSE y NOTICE completos.
-La tablet había sido desinstalada por el usuario antes de esta revisión y se
-reinstaló con autorización; no se atribuye conservación a aquellos datos ya
-retirados. La actualización posterior del candidato se realiza con <code>adb install -r</code>,
-conservando identidad del paquete y fecha de primera instalación. Android Lint
-mantiene cero errores y 23 avisos de mantenimiento. Play Store continúa preparado,
-sin publicación en la tienda.</p>
-<h2 id="revisión-de-dependencias-de-la-versión-146">Revisión de dependencias de la versión 1.4.6</h2>
-<p>Revisión del 11 de noviembre de 2026. Se actualizan Caddy a 2.11.5, go-jose a
-4.1.6, QUIC a 0.63.0 y las dependencias de red y compresión. La compilación
-requiere Go 1.27.4 para incorporar las correcciones de la biblioteca estándar.</p>
-<p>La bandeja fija glob 14.0.4 y minimatch 11.0.8 mediante <code>overrides</code>. El
-empaquetador ASAR todavía solicita versiones principales anteriores. Las
-pruebas comprobaron la creación y lectura de un ASAR, el empaquetado Linux
-completo y el arranque Electron con autenticación de prueba, aislamiento del
-renderer y almacenamiento cifrado. <code>npm audit</code> y <code>govulncheck</code> registraron
-cero vulnerabilidades, incluidos los avisos de módulos sin llamadas detectadas.</p>
-<p>El aviso GHSA-wwhq-w58m-w29c carece de versión corregida declarada en GitHub,
-pero Caddy 2.11.5 ya elimina la segunda expansión de los valores en
-<code>VarsMatcher</code> y <code>MatchVarsRE</code>. Los módulos HTTP de Caddy afectados por ese
-aviso no forman parte de los paquetes compilados del Gateway.</p>
-<p>Para repetir el análisis desde <code>src/</code>, ejecuta
-<code>go run golang.org/x/vuln/cmd/govulncheck@v1.9.0 -show verbose ./...</code>.
-Desde <code>src/desktop/</code>, ejecuta <code>npm ci</code>, <code>npm audit</code>, <code>npm test</code> y
-<code>npm run pack</code>. La prueba <code>npm run smoke</code> requiere un escritorio gráfico.</p>
-<h2 id="preparación-de-la-versión-147">Preparación de la versión 1.4.7</h2>
-<p>La versión común se aplica al motor, Home Assistant, YunoHost, la bandeja y
-Android. El cliente de bandeja admite una URL base con subruta y limita la
-respuesta de la API a 4 MiB mientras la recibe, conservando el rechazo de
-redirecciones y de HTTP remoto. Las pruebas HTTP incluyen una subruta real,
-una respuesta excesiva y un intento de redirección.</p>
-<p><code>tools/verify.sh</code> ha terminado correctamente: contratos Python, panel y
-bandeja JavaScript, pruebas Go, variantes comerciales, formato, vet y
-compilación Linux. Los dos análisis de Go (módulos y llamadas) y <code>npm audit</code>
-no detectaron vulnerabilidades en esta revisión. Esto es un resultado fechado,
-no una garantía de ausencia futura; los flujos repiten la auditoría antes de
-fusionar y publicar.</p>
-<p>Android usa el motor Go común en arm64-v8a y x86_64, target API 36 y una clave
-estable guardada fuera del repositorio. El verificador comprueba identidad,
-versión, ausencia de depuración, firma y alineación ELF de 16 KiB de todas las
-bibliotecas nativas. Se preparan APK directo firmado, APK sin firmar para
-F-Droid y AAB para Play. El gesto Atrás usa la API moderna desde Android 13;
-el inicio conserva la navegación del sistema. Los secretos se excluyen tanto
-de las copias en la nube como de la transferencia automática entre dispositivos.</p>
-<p>La aceptación en teléfonos físicos, cambios Wi-Fi/datos, suspensión, IPv6 y
-proveedores DNS/ACME reales sigue pendiente. El emulador local se cierra con
-un fallo de segmentación antes de ofrecer un dispositivo ADB; no se atribuye
-una prueba funcional nueva a esa ejecución. Los resultados de Waydroid en
-<a href="ANDROID.html">ANDROID.md</a> son antecedentes de la adaptación del motor, no una
-certificación de cada APK nueva. Tampoco se ha publicado en F-Droid ni Play.</p>
-<p>La construcción local con <code>fdroidserver 2.4.5</code>, desde una exportación Git sin
-historial privado, completó el escaneo de fuentes, la compilación de ambos
-motores Go y del APK y el escaneo binario. Se usó <code>build --test --no-tarball
---scan-binary</code>; no equivale a una construcción en los servidores oficiales ni
-a la admisión en F-Droid. El Lint de Android, repetido sin reutilizar tareas,
-terminó con cero errores y 23 avisos pendientes de mantenimiento.</p>
-<p>El paquete YunoHost incorpora descripción en inglés y español, README generado
-con la versión, documentación administrativa completa y pruebas de raíz/subruta
-con sesión SSO administradora. El linter oficial ya no registra errores de
-empaquetado; señala que la aplicación se mantiene fuera del catálogo,
-ni tiene estado y categoría asignados allí. La
-<a href="CATALOGO_YUNOHOST.html">guía de mantenimiento y sus evidencias</a> distinguen
-estos avisos de los fallos funcionales. Los resultados de <code>package_check</code> se
-conservan con cada entrega; no se asigna un nivel oficial localmente.</p>
-<p>El 14 de noviembre de 2026 se validó <code>1.4.7~ynh2</code> en una VM limitada a 2 GiB.
-La batería completa duró 34 minutos y 29 segundos: siete operaciones correctas
-y un fallo de descarga durante la actualización sobre la misma revisión. La
-réplica eliminaba una etiqueta creada únicamente en GitHub y devolvía la release
-a borrador. Se corrigió creando primero <code>server-v1.4.7</code> en Forgejo, sin mover su
-commit. La repetición oficial selectiva de instalación raíz y actualización
-terminó correctamente en 9 minutos y 23 segundos. En conjunto quedaron correctas
-las ocho operaciones, incluida la migración desde <code>1.4.7~ynh1</code>; se conservan
-ambos informes originales, incluido el fallo anterior.</p>
-<p>La actualización aislada conservó los datos SQLite de prueba, clave maestra,
-credenciales y secreto de proxy, con permisos privados. Una segunda prueba
-comparó la configuración, servicios, plantillas y autenticación persistidos y
-descifró correctamente una clave API ficticia sembrada antes de actualizar.
-La sesión SSO administradora respondió 200; SSOwat redirigió al SSO (302) los
-accesos sin sesión y la API del motor rechazó con 403 tanto las peticiones
-anónimas como las cabeceras de identidad falsificadas por loopback.
-Los 13 archivos de ejecución y configuración del paquete final
-coinciden por SHA-256 con los probados. Los 54 contratos Python terminaron
-correctamente con un pico de unos 106 MiB. El exportador de fuentes evita
-recorrer compilaciones, máquinas virtuales y dependencias antes de filtrarlas.</p>
-<p>El 13 de noviembre de 2026, <code>package_check</code> completó las siete comprobaciones
-en 28 minutos y 36 segundos sobre YunoHost 12.1.41.2, amd64: linter,
-instalación raíz, subruta, multiinstancia, copia/restauración, actualización
-desde la misma versión y cambio de URL. Se corrigió también la recuperación
-de permisos privados de <code>startup.json</code> tras restaurar. Las sumas de los 950
-archivos de ejecución, configuración y payload se comparan con la entrega.
-Esto no acredita una ejecución en arm64 ni una actualización desde cada
-versión anterior.</p>
-<p>El resultado global local del comprobador es <code>0 (Broken)</code>: el linter marca
-<code>AppCatalog.is_in_catalog</code> como crítico y <code>AppCatalog.state_is_working</code> como
-error al no existir una entrada oficial. El aviso
-<code>AppCatalog.has_category</code> tiene la misma causa. Se conservan esos resultados
-sin alterar el catálogo para obtener una calificación. Las siete pruebas
-correctas y estos avisos se presentan por separado como evidencias del mantenimiento independiente.</p>
-<p>El manual se compila en modo estricto y se revisan sus enlaces locales. Las dos
-webs de GitHub Pages se publican desde las mismas fuentes. Una compilación del
-manual no acredita por sí sola que la publicación remota haya terminado.</p>
-<h2 id="límites-de-la-entrega">Límites de la entrega</h2>
-<p>Las compilaciones cruzadas de Windows y macOS verifican que el código compila;
-no sustituyen una prueba de escritorio en esos sistemas. Home Assistant OS y
-los equipos reales requieren su aceptación específica. Las pruebas se hacen
-sin actualizar ni reinstalar el YunoHost personal. La revisión oficial del
-catálogo y la aprobación de las tiendas pertenecen a sus respectivos equipos.</p>
-<h2 id="repetir-la-comprobación">Repetir la comprobación</h2>
-<p>Desde la raíz del proyecto:</p>
-<pre tabindex="0"><code class="language-bash">bash tools/verify.sh
-builds/docs-env/bin/python -m mkdocs build --strict
-python3 tools/check_manual.py builds/manual
-sha256sum --check --quiet CONTENIDO.sha256
-</code></pre>
-<p>Prepara el entorno documental según <a href="MANUAL_WEB.html">MANUAL_WEB.md</a>. La suma
-corresponde al contenido entregado; cambiar un archivo hace necesario actualizarla.
-Consulta <a href="DESARROLLO.html">CONTRIBUTING.md</a> antes de preparar un commit.</p>
-<h2 id="comprobar-una-exportación">Comprobar una exportación</h2>
-<p>El archivo externo <code>.zip.sha256</code> verifica el ZIP. Dentro, <code>CONTENIDO.sha256</code>
-contiene la suma de cada archivo entregado. Compruébalo desde la carpeta
-extraída antes de modificarla. El exportador incluye fuentes nativas, manuales,
-capturas, herramientas del manual y paquetes instalables. Excluye historial
-Git, cachés, credenciales, SQLite y perfiles de ejecución.</p>
-<p>La <a href="MIGRACION_REPOSITORIO.html">guía de Git y entregas</a> explica cómo generar una
-exportación y revisarla. Los paquetes de ejecutables incluyen también los
-recursos de las guías, como las capturas, conservando sus subdirectorios.</p></article>
+      <article class="prose"><h1 id="validación-y-límites">Validación y límites</h1>
+<h2 id="revisión-1416-en-preparación">Revisión 1.4.16 en preparación</h2>
+<p>La revisión actual limpia resultados locales y documentación, añade controles
+de privacidad y corrige el contrato de rutas del controlador Headscale en
+Windows. No está subida ni publicada. El estado de trabajo y lo pendiente se
+mantienen en <a href="ESTADO_DESARROLLO.html">ESTADO_DESARROLLO.md</a>.</p>
+<h3 id="fallo-windows-reproducido-y-corregido">Fallo Windows reproducido y corregido</h3>
+<p>El <a href="https://github.com/Gente-del-Condado/headscale_gateway_releases/actions/runs/43784256540/job/133056107526">trabajo Windows de 1.4.15</a>
+falló en <code>TestControllerBindingRejectsCredentialedOrUnencryptedRemoteOrigins</code>.
+<code>filepath.Join</code> aplicaba separadores Windows a rutas que pertenecen al actuador
+Linux; la validación rechazaba un contrato válido antes de comprobar su origen.</p>
+<p>Se utiliza ahora <code>path</code> para ese contrato POSIX y se rechazan rutas Windows,
+relativas, no canónicas y caracteres de control. No se omite la prueba en Windows
+ni se retiran las comprobaciones de permisos, identidad o TLS.</p>
+<p>Se compiló el ejecutable de pruebas Windows anterior y se reprodujo el mismo
+fallo bajo Wine. El ejecutable corregido pasa la suite del controlador en ese
+entorno. Esto es una ejecución de binario Windows bajo Wine, <strong>no</strong> una aceptación
+nativa en la VM ni una prueba del SCM. La VM Windows no respondió al acceso SSH;
+no se modificaron sus recursos ni se reanudó la aceptación detenida.</p>
+<h3 id="comprobaciones-del-mantenimiento">Comprobaciones del mantenimiento</h3>
+<p>Comprobaciones locales de esta revisión:</p>
+<ul>
+<li>Verificación general Go, JavaScript y Python, vet y compilación del motor.</li>
+<li>Pruebas del lector/publicador público y de los contratos de paquetes.</li>
+<li>Auditorías Go a nivel de módulos y de llamadas: sin vulnerabilidades detectadas.
+  Auditoría npm, incluidas dependencias de desarrollo: cero vulnerabilidades.</li>
+<li>Manual estricto: 50 páginas HTML y 3.160 enlaces locales comprobados.</li>
+<li>Binario Windows del motor compilado y suite Windows del controlador ejecutada
+  bajo Wine, con fallo reproducido antes de la corrección y éxito después.</li>
+<li>Estructura y versión común 1.4.16, instaladores regenerados y exportación de
+  fuentes revisada; auditoría de privacidad y Gitleaks sin secretos detectados.</li>
+<li>OCR de las cuatro capturas del manual: sin coincidencias de credenciales o de
+  los identificadores del laboratorio buscados. No sustituye toda revisión visual.</li>
+</ul>
+<p>Los comandos se mantienen en <a href="DESARROLLO.html">CONTRIBUTING.md</a> y
+<a href="SEGURIDAD.html">SEGURIDAD.md</a>. Estas comprobaciones no atribuyen por anticipado
+el éxito de una nueva CI remota ni una aceptación física en todas las plataformas.</p>
+<p>La auditoría Gitleaks del historial local examinó 92 commits. Sus 683 coincidencias
+iniciales correspondían exclusivamente a líneas SHA-256 de dos manifiestos;
+se contrastaron con los archivos originales de cada commit. La regla específica
+para esas líneas no excluye el resto del JSON. Tras esa clasificación no se
+detectaron credenciales. Se revisan además las fuentes y la exportación preparada;
+una auditoría no garantiza ausencia absoluta de datos privados.</p>
+<h2 id="evidencia-anterior-que-se-conserva-como-referencia">Evidencia anterior que se conserva como referencia</h2>
+<table>
+<thead>
+<tr>
+<th scope="col">Revisión</th>
+<th scope="col">Qué se comprobó</th>
+<th scope="col">Límite</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.4.15</td>
+<td>Motor, panel, DNS y restricciones OIDC; observación y delegación TLS entre dos Gateway; actualización y restauración real YunoHost conservando datos, secretos, CA e identidad; compilación Windows/Android y RPM</td>
+<td>La CI Windows falló después por el contrato de rutas; la distribución completa quedó bloqueada</td>
+</tr>
+<tr>
+<td>1.4.14</td>
+<td>Enlaces y dominio principal; aceptación local en Windows, Fedora, YunoHost, Home Assistant y tablet; compilación y publicación públicas completadas</td>
+<td>No demuestra una aceptación nueva de esas plataformas para 1.4.16</td>
+</tr>
+<tr>
+<td>1.4.13</td>
+<td>Servicio Windows y recuperación, conservación de datos, emisión y renovación DNS-01 con CA/DNS aislados, TXT ajenos preservados</td>
+<td>No se atribuye coexistencia con Tailscale activo si estaba detenido</td>
+</tr>
+<tr>
+<td>1.4.7~ynh2</td>
+<td>Linter y laboratorio YunoHost, migración, actualización, restauración, SSO y permisos</td>
+<td>Es evidencia histórica; no un nivel de catálogo oficial ni una nueva prueba arm64</td>
+</tr>
+</tbody>
+</table>
+<p>Los resultados y límites originales permanecen en los commits y notas de sus
+versiones. Los informes locales completos se guardan fuera del árbol del
+proyecto si contienen direcciones, identidades o credenciales del laboratorio.</p>
+<h2 id="pruebas-interrumpidas-y-funciones-pendientes">Pruebas interrumpidas y funciones pendientes</h2>
+<p>Después de la validación de 1.4.15, se instaló la APK directa en la tablet y se
+inició otra instalación limpia del laboratorio. El usuario detuvo esa prueba.
+Dex y Headscale quedaron instalados en la VM; no se completaron la instalación
+del nuevo Gateway, Technitium, la configuración Dex adicional ni la aceptación
+conjunta de todas las funciones desde la tablet. No se presentan como realizadas.</p>
+<p><strong>Play Store sigue solo preparado.</strong> La distribución Flatpak directa no significa
+aceptación en Flathub. El paquete YunoHost se mantiene para instalar desde su
+repositorio; no se solicitará su inclusión en el catálogo oficial.</p></article>
       <footer class="page-footer">
         <p>Headscale Gateway · Gente del Condado · Documentación en español</p>
         <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>
@@ -356,19 +253,11 @@ recursos de las guías, como las capturas, conservando sus subdirectorios.</p></
     <aside class="page-toc">
       <nav aria-label="En esta página"><p>En esta página</p><ul>
         
-          <li><a href="#validación-local-del-candidato-1414">Validación local del candidato 1.4.14</a></li>
+          <li><a href="#revisión-1416-en-preparación">Revisión 1.4.16 en preparación</a></li>
         
-          <li><a href="#validación-local-del-candidato-1413">Validación local del candidato 1.4.13</a></li>
+          <li><a href="#evidencia-anterior-que-se-conserva-como-referencia">Evidencia anterior que se conserva como referencia</a></li>
         
-          <li><a href="#revisión-de-dependencias-de-la-versión-146">Revisión de dependencias de la versión 1.4.6</a></li>
-        
-          <li><a href="#preparación-de-la-versión-147">Preparación de la versión 1.4.7</a></li>
-        
-          <li><a href="#límites-de-la-entrega">Límites de la entrega</a></li>
-        
-          <li><a href="#repetir-la-comprobación">Repetir la comprobación</a></li>
-        
-          <li><a href="#comprobar-una-exportación">Comprobar una exportación</a></li>
+          <li><a href="#pruebas-interrumpidas-y-funciones-pendientes">Pruebas interrumpidas y funciones pendientes</a></li>
         
       </ul></nav>
     </aside>

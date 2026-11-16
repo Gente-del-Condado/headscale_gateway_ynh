@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.14</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.16</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -76,6 +76,8 @@
             
               <p class="nav-group">Administrar</p>
               <ul>
+                <li><a href="CONTROL_HEADSCALE.html" >Coordinador Headscale</a></li>
+              
                 <li><a href="RED_Y_CA_LAN.html" >Red, puertos y CA</a></li>
               
                 <li><a href="CA-FEDERACION.html" >Confianza y federación</a></li>
@@ -89,6 +91,14 @@
             
               <p class="nav-group">Desarrollar</p>
               <ul>
+                <li><a href="EMPEZAR_DESARROLLO.html" >Empezar a desarrollar</a></li>
+              
+                <li><a href="ESTADO_DESARROLLO.html" >Estado de la siguiente entrega</a></li>
+              
+                <li><a href="SEGURIDAD.html" >Privacidad y limpieza</a></li>
+              
+                <li><a href="CAMBIOS.html" >Cambios</a></li>
+              
                 <li><a href="ESTRUCTURA.html" aria-current="page">Estructura del proyecto</a></li>
               
                 <li><a href="ARQUITECTURA.html" >Arquitectura y flujos</a></li>
@@ -291,12 +301,21 @@ manual y <code>requirements-docs.txt</code> fija su generador.</p>
 mantener duplicados editables. La plantilla, estilos y búsqueda residen en
 <code>tools/manual_theme/</code>. <code>tools/check_manual.py</code> comprueba enlaces y anclas del
 resultado HTML. El resultado se genera en <code>builds/manual/</code>, que no se versiona.</p>
-<p>La automatización de GitHub Pages está en <code>.github/workflows/pages.yml</code>;
-requiere Pages configurado en los dos destinos públicos. Los flujos de GitHub
-esperan la calidad correcta del SHA vigente de <code>main</code> y publican directamente
-con <code>PUBLICATION_TOKEN</code>. Las Actions de Forgejo están desactivadas; Forgejo
-conserva el origen y replica Git hacia GitHub. Consulta
-<a href="PUBLICACION.html">PUBLICACION.md</a>.</p></article>
+<p>El control de publicación se mantiene en <code>packaging/releases/automation/</code> y
+<code>packaging/releases/.github/workflows/</code>. Se exporta al repositorio público
+<code>headscale_gateway_releases</code>, que lee releases estables de Forgejo y publica
+las distribuciones y ambos manuales. Los workflows de la raíz del principal
+comprueban el espejo y sus pull requests; no hay otro publicador ni jobs de
+Forgejo en este árbol. Consulta <a href="PUBLICACION.html">PUBLICACION.md</a>.</p>
+<p>Para empezar sin contexto previo, lee <a href="EMPEZAR_DESARROLLO.html">EMPEZAR_DESARROLLO.md</a>.
+<a href="ESTADO_DESARROLLO.html">ESTADO_DESARROLLO.md</a> contiene la situación de la siguiente
+entrega; no deben guardarse credenciales ni accesos privados en esa página.
+<code>tools/check_privacy.py</code> revisa las fuentes sin imprimir los valores detectados.</p>
+<p>El control del coordinador vive en <code>src/internal/headscalecontrol/</code>; el motor
+común lo adapta en <code>src/admin_headscale_control.go</code> y comparte el observador
+de <code>src/admin_headscale_agent.go</code>. El registro privilegiado de systemd se crea
+explícitamente con <code>packaging/linux/native/headscale-gateway-setup-headscale</code>.
+Consulta <a href="CONTROL_HEADSCALE.html">CONTROL_HEADSCALE.md</a> antes de modificarlo.</p></article>
       <footer class="page-footer">
         <p>Headscale Gateway · Gente del Condado · Documentación en español</p>
         <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>

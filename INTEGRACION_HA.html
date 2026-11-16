@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.14</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.16</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -76,6 +76,8 @@
             
               <p class="nav-group">Administrar</p>
               <ul>
+                <li><a href="CONTROL_HEADSCALE.html" >Coordinador Headscale</a></li>
+              
                 <li><a href="RED_Y_CA_LAN.html" >Red, puertos y CA</a></li>
               
                 <li><a href="CA-FEDERACION.html" >Confianza y federación</a></li>
@@ -89,6 +91,14 @@
             
               <p class="nav-group">Desarrollar</p>
               <ul>
+                <li><a href="EMPEZAR_DESARROLLO.html" >Empezar a desarrollar</a></li>
+              
+                <li><a href="ESTADO_DESARROLLO.html" >Estado de la siguiente entrega</a></li>
+              
+                <li><a href="SEGURIDAD.html" >Privacidad y limpieza</a></li>
+              
+                <li><a href="CAMBIOS.html" >Cambios</a></li>
+              
                 <li><a href="ESTRUCTURA.html" >Estructura del proyecto</a></li>
               
                 <li><a href="ARQUITECTURA.html" >Arquitectura y flujos</a></li>
@@ -225,7 +235,8 @@ como si fuera una única integración.</p>
 <p>La fuente se desarrolla en el principal privado de
 <a href="https://gentedelcondado.es/forgejo/wolfbelmi88/headscale_gateway">Forgejo</a>, se
 replica en <a href="https://github.com/Gente-del-Condado/headscale_gateway">GitHub</a> y solo
-se publica después de superar la calidad. Los publicadores no escriben en
+se publica desde el compilador público <code>headscale_gateway_releases</code> después
+de superar sus pruebas de seguridad y plataformas. Los publicadores no escriben en
 Forgejo. El servidor se distribuye como aplicación en Mis_app_ha; no está
 incluido en este repositorio de integración.</p>
 <p>Fuentes oficiales consultadas el 13 de noviembre de 2026:
@@ -339,7 +350,12 @@ ni cambia la configuración del Gateway.</p>
 </table>
 <p>Para cambiar la dirección, utiliza <strong>Reconfigurar</strong> en la integración. Para
 actualizar el código, copia la carpeta de la nueva versión y reinicia Core.
-Conserva la entrada existente para mantener los identificadores de las entidades.</p></article>
+Conserva la entrada existente para mantener los identificadores de las entidades.</p>
+<h2 id="qué-gestiona-esta-integración">Qué gestiona esta integración</h2>
+<p>Este repositorio contiene las entidades de estado, no el motor Go ni otro panel
+para administrar Headscale. La aplicación de Mis_app_ha ejecuta el motor y su
+panel común, que puede utilizar una delegación explícita al controlador del
+coordinador. El token de lectura de las entidades no concede ese permiso.</p></article>
       <footer class="page-footer">
         <p>Headscale Gateway · Gente del Condado · Documentación en español</p>
         <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>
@@ -370,6 +386,8 @@ Conserva la entrada existente para mantener los identificadores de las entidades
           <li><a href="#entidades-disponibles">Entidades disponibles</a></li>
         
           <li><a href="#si-no-conecta">Si no conecta</a></li>
+        
+          <li><a href="#qué-gestiona-esta-integración">Qué gestiona esta integración</a></li>
         
       </ul></nav>
     </aside>

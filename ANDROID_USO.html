@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.14</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.16</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -76,6 +76,8 @@
             
               <p class="nav-group">Administrar</p>
               <ul>
+                <li><a href="CONTROL_HEADSCALE.html" >Coordinador Headscale</a></li>
+              
                 <li><a href="RED_Y_CA_LAN.html" >Red, puertos y CA</a></li>
               
                 <li><a href="CA-FEDERACION.html" >Confianza y federación</a></li>
@@ -89,6 +91,14 @@
             
               <p class="nav-group">Desarrollar</p>
               <ul>
+                <li><a href="EMPEZAR_DESARROLLO.html" >Empezar a desarrollar</a></li>
+              
+                <li><a href="ESTADO_DESARROLLO.html" >Estado de la siguiente entrega</a></li>
+              
+                <li><a href="SEGURIDAD.html" >Privacidad y limpieza</a></li>
+              
+                <li><a href="CAMBIOS.html" >Cambios</a></li>
+              
                 <li><a href="ESTRUCTURA.html" >Estructura del proyecto</a></li>
               
                 <li><a href="ARQUITECTURA.html" >Arquitectura y flujos</a></li>
@@ -148,8 +158,8 @@
     <main id="contenido" tabindex="-1">
       <p class="breadcrumb"><a href="index.html">Manual</a><span aria-hidden="true"> / </span>Android</p>
       <article class="prose"><h1 id="headscale-gateway-para-android">Headscale Gateway para Android</h1>
-<p>La entrega común <strong>1.4.14</strong> utiliza el motor Go compartido y <code>versionCode</code>
-<code>10040140</code>. GitHub Actions construye el APK directo con la firma estable, el
+<p>La entrega común <strong>1.4.16</strong> utiliza el motor Go compartido y <code>versionCode</code>
+<code>10040160</code>. GitHub Actions construye el APK directo con la firma estable, el
 APK F-Droid sin firma y el AAB validado. Play Store continúa solo preparado;
 no se crea una ficha ni se envía la aplicación a las tiendas.</p>
 <p>Aplicación experimental con el motor completo del proyecto, panel administrativo
@@ -374,7 +384,12 @@ el Gateway, pero no dan por sí solos conectividad del navegador a la Tailnet.
 En Android, activa <strong>Conectar aplicaciones</strong> cuando el destino lo requiera.</p>
 <h2 id="autor-y-soporte">Autor y soporte</h2>
 <p>Autor: <strong>Gente del Condado</strong>. Soporte: <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>.
-<a href="https://gente-del-condado.github.io/headscale_gateway_ynh/">Manual en línea</a>.</p></article>
+<a href="https://gente-del-condado.github.io/headscale_gateway_ynh/">Manual en línea</a>.</p>
+<h2 id="gestión-del-coordinador-desde-android">Gestión del coordinador desde Android</h2>
+<p>El portal del motor Go compartido incluye <strong>Coordinador / Ajustes</strong>. Android puede
+usar una delegación HTTPS de lectura o escritura al Gateway junto a Headscale,
+con CA aprobada y token específico. No instala un controlador privilegiado en
+Android ni un segundo túnel VPN. Consulta el <a href="https://gente-del-condado.github.io/headscale_gateway_ynh/CONTROL_HEADSCALE.html">manual del controlador</a>.</p></article>
       <footer class="page-footer">
         <p>Headscale Gateway · Gente del Condado · Documentación en español</p>
         <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>
@@ -409,6 +424,8 @@ En Android, activa <strong>Conectar aplicaciones</strong> cuando el destino lo r
           <li><a href="#encontrar-el-portal-y-la-administración">Encontrar el portal y la administración</a></li>
         
           <li><a href="#autor-y-soporte">Autor y soporte</a></li>
+        
+          <li><a href="#gestión-del-coordinador-desde-android">Gestión del coordinador desde Android</a></li>
         
       </ul></nav>
     </aside>

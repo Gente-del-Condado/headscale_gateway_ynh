@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.14</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.16</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -76,6 +76,8 @@
             
               <p class="nav-group">Administrar</p>
               <ul>
+                <li><a href="CONTROL_HEADSCALE.html" >Coordinador Headscale</a></li>
+              
                 <li><a href="RED_Y_CA_LAN.html" >Red, puertos y CA</a></li>
               
                 <li><a href="CA-FEDERACION.html" >Confianza y federación</a></li>
@@ -89,6 +91,14 @@
             
               <p class="nav-group">Desarrollar</p>
               <ul>
+                <li><a href="EMPEZAR_DESARROLLO.html" >Empezar a desarrollar</a></li>
+              
+                <li><a href="ESTADO_DESARROLLO.html" >Estado de la siguiente entrega</a></li>
+              
+                <li><a href="SEGURIDAD.html" >Privacidad y limpieza</a></li>
+              
+                <li><a href="CAMBIOS.html" >Cambios</a></li>
+              
                 <li><a href="ESTRUCTURA.html" >Estructura del proyecto</a></li>
               
                 <li><a href="ARQUITECTURA.html" >Arquitectura y flujos</a></li>
@@ -148,117 +158,71 @@
     <main id="contenido" tabindex="-1">
       <p class="breadcrumb"><a href="index.html">Manual</a><span aria-hidden="true"> / </span>Git y entregas</p>
       <article class="prose"><h1 id="git-actualizaciones-y-entregas">Git, actualizaciones y entregas</h1>
-<p>El proyecto se mantiene en Git con el código común en <code>src/</code>, las fuentes
-Android en <code>android/src/</code> y los instaladores generados en <code>addons/</code> y <code>yunohost/</code>.
-Para localizar un componente consulta <a href="ESTRUCTURA.html">ESTRUCTURA.md</a>.</p>
-<h2 id="abrir-un-clon-de-trabajo">Abrir un clon de trabajo</h2>
-<p>Clona el repositorio autorizado con tu clave SSH. El siguiente ejemplo usa una
-dirección ficticia que debes sustituir por la de tu servidor.</p>
-<pre tabindex="0"><code class="language-bash">git clone ssh://git@forgejo.example.net:2222/usuario/headscale_gateway.git
+<p>Forgejo conserva el origen privado. GitHub recibe su espejo privado y el
+compilador público genera las distribuciones. <a href="PUBLICACION.html">PUBLICACION.md</a>
+explica los destinos y sus permisos; esta página describe el trabajo con Git.</p>
+<h2 id="empezar-una-modificación">Empezar una modificación</h2>
+<p>Clona por SSH el repositorio para el que tengas autorización. Este ejemplo usa
+un servidor ficticio:</p>
+<pre tabindex="0"><code class="language-sh">git clone ssh://git@forgejo.example.net:2222/usuario/headscale_gateway.git
 cd headscale_gateway
-git status
-python3 tools/check_repository.py
-python3 tools/prepare_git_install.py --check
-sha256sum -c CONTENIDO.sha256
+git status --short
+git fetch origin
+git switch -c codex/mi-cambio origin/main
 </code></pre>
-<p>Los requisitos de compilación están en el <a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/blob/upstream-source/README.md">README</a>. Para instalar
-los paquetes ya incluidos, sigue <a href="INSTALACION_PRIVADA.html">INSTALACION_PRIVADA.md</a>.</p>
-<h2 id="trabajar-sobre-una-versión-nueva">Trabajar sobre una versión nueva</h2>
-<p>Con el árbol limpio, descarga los cambios antes de empezar.</p>
-<pre tabindex="0"><code class="language-bash">git pull --ff-only
-</code></pre>
-<p>Edita las fuentes y prepara los contenidos generados cuando corresponda. Revisa
-las diferencias y ejecuta las pruebas indicadas en <a href="DESARROLLO.html">CONTRIBUTING.md</a>.
-Los commits nuevos conservan la historia de las versiones publicadas.</p>
-<pre tabindex="0"><code class="language-bash">git diff
-git switch -c codex/mi-cambio
-git add .
+<p>Lee <a href="DESARROLLO.html">CONTRIBUTING.md</a> y
+<a href="EMPEZAR_DESARROLLO.html">Empezar a desarrollar</a>. Edita las fuentes y documenta el
+cambio. No edites directamente <code>addons/</code> o <code>yunohost/</code>: son instaladores generados.
+Revisa trabajo ajeno antes de cambiar de rama o preparar el índice.</p>
+<h2 id="guardar-el-resultado-local">Guardar el resultado local</h2>
+<p>Ejecuta las pruebas correspondientes y revisa archivos nuevos y eliminados.
+Después de preparar el índice, actualiza sus sumas:</p>
+<pre tabindex="0"><code class="language-sh">git add --all
+python3 -B tools/check_privacy.py
 git ls-files -z -- . ':(exclude)CONTENIDO.sha256' | xargs -0 sha256sum &gt; CONTENIDO.sha256
 git add CONTENIDO.sha256
-git diff --cached --stat
-git commit -m &quot;Describir el cambio realizado&quot;
-git push -u origin codex/mi-cambio
+git diff --cached --check
+sha256sum --check --quiet CONTENIDO.sha256
+git commit -m &quot;Describir el cambio y su finalidad&quot;
 </code></pre>
-<p><code>CONTENIDO.sha256</code> contiene las sumas de los archivos versionados del árbol
-entregado. Añade primero los archivos nuevos y después calcula las sumas.
-Revisa el contenido preparado antes de confirmar el commit.</p>
-<h2 id="identificar-una-entrega">Identificar una entrega</h2>
-<p>La versión del motor se define en <code>VERSION</code> y se cambia con
-<code>python3 tools/set_version.py X.Y.Z</code>. Regenera después los paquetes instalables.
-Una etiqueta Git identifica el commit de una entrega. El nombre debe ser nuevo
-y responder a la política de versiones acordada.</p>
-<pre tabindex="0"><code class="language-bash"># Tras fusionar el commit aprobado de 1.4.7 en main.
-git tag -a v1.4.7 -m &quot;Headscale Gateway 1.4.7&quot;
-git push origin refs/tags/v1.4.7
-git ls-remote origin refs/heads/main 'refs/tags/v1.4.7^{}'
+<p>Un commit local no instala, publica ni sube nada. Si se pidió preparar sin
+subir, este es el punto de parada. Conserva en el informe los resultados reales
+y lo pendiente, sin contraseñas ni rutas personales de instalaciones.</p>
+<h2 id="subir-y-fusionar-cuando-esté-autorizado">Subir y fusionar cuando esté autorizado</h2>
+<p>Sube la rama por SSH y abre una solicitud de fusión en Forgejo. <code>main</code> está
+protegido; no se desactiva la protección ni se utiliza <code>--force</code> para eludirla.
+Después de fusionar, descarga y comprueba la referencia remota y su <code>VERSION</code>.
+Comprueba el mismo commit en el espejo de GitHub. La réplica Git transmite ramas
+y etiquetas; no transmite los metadatos ni adjuntos de releases.</p>
+<h2 id="identificar-y-publicar-una-entrega">Identificar y publicar una entrega</h2>
+<p><code>VERSION</code> identifica motor y paquetes. Se cambia con
+<code>python3 tools/set_version.py X.Y.Z</code>; después se regeneran los instaladores.
+Solo tras la aprobación de publicación, crea una etiqueta <strong>nueva</strong> <code>vX.Y.Z</code>
+en el commit correcto de <code>main</code> y súbela por SSH. Comprueba el commit al que
+apunta, también cuando sea una etiqueta anotada.</p>
+<p>Publica una <strong>release estable en Forgejo</strong> con esa etiqueta. Una etiqueta sola,
+un borrador o un push a <code>main</code> no activa una entrega. El controlador público
+consulta esa release, fija el commit y ejecuta seguridad y pruebas antes de
+compilar y publicar instaladores, paquetes, tiendas y manuales. No necesita
+adjuntos preparados en el servidor YunoHost ni un runner de Forgejo.</p>
+<p>Los workflows vigentes del compilador se mantienen en
+<code>packaging/releases/.github/workflows/</code>. Los flujos de la raíz comprueban el
+espejo y las propuestas de cambio; no constituyen otro publicador. Las recetas
+privadas de entrega y los publicadores de Forgejo antiguos se retiraron del
+árbol actual; sus versiones originales permanecen en las etiquetas históricas.</p>
+<p>No muevas etiquetas publicadas ni reemplaces un adjunto por otro de distinto
+contenido. Una corrección exige otra versión. Conserva junto a los escritorios
+los fuentes y avisos de Electron/Chromium/FFmpeg, y la firma Android estable
+fuera del repositorio. Consulta <a href="LICENCIAS.html">licencias</a>.</p>
+<h2 id="exportar-fuentes-sin-el-historial-privado">Exportar fuentes sin el historial privado</h2>
+<pre tabindex="0"><code class="language-sh">python3 -B tools/prepare_git_install.py --check
+python3 -B tools/check_privacy.py
+python3 tools/repository_archive.py --output builds/export/headscale-gateway-fuentes.zip
 </code></pre>
-<p>Las dos referencias de una entrega recién etiquetada deben resolver al commit
-que acabas de publicar. La primera prueba documental utilizó <code>v0.1.0.1</code> mientras
-el motor declaraba <code>1.4.4</code>. Consulta ambos valores antes de automatizar números
-de versión en instaladores.</p>
-<h3 id="publicación-y-adjuntos">Publicación y adjuntos</h3>
-<p>Forgejo conserva el origen privado y replica ramas y etiquetas en el principal
-privado de GitHub. La calidad y los publicadores se ejecutan en GitHub Actions.
-Las Actions de Forgejo están desactivadas para este proyecto. El runner local,
-la carpeta histórica de preparación y <code>HGW_RELEASE_READ_TOKEN</code> no forman parte
-del recorrido automático vigente. No prepares nuevos adjuntos en YunoHost
-siguiendo instrucciones de entregas anteriores.</p>
-<p>Después de fusionar una revisión en Forgejo, comprueba la misma referencia en
-GitHub y la ejecución <strong>Calidad multiplataforma</strong>. Su finalización correcta en
-<code>main</code> activa los publicadores de paquetes, integración, tiendas y manual.
-Consulta <a href="PUBLICACION.html">PUBLICACION.md</a> para los destinos y permisos.</p>
-<p>El flujo <strong>Preparar entrega completa</strong> de GitHub construye los motores de las
-seis plataformas, los escritorios Linux/Windows con sus fuentes de terceros y
-los candidatos APK/AAB sin firma. Conserva los resultados como artefactos de
-Actions durante siete días; no crea una release ni publica Android sin firma.
-Se ejecuta sobre la revisión elegida con <code>workflow_dispatch</code>. Antes de distribuir,
-verifica la calidad de ese SHA, firma Android con la identidad estable local y
-comprueba la actualización desde la entrega anterior. Play Store queda preparado,
-sin enviar la aplicación a la tienda.</p>
-<p>Después, <strong>Preparar borrador de release</strong> recibe el número de esa ejecución.
-Exige calidad correcta en el <code>main</code> vigente, una etiqueta ya replicada desde
-Forgejo y los mismos fuentes de motor, Android y escritorio. Revalida las sumas,
-incorpora la documentación actual y prepara un borrador en el principal privado
-de GitHub. Los escritorios grandes se dividen sin retirar sus fuentes. Verifica
-cada descarga; no modifica una release existente ni publica automáticamente el
-borrador. Incorpora después Android firmado y su validación antes de publicarlo.
-Así los adjuntos grandes no vuelven a ocupar espacio en el servidor YunoHost.</p>
-<p>El espejo Git no copia metadatos de releases ni adjuntos. Una etiqueta recibida
-por GitHub no garantiza que estén publicados los instaladores de escritorio o
-Android. Comprueba por separado la lista de archivos, sus tamaños y SHA-256 y
-las notas de la entrega antes de anunciarla. No sobrescribas etiquetas ni
-archivos de una versión anterior.</p>
-<p>Los escritorios deben acompañarse de los fuentes y avisos completos de Electron
-y FFmpeg previstos en <a href="LICENCIAS.html">LICENCIAS.md</a>. Si se divide un archivo con
-<code>tools/split_release.py</code>, se distribuyen todas las partes, las sumas y las
-instrucciones de reconstrucción. Android conserva su identidad de aplicación y
-la firma de release para permitir actualizar una instalación existente. Las
-claves de firma permanecen fuera del repositorio.</p>
-<h2 id="exportar-una-carpeta-o-un-zip-limpio">Exportar una carpeta o un ZIP limpio</h2>
-<pre tabindex="0"><code class="language-bash">python3 tools/prepare_git_install.py --check
-python3 tools/repository_archive.py --output releases/headscale-gateway-fuentes.zip
-</code></pre>
-<p>El exportador utiliza una lista de fuentes permitidas y verifica los paquetes.
-Cada ZIP incorpora su propia lista <code>CONTENIDO.sha256</code>. Con <code>--include-releases</code>
-añade los archivos Android autorizados de <code>releases/android/</code>, si existen y su
-suma coincide.</p>
-<p>Descomprime las entregas en una carpeta nueva y comprueba sus sumas antes de
-usarlas. Si trabajas sobre un clon existente, incorpora los cambios como una
-modificación revisada que conserve su directorio <code>.git</code> y su historia.</p>
-<h2 id="datos-de-las-instalaciones">Datos de las instalaciones</h2>
-<p>Las fuentes del proyecto y los datos de ejecución tienen ubicaciones propias.
-En Home Assistant los datos del motor están en <code>/data/gateway/</code>. En YunoHost se
-utiliza la subcarpeta <code>gateway/</code> del directorio de datos asignado a la instancia.
-Mantén las bases de datos, claves, perfiles y copias privadas fuera del clon.
-Las actualizaciones se realizan con el procedimiento de cada plataforma.</p>
-<h2 id="distribuir-sin-abrir-el-principal">Distribuir sin abrir el principal</h2>
-<p>El borrador y las pruebas del principal privado son una etapa de preparación.
-Las descargas para usuarios se publican sin credenciales en
-<a href="https://github.com/Gente-del-Condado/headscale_gateway_releases/releases">headscale_gateway_releases</a>,
-con fuentes saneados y sin copiar la historia privada. Los paquetes específicos
-se publican en sus repositorios YunoHost, Home Assistant y Flatpak. Consulta
-<a href="PUBLICACION.html#descargas-públicas-y-nuevos-paquetes-linux">el flujo público</a>.
-No compartas un enlace al principal privado como descarga para usuarios públicos.</p></article>
+<p>El exportador selecciona carpetas y archivos concretos y excluye claves,
+SQLite, copias, cachés y resultados locales. La exportación pública usa una
+historia independiente; no se convierte en público el principal ni se copia su
+<code>.git</code>. Audita también la carpeta exportada según <a href="SEGURIDAD.html">SEGURIDAD.md</a>.</p></article>
       <footer class="page-footer">
         <p>Headscale Gateway · Gente del Condado · Documentación en español</p>
         <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>
@@ -268,17 +232,15 @@ No compartas un enlace al principal privado como descarga para usuarios público
     <aside class="page-toc">
       <nav aria-label="En esta página"><p>En esta página</p><ul>
         
-          <li><a href="#abrir-un-clon-de-trabajo">Abrir un clon de trabajo</a></li>
+          <li><a href="#empezar-una-modificación">Empezar una modificación</a></li>
         
-          <li><a href="#trabajar-sobre-una-versión-nueva">Trabajar sobre una versión nueva</a></li>
+          <li><a href="#guardar-el-resultado-local">Guardar el resultado local</a></li>
         
-          <li><a href="#identificar-una-entrega">Identificar una entrega</a></li>
+          <li><a href="#subir-y-fusionar-cuando-esté-autorizado">Subir y fusionar cuando esté autorizado</a></li>
         
-          <li><a href="#exportar-una-carpeta-o-un-zip-limpio">Exportar una carpeta o un ZIP limpio</a></li>
+          <li><a href="#identificar-y-publicar-una-entrega">Identificar y publicar una entrega</a></li>
         
-          <li><a href="#datos-de-las-instalaciones">Datos de las instalaciones</a></li>
-        
-          <li><a href="#distribuir-sin-abrir-el-principal">Distribuir sin abrir el principal</a></li>
+          <li><a href="#exportar-fuentes-sin-el-historial-privado">Exportar fuentes sin el historial privado</a></li>
         
       </ul></nav>
     </aside>
