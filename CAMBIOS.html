@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.17</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.18</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -158,15 +158,18 @@
     <main id="contenido" tabindex="-1">
       <p class="breadcrumb"><a href="index.html">Manual</a><span aria-hidden="true"> / </span>Cambios</p>
       <article class="prose"><h1 id="cambios-de-headscale-gateway">Cambios de Headscale Gateway</h1>
-<h2 id="mantenimiento-posterior-a-1417">Mantenimiento posterior a 1.4.17</h2>
+<h2 id="1418">1.4.18</h2>
 <ul>
-<li>
-<p>Diagnóstico de instalación por etapa y código HTTP, sin revelar credenciales.</p>
-</li>
-<li>
-<p>Retención automática de dos versiones completas en GitHub y temporizador local para Forgejo.</p>
-</li>
-<li>Protección de todos los fuentes reutilizables Electron, versiones pendientes y referencias Git.</li>
+<li>Perfil AppArmor propio para el complemento Home Assistant, en modo estricto,
+  con clasificación 7/8 comprobada en HAOS amd64 y aarch64 emulado.</li>
+<li>Restringe ejecución y escritura a los programas y directorios necesarios;
+  conserva red LAN, multicast, Ingress, VPN, certificados y datos del Gateway.</li>
+<li>Desactiva la caché de Python sobre los programas de solo lectura.</li>
+<li>Añade aceptación repetible de AppArmor, SSO/CSRF, copias y exportación;
+  documenta conservación de claves y opciones tras reiniciar y apagar/encender.</li>
+<li>La guía de Home Assistant consulta el puerto web real de cada instalación.</li>
+<li>Conserva firma Android, licencias y reutilización de fuentes Electron.
+  Play Store continúa solo preparado; no se envía ninguna aplicación a la tienda.</li>
 </ul>
 <h2 id="1417">1.4.17</h2>
 <ul>
@@ -219,7 +222,7 @@ que todos sus instaladores se hayan publicado: consulta sus comprobaciones.</p><
     <aside class="page-toc">
       <nav aria-label="En esta página"><p>En esta página</p><ul>
         
-          <li><a href="#mantenimiento-posterior-a-1417">Mantenimiento posterior a 1.4.17</a></li>
+          <li><a href="#1418">1.4.18</a></li>
         
           <li><a href="#1417">1.4.17</a></li>
         

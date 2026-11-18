@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.17</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.18</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -220,6 +220,50 @@ no se crea una cookie del Gateway reutilizable fuera de esta conexión.</p>
 estos datos, el usuario no es administrador o la petición no procede del proxy
 confiable, se deniega el acceso. Mantén Home Assistant y Supervisor actualizados
 si no se reciben las cabeceras de identidad.</p>
+<h2 id="confinamiento-apparmor">Confinamiento AppArmor</h2>
+<p>El paquete incluye <code>apparmor.txt</code>, un perfil propio en modo <strong>enforce</strong> que
+Supervisor carga al instalar o actualizar. Mantén activado el modo de protección.
+Permite ejecutar Python y el motor Go, consultar el resolver y las CA del
+contenedor, utilizar TCP/UDP y netlink y guardar el estado en <code>/data/</code>.
+Los únicos directorios temporales escribibles son <code>/tmp/</code> y
+<code>/run/headscale-gateway/</code>. No permite ejecutar una shell, modificar los programas,
+leer <code>/etc/shadow</code> ni administrar Docker o el anfitrión.</p>
+<p>El perfil conserva la red del anfitrión para servicios LAN y descubrimiento
+multicast; no solicita TUN, <code>NET_ADMIN</code> ni acceso completo. Las CA propias,
+certificados, claves, identidad VPN, SQLite y copias permanecen en <code>/data/</code>.
+La confianza de los equipos clientes sigue configurándose en esos equipos;
+este perfil no instala certificados en Home Assistant OS.</p>
+<p>En el laboratorio con Supervisor y AppArmor activos la clasificación pasa de
+<strong>6/8 a 7/8</strong>. La tienda puede mostrar todavía 6 antes de instalar el perfil;
+la puntuación efectiva depende de Supervisor y del sistema anfitrión. Una
+instalación anterior no cambia hasta recibir el paquete actualizado. Si el
+perfil no puede cargarse, revisa el registro de Supervisor; no lo soluciones
+con <code>apparmor: false</code> ni desactivando la protección.</p>
+<p>Para mantenerlo, prueba una <strong>copia local desechable</strong> con slug
+<code>headscale_gateway_apparmor_lab</code>, puertos libres, nombre propio y datos nuevos.
+Nunca reutilices la SQLite ni la identidad de un Gateway activo. Supervisor
+sustituye automáticamente el nombre principal del perfil por el ID instalado.
+No basta con recargar la tienda para recargar un perfil de una app ya instalada:
+verifica la carga durante instalación/actualización y el perfil efectivo del
+contenedor. La imagen de producción desactiva la caché de Python para evitar
+escrituras sobre los programas.</p>
+<p>El comprobador <code>tools/check_ha_apparmor.py</code> del principal ofrece dos modos:</p>
+<ul>
+<li><code>--confirm-disposable-lab --confinement</code>: ejecútalo con <code>python3 -B</code> dentro
+  del contenedor de laboratorio, con una marca vacía <code>/data/.hgw-apparmor-lab</code>.
+  Comprueba <strong>enforce</strong>, SQLite WAL, temporales, DNS, multicast y denegaciones
+  reales de lectura, escritura y ejecución fuera de los permisos previstos.</li>
+<li><code>--confirm-disposable-lab --panel-address HOST:PUERTO</code>: ejecútalo desde el
+  contenedor Supervisor, contra el puerto Ingress dinámico de la copia aislada.
+  Comprueba SSO, CSRF, rechazo de no administradores, panel, PKI,
+  descubrimiento, creación y descarga de copia cifrada y exportación cifrada.
+  Crea datos y una contraseña ficticia de respaldo solo para ese laboratorio.</li>
+</ul>
+<p>Consulta en el anfitrión <code>journalctl _TRANSPORT=audit</code> y filtra por el ID de la
+copia aislada. Las tres denegaciones del ensayo negativo son esperadas; cualquier
+otra se investiga. Repite con una conexión Headscale y ACME de laboratorio cuando
+cambien esas funciones. Tras terminar, retira la copia aislada y sus datos;
+no distribuyas un perfil en modo <code>complain</code> ni añadas permisos globales.</p>
 <h2 id="instalar-desde-forgejo-privado">Instalar desde Forgejo privado</h2>
 <p>En la terminal de Home Assistant, configura primero una clave SSH con permiso
 de lectura sobre el repositorio privado. Después clona el proyecto:</p>
@@ -313,8 +357,9 @@ subred. Las rutas necesitan permisos ACL y aprobación en Headscale.</p>
 puerto de Ingress asignado dinámicamente y solo acepta a Supervisor en
 <code>172.30.32.2</code>. No publiques ese puerto directamente.</p>
 <p>Para publicar el propio Home Assistant como servicio del Gateway, utiliza la
-dirección de destino que sea alcanzable desde el complemento; con esta red,
-normalmente será <code>http://127.0.0.1:8123</code>. Configura <code>http.use_x_forwarded_for</code> y
+dirección de destino que sea alcanzable desde el complemento. Consulta el puerto
+real con <code>ha core info</code>: con esta red puede ser <code>http://127.0.0.1</code> (puerto 80)
+o <code>http://127.0.0.1:8123</code>, según la instalación. Configura <code>http.use_x_forwarded_for</code> y
 <code>http.trusted_proxies</code> en Home Assistant para la IP real de origen del Gateway,
 y comprueba <code>/api/websocket</code>. Esta publicación es independiente del acceso
 administrativo mediante Ingress.</p>
@@ -435,6 +480,8 @@ o escritura específico. Consulta el <a href="https://gente-del-condado.github.i
           <li><a href="#instalar-desde-mis_app_ha">Instalar desde Mis_app_ha</a></li>
         
           <li><a href="#abrir-el-panel-desde-home-assistant">Abrir el panel desde Home Assistant</a></li>
+        
+          <li><a href="#confinamiento-apparmor">Confinamiento AppArmor</a></li>
         
           <li><a href="#instalar-desde-forgejo-privado">Instalar desde Forgejo privado</a></li>
         

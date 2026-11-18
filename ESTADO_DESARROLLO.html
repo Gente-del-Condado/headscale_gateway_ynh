@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.17</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.18</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -158,6 +158,28 @@
     <main id="contenido" tabindex="-1">
       <p class="breadcrumb"><a href="index.html">Manual</a><span aria-hidden="true"> / </span>Estado de la siguiente entrega</p>
       <article class="prose"><h1 id="estado-de-desarrollo-y-siguiente-entrega">Estado de desarrollo y siguiente entrega</h1>
+<h2 id="1418-apparmor-preparado-para-publicación">1.4.18: AppArmor preparado para publicación</h2>
+<p>Se incorpora un perfil restrictivo al paquete y al instalador generado. Probado
+con Supervisor real en una copia aislada de Home Assistant OS 18.4, amd64:
+perfil cargado en enforce, protección activa y clasificación 7/8. Se conservan
+host_network, Ingress y el motor Go; no se solicitan capacidades nuevas.
+Python desactiva la caché sobre sus bibliotecas de solo lectura.</p>
+<p>Pasaron las peticiones reales de Ingress/SSO/CSRF, PKI, descubrimiento, copia
+SQLite cifrada, descarga y exportación del perfil. Las pruebas Go de TLS local,
+renovación, DNS, restauración e identidad se ejecutaron dentro del perfil.
+El reinicio conservó la clave maestra y las opciones. Las comprobaciones
+negativas bloquearon shadow, escritura sobre programas y ejecución de shell.
+Estos ensayos no acreditan una conexión a Headscale ni una emisión ACME externa.
+El perfil también pasó en una VM nueva
+HAOS 18.4 aarch64 emulada con QEMU/TCG, Supervisor 2026.11.0: 7/8, enforce,
+las 14 pruebas Go bajo confinamiento y el comprobador de panel y bloqueos.
+El reinicio completo de esa VM conservó SSH y claves y arrancó Gateway
+automáticamente con el perfil activo. Core quedó listo para el alta inicial.
+La aplicación existente de la VM amd64 no se modificó.
+VERSION y los paquetes están sincronizados en 1.4.18. La solicitud de fusión
+y la release estable de Forgejo activarán el recorrido automático de GitHub.
+La validación de la tienda y del paquete publicado se registrará al completarse.
+Play Store permanece solo preparado.</p>
 <h2 id="mantenimiento-de-actions-sin-nueva-versión-del-motor">Mantenimiento de Actions (sin nueva versión del motor)</h2>
 <p>El control público mantiene app, integración y tiendas desde un SHA de Forgejo.
 El plan evita trabajos sin cambios; las imágenes solo se solicitan si hay árboles
@@ -250,6 +272,8 @@ guías vigentes se actualizan en ambas webs sin modificar los instaladores.</p><
     </main>
     <aside class="page-toc">
       <nav aria-label="En esta página"><p>En esta página</p><ul>
+        
+          <li><a href="#1418-apparmor-preparado-para-publicación">1.4.18: AppArmor preparado para publicación</a></li>
         
           <li><a href="#mantenimiento-de-actions-sin-nueva-versión-del-motor">Mantenimiento de Actions (sin nueva versión del motor)</a></li>
         
