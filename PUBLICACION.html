@@ -282,45 +282,27 @@ commits y notas; los informes privados se archivan fuera del árbol de desarroll
 nginx/NSS en contenedor son complementarias; no equivalen a repetir package_check
 o la actualización de una instalación real con datos y secretos. No ejecutes
 máquinas virtuales ni compilaciones grandes en el Linux del usuario.</p>
-<h2 id="limpieza-automática-de-releases-antiguas">Limpieza automática de releases antiguas</h2>
-<p>Se conservan las dos últimas versiones completadas y verificadas. La limpieza
-retira releases anteriores y sus adjuntos; mantiene commits, ramas y etiquetas.
-Las URL de releases retiradas dejan de descargar. Los archivos de las dos
-versiones conservadas permanecen intactos.</p>
-<p>GitHub limpia los cuatro destinos de descargas mediante un workflow separado,
-después de una entrega correcta y diariamente. Forgejo utiliza un temporizador
-local de YunoHost y una credencial limitada al principal, guardada solo allí.
-GitHub no escribe en Forgejo. Las tiendas compartidas y las demás aplicaciones
-no se modifican.</p>
-<p>Las releases de fuentes Electron <strong>nunca se borran automáticamente</strong>, incluidas
-las de runtimes anteriores: siguen disponibles para los instaladores conservados
-y las redistribuciones. Borradores, prereleases, entregas pendientes, releases
-inmutables y nombres no reconocidos se protegen. Una entrega fallida no desplaza
-las dos versiones completas. Si no se pueden verificar las sumas o la existencia
-de las distribuciones conservadas, no se inicia el borrado.</p>
-<p>Desde el principal revisado, prepara el instalador sin credenciales y ejecútalo:</p>
-<pre tabindex="0"><code class="language-sh">python3 -B tools/prepare_release_retention.py --output /tmp/hgw-release-retention
-bash /tmp/hgw-release-retention/bootstrap.sh
-</code></pre>
-<p>En Forgejo, crea un token limitado al principal con <code>repository</code> de lectura y
-escritura. El instalador lo pide de forma oculta en la terminal y lo conserva
-en YunoHost, en <code>/etc/hgw-release-retention/forgejo-token</code> (root, 0600).
-SSH y sudo se autentican solo en esa terminal. El servicio utiliza
-<code>LoadCredential</code>, se ejecuta con usuario dinámico y reintenta fallos cada 15
-minutos; el temporizador diario recupera una ejecución perdida al arrancar.</p>
-<p>La activación requiere <code>RETENCION_FORGEJO_AUTOMATICA_OK</code> tras una ejecución real.
-Preparar sus archivos no equivale a tenerlo instalado. Consulta en YunoHost
-<code>sudo systemctl list-timers forgejo-retention.timer</code> y
-<code>sudo journalctl -u forgejo-retention.service</code>. Para detener solo la limpieza,
-deshabilita ese temporizador y detén ese servicio; Forgejo continúa funcionando.
-La guía de mantenimiento completa también se conserva junto al instalador
-en <code>packaging/maintenance/release-retention/README.md</code> del principal.</p>
 <h2 id="pivigia-y-jacksignal">PiVigia y JackSignal</h2>
 <p>Sus flujos reciben el espejo desde Forgejo y publican directamente en GitHub
 tras calidad correcta del mismo SHA de main. Los pull requests no publican.
 Sus secretos PUBLICATION_TOKEN permanecen en los respectivos principales
 privados, limitados a sus destinos públicos. Esta migración del compilador de
-Headscale no cambia sus credenciales ni sus flujos.</p></article>
+Headscale no cambia sus credenciales ni sus flujos.</p>
+<h2 id="imágenes-precompiladas-de-home-assistant">Imágenes precompiladas de Home Assistant</h2>
+<p>Forgejo sigue siendo el origen y GitHub el espejo. El publicador entrega el
+contenido aprobado a <code>build-source</code> de <code>Mis_app_ha</code>. Un único workflow de esa
+tienda construye imágenes nativas <code>amd64</code> y <code>aarch64</code>, ejecuta las pruebas de
+arranque con datos desechables y crea un índice multi arquitectura en GHCR.
+Solo después de verificar su descarga anónima actualiza la aplicación en <code>main</code>
+y añade <code>image:</code>. La versión anterior sigue instalable mientras se prepara la nueva.</p>
+<p>Los Dockerfile y fuentes se conservan; Home Assistant descarga la imagen preparada.
+No se cambian slugs, opciones, volúmenes, permisos, datos ni credenciales. Una imagen
+ya distribuida no se sustituye con otro contenido: aumenta la versión al cambiar
+el contexto de compilación. El cambio inicial publica las versiones actuales sin
+forzar actualizaciones ni reinstalaciones de los equipos existentes.</p>
+<p>El controlador común se mantiene en <code>packaging/homeassistant-store/</code> de
+<code>headscale_gateway</code> en Forgejo y se exporta a <code>.github/ha-images/</code> y al workflow
+de <code>Mis_app_ha</code>. No escribe en los principales ni devuelve cambios a Forgejo.</p></article>
       <footer class="page-footer">
         <p>Headscale Gateway · Gente del Condado · Documentación en español</p>
         <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>
@@ -334,9 +316,9 @@ Headscale no cambia sus credenciales ni sus flujos.</p></article>
         
           <li><a href="#descargas-públicas-y-nuevos-paquetes-linux">Descargas públicas y nuevos paquetes Linux</a></li>
         
-          <li><a href="#limpieza-automática-de-releases-antiguas">Limpieza automática de releases antiguas</a></li>
-        
           <li><a href="#pivigia-y-jacksignal">PiVigia y JackSignal</a></li>
+        
+          <li><a href="#imágenes-precompiladas-de-home-assistant">Imágenes precompiladas de Home Assistant</a></li>
         
       </ul></nav>
     </aside>
