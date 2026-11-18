@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.18</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.19</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -97,6 +97,8 @@
               
                 <li><a href="SEGURIDAD.html" >Privacidad y limpieza</a></li>
               
+                <li><a href="SEGURIDAD_PLATAFORMAS.html" >Protecciones por plataforma</a></li>
+              
                 <li><a href="CAMBIOS.html" >Cambios</a></li>
               
                 <li><a href="ESTRUCTURA.html" >Estructura del proyecto</a></li>
@@ -162,8 +164,8 @@
 auxiliares. Gateway-Tray es un cliente opcional y no es necesario para usar el
 servidor. Las descargas y sus fuentes están en
 <a href="https://github.com/Gente-del-Condado/headscale_gateway_releases/releases">headscale_gateway_releases</a>.</p>
-<p>Instala el archivo de tu arquitectura con <code>sudo apt install ./headscale-gateway_1.4.18-1_amd64.deb</code>
-o <code>sudo dnf install ./headscale-gateway-1.4.18-1.x86_64.rpm</code>.
+<p>Instala el archivo de tu arquitectura con <code>sudo apt install ./headscale-gateway_1.4.19-1_amd64.deb</code>
+o <code>sudo dnf install ./headscale-gateway-1.4.19-1.x86_64.rpm</code>.
 El paquete crea un usuario de servicio sin acceso interactivo. La primera
 instalación no arranca ni expone el panel sin configurar una cuenta:</p>
 <pre tabindex="0"><code class="language-sh">sudo -u headscale-gateway headscale-gateway-configure --admin miadministrador
@@ -231,7 +233,11 @@ con el sistema y se reinicia tras un fallo. Cerrar el navegador no lo detiene.</
 observación de nodos. El paquete incluye <code>headscale-gateway-setup-headscale</code> para
 registrar un ayudante local separado del servicio sin privilegios. También puede
 actuar como cliente remoto desde otras plataformas. No se activa automáticamente.
-Consulta <a href="https://gente-del-condado.github.io/headscale_gateway_ynh/CONTROL_HEADSCALE.html">Control de Headscale</a>.</p></article>
+Consulta <a href="https://gente-del-condado.github.io/headscale_gateway_ynh/CONTROL_HEADSCALE.html">Control de Headscale</a>.</p>
+<h2 id="protecciones-de-la-plataforma">Protecciones de la plataforma</h2>
+<p>Consulta las <a href="https://gente-del-condado.github.io/headscale_gateway_ynh/SEGURIDAD_PLATAFORMAS.html">protecciones y sus límites</a>: aislamiento del servicio,
+autorización del contenedor Android y permisos Flatpak. Las actualizaciones
+conservan los datos y la identidad; no requieren desactivar protecciones del sistema.</p></article>
       <footer class="page-footer">
         <p>Headscale Gateway · Gente del Condado · Documentación en español</p>
         <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>
@@ -250,6 +256,8 @@ Consulta <a href="https://gente-del-condado.github.io/headscale_gateway_ynh/CONT
           <li><a href="#servicio-y-menú-de-aplicaciones">Servicio y menú de aplicaciones</a></li>
         
           <li><a href="#controlador-headscale-opcional">Controlador Headscale opcional</a></li>
+        
+          <li><a href="#protecciones-de-la-plataforma">Protecciones de la plataforma</a></li>
         
       </ul></nav>
     </aside>

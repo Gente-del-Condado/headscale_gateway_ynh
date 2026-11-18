@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.18</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.19</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -97,6 +97,8 @@
               
                 <li><a href="SEGURIDAD.html" >Privacidad y limpieza</a></li>
               
+                <li><a href="SEGURIDAD_PLATAFORMAS.html" >Protecciones por plataforma</a></li>
+              
                 <li><a href="CAMBIOS.html" >Cambios</a></li>
               
                 <li><a href="ESTRUCTURA.html" >Estructura del proyecto</a></li>
@@ -158,8 +160,8 @@
     <main id="contenido" tabindex="-1">
       <p class="breadcrumb"><a href="index.html">Manual</a><span aria-hidden="true"> / </span>Android</p>
       <article class="prose"><h1 id="headscale-gateway-para-android">Headscale Gateway para Android</h1>
-<p>La entrega común <strong>1.4.18</strong> utiliza el motor Go compartido y <code>versionCode</code>
-<code>10040180</code>. GitHub Actions construye el APK directo con la firma estable, el
+<p>La entrega común <strong>1.4.19</strong> utiliza el motor Go compartido y <code>versionCode</code>
+<code>10040190</code>. GitHub Actions construye el APK directo con la firma estable, el
 APK F-Droid sin firma y el AAB validado. Play Store continúa solo preparado;
 no se crea una ficha ni se envía la aplicación a las tiendas.</p>
 <p>Aplicación experimental con el motor completo del proyecto, panel administrativo
@@ -389,7 +391,11 @@ En Android, activa <strong>Conectar aplicaciones</strong> cuando el destino lo r
 <p>El portal del motor Go compartido incluye <strong>Coordinador / Ajustes</strong>. Android puede
 usar una delegación HTTPS de lectura o escritura al Gateway junto a Headscale,
 con CA aprobada y token específico. No instala un controlador privilegiado en
-Android ni un segundo túnel VPN. Consulta el <a href="https://gente-del-condado.github.io/headscale_gateway_ynh/CONTROL_HEADSCALE.html">manual del controlador</a>.</p></article>
+Android ni un segundo túnel VPN. Consulta el <a href="https://gente-del-condado.github.io/headscale_gateway_ynh/CONTROL_HEADSCALE.html">manual del controlador</a>.</p>
+<h2 id="protecciones-de-la-plataforma">Protecciones de la plataforma</h2>
+<p>Consulta las <a href="https://gente-del-condado.github.io/headscale_gateway_ynh/SEGURIDAD_PLATAFORMAS.html">protecciones y sus límites</a>: aislamiento del servicio,
+autorización del contenedor Android y permisos Flatpak. Las actualizaciones
+conservan los datos y la identidad; no requieren desactivar protecciones del sistema.</p></article>
       <footer class="page-footer">
         <p>Headscale Gateway · Gente del Condado · Documentación en español</p>
         <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>
@@ -426,6 +432,8 @@ Android ni un segundo túnel VPN. Consulta el <a href="https://gente-del-condado
           <li><a href="#autor-y-soporte">Autor y soporte</a></li>
         
           <li><a href="#gestión-del-coordinador-desde-android">Gestión del coordinador desde Android</a></li>
+        
+          <li><a href="#protecciones-de-la-plataforma">Protecciones de la plataforma</a></li>
         
       </ul></nav>
     </aside>

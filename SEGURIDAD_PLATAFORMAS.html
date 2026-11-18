@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Manual de instalación, administración y desarrollo de Headscale Gateway.">
+  <title>Protecciones por plataforma · Headscale Gateway</title>
+  <link rel="stylesheet" href="assets/manual.css">
+  <script src="assets/search-data.js" defer></script>
+  <script src="assets/manual.js" defer></script>
+</head>
+<body data-base=".">
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="site-header">
+    <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
+    <div class="header-links"><span>Manual · 1.4.19</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <details id="manual-menu" open>
+        <summary>Índice del manual</summary>
+        <search>
+          <label for="manual-search">Buscar en el manual</label>
+          <input id="manual-search" type="search" placeholder="Copias, DNS, instalación…" aria-controls="search-results">
+          <p id="search-status" role="status"></p>
+          <ul id="search-results" hidden></ul>
+        </search>
+        <nav aria-label="Temas del manual">
+          
+            
+              <a class="nav-home" href="index.html" >Inicio</a>
+            
+          
+            
+              <p class="nav-group">Empezar</p>
+              <ul>
+                <li><a href="PRIMEROS_PASOS.html" >Primeros pasos</a></li>
+              
+                <li><a href="USO_COMPLETO.html" >Manual de uso</a></li>
+              
+                <li><a href="EJEMPLOS.html" >Ejemplos completos</a></li>
+              
+                <li><a href="CAPTURAS.html" >Capturas del panel</a></li>
+              </ul>
+            
+          
+            
+              <p class="nav-group">Instalar</p>
+              <ul>
+                <li><a href="DESCARGAS_PUBLICAS.html" >Descargas públicas</a></li>
+              
+                <li><a href="LINUX_NATIVO.html" >Debian y Fedora</a></li>
+              
+                <li><a href="WINDOWS_SERVICIO.html" >Servicio de Windows</a></li>
+              
+                <li><a href="FLATPAK.html" >Flatpak</a></li>
+              
+                <li><a href="HOME_ASSISTANT.html" >Home Assistant</a></li>
+              
+                <li><a href="INTEGRACION_HA.html" >Entidades en Home Assistant</a></li>
+              
+                <li><a href="YUNOHOST.html" >YunoHost</a></li>
+              
+                <li><a href="ANDROID_USO.html" >Android</a></li>
+              
+                <li><a href="PRIVACIDAD_ANDROID.html" >Privacidad Android</a></li>
+              
+                <li><a href="ANDROID_CANALES.html" >Canales Android</a></li>
+              
+                <li><a href="INSTALACION_PRIVADA.html" >Acceso al Git privado</a></li>
+              
+                <li><a href="PLATAFORMAS.html" >Plataformas y contratos</a></li>
+              </ul>
+            
+          
+            
+              <p class="nav-group">Administrar</p>
+              <ul>
+                <li><a href="CONTROL_HEADSCALE.html" >Coordinador Headscale</a></li>
+              
+                <li><a href="RED_Y_CA_LAN.html" >Red, puertos y CA</a></li>
+              
+                <li><a href="CA-FEDERACION.html" >Confianza y federación</a></li>
+              
+                <li><a href="RECUPERAR_ACCESO.html" >Recuperar el acceso</a></li>
+              
+                <li><a href="SOLUCION_PROBLEMAS.html" >Resolver problemas</a></li>
+              </ul>
+            
+          
+            
+              <p class="nav-group">Desarrollar</p>
+              <ul>
+                <li><a href="EMPEZAR_DESARROLLO.html" >Empezar a desarrollar</a></li>
+              
+                <li><a href="ESTADO_DESARROLLO.html" >Estado de la siguiente entrega</a></li>
+              
+                <li><a href="SEGURIDAD.html" >Privacidad y limpieza</a></li>
+              
+                <li><a href="SEGURIDAD_PLATAFORMAS.html" aria-current="page">Protecciones por plataforma</a></li>
+              
+                <li><a href="CAMBIOS.html" >Cambios</a></li>
+              
+                <li><a href="ESTRUCTURA.html" >Estructura del proyecto</a></li>
+              
+                <li><a href="ARQUITECTURA.html" >Arquitectura y flujos</a></li>
+              
+                <li><a href="DESARROLLO.html" >Guía de contribución</a></li>
+              
+                <li><a href="CONTINUIDAD.html" >Continuar con otra IA</a></li>
+              
+                <li><a href="ANDROID_FDROID.html" >Publicar en F-Droid</a></li>
+              
+                <li><a href="ANDROID_PLAY.html" >Preparar Google Play</a></li>
+              
+                <li><a href="CATALOGO_YUNOHOST.html" >Mantenimiento YunoHost</a></li>
+              
+                <li><a href="MANUAL_WEB.html" >Editar y publicar el manual</a></li>
+              
+                <li><a href="PUBLICACION.html" >Publicación y repositorios</a></li>
+              
+                <li><a href="MIGRACION_REPOSITORIO.html" >Git y entregas</a></li>
+              
+                <li><a href="PRUEBAS.html" >Pruebas</a></li>
+              </ul>
+            
+          
+            
+              <p class="nav-group">Referencia</p>
+              <ul>
+                <li><a href="MODELOS_API.html" >Modelos de la API</a></li>
+              
+                <li><a href="API_CLI.html" >Guía API y CLI</a></li>
+              
+                <li><a href="PORTAL_Y_FEDERACION.html" >Portal y federación</a></li>
+              
+                <li><a href="HELPER_CA.html" >Helper de certificados</a></li>
+              
+                <li><a href="IDIOMAS_Y_REGISTROS.html" >Idiomas y registros</a></li>
+              
+                <li><a href="ANDROID.html" >Android por dentro</a></li>
+              
+                <li><a href="FEDERACION_WINDOWS.html" >Prueba entre Windows y Linux</a></li>
+              
+                <li><a href="LEEME_BINARIOS.html" >Paquetes de ejecutables</a></li>
+              
+                <li><a href="VERIFICACION_FINAL.html" >Validación y límites</a></li>
+              
+                <li><a href="LICENCIAS.html" >Licencias</a></li>
+              
+                <li><a href="ESCRITORIO_LICENCIAS.html" >Fuentes del escritorio</a></li>
+              
+                <li><a href="SUSCRIPCIONES.html" >Activación comercial</a></li>
+              </ul>
+            
+          
+        </nav>
+      </details>
+    </aside>
+    <main id="contenido" tabindex="-1">
+      <p class="breadcrumb"><a href="index.html">Manual</a><span aria-hidden="true"> / </span>Protecciones por plataforma</p>
+      <article class="prose"><h1 id="protecciones-por-plataforma">Protecciones por plataforma</h1>
+<p>El motor Go y el panel mantienen las mismas funciones. Cada paquete aplica el
+confinamiento de su sistema; una puntuación AppArmor de Home Assistant no se
+traslada a Android o Linux ni acredita por sí sola la seguridad del producto.</p>
+<h2 id="debian-fedora-y-yunohost">Debian, Fedora y YunoHost</h2>
+<p>El portal usa una cuenta sin privilegios, permisos privados y un sistema de
+archivos de solo lectura salvo sus datos y temporales. systemd elimina sus
+capacidades y bloquea nuevos namespaces, memoria simultáneamente escribible y
+ejecutable, montaje, depuración y operaciones de administración del núcleo.
+Oculta procesos de otros usuarios y protege reloj y nombre del anfitrión.</p>
+<p>Se conservan sockets Unix, IPv4, IPv6 y netlink para detectar interfaces,
+resolver nombres y comunicarse con el actuador. tsnet funciona en espacio de
+usuario; el portal no necesita NET_ADMIN ni acceso al dispositivo TUN.
+YunoHost mantiene visible <code>/home/yunohost.app</code> en modo de solo lectura y permite
+escribir únicamente en los datos de esta aplicación. NSS y el grupo <code>admins</code>
+siguen formando parte de la validación SSO.</p>
+<p>El actuador opcional que administra Headscale pertenece al administrador del
+anfitrión y usa otra unidad. No se le aplican a ciegas las capacidades vacías del
+portal: debe poder comprobar propietarios y ejecutar Headscale con su usuario.
+En Fedora no se desactiva SELinux ni se instala una política permisiva. Este
+cambio refuerza systemd; no introduce un dominio SELinux propio.</p>
+<h2 id="android">Android</h2>
+<p>El sistema conserva el aislamiento de la aplicación, Android Keystore y los
+archivos privados sin copia automática. La firma y las rutas de datos no cambian.
+El WebView impide acceso a archivos locales, contenido mixto y errores TLS.
+Los enlaces externos se abren en el navegador; importar y exportar usa el selector
+de documentos y permisos concedidos por el usuario.</p>
+<p>El puente de descargas no acepta un origen declarado como credencial. Solo el
+documento superior del panel local recibe una capacidad aleatoria encerrada en
+una función JavaScript, sin exponerla en <code>window</code>, HTML ni almacenamiento web.
+La navegación la revoca y cancela transferencias incompletas. Cada transferencia
+requiere además su propio identificador. Una exportación terminada pendiente de
+guardar conserva su mecanismo de recuperación. Esto no sustituye las defensas
+contra XSS ni concede acceso adicional a la API.</p>
+<h2 id="flatpak">Flatpak</h2>
+<p>El manifiesto conserva únicamente <code>--share=network</code>: no accede al hogar, SSH,
+archivos del anfitrión, TUN ni bus de sistema. Los archivos elegidos pasan por
+portales. El acceso de red es necesario para VPN, DNS, ACME y servicios LAN;
+también comparte el espacio de red del anfitrión y no equivale a aislar sockets
+abstractos Unix. No se solicita <code>flatpak-spawn --host</code>.</p>
+<p>La comprobación del panel loopback ignora proxies del entorno y no sigue
+redirecciones. Se conservan datos privados, bloqueo de instancia, reintentos y
+solicitud explícita de permiso de segundo plano. Las restricciones no autorizan
+instalar certificados en el almacén del anfitrión.</p>
+<h2 id="repetir-las-comprobaciones">Repetir las comprobaciones</h2>
+<p>Con un binario de pruebas compilado desde <code>src/</code>:</p>
+<pre tabindex="0"><code class="language-sh">CGO_ENABLED=0 go -C src test -c -o /tmp/gateway.test .
+sudo python3 tools/test_systemd_hardening.py --confirm-disposable-lab \
+  --template packaging/yunohost/conf/systemd.service --tests /tmp/gateway.test
+</code></pre>
+<p>Utiliza únicamente una VM de laboratorio. La herramienta crea una unidad y datos
+temporales propios, comprueba rechazos reales, SQLite WAL, NSS, TLS y sockets y
+corre pruebas Go de certificados, DNS y restauración. Retira su unidad y datos al
+terminar. La variante <code>--user --lab-root "$PWD/builds"</code> valida restricciones de
+una sesión Fedora con <code>PrivateUsers</code>; no equivale a instalar un servicio de
+sistema con RPM. Consulta <a href="ANDROID.html">pruebas Android</a> y la
+<a href="VERIFICACION_FINAL.html">validación de la entrega</a> para resultados y límites.</p></article>
+      <footer class="page-footer">
+        <p>Headscale Gateway · Gente del Condado · Documentación en español</p>
+        <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>
+        <a href="MANUAL_WEB.html">Cómo editar este manual</a>
+      </footer>
+    </main>
+    <aside class="page-toc">
+      <nav aria-label="En esta página"><p>En esta página</p><ul>
+        
+          <li><a href="#debian-fedora-y-yunohost">Debian, Fedora y YunoHost</a></li>
+        
+          <li><a href="#android">Android</a></li>
+        
+          <li><a href="#flatpak">Flatpak</a></li>
+        
+          <li><a href="#repetir-las-comprobaciones">Repetir las comprobaciones</a></li>
+        
+      </ul></nav>
+    </aside>
+  </div>
+</body>
+</html>
