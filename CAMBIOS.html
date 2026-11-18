@@ -160,31 +160,15 @@
     <main id="contenido" tabindex="-1">
       <p class="breadcrumb"><a href="index.html">Manual</a><span aria-hidden="true"> / </span>Cambios</p>
       <article class="prose"><h1 id="cambios-de-headscale-gateway">Cambios de Headscale Gateway</h1>
-<h2 id="1419">1.4.19</h2>
+<h2 id="mantenimiento-posterior-a-1417">Mantenimiento posterior a 1.4.17</h2>
 <ul>
-<li>Refuerza el servicio sin privilegios de Debian, Fedora y YunoHost: capacidades
-  vacías, restricciones de namespaces, llamadas al núcleo y memoria W^X;
-  conserva SQLite, NSS, TLS y sockets Unix/IP/netlink.</li>
-<li>Android autoriza las descargas con una capacidad por documento local, revocada
-  al navegar, en lugar de confiar en un origen declarado por JavaScript.
-  Conserva exportaciones, firma y datos de la aplicación.</li>
-<li>Flatpak comprueba el panel loopback sin proxies ni redirecciones; mantiene
-  únicamente el permiso de red y los portales del escritorio.</li>
-<li>Añade pruebas repetibles y documentación de las protecciones y sus límites.
-  Play Store permanece solo preparado.</li>
-</ul>
-<h2 id="1418">1.4.18</h2>
-<ul>
-<li>Perfil AppArmor propio para el complemento Home Assistant, en modo estricto,
-  con clasificación 7/8 comprobada en HAOS amd64 y aarch64 emulado.</li>
-<li>Restringe ejecución y escritura a los programas y directorios necesarios;
-  conserva red LAN, multicast, Ingress, VPN, certificados y datos del Gateway.</li>
-<li>Desactiva la caché de Python sobre los programas de solo lectura.</li>
-<li>Añade aceptación repetible de AppArmor, SSO/CSRF, copias y exportación;
-  documenta conservación de claves y opciones tras reiniciar y apagar/encender.</li>
-<li>La guía de Home Assistant consulta el puerto web real de cada instalación.</li>
-<li>Conserva firma Android, licencias y reutilización de fuentes Electron.
-  Play Store continúa solo preparado; no se envía ninguna aplicación a la tienda.</li>
+<li>
+<p>Diagnóstico de instalación por etapa y código HTTP, sin revelar credenciales.</p>
+</li>
+<li>
+<p>Retención automática de dos versiones completas en GitHub y temporizador local para Forgejo.</p>
+</li>
+<li>Protección de todos los fuentes reutilizables Electron, versiones pendientes y referencias Git.</li>
 </ul>
 <h2 id="1417">1.4.17</h2>
 <ul>
@@ -237,9 +221,7 @@ que todos sus instaladores se hayan publicado: consulta sus comprobaciones.</p><
     <aside class="page-toc">
       <nav aria-label="En esta página"><p>En esta página</p><ul>
         
-          <li><a href="#1419">1.4.19</a></li>
-        
-          <li><a href="#1418">1.4.18</a></li>
+          <li><a href="#mantenimiento-posterior-a-1417">Mantenimiento posterior a 1.4.17</a></li>
         
           <li><a href="#1417">1.4.17</a></li>
         
