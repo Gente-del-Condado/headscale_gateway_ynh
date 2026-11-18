@@ -51,3 +51,7 @@ En Android, activa **Conectar aplicaciones** cuando el destino lo requiera.
 
 Autor: **Gente del Condado**. Soporte: [headscale-gateway@gentedelcondado.es](mailto:headscale-gateway@gentedelcondado.es).
 [Manual en línea](https://gente-del-condado.github.io/headscale_gateway_ynh/).
+
+El complemento incluye un perfil AppArmor propio en modo estricto, sin permisos
+TUN ni NET_ADMIN. En sistemas compatibles con el perfil cargado, la clasificación
+comprobada es 7/8. Consulta en `DOCS.md` su alcance y la aceptación de laboratorio.

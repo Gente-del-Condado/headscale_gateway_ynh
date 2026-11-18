@@ -8,6 +8,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 
 OWNER = 'Gente-del-Condado'
 GENERAL = OWNER + '/headscale_gateway_releases'
@@ -83,9 +84,23 @@ def publish(root, output, source_sha):
         ha = clone('headscale_gateway_ha')
         run([sys.executable, 'tools/publish_ha_repository.py', ha, '--domain', 'headscale_gateway', '--readme', 'packaging/hacs/README.md'], root)
         commit_and_push(ha, version)
-        apps = clone('Mis_app_ha')
+        apps = clone('Mis_app_ha', branch='build-source')
         run(['bash', 'tools/publish_homeassistant_store.sh', apps], root)
-        commit_and_push(apps, version)
+        commit_and_push(apps, version, 'build-source')
+        # No marcar completa la entrega hasta que la tienda anuncie la imagen
+        # probada de este árbol. No hay credenciales de GHCR en este publicador.
+        expected_tree = subprocess.check_output(['git', 'rev-parse', 'HEAD:addons/headscale_gateway'], cwd=root, text=True).strip()
+        deadline = time.monotonic() + 1800
+        while True:
+            check = subprocess.run(['gh', 'api', 'repos/' + OWNER + '/Mis_app_ha/contents/.images/headscale_gateway.json?ref=main',
+                                    '-H', 'Accept: application/vnd.github.raw+json'], capture_output=True, text=True)
+            if check.returncode == 0:
+                record = json.loads(check.stdout)
+                if record.get('tree') == expected_tree and record.get('version') == version:
+                    break
+            if time.monotonic() >= deadline:
+                raise ValueError('La imagen Home Assistant aún no está verificada y publicada; no se marca completa la entrega')
+            time.sleep(20)
         components = clone('Mis_componente_ha')
         destination = components / 'headscale_gateway'
         if destination.is_symlink():

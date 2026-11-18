@@ -2,7 +2,7 @@ name: Compilar y publicar desde Forgejo
 'on':
   push:
     branches: [main]
-    paths: ['automation/**', '.github/workflows/release-public.yml']
+    paths: ['automation/**', '!automation/manual-*.md', '!automation/release_retention.py', '!automation/test_release_retention.py', '.github/workflows/release-public.yml']
   schedule:
     - cron: '17 * * * *'
 permissions:
@@ -197,3 +197,15 @@ jobs:
           FORGEJO_RELEASE_READ_TOKEN: ${{ secrets.FORGEJO_RELEASE_READ_TOKEN }}
           SOURCE_SHA: ${{ needs.plan.outputs.sha }}
         run: python3 automation/publish_public.py --source source --output "$RUNNER_TEMP/public-release" --sha "$SOURCE_SHA"
+
+  manual:
+    needs: release
+    uses: ./.github/workflows/manual-current.yml
+    secrets:
+      FORGEJO_RELEASE_READ_TOKEN: ${{ secrets.FORGEJO_RELEASE_READ_TOKEN }}
+      PUBLICATION_TOKEN: ${{ secrets.PUBLICATION_TOKEN }}
+  retention:
+    needs: release
+    uses: ./.github/workflows/release-retention.yml
+    secrets:
+      PUBLICATION_TOKEN: ${{ secrets.PUBLICATION_TOKEN }}

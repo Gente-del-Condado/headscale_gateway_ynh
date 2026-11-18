@@ -1,0 +1,31 @@
+name: Conservar dos entregas verificadas de Gateway
+'on':
+  push:
+    branches: [main]
+    paths: ['automation/release_retention.py', 'automation/test_release_retention.py', '.github/workflows/release-retention.yml']
+  workflow_call:
+    secrets:
+      PUBLICATION_TOKEN:
+        required: true
+  schedule:
+    - cron: '43 4 * * *'
+permissions:
+  contents: read
+concurrency:
+  group: gateway-release-retention
+  cancel-in-progress: false
+jobs:
+  retention:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Probar protección y planificación sin credenciales
+        run: python3 -B -m unittest discover -s automation -p 'test_release_retention.py'
+      - name: Limpiar solo releases de los cuatro destinos públicos
+        env:
+          GH_TOKEN: ${{ secrets.PUBLICATION_TOKEN }}
+        run: python3 automation/release_retention.py --forge github --apply
+

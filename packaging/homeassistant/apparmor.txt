@@ -1,0 +1,60 @@
+#include <tunables/global>
+
+# Python prepara el arranque y cede el proceso al motor Go. No usa S6 ni shell.
+profile headscale_gateway flags=(attach_disconnected,mediate_deleted) {
+  #include <abstractions/base>
+
+  # HTTPS, DNS, tsnet y descubrimiento multicast sin dispositivos TUN ni sockets IP raw.
+  network inet stream,
+  network inet dgram,
+  network inet6 stream,
+  network inet6 dgram,
+  network netlink raw,
+  network unix stream,
+  network unix dgram,
+  capability net_bind_service,
+
+  # La abstracción base admite las señales de Docker y del propio perfil.
+
+  / r,
+  /dev/init rix,
+  /sbin/docker-init rix,
+  /usr/local/bin/python3{,.14} rix,
+  /usr/local/bin/headscale-gateway rix,
+  /usr/local/lib/libpython3.14.so{,.1.0} mr,
+  /usr/local/lib/python3.14/ r,
+  /usr/local/lib/python3.14/** mr,
+  /usr/local/lib/headscale-gateway/ r,
+  /usr/local/lib/headscale-gateway/** r,
+  /usr/share/headscale-gateway/** r,
+  /usr/share/licenses/headscale-gateway/** r,
+  /usr/share/zoneinfo.zip r,
+
+  # Resolver, confianza TLS y consulta de interfaces; sin escribir configuración del sistema.
+  /etc/{hosts,hostname,resolv.conf,nsswitch.conf,passwd,group,services,protocols} r,
+  /etc/ssl/{,**} r,
+  /proc/ r,
+  /proc/sys/net/** r,
+  /proc/sys/kernel/{hostname,osrelease,ostype} r,
+  /proc/sys/vm/overcommit_memory r,
+  /proc/net/** r,
+  owner /proc/[0-9]*/{stat,status,mountinfo,mounts,cgroup,limits,cmdline,attr/current} r,
+  owner /proc/[0-9]*/net/** r,
+  owner /proc/[0-9]*/fd/ r,
+  owner /proc/[0-9]*/task/ r,
+  owner /proc/[0-9]*/task/[0-9]*/{stat,status,comm} r,
+  /sys/devices/system/cpu/{,**} r,
+  /sys/fs/cgroup/{cpu.max,cpu.cfs_quota_us,cpu.cfs_period_us} r,
+  /sys/class/net/{,**} r,
+  /sys/devices/virtual/net/{,**} r,
+  /sys/kernel/mm/transparent_hugepage/hpage_pmd_size r,
+  /dev/{null,zero} rw,
+
+  # Todo estado persistente, incluido SQLite, CA, tsnet y copias, queda en /data.
+  /data/ rw,
+  /data/** rwk,
+  /run/headscale-gateway/ rw,
+  /run/headscale-gateway/** rwk,
+  /tmp/ rw,
+  /tmp/** rwk,
+}

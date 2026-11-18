@@ -1,3 +1,16 @@
+# 1.4.18
+
+- Perfil AppArmor propio en enforce; clasificación 7/8 comprobada en HAOS amd64 y ARM64 emulado.
+- Conserva Ingress, descubrimiento LAN, certificados, copias, identidad y configuración.
+- Bloquea shell, lectura de shadow y escritura sobre los programas; Python no escribe caché en bibliotecas.
+- Pruebas reales de panel, SSO/CSRF, copias, exportación y reinicio con conservación de claves.
+- La guía explica cómo consultar el puerto real de Home Assistant.
+
+# 1.4.17
+
+- Distribución mediante imágenes GHCR precompiladas amd64 y aarch64.
+- Fuentes Electron reutilizables y guías de descarga actualizadas.
+
 # 1.4.16
 
 - Corrige el contrato de rutas del controlador Linux al validar desde Windows.

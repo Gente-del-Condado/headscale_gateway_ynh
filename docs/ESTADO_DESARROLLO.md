@@ -1,5 +1,48 @@
 # Estado de desarrollo y siguiente entrega
 
+## 1.4.18: AppArmor preparado para publicación
+
+Se incorpora un perfil restrictivo al paquete y al instalador generado. Probado
+con Supervisor real en una copia aislada de Home Assistant OS 18.4, amd64:
+perfil cargado en enforce, protección activa y clasificación 7/8. Se conservan
+host_network, Ingress y el motor Go; no se solicitan capacidades nuevas.
+Python desactiva la caché sobre sus bibliotecas de solo lectura.
+
+Pasaron las peticiones reales de Ingress/SSO/CSRF, PKI, descubrimiento, copia
+SQLite cifrada, descarga y exportación del perfil. Las pruebas Go de TLS local,
+renovación, DNS, restauración e identidad se ejecutaron dentro del perfil.
+El reinicio conservó la clave maestra y las opciones. Las comprobaciones
+negativas bloquearon shadow, escritura sobre programas y ejecución de shell.
+Estos ensayos no acreditan una conexión a Headscale ni una emisión ACME externa.
+El perfil también pasó en una VM nueva
+HAOS 18.4 aarch64 emulada con QEMU/TCG, Supervisor 2026.11.0: 7/8, enforce,
+las 14 pruebas Go bajo confinamiento y el comprobador de panel y bloqueos.
+El reinicio completo de esa VM conservó SSH y claves y arrancó Gateway
+automáticamente con el perfil activo. Core quedó listo para el alta inicial.
+La aplicación existente de la VM amd64 no se modificó.
+VERSION y los paquetes están sincronizados en 1.4.18. La solicitud de fusión
+y la release estable de Forgejo activarán el recorrido automático de GitHub.
+La validación de la tienda y del paquete publicado se registrará al completarse.
+Play Store permanece solo preparado.
+
+
+## Mantenimiento de Actions (sin nueva versión del motor)
+
+El control público mantiene app, integración y tiendas desde un SHA de Forgejo.
+El plan evita trabajos sin cambios; las imágenes solo se solicitan si hay árboles
+pendientes. Las comprobaciones unitarias cubren propiedad de archivos, sumas,
+etiquetas inmutables, conservación de otros componentes y planificación sin
+cambios. Los flujos antiguos se retiran por solicitudes de fusión en el origen.
+El manual sigue privado en Olivar y no se activa ningún servicio de laboratorio.
+
+Comprobado el flujo público [44213839402](https://github.com/Gente-del-Condado/Mis_app_ha/actions/runs/44213839402):
+PiVigia y JackSignal superaron calidad; se publicaron sus dos distribuciones y
+las dos carpetas del catálogo con recibos de SHA y versión. No hubo imágenes
+pendientes y el trabajo de imágenes se omitió. Los ensayos locales pasaron 100
+pruebas generales, 18 del controlador de tienda y 21 del controlador de releases;
+el manual estricto pasó 50 páginas y 3171 enlaces. Estas pruebas de mantenimiento
+no equivalen a actualizar instalaciones reales de las aplicaciones.
+
 ## 1.4.17: entrega de mantenimiento
 
 La entrega incorpora la separación y reutilización de fuentes de Electron y las

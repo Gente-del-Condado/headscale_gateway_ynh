@@ -14,6 +14,21 @@ sys.path.insert(0, str(ROOT / 'packaging/common'))
 
 
 class PlatformPackagingTest(unittest.TestCase):
+    def test_homeassistant_apparmor_is_enforced_and_distributed(self):
+        source = (ROOT / 'packaging/homeassistant/apparmor.txt').read_text()
+        self.assertEqual(source, (ROOT / 'addons/headscale_gateway/apparmor.txt').read_text())
+        profiles = [line for line in source.splitlines() if line.startswith('profile ')]
+        self.assertEqual(len(profiles), 1, 'Supervisor necesita exactamente un perfil principal')
+        self.assertTrue(profiles[0].startswith('profile headscale_gateway flags='))
+        self.assertNotIn('complain', profiles[0], 'La entrega debe bloquear, no solo registrar')
+        rules = [line.strip() for line in source.splitlines() if not line.lstrip().startswith('#')]
+        for broad in ('file,', 'capability,', 'network,', '/** rw,', '/** rwix,'):
+            self.assertNotIn(broad, rules, 'No conceder acceso global para mejorar la puntuación')
+        self.assertFalse(any(' ux' in line or ' Ux' in line for line in rules))
+        dockerfile = (ROOT / 'packaging/homeassistant/Dockerfile').read_text()
+        self.assertIn('PYTHONDONTWRITEBYTECODE=1', dockerfile,
+                      'Python no debe necesitar escribir caché sobre los programas')
+
     def test_yunohost_restore_repairs_private_startup_and_rejects_symlinks(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

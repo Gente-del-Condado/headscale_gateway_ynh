@@ -1,8 +1,11 @@
 name: Actualizar guía de publicación tras la entrega
 'on':
-  workflow_run:
-    workflows: [Compilar y publicar desde Forgejo]
-    types: [completed]
+  workflow_call:
+    secrets:
+      FORGEJO_RELEASE_READ_TOKEN:
+        required: true
+      PUBLICATION_TOKEN:
+        required: true
   push:
     branches: [main]
     paths: ['automation/manual-*.md', '.github/workflows/manual-current.yml']
@@ -13,7 +16,6 @@ concurrency:
   cancel-in-progress: false
 jobs:
   manual:
-    if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.head_repository.full_name == github.repository)
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:

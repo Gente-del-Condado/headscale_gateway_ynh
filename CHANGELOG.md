@@ -1,5 +1,19 @@
 # Cambios de Headscale Gateway
 
+## 1.4.18
+
+- Perfil AppArmor propio para el complemento Home Assistant, en modo estricto,
+  con clasificación 7/8 comprobada en HAOS amd64 y aarch64 emulado.
+- Restringe ejecución y escritura a los programas y directorios necesarios;
+  conserva red LAN, multicast, Ingress, VPN, certificados y datos del Gateway.
+- Desactiva la caché de Python sobre los programas de solo lectura.
+- Añade aceptación repetible de AppArmor, SSO/CSRF, copias y exportación;
+  documenta conservación de claves y opciones tras reiniciar y apagar/encender.
+- La guía de Home Assistant consulta el puerto web real de cada instalación.
+- Conserva firma Android, licencias y reutilización de fuentes Electron.
+  Play Store continúa solo preparado; no se envía ninguna aplicación a la tienda.
+
+
 ## 1.4.17
 
 - Publicación de mantenimiento: conserva el motor y la firma Android existentes.

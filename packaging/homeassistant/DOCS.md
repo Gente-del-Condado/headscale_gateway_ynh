@@ -76,6 +76,56 @@ estos datos, el usuario no es administrador o la petición no procede del proxy
 confiable, se deniega el acceso. Mantén Home Assistant y Supervisor actualizados
 si no se reciben las cabeceras de identidad.
 
+## Confinamiento AppArmor
+
+El paquete incluye `apparmor.txt`, un perfil propio en modo **enforce** que
+Supervisor carga al instalar o actualizar. Mantén activado el modo de protección.
+Permite ejecutar Python y el motor Go, consultar el resolver y las CA del
+contenedor, utilizar TCP/UDP y netlink y guardar el estado en `/data/`.
+Los únicos directorios temporales escribibles son `/tmp/` y
+`/run/headscale-gateway/`. No permite ejecutar una shell, modificar los programas,
+leer `/etc/shadow` ni administrar Docker o el anfitrión.
+
+El perfil conserva la red del anfitrión para servicios LAN y descubrimiento
+multicast; no solicita TUN, `NET_ADMIN` ni acceso completo. Las CA propias,
+certificados, claves, identidad VPN, SQLite y copias permanecen en `/data/`.
+La confianza de los equipos clientes sigue configurándose en esos equipos;
+este perfil no instala certificados en Home Assistant OS.
+
+En el laboratorio con Supervisor y AppArmor activos la clasificación pasa de
+**6/8 a 7/8**. La tienda puede mostrar todavía 6 antes de instalar el perfil;
+la puntuación efectiva depende de Supervisor y del sistema anfitrión. Una
+instalación anterior no cambia hasta recibir el paquete actualizado. Si el
+perfil no puede cargarse, revisa el registro de Supervisor; no lo soluciones
+con `apparmor: false` ni desactivando la protección.
+
+Para mantenerlo, prueba una **copia local desechable** con slug
+`headscale_gateway_apparmor_lab`, puertos libres, nombre propio y datos nuevos.
+Nunca reutilices la SQLite ni la identidad de un Gateway activo. Supervisor
+sustituye automáticamente el nombre principal del perfil por el ID instalado.
+No basta con recargar la tienda para recargar un perfil de una app ya instalada:
+verifica la carga durante instalación/actualización y el perfil efectivo del
+contenedor. La imagen de producción desactiva la caché de Python para evitar
+escrituras sobre los programas.
+
+El comprobador `tools/check_ha_apparmor.py` del principal ofrece dos modos:
+
+- `--confirm-disposable-lab --confinement`: ejecútalo con `python3 -B` dentro
+  del contenedor de laboratorio, con una marca vacía `/data/.hgw-apparmor-lab`.
+  Comprueba **enforce**, SQLite WAL, temporales, DNS, multicast y denegaciones
+  reales de lectura, escritura y ejecución fuera de los permisos previstos.
+- `--confirm-disposable-lab --panel-address HOST:PUERTO`: ejecútalo desde el
+  contenedor Supervisor, contra el puerto Ingress dinámico de la copia aislada.
+  Comprueba SSO, CSRF, rechazo de no administradores, panel, PKI,
+  descubrimiento, creación y descarga de copia cifrada y exportación cifrada.
+  Crea datos y una contraseña ficticia de respaldo solo para ese laboratorio.
+
+Consulta en el anfitrión `journalctl _TRANSPORT=audit` y filtra por el ID de la
+copia aislada. Las tres denegaciones del ensayo negativo son esperadas; cualquier
+otra se investiga. Repite con una conexión Headscale y ACME de laboratorio cuando
+cambien esas funciones. Tras terminar, retira la copia aislada y sus datos;
+no distribuyas un perfil en modo `complain` ni añadas permisos globales.
+
 ## Instalar desde Forgejo privado
 
 En la terminal de Home Assistant, configura primero una clave SSH con permiso
@@ -171,8 +221,9 @@ puerto de Ingress asignado dinámicamente y solo acepta a Supervisor en
 `172.30.32.2`. No publiques ese puerto directamente.
 
 Para publicar el propio Home Assistant como servicio del Gateway, utiliza la
-dirección de destino que sea alcanzable desde el complemento; con esta red,
-normalmente será `http://127.0.0.1:8123`. Configura `http.use_x_forwarded_for` y
+dirección de destino que sea alcanzable desde el complemento. Consulta el puerto
+real con `ha core info`: con esta red puede ser `http://127.0.0.1` (puerto 80)
+o `http://127.0.0.1:8123`, según la instalación. Configura `http.use_x_forwarded_for` y
 `http.trusted_proxies` en Home Assistant para la IP real de origen del Gateway,
 y comprueba `/api/websocket`. Esta publicación es independiente del acceso
 administrativo mediante Ingress.

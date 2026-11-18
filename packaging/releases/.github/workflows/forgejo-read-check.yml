@@ -1,8 +1,6 @@
 name: Verificar lectura privada de Forgejo
 'on':
-  push:
-    branches: [main]
-    paths: ['automation/forgejo_source.py', '.github/workflows/forgejo-read-check.yml']
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:

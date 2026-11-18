@@ -121,8 +121,58 @@ máquinas virtuales ni compilaciones grandes en el Linux del usuario.
 
 ## PiVigia y JackSignal
 
-Sus flujos reciben el espejo desde Forgejo y publican directamente en GitHub
-tras calidad correcta del mismo SHA de main. Los pull requests no publican.
-Sus secretos PUBLICATION_TOKEN permanecen en los respectivos principales
-privados, limitados a sus destinos públicos. Esta migración del compilador de
-Headscale no cambia sus credenciales ni sus flujos.
+Forgejo conserva los dos principales privados y GitHub sus espejos. La tienda
+pública consulta el SHA de main y ejecuta calidad sin credenciales antes de
+preparar aplicaciones e integraciones. Las distribuciones dedicadas y
+Mis_componente_ha se publican con DISTRIBUTION_TOKEN, limitado a esos tres
+destinos públicos. Los pull requests no publican y no hay escritura de regreso
+a Forgejo. Los publicadores antiguos de los espejos se han retirado.
+
+## Imágenes precompiladas de Home Assistant
+
+Forgejo sigue siendo el origen y GitHub el espejo. El publicador entrega el
+contenido aprobado a `build-source` de `Mis_app_ha`. Un único workflow de esa
+tienda construye imágenes nativas `amd64` y `aarch64`, ejecuta las pruebas de
+arranque con datos desechables y crea un índice multi arquitectura en GHCR.
+Solo después de verificar su descarga anónima actualiza la aplicación en `main`
+y añade `image:`. La versión anterior sigue instalable mientras se prepara la nueva.
+
+Los Dockerfile y fuentes se conservan; Home Assistant descarga la imagen preparada.
+No se cambian slugs, opciones, volúmenes, permisos, datos ni credenciales. Una imagen
+ya distribuida no se sustituye con otro contenido: aumenta la versión al cambiar
+el contexto de compilación. El cambio inicial publica las versiones actuales sin
+forzar actualizaciones ni reinstalaciones de los equipos existentes.
+
+El controlador común se mantiene en `packaging/homeassistant-store/` de
+`headscale_gateway` en Forgejo y se exporta a `.github/ha-images/` y al workflow
+de `Mis_app_ha`. No escribe en los principales ni devuelve cambios a Forgejo.
+
+`Verificar aplicaciones desde Forgejo` consulta main cada hora con
+FORGEJO_APPS_READ_TOKEN de solo lectura. El plan compara los recibos antes de
+descargar los proyectos. Una validación correcta publica los contextos y llama
+al workflow reutilizable de imágenes solo cuando hay árboles pendientes. Así
+funciona también con commits escritos por GITHUB_TOKEN y se recuperan intentos
+de imágenes fallidos sin repetir la calidad ya validada.
+
+## Actions simplificadas
+
+La tienda pública comprueba primero SHA y recibos de PiVigia/JackSignal. Una
+consulta sin cambios no descarga fuentes ni ejecuta calidad/publicación. Las
+integraciones se exportan con sumas y se publican en sus repositorios dedicados
+y Mis_componente_ha; los demás proyectos se conservan. DISTRIBUTION_TOKEN concede
+Contents de escritura únicamente a esos tres destinos públicos. Los secretos
+anteriores de los principales privados no se reutilizan ni se extraen.
+
+Los antiguos publicadores privados se retiran cuando este recorrido ha pasado
+sus pruebas. La CI de los espejos queda para pull requests y ensayos manuales,
+sin duplicar cada réplica de main. Headscale conserva las pruebas nativas de
+Windows, Debian, Android, integración HA y contenedores; verify.sh se ejecuta una
+vez por revisión y los paquetes dependen de su resultado.
+
+El manual y la retención GitHub son workflows reutilizables invocados después
+de una publicación real, sin engancharse al éxito de un plan sin cambios. Las
+guías se actualizan también por cambios documentales, excluidos del disparador
+del compilador. La retención conserva su tarea diaria y las protecciones de
+fuentes Electron. Esta simplificación no activa la limpieza local de YunoHost
+cancelada anteriormente. La lectura de Forgejo queda como diagnóstico manual y
+se retira la comprobación inicial que solo imprimía el estado del runner.

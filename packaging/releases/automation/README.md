@@ -4,8 +4,7 @@ Este directorio y `../.github/workflows/` son fuentes del control de publicació
 que se exporta a `Gente-del-Condado/headscale_gateway_releases`. Se mantienen
 primero en Forgejo; el control no escribe en Forgejo ni replica su historial.
 
-La primera comprobación `Verificar lectura privada de Forgejo` se activa al
-actualizar el control en main. Consulta la API con un token de solo lectura,
+La primera comprobación `Verificar lectura privada de Forgejo` es un diagnóstico manual para el mantenedor. Consulta la API con un token de solo lectura,
 selecciona una release estable y descarga su commit exacto. Rechaza borradores,
 prereleases, cambios de etiqueta, rutas externas y enlaces en el archivo. Valida
 VERSION y el manifiesto de los instaladores generados. No publica binarios.
@@ -129,3 +128,12 @@ principal), `manual-downloads.md` (README de releases), `manual-desktop.md`
 correspondientes de docs/). También se exportan `manual-state.md`,
 `manual-changes.md` y `manual-verification.md` desde el estado, changelog y
 validación vigentes. Se copian desde Forgejo al actualizar el control.
+
+
+## Evitar ejecuciones repetidas
+
+`release-public.yml` excluye las guías y el controlador de retención de su filtro
+de cambios. Invoca los workflows reutilizables del manual y retención solo si
+termina el trabajo de publicación real. Las guías conservan su propio disparador;
+la retención conserva su programación diaria. El chequeo inicial de runner se
+ha retirado. No se reactiva ningún temporizador ni credencial de YunoHost.
