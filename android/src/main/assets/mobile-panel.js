@@ -50,7 +50,7 @@
       const blob=blobs.get(url);blobs.delete(url);
       const response=blob?new Response(blob):await fetch(url,{credentials:'same-origin'});
       if(!response.ok)throw Error('No se ha podido descargar el archivo');
-      id=DescargasGateway.beginBlob(location.origin,name||'exportacion-gateway.hgw',response.headers.get('Content-Type')||'application/octet-stream');
+      id=DescargasGateway.beginBlob(androidDocumentCapability,name||'exportacion-gateway.hgw',response.headers.get('Content-Type')||'application/octet-stream');
       if(!id)return;
       const reader=response.body.getReader();
       for(;;) {
@@ -75,5 +75,5 @@
   const click=HTMLAnchorElement.prototype.click;
   HTMLAnchorElement.prototype.click=function(...args){if(!intercept(this))return click.apply(this,args);};
   document.addEventListener('click',event=>{if(intercept(event.target.closest?.('a[download]')))event.preventDefault();},true);
-  window.addEventListener('hgw-android-certificate-settings',()=>DescargasGateway.securitySettings(location.origin));
+  window.addEventListener('hgw-android-certificate-settings',()=>DescargasGateway.securitySettings(androidDocumentCapability));
 })();

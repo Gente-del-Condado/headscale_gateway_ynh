@@ -26,7 +26,7 @@ Descarga el archivo `.flatpak` de la release pública correspondiente, comprueba
 su suma e instala:
 
 ```sh
-flatpak install --user ./headscale-gateway-1.4.18-x86_64.flatpak
+flatpak install --user ./headscale-gateway-1.4.19-x86_64.flatpak
 flatpak run es.gentedelcondado.HeadscaleGateway
 ```
 
@@ -43,7 +43,7 @@ IA: no se presenta como apto para solicitar inclusión ni se envía una solicitu
 
 ## Construcción
 
-El manifiesto toma binarios 1.4.18 verificados de los recursos públicos YunoHost.
+El manifiesto toma binarios 1.4.19 verificados de los recursos públicos YunoHost.
 Los fuentes completos del motor y sus dependencias están en `source.tar.gz`
 de esa misma release; los fuentes completos del proyecto se publican aparte.
 No reconstruye ni modifica el motor para Flatpak. `flatpak-builder` construye el
@@ -92,3 +92,9 @@ retirar el arranque automático revisa los permisos de aplicaciones de tu escrit
 Los datos siguen dentro de los datos privados de Flatpak. Si existe una instalación
 anterior, primero detén todas sus instancias; el asistente pide confirmarlo antes
 de adoptar la misma SQLite, identidad y credenciales, sin restablecerlas.
+
+## Protecciones de la plataforma
+
+Consulta las [protecciones y sus límites](https://gente-del-condado.github.io/headscale_gateway_ynh/SEGURIDAD_PLATAFORMAS.html): aislamiento del servicio,
+autorización del contenedor Android y permisos Flatpak. Las actualizaciones
+conservan los datos y la identidad; no requieren desactivar protecciones del sistema.

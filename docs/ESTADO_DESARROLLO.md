@@ -1,5 +1,42 @@
 # Estado de desarrollo y siguiente entrega
 
+## 1.4.19: protecciones por plataforma validadas
+
+El portal Linux incorpora restricciones systemd adicionales sin ampliar sus
+privilegios. El actuador opcional de Headscale conserva su unidad independiente.
+Android usa capacidades temporales del documento superior para sus descargas;
+Flatpak mantiene solo red y comprueba loopback sin usar proxies del entorno.
+
+Han pasado la suite general, Lint Android, compilación de motores Android arm64
+y x86_64, pruebas del puente y exportaciones en la tablet física, y pruebas del
+motor bajo las unidades YunoHost/Debian y una sesión Fedora con aislamiento.
+El Flatpak de laboratorio instalado usa permisos efectivos de red únicamente;
+conserva datos privados y ejecuta las pruebas TLS/DNS/restauración.
+La instalación/reinstalación y retirada de DEB/RPM en contenedores conserva datos.
+Waydroid no se ha utilizado. No se cambian recursos ni red de las VM.
+
+El instalador YunoHost encontró repositorios APT inaccesibles en la VM. Las
+dependencias exigidas ya estaban instaladas. Para el ensayo se retiró únicamente
+su aprovisionamiento APT de una copia del manifiesto y se sirvieron los recursos
+por loopback, conservando sumas y scripts. Esta adaptación del laboratorio no
+se publica; el paquete de producción conserva sus recursos APT y URL originales.
+La instalación anterior y la semilla de SSO, configuración, servicios y copia
+cifrada pasaron. El primer intento de actualización se bloqueó durante su copia
+previa con un fallo del kernel 6.1.0-55 en ext4. Tras autorización del usuario se
+arrancó el kernel 6.1.0-54 ya instalado, solo para ese arranque; no se eliminaron
+kernels ni se modificaron RAM, CPU o red. Un archivo de metadatos de la primera
+copia quedó vacío tras el fallo; se conservó como diagnóstico y se creó una copia
+ficticia nueva con la misma clave antes de repetir la aceptación.
+
+Con 6.1.0-54 pasó la actualización real 1.4.18~ynh1 → 1.4.19~ynh1. Se verificaron
+SSO, rechazo de secreto de proxy incorrecto, servicios, ajustes, huellas de clave
+maestra y arranque, descarga cifrada, PKI, descubrimiento y exportación portable.
+La adaptación sin aprovisionamiento APT solo afecta a la copia del laboratorio;
+el paquete publicado conserva dependencias y URL de producción. La VM quedó con
+la aplicación de laboratorio activa. La selección de kernel no cambia el valor
+predeterminado para próximos arranques. Play Store permanece solo preparado.
+La publicación se tramita por solicitud de fusión en Forgejo.
+
 ## 1.4.18: AppArmor preparado para publicación
 
 Se incorpora un perfil restrictivo al paquete y al instalador generado. Probado

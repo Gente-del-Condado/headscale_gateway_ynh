@@ -152,3 +152,18 @@ también el certificado SHA-256 de ambas APK con `apksigner verify --print-certs
 Esto no sustituye una prueba de reconexión VPN ni una restauración real.
 Al acabar retira únicamente los paquetes release y sonda que instaló esta prueba;
 no elimines `.dev`, `.lab` ni los datos de otras aplicaciones.
+
+## Seguridad del puente sin un Headscale externo
+
+En la APK `.lab` aislada, con ambas APK instaladas, ejecuta:
+
+```sh
+adb -s "$ANDROID_SERIAL" shell am instrument -w -e security true \
+  org.headscalegateway.android.lab.test/org.headscalegateway.android.SmokeInstrumentation
+```
+
+Exige `ANDROID_SEGURIDAD_OK`. Comprueba que no basta declarar el origen local,
+que navegar revoca la autorización y las transferencias abiertas, y que una
+autorización antigua se rechaza. Exporta un blob y una respuesta de API mediante
+ContentResolver, conservando nombre y bytes. No cambia la VPN ni los datos de la
+aplicación habitual. Selecciona siempre el serial físico; no utiliza otro emulador.

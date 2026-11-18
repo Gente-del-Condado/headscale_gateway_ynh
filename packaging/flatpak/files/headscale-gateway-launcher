@@ -50,12 +50,13 @@ def wait_ready(url, child=None):
     # La comprobación no usa credenciales ni sigue redirecciones externas.
     class NoRedirect(urllib.request.HTTPRedirectHandler):
         def redirect_request(self,*args,**kwargs): return None
-    opener = urllib.request.build_opener(NoRedirect)
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), NoRedirect)
     for _ in range(60):
         if child is not None and child.poll() is not None: raise RuntimeError('El motor no pudo iniciarse. Revisa los registros privados y el manual.')
         try:
             with opener.open(url,timeout=1) as response:
                 if response.status == 200: return
+        except urllib.error.HTTPError as error: error.close()
         except (OSError,urllib.error.URLError): pass
         time.sleep(.25)
     raise RuntimeError('El panel local no está disponible. Revisa el servicio y sus registros.')

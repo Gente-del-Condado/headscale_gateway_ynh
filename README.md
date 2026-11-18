@@ -208,3 +208,9 @@ DNS de la Tailnet, restricciones OIDC, registros dinámicos y observación de no
 Consulta [Control de Headscale](docs/CONTROL_HEADSCALE.md) para registrar el ayudante
 local, delegar permisos y conocer sus límites. Todas las plataformas comparten la
 interfaz; YunoHost añade su adaptación de instalación.
+
+## Protecciones de la plataforma
+
+Consulta las [protecciones y sus límites](docs/SEGURIDAD_PLATAFORMAS.md): aislamiento del servicio,
+autorización del contenedor Android y permisos Flatpak. Las actualizaciones
+conservan los datos y la identidad; no requieren desactivar protecciones del sistema.

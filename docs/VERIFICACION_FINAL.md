@@ -1,5 +1,36 @@
 # Validación y límites
 
+## Preparación de 1.4.19
+
+- Suite completa: 102 pruebas Python, Go, JavaScript, vet y compilación.
+- Tablet física Android 8.1/arm64: rechazo de origen falsificado y capacidad
+  caducada, cancelación de transferencia al navegar, exportación blob y API
+  con nombre y bytes conservados mediante ContentResolver. No utiliza Waydroid.
+- Motores Android arm64 y x86_64 compilados; Lint release correcto y APK arm64
+  firmada con la identidad estable existente. No equivale a ejecutar Android x86.
+- systemd 252 en YunoHost/Debian 12: comprobaciones negativas de capacidades,
+  namespaces, memoria W^X y escritura; positivas de SQLite WAL, TLS, NSS y red.
+  Doce pruebas Go de certificados, DNS y restauración ejecutadas bajo cada unidad;
+  el laboratorio ACME externo se omite explícitamente.
+- Fedora con SELinux activo: mismas pruebas en una unidad temporal de usuario
+  con `PrivateUsers`, sin instalar un servicio de sistema ni política SELinux.
+- Flatpak de laboratorio instalado: permiso efectivo de red únicamente, datos
+  privados conservados, claves SSH del anfitrión inaccesibles y mismas pruebas Go.
+- DEB y RPM: construcción, instalación, reinstalación y conservación tras retirar
+  el programa, en contenedores desechables. No equivale a un arranque nativo RPM.
+- Actualización real YunoHost 1.4.18 → 1.4.19 con kernel 6.1.0-54: SSO,
+  configuración, servicios, clave maestra, secreto del proxy, copia cifrada,
+  PKI, descubrimiento y exportación conservados. Dependencias previamente
+  instaladas y recursos locales con sumas originales; APT exterior inaccesible.
+  El primer intento bajo 6.1.0-55 se bloqueó en ext4 antes de aplicar la revisión;
+  no se presenta como una prueba completada ni una garantía ante fallos del disco.
+- Manual estricto: 51 páginas y 3.296 enlaces locales; privacidad e i18n correctas.
+
+Los resultados de actualización YunoHost y publicación se anotan en
+[estado de desarrollo](ESTADO_DESARROLLO.md). Estos ensayos no acreditan una
+emisión ACME pública ni una nueva conexión VPN con un proveedor de producción.
+Play Store permanece solo preparado.
+
 ## Preparación de 1.4.17
 
 Comprobaciones locales completadas: `tools/verify.sh` (100 pruebas Python,

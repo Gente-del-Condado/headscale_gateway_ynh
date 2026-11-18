@@ -81,6 +81,29 @@ class DesktopSessionTest(unittest.TestCase):
             path.write_text(json.dumps({'listen_addr':'127.0.0.1:23456'}))
             self.assertEqual(self.launcher.admin_url(path),'http://127.0.0.1:23456/admin/')
 
+    def test_readiness_ignores_proxy_environment_and_rejects_redirects(self):
+        import http.server
+        import threading
+        requests=[]
+        class Handler(http.server.BaseHTTPRequestHandler):
+            def do_GET(self):
+                requests.append(self.path)
+                self.send_response(302 if self.path=='/redirect' else 200)
+                if self.path=='/redirect': self.send_header('Location','/forbidden')
+                self.end_headers()
+            def log_message(self,*args): pass
+        server=http.server.ThreadingHTTPServer(('127.0.0.1',0),Handler)
+        thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
+        url=f'http://127.0.0.1:{server.server_port}'
+        try:
+            with patch.dict(os.environ,{'http_proxy':'http://127.0.0.1:1','HTTP_PROXY':'http://127.0.0.1:1','no_proxy':'','NO_PROXY':''}):
+                self.launcher.wait_ready(url+'/admin/')
+                with patch.object(self.launcher.time,'sleep'):
+                    with self.assertRaises(RuntimeError): self.launcher.wait_ready(url+'/redirect')
+            self.assertIn('/admin/',requests)
+            self.assertNotIn('/forbidden',requests)
+        finally: server.shutdown();server.server_close();thread.join()
+
     def test_second_launch_opens_browser_without_another_engine(self):
         import fcntl
         with tempfile.TemporaryDirectory() as directory:

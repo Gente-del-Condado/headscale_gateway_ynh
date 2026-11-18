@@ -183,6 +183,9 @@ public final class MainActivity extends Activity {
     private FrameLayout buildPanel() {
         FrameLayout frame=new FrameLayout(this);panel=new WebView(this);panel.setId(R.id.panel_webview);panel.setBackgroundColor(BG);
         panel.getSettings().setJavaScriptEnabled(true);panel.getSettings().setDomStorageEnabled(true);panel.getSettings().setAllowFileAccess(false);
+        panel.getSettings().setAllowFileAccessFromFileURLs(false);
+        panel.getSettings().setAllowUniversalAccessFromFileURLs(false);
+        if(Build.VERSION.SDK_INT>=26)panel.getSettings().setSafeBrowsingEnabled(true);
         panel.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
         panel.setWebViewClient(new WebViewClient() {
             @Override public WebResourceResponse shouldInterceptRequest(WebView view,WebResourceRequest request) {
@@ -232,6 +235,7 @@ public final class MainActivity extends Activity {
             }
             @Override public void onProgressChanged(WebView view,int progress) {loading.setProgress(progress);loading.setVisibility(progress<100?View.VISIBLE:View.GONE);}
             @Override public boolean onShowFileChooser(WebView view,ValueCallback<Uri[]> callback,FileChooserParams params) {
+                if(!isPanelURL(view.getUrl()) || downloads.capability().isEmpty()){callback.onReceiveValue(null);return true;}
                 if(fileResult!=null)fileResult.onReceiveValue(null);fileResult=callback;
                 startActivityForResult(Intent.createChooser(new Intent(Intent.ACTION_OPEN_DOCUMENT).setType("*/*").addCategory(Intent.CATEGORY_OPENABLE),getString(R.string.file_choose)),51);return true;
             }
@@ -249,10 +253,10 @@ public final class MainActivity extends Activity {
 
     private boolean isPanelURL(String url) {return url!=null && url.startsWith(RuntimeState.base(this)+"/admin/");}
     private void applyMobilePanel() {
-        if(!isPanelURL(panel.getUrl()))return;
-        String code="if(location.origin==="+JSONObject.quote(RuntimeState.base(this))+" && location.pathname.startsWith('/admin/')){let s=document.getElementById('android-style');if(!s){s=document.createElement('link');s.rel='stylesheet';s.id='android-style';s.href='/admin/android-container.css';document.head.append(s);}"+mobileJS+";";
+        if(!isPanelURL(panel.getUrl()) || downloads.capability().isEmpty())return;
+        String code="(()=>{const androidDocumentCapability="+JSONObject.quote(downloads.capability())+";if(window===window.top && location.origin==="+JSONObject.quote(RuntimeState.base(this))+" && location.pathname.startsWith('/admin/')){let s=document.getElementById('android-style');if(!s){s=document.createElement('link');s.rel='stylesheet';s.id='android-style';s.href='/admin/android-container.css';document.head.append(s);}"+mobileJS+";";
         if(!pendingSection.isEmpty())code+="window.gatewayAndroidOpenSection("+JSONObject.quote(pendingSection)+");";
-        panel.evaluateJavascript(code+"}",null);pendingSection="";
+        panel.evaluateJavascript(code+"}})()",null);pendingSection="";
     }
     private void openSection(String section) {pendingSection=section;showScreen(1,true);if(isPanelURL(panel.getUrl()))applyMobilePanel();}
     private void showScreen(int page,boolean startIfNeeded) {

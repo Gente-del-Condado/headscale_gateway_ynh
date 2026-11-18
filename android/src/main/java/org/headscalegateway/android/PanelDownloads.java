@@ -16,6 +16,7 @@ final class PanelDownloads {
     private FileOutputStream output;
     private String nonce="", filename="", mime="application/octet-stream";
     private volatile String trustedOrigin="";
+    private String documentCapability="";
     private boolean pickerLaunched=false,recoveryShown=false;
     private long size,maxBytes;
     private File metadata() {return new File(RuntimeState.root(activity),"pending-download.json");}
@@ -30,11 +31,25 @@ final class PanelDownloads {
             } else metadata().delete();
         }catch(Exception ignored){}
     }
-    void trust(String url) {
-        String base=RuntimeState.base(activity);trustedOrigin=url!=null && url.startsWith(base+"/admin/")?base:"";
+    synchronized void trust(String url) {
+        // addJavascriptInterface existe en todos los marcos: el origen declarado
+        // por JavaScript no acredita al llamante. Solo el documento superior
+        // local recibe esta capacidad, encerrada en una función, nunca en window.
+        documentCapability="";trustedOrigin="";
+        if(output!=null)close();
+        String base=RuntimeState.base(activity);
+        if(url!=null && url.startsWith(base+"/admin/")) {
+            trustedOrigin=base;documentCapability=RuntimeState.hexSecret();
+        }
     }
-    @JavascriptInterface public synchronized String beginBlob(String origin,String name,String type) {
-        if(!RuntimeState.base(activity).equals(origin) || !origin.equals(trustedOrigin))return "";
+    synchronized String capability() {return documentCapability;}
+    private boolean authorized(String capability) {
+        return capability!=null && !documentCapability.isEmpty()
+            && java.security.MessageDigest.isEqual(documentCapability.getBytes(java.nio.charset.StandardCharsets.UTF_8),
+                capability.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+    }
+    @JavascriptInterface public synchronized String beginBlob(String capability,String name,String type) {
+        if(!authorized(capability))return "";
         if(pending!=null) {failure("Termina o cancela la exportación anterior.");return "";}
         try {
             // Reserva espacio para el temporal y otra copia si el destino
@@ -84,8 +99,8 @@ final class PanelDownloads {
     @JavascriptInterface public synchronized void failed(String id) {
         if(output!=null && nonce.equals(id)){close();failure("No se ha podido descargar el archivo.");}
     }
-    @JavascriptInterface public void securitySettings(String origin) {
-        if(origin.equals(trustedOrigin) && origin.equals(RuntimeState.base(activity)))activity.runOnUiThread(()->activity.openCertificateSettings());
+    @JavascriptInterface public synchronized void securitySettings(String capability) {
+        if(authorized(capability))activity.runOnUiThread(()->activity.openCertificateSettings());
     }
     synchronized void save(Uri destination) {
         try {
@@ -99,7 +114,7 @@ final class PanelDownloads {
             }
         }catch(Exception e){failure("No se ha podido guardar la exportación.");}finally{close();}
     }
-    synchronized void detach() {trustedOrigin="";if(output!=null)close();}
+    synchronized void detach() {trust(null);}
     synchronized void close() {try{if(output!=null)output.close();}catch(Exception ignored){}output=null;nonce="";if(pending!=null)pending.delete();pending=null;metadata().delete();pickerLaunched=false;recoveryShown=false;}
     private void failure(String message) {activity.runOnUiThread(()->Toast.makeText(activity,message,Toast.LENGTH_LONG).show());}
 }

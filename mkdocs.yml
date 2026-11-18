@@ -68,6 +68,7 @@ nav:
       - Empezar a desarrollar: EMPEZAR_DESARROLLO.md
       - Estado de la siguiente entrega: ESTADO_DESARROLLO.md
       - Privacidad y limpieza: SEGURIDAD.md
+      - Protecciones por plataforma: SEGURIDAD_PLATAFORMAS.md
       - Cambios: CAMBIOS.md
       - Estructura del proyecto: ESTRUCTURA.md
       - Arquitectura y flujos: ARQUITECTURA.md

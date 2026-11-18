@@ -15,6 +15,17 @@ RestartSec=5
 TimeoutStopSec=30
 UMask=0077
 NoNewPrivileges=true
+# El portal no administra el anfitrión; el actuador opcional usa otra unidad.
+CapabilityBoundingSet=
+AmbientCapabilities=
+RestrictNamespaces=true
+ProtectClock=true
+ProtectHostname=true
+ProtectProc=invisible
+MemoryDenyWriteExecute=true
+SystemCallFilter=~@mount @reboot @swap @module @raw-io @debug @cpu-emulation @obsolete
+SystemCallErrorNumber=EPERM
+SystemCallArchitectures=native
 ProtectSystem=strict
 # YunoHost's data_dir lives under /home/yunohost.app. Keep it visible and
 # grant write access only to this app's data_dir below.
@@ -23,8 +34,11 @@ PrivateTmp=true
 PrivateDevices=true
 ProtectKernelTunables=true
 ProtectKernelModules=true
+ProtectKernelLogs=true
 ProtectControlGroups=true
 RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
 RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6 AF_NETLINK
 ReadWritePaths=__DATA_DIR__
 

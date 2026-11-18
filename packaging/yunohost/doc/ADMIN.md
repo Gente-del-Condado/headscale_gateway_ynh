@@ -246,3 +246,9 @@ motor protegido de un controlador ya registrado; las copias no conceden este
 privilegio en un anfitrión nuevo. Otros Gateway pueden utilizar una delegación
 HTTPS explícita de lectura o escritura. No cambia el DNS-01 ni los certificados
 de los servicios. Sigue el [manual del controlador](https://gente-del-condado.github.io/headscale_gateway_ynh/CONTROL_HEADSCALE.html).
+
+## Protecciones de la plataforma
+
+Consulta las [protecciones y sus límites](https://gente-del-condado.github.io/headscale_gateway_ynh/SEGURIDAD_PLATAFORMAS.html): aislamiento del servicio,
+autorización del contenedor Android y permisos Flatpak. Las actualizaciones
+conservan los datos y la identidad; no requieren desactivar protecciones del sistema.

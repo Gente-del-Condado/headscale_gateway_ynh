@@ -5,8 +5,8 @@ auxiliares. Gateway-Tray es un cliente opcional y no es necesario para usar el
 servidor. Las descargas y sus fuentes están en
 [headscale_gateway_releases](https://github.com/Gente-del-Condado/headscale_gateway_releases/releases).
 
-Instala el archivo de tu arquitectura con `sudo apt install ./headscale-gateway_1.4.18-1_amd64.deb`
-o `sudo dnf install ./headscale-gateway-1.4.18-1.x86_64.rpm`.
+Instala el archivo de tu arquitectura con `sudo apt install ./headscale-gateway_1.4.19-1_amd64.deb`
+o `sudo dnf install ./headscale-gateway-1.4.19-1.x86_64.rpm`.
 El paquete crea un usuario de servicio sin acceso interactivo. La primera
 instalación no arranca ni expone el panel sin configurar una cuenta:
 
@@ -92,3 +92,9 @@ observación de nodos. El paquete incluye `headscale-gateway-setup-headscale` pa
 registrar un ayudante local separado del servicio sin privilegios. También puede
 actuar como cliente remoto desde otras plataformas. No se activa automáticamente.
 Consulta [Control de Headscale](https://gente-del-condado.github.io/headscale_gateway_ynh/CONTROL_HEADSCALE.html).
+
+## Protecciones de la plataforma
+
+Consulta las [protecciones y sus límites](https://gente-del-condado.github.io/headscale_gateway_ynh/SEGURIDAD_PLATAFORMAS.html): aislamiento del servicio,
+autorización del contenedor Android y permisos Flatpak. Las actualizaciones
+conservan los datos y la identidad; no requieren desactivar protecciones del sistema.

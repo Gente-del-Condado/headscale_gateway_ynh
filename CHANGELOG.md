@@ -1,5 +1,18 @@
 # Cambios de Headscale Gateway
 
+## 1.4.19
+
+- Refuerza el servicio sin privilegios de Debian, Fedora y YunoHost: capacidades
+  vacías, restricciones de namespaces, llamadas al núcleo y memoria W^X;
+  conserva SQLite, NSS, TLS y sockets Unix/IP/netlink.
+- Android autoriza las descargas con una capacidad por documento local, revocada
+  al navegar, en lugar de confiar en un origen declarado por JavaScript.
+  Conserva exportaciones, firma y datos de la aplicación.
+- Flatpak comprueba el panel loopback sin proxies ni redirecciones; mantiene
+  únicamente el permiso de red y los portales del escritorio.
+- Añade pruebas repetibles y documentación de las protecciones y sus límites.
+  Play Store permanece solo preparado.
+
 ## 1.4.18
 
 - Perfil AppArmor propio para el complemento Home Assistant, en modo estricto,

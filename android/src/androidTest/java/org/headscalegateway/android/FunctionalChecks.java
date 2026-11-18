@@ -90,6 +90,18 @@ final class FunctionalChecks {
             try {JSONObject state=RuntimeState.control(s.context,"/state");if(state.optString("boot_id").equals(before))continue;s.cookie="";s.csrf="";s.login();if(state.optBoolean("connected")){browserSession();return;}}catch(Exception|AssertionError ignored){}
         }throw new AssertionError("El Gateway no volvió a conectar después de restaurar");
     }
+    void bridgeExports()throws Exception {
+        require(s.context.getPackageName().endsWith(".lab"),"Solo laboratorio");pickers();
+        try {
+            s.runOnMainSync(()->s.activity.findViewById(R.id.nav_panel).performClick());
+            waitJS("!!window.gatewayAndroidDownload","El puente de descargas no está preparado");
+            exported("(()=>{const url=URL.createObjectURL(new Blob(['Certificado de prueba'],{type:'application/x-pem-file'}));const a=document.createElement('a');a.href=url;a.download='seguridad-prueba.crt';a.click();URL.revokeObjectURL(url)})()","seguridad-prueba.crt","Certificado de prueba".getBytes(StandardCharsets.UTF_8));
+            // También debe funcionar el fetch autenticado a la API, con nombre
+            // y bytes conservados por el proveedor de documentos del laboratorio.
+            byte[] status=download("auth/methods");
+            exported("window.gatewayAndroidDownload(location.origin+'/api/v1/auth/methods','seguridad-api.json')","seguridad-api.json",status);
+        } finally {s.removeMonitor(monitor);}
+    }
     void run()throws Exception {
         require(s.context.getPackageName().endsWith(".lab"),"Prohibido modificar una instalación habitual");pickers();
         try {

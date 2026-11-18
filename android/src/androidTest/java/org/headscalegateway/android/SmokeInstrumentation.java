@@ -149,7 +149,7 @@ public final class SmokeInstrumentation extends Instrumentation {
         Bundle result=new Bundle();
         try {
             context=getTargetContext();
-            boolean labWork=arguments.getString("functional","false").equals("true") || arguments.getString("statuslinks","false").equals("true")
+            boolean labWork=arguments.getString("security","false").equals("true") || arguments.getString("functional","false").equals("true") || arguments.getString("statuslinks","false").equals("true")
                 || arguments.containsKey("headscale") || arguments.containsKey("ca") || arguments.containsKey("authkey") || arguments.getString("pingpeers","false").equals("true");
             if(labWork && !context.getPackageName().endsWith(".lab"))throw new AssertionError("Las pruebas funcionales requieren la APK de laboratorio aislada");
             if(Build.VERSION.SDK_INT>=33)getUiAutomation().grantRuntimePermission(context.getPackageName(),android.Manifest.permission.POST_NOTIFICATIONS);
@@ -186,6 +186,12 @@ public final class SmokeInstrumentation extends Instrumentation {
                 finish(-1,result);return;
             }
             mobileInterface();
+            if(arguments.getString("security","false").equals("true")) {
+                new BridgeSecurityChecks(this).run();
+                phase(new JSONObject().put("phase","passed").put("detail","Puente restringido al documento local, revocación y exportaciones comprobados"));
+                result.putString("stream","ANDROID_SEGURIDAD_OK: rechazos, revocación, exportación blob y API mediante ContentResolver.\n");
+                finish(-1,result);return;
+            }
             String headscale=arguments.getString("headscale","");
             if(!headscale.isEmpty()) {
                 JSONObject settings=new JSONObject().put("headscale.url",headscale).put("headscale.api_key",arguments.getString("apikey","")).put("domain.base_domain",arguments.getString("basedomain","lab.example.test"))
