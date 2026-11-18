@@ -158,13 +158,18 @@
     <main id="contenido" tabindex="-1">
       <p class="breadcrumb"><a href="index.html">Manual</a><span aria-hidden="true"> / </span>Estado de la siguiente entrega</p>
       <article class="prose"><h1 id="estado-de-desarrollo-y-siguiente-entrega">Estado de desarrollo y siguiente entrega</h1>
-<h2 id="1417-publicada-y-verificada">1.4.17: publicada y verificada</h2>
+<h2 id="mantenimiento-de-actions-sin-nueva-versión-del-motor">Mantenimiento de Actions (sin nueva versión del motor)</h2>
+<p>El control público mantiene app, integración y tiendas desde un SHA de Forgejo.
+El plan evita trabajos sin cambios; las imágenes solo se solicitan si hay árboles
+pendientes. Las comprobaciones unitarias cubren propiedad de archivos, sumas,
+etiquetas inmutables, conservación de otros componentes y planificación sin
+cambios. Los flujos antiguos se retiran por solicitudes de fusión en el origen.
+El manual sigue privado en Olivar y no se activa ningún servicio de laboratorio.</p>
+<h2 id="1417-entrega-de-mantenimiento">1.4.17: entrega de mantenimiento</h2>
 <p>La entrega incorpora la separación y reutilización de fuentes de Electron y las
 guías de descargas actualizadas. Conserva el motor común y la firma Android.
-Se publicó por la solicitud #35 de Forgejo y el flujo público
-<a href="https://github.com/Gente-del-Condado/headscale_gateway_releases/actions/runs/43806752417">43806752417</a>
-terminó correctamente, incluido Windows. Se verificaron 41 archivos accesibles,
-los seis destinos y ambos manuales. Electron reutilizó sus diez adjuntos existentes.
+La publicación exige la solicitud de fusión en Forgejo y todas las comprobaciones
+del compilador público; la versión declarada no acredita por sí sola su resultado.
 Play Store permanece solo preparado.</p>
 <h2 id="1416-publicada-y-verificada">1.4.16: publicada y verificada</h2>
 <p>La 1.4.16 se publicó mediante la solicitud #32 de Forgejo y se replicó en
@@ -229,14 +234,7 @@ duplicar los archivos grandes.</p>
 dato de prueba), una barrera contra adjuntos de terceros mezclados y una
 comprobación pública que evita volver a preparar o subir un conjunto existente.
 El ensayo no cambia VERSION, crea etiquetas ni publica otra aplicación. Las
-guías vigentes se actualizan en ambas webs sin modificar los instaladores.</p>
-<h2 id="retención-automática-posterior-a-1417">Retención automática posterior a 1.4.17</h2>
-<p>La política y las pruebas están en <code>packaging/releases/automation/release_retention.py</code>.
-GitHub tiene un workflow propio para los cuatro destinos públicos. Forgejo se
-administra desde un temporizador local de YunoHost: su activación requiere ejecutar
-el instalador revisado y comprobar el informe real. Las releases Electron se
-excluyen de la limpieza; commits y etiquetas se conservan. No se cambia VERSION
-ni se reemplazan los instaladores para introducir este mantenimiento.</p></article>
+guías vigentes se actualizan en ambas webs sin modificar los instaladores.</p></article>
       <footer class="page-footer">
         <p>Headscale Gateway · Gente del Condado · Documentación en español</p>
         <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>
@@ -246,7 +244,9 @@ ni se reemplazan los instaladores para introducir este mantenimiento.</p></artic
     <aside class="page-toc">
       <nav aria-label="En esta página"><p>En esta página</p><ul>
         
-          <li><a href="#1417-publicada-y-verificada">1.4.17: publicada y verificada</a></li>
+          <li><a href="#mantenimiento-de-actions-sin-nueva-versión-del-motor">Mantenimiento de Actions (sin nueva versión del motor)</a></li>
+        
+          <li><a href="#1417-entrega-de-mantenimiento">1.4.17: entrega de mantenimiento</a></li>
         
           <li><a href="#1416-publicada-y-verificada">1.4.16: publicada y verificada</a></li>
         
@@ -255,8 +255,6 @@ ni se reemplazan los instaladores para introducir este mantenimiento.</p></artic
           <li><a href="#qué-debe-hacer-el-siguiente-mantenedor">Qué debe hacer el siguiente mantenedor</a></li>
         
           <li><a href="#mantenimiento-posterior-a-la-1416">Mantenimiento posterior a la 1.4.16</a></li>
-        
-          <li><a href="#retención-automática-posterior-a-1417">Retención automática posterior a 1.4.17</a></li>
         
       </ul></nav>
     </aside>
