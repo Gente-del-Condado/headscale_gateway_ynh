@@ -942,6 +942,10 @@ msgstr ""
 msgid "Aplicar preferencias locales"
 msgstr ""
 
+#: src/internal/admin/panel.html
+msgid "Apoyar el proyecto en Ko-fi"
+msgstr ""
+
 #: src/internal/platform/firewall/report_darwin.go
 msgid "Application Firewall"
 msgstr ""
@@ -3768,6 +3772,10 @@ msgstr ""
 
 #: src/internal/admin/panel.html
 msgid "Dominios de correo permitidos"
+msgstr ""
+
+#: src/internal/admin/panel.html
+msgid "Donativos"
 msgstr ""
 
 #: src/internal/diagnostics/levels.go

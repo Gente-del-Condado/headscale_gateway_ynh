@@ -1,3 +1,28 @@
+# Consumidores públicos de la tienda Home Assistant
+
+El workflow `sync-forgejo.yml` se ha retirado. JackSignal y PiVigia ya se leen
+anónimamente desde sus repositorios públicos mediante `sync-public-apps.yml`.
+`PUBLIC_APP_MIGRATIONS=jacksignal,pivigia` selecciona ambos consumidores.
+`FORGEJO_APPS_READ_TOKEN` y `DISTRIBUTION_TOKEN` dejan de ser necesarios en la tienda.
+Los helpers históricos que comparten validación y preparación con los lectores
+actuales se conservan como código; no hay un workflow que invoque su lectura privada.
+
+PGM tiene un consumidor independiente mantenido en su origen Forgejo:
+`.github/pgm-publication/sync-pgm-app.yml`. Solo escribe su propia carpeta en
+build-source con el GITHUB_TOKEN de Mis_app_ha. Los consumidores llaman al
+workflow de imágenes para publicar o recuperar contextos pendientes.
+Gateway sigue entregando su contexto con PUBLICATION_TOKEN del compilador.
+La tienda no almacena ninguna de esas credenciales de escritura de terceros.
+
+Los controladores de imágenes y los consumidores de JackSignal/PiVigia se
+mantienen aquí y se exportan expresamente a los públicos. No ejecutar Actions
+en los espejos privados. Conservar versiones, slugs, firmas y recibos.
+
+## Documentación histórica anterior al cierre
+
+Las instrucciones de reversión por sync-forgejo que siguen ya no son operativas;
+recuperar código y credenciales requeriría una decisión explícita de mantenimiento.
+
 # Imágenes de Mis_app_ha
 
 Control común mantenido primero en el principal Headscale Gateway de Forgejo.
@@ -73,3 +98,58 @@ obliga a comprobar una vez las fuentes de la migración anterior.
 
 `store-readme.md` se exporta al README raíz de la tienda; sus aplicaciones solo
 se editan en sus fuentes. No se publican tokens en YAML ni se cambian presupuestos.
+
+## Migración preparada: espejo privado → aplicación pública → tienda pública
+
+Los espejos privados son pasivos, con Actions deshabilitado. Las nuevas plantillas
+se ejecutan exclusivamente en repositorios públicos y permanecen desactivadas
+hasta configurar sus variables de adopción. Añadir estos archivos al principal
+no activa ni sustituye el recorrido vigente.
+
+- `publish-mirror.yml` → `.github/workflows/publish-mirror.yml` en `jacksignal_ha`
+  y `pivigia_ha`; los módulos Python se exportan a `.github/ha-images/`.
+- `sync-public-apps.yml` → workflow de `Mis_app_ha`.
+- `sync-public-components.yml` → workflow de `Mis_componente_ha`.
+- La versión actualizada de `sync-forgejo.yml` omite solamente las aplicaciones
+  enumeradas en `PUBLIC_APP_MIGRATIONS`; sin variable conserva el comportamiento.
+
+Cada aplicación pública recibe su propio `MIRROR_READ_TOKEN`: Contents de lectura
+limitado a su espejo privado, sin escritura ni acceso a otras aplicaciones. No
+se utiliza el token para pruebas, exportadores ni publicación. El lector verifica
+identidad numérica, propietario, nombre y visibilidad privada; fija el SHA, limita
+archivos y no reenvía Authorization a codeload. El trabajo de publicación vuelve a
+validar el SHA y el recibo en un runner separado; utiliza GITHUB_TOKEN con Contents
+de escritura exclusivamente para el propio repositorio público.
+
+La rama pública independiente `public-source` contiene únicamente el contexto de
+la aplicación, sus distribuciones autorizadas y `receipt.json`. No conserva el
+historial privado. Las tiendas descargan esa rama por SHA sin credenciales y
+validan sus sumas, permisos y procedencia antes de copiar. Cada tienda escribe en
+sí misma con GITHUB_TOKEN; `Mis_app_ha` mantiene la compilación y validación de
+imágenes ya existente. Los consumidores se programan explícitamente: no dependen
+de que un push de GITHUB_TOKEN dispare otro workflow.
+
+Adopción por aplicación, empezando por JackSignal:
+
+1. Revisar y desplegar controladores en los cuatro destinos públicos; no activar
+   `ENABLE_MIRROR_PUBLICATION` todavía. Mantener credenciales vigentes.
+2. Configurar `MIRROR_READ_TOKEN` en el publicador público correspondiente con
+   lectura del único espejo privado. Mantener Actions privados deshabilitados.
+3. Esperar a que termine cualquier publicación antigua en curso. Establecer
+   `PUBLIC_APP_MIGRATIONS=jacksignal` en ambas tiendas. Esto detiene las nuevas
+   publicaciones directas de esa aplicación desde Forgejo; las versiones
+   instalables anteriores permanecen disponibles. La lista puede ampliarse luego
+   a `jacksignal,pivigia`, siempre idéntica en ambos consumidores.
+4. Activar `ENABLE_MIRROR_PUBLICATION=true` en `jacksignal_ha` y ejecutar su
+   workflow. Verificar integración, release, rama pública y recibo por SHA.
+5. Ejecutar consumidores y comprobar imágenes, catálogos y descargas anónimas.
+   Solo después incorporar PiVigia y retirar las credenciales que hayan quedado
+   sin consumidores. No retirar firmas Android/F-Droid ni claves de espejos.
+6. Para volver al productor previo: desactivar el publicador nuevo y esperar sus
+   ejecuciones; quitar la aplicación de ambas listas y ejecutar sync-forgejo.
+   No mover tags ni sobrescribir versiones publicadas.
+
+Esta plantilla cubre JackSignal y PiVigia. No cambia las releases de Gateway,
+PGM, YunoHost ni F-Droid. Gateway conserva su comprobación de release estable de
+Forgejo: replicar tags Git no replica el estado draft/prerelease ni las releases.
+Migrar ese control exige preservar explícitamente esa intención de publicación.

@@ -18,8 +18,10 @@ Desde la entrega 1.4.9, el control de
 compila en runners públicos estándar. Así no depende de la cuota de ejecución
 del espejo privado. Los publicadores antiguos del espejo se retiraron del árbol actual para evitar
 entregas duplicadas; la comprobación de calidad de pull requests se conserva.
-Lee la API de Forgejo con un token limitado y descarga solo
-el árbol de fuentes de la etiqueta publicada; no copia el historial privado.
+Forgejo autoriza la entrega mediante su release estable. Con la migración
+`HGW_SOURCE_BACKEND=github-mirror`, el controlador comprueba que la etiqueta del
+espejo privado de GitHub tiene el mismo SHA y descarga de allí únicamente el
+árbol de fuentes. No copia el historial privado ni publica por un push a main.
 
 Sus fuentes se mantienen primero en `packaging/releases/automation/` y
 `packaging/releases/.github/workflows/` del principal de Forgejo. Exportar ese
@@ -33,7 +35,7 @@ necesita repetirla para cada versión normal de la aplicación.
 3. El flujo **Compilar y publicar desde Forgejo** consulta las releases cada hora,
    en el minuto 17 UTC. También se activa al actualizar su controlador en main.
    No hace falta lanzar flujos a mano. GitHub puede retrasar sus programaciones.
-4. Cada trabajo descarga el mismo commit y vuelve a comprobar etiqueta, versión
+4. Cada trabajo descarga del origen seleccionado el mismo commit y vuelve a comprobar etiqueta, versión
    y manifiesto. Seguridad Go/npm, pruebas Go/JS/Python, Windows, Debian,
    integración Home Assistant y contenedores preceden a la entrega. Un fallo
    bloquea la publicación de instaladores.
@@ -56,6 +58,9 @@ Los siguientes secretos se guardan en Actions de **headscale_gateway_releases**:
 
 - `FORGEJO_RELEASE_READ_TOKEN`: solo `wolfbelmi88/headscale_gateway`, permiso
   `repository` en Leídas y el resto sin acceso. No permite escribir en Forgejo.
+- `MIRROR_READ_TOKEN`: token GitHub fine-grained, solo el repositorio privado
+  `headscale_gateway`, Contents y Metadata de lectura. Se usa únicamente para
+  contrastar referencias y descargar el commit aprobado; no firma ni publica.
 - `PUBLICATION_TOKEN`: token GitHub fine-grained con Contents de lectura y
   escritura solo en los seis destinos públicos de Headscale de la tabla.
   No necesita Administration, Workflows ni acceso al espejo privado.
@@ -119,7 +124,19 @@ nginx/NSS en contenedor son complementarias; no equivalen a repetir package_chec
 o la actualización de una instalación real con datos y secretos. No ejecutes
 máquinas virtuales ni compilaciones grandes en el Linux del usuario.
 
-## PiVigia y JackSignal
+## Cierre de credenciales de la tienda
+
+JackSignal y PiVigia ya se consumen desde sus públicos, con lectura anónima y
+GITHUB_TOKEN del destino. Se retira `sync-forgejo.yml` de Mis_app_ha y de esta
+plantilla; `FORGEJO_APPS_READ_TOKEN` y `DISTRIBUTION_TOKEN` de la tienda dejan de
+ser necesarios. PGM usa también su consumidor público autónomo.
+
+Gateway conserva `PUBLICATION_TOKEN`: sus seis destinos y la retención todavía
+lo requieren. No revocar la firma Android, el índice F-Droid ni accesos de copias.
+Las claves SSH de espejos privados y sus tokens exclusivos de lectura siguen
+vigentes. La CI privada permanece desactivada.
+
+## PiVigia y JackSignal (recorrido histórico sustituido)
 
 Forgejo conserva los dos principales privados y GitHub sus espejos. La tienda
 pública consulta el SHA de main y ejecuta calidad sin credenciales antes de
@@ -176,3 +193,48 @@ del compilador. La retención conserva su tarea diaria y las protecciones de
 fuentes Electron. Esta simplificación no activa la limpieza local de YunoHost
 cancelada anteriormente. La lectura de Forgejo queda como diagnóstico manual y
 se retira la comprobación inicial que solo imprimía el estado del runner.
+
+## Tienda Android F-Droid propia
+
+`packaging/fdroid-store/` mantiene el controlador de
+[Mis_app_fdroid](https://github.com/Gente-del-Condado/Mis_app_fdroid). Se exporta
+con `python3 tools/prepare_fdroid_store.py /ruta/nueva`, desde el commit revisado
+y fusionado en Forgejo. La exportación enumera archivos públicos explícitamente
+y registra su origen; no copia APK locales, historial ni claves.
+
+GitHub Actions consulta las releases públicas en el minuto 43 UTC y actualiza
+el índice firmado de GitHub Pages si hay versiones nuevas; lo renueva cada semana
+aunque las APK no cambien. La APK directa conserva su firma original. El secreto
+`FDROID_REPO_SIGNING_BUNDLE` solo firma el índice, con una identidad distinta.
+No necesita acceso al principal ni devuelve cambios a Forgejo. El sitio contiene
+solo el resultado público. El índice verifica exactamente las APK comprobadas,
+con dos versiones estables por aplicación. Un fallo conserva el despliegue previo.
+
+La tienda propia no implica aceptación en f-droid.org ni publicación en Play Store.
+Sus instrucciones de instalación, huella y recuperación están en su README.
+
+## Activar la lectura desde el espejo privado de Gateway
+
+El controlador incluye un cambio gradual, sin Actions privadas. La variable
+`HGW_SOURCE_BACKEND` de `headscale_gateway_releases` acepta `forgejo` (valor
+inicial) o `github-mirror`. No cambia de origen automáticamente cuando falla
+un token o falta una etiqueta: detiene la entrega. Forgejo y el espejo deben
+apuntar al mismo commit tanto para releases como para ramas candidatas.
+
+Primero guardar `MIRROR_READ_TOKEN` en el publicador público y ejecutar
+**Verificar espejo privado sin publicar**. Ese diagnóstico fuerza la lectura
+del espejo, contrasta la release estable, descarga sus fuentes y verifica el
+manifiesto y todas las sumas sin construir ni volver a publicar instaladores.
+Después de un resultado correcto, activar `HGW_SOURCE_BACKEND=github-mirror`.
+La lectura inicial de una entrega ya completada debe omitir su reconstrucción.
+
+Conservar `FORGEJO_RELEASE_READ_TOKEN`: el espejo Git no replica la información
+de releases estables/borradores, y una etiqueta sola no autoriza la entrega.
+Conservar `PUBLICATION_TOKEN`, la firma Android y la firma separada del índice
+F-Droid mientras sus consumidores sigan activos. Los destinos YunoHost, Flatpak,
+Home Assistant y F-Droid mantienen URLs, versiones e identidades de firma.
+No cambiar ni republicar una release existente para probar esta migración.
+
+Para volver temporalmente al origen previo, seleccionar `forgejo` y esperar a
+que termine cualquier trabajo en curso. No mover etiquetas ni sustituir
+archivos ya publicados. La reversión no habilita Actions privadas.

@@ -257,7 +257,12 @@ def plan():
     git('.', 'fetch', '--no-tags', 'origin', '+refs/heads/main:refs/remotes/origin/main',
         '+refs/heads/build-source:refs/remotes/origin/build-source')
     choices = []
+    # Una aplicación cambia de productor solo al activar explícitamente su migración.
+    from public_apps import selected
+    migrated = selected()
     for repo in APPS:
+        if repo in migrated:
+            continue
         sha = current(repo)
         previous = subprocess.run(['git', 'show', 'origin/build-source:.sources/' + repo + '.json'], capture_output=True, text=True)
         record = json.loads(previous.stdout) if previous.returncode == 0 else {}

@@ -137,3 +137,22 @@ de cambios. Invoca los workflows reutilizables del manual y retención solo si
 termina el trabajo de publicación real. Las guías conservan su propio disparador;
 la retención conserva su programación diaria. El chequeo inicial de runner se
 ha retirado. No se reactiva ningún temporizador ni credencial de YunoHost.
+
+## Lectura desde el espejo GitHub privado
+
+La variable `HGW_SOURCE_BACKEND=github-mirror` activa la lectura por SHA desde
+el espejo privado `Gente-del-Condado/headscale_gateway`. El token
+`MIRROR_READ_TOKEN` solo necesita Contents y Metadata de lectura en ese único
+repositorio; se guarda en el controlador público. El valor inicial `forgejo`
+permite preparar y verificar la migración antes de cambiar el origen.
+
+La exportación de mantenimiento debe copiar también el lector común
+`packaging/homeassistant-store/github_mirror.py` y su prueba
+`test_github_mirror.py` a `automation/`. Se mantiene una única fuente compartida
+con los publicadores de JackSignal y PiVigia.
+
+El workflow `mirror-read-check.yml` verifica releases, igualdad de etiquetas,
+archivo, manifiesto y sumas sin publicar, firmar ni acceder a los otros
+repositorios privados. Un error de lectura nunca activa una descarga alternativa.
+El control conserva Forgejo para autorizar releases estables y valida de nuevo
+ambas referencias antes de publicar. Consulta `docs/PUBLICACION.md`.

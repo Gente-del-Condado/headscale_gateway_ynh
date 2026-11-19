@@ -1,5 +1,14 @@
 # Cambios de Headscale Gateway
 
+## 1.4.20
+
+- Añade Acerca de → Donativos con el enlace público de Gente del Condado en Ko-fi,
+  compartido por todas las plataformas y traducido al inglés.
+- El donativo se abre en la página externa; no se cargan widgets de terceros ni
+  se guardan credenciales o datos de pago en el Gateway.
+- Conserva las protecciones de plataforma, la firma Android y las actualizaciones
+  que mantienen configuración y datos. Play Store permanece solo preparado.
+
 ## 1.4.19
 
 - Refuerza el servicio sin privilegios de Debian, Fedora y YunoHost: capacidades

@@ -1,5 +1,56 @@
 # Estado de desarrollo y siguiente entrega
 
+## 1.4.20: donativos Ko-fi preparados para publicación
+
+Acerca de → Donativos enlaza a `https://ko-fi.com/gentedelcondado` con un enlace
+HTML del panel común. Android utiliza su apertura de enlaces externos existente.
+No se incorporan widgets, credenciales ni procesamiento de pagos. Incluye el
+texto en español e inglés y la explicación en el manual. Se prepara la versión
+común 1.4.20 para publicación por solicitud de fusión en Forgejo. La recepción
+automática en los destinos públicos se verifica tras publicar la release estable.
+
+La entrega combinada con main supera la verificación completa, 26 pruebas del
+controlador público y 31 de la tienda, además del manual estricto (51 páginas y
+3306 enlaces locales). La subida SSH requiere la clave de Forgejo cargada; no
+se ha creado aún la release estable de 1.4.20.
+
+Validación: verificación completa correcta (102 pruebas Python, 43 del panel,
+5 de escritorio, pruebas Go, vet y compilación), referencia e i18n actualizados,
+manual estricto y 3302 enlaces locales correctos.
+
+## Tienda F-Droid propia publicada
+
+Se añade un controlador independiente en `packaging/fdroid-store/`, exportable a
+`Gente-del-Condado/Mis_app_fdroid`. Recoge únicamente releases públicas completas,
+comprueba firma APK fijada, identidad y sumas; genera índices v1/v2 con una firma
+propia y publica Pages desde Actions. No recompila ni vuelve a firmar las APK.
+La aplicación conserva 1.4.19 y su firma; esta tarea no mueve etiquetas existentes.
+
+El ensayo local con fdroidserver 2.4.5 genera y verifica índices firmados con las
+APK públicas 1.4.19 y 1.4.18. Pasan doce pruebas de selección, identidad, firmas,
+sumas, retención y omisión de trabajo sin cambios. La clave del índice se guarda
+fuera del proyecto. El secreto Actions está guardado y los trabajos de generación
+y despliegue en GitHub han terminado correctamente. Se han descargado por HTTPS
+ambas APK y verificado las firmas de los índices v1/v2 y sus sumas. La corrección
+del entorno temporal del workflow se fusionó por Forgejo #47.
+
+La prueba real en F-Droid 2.0.3 de la tablet física ha pasado: alta con huella,
+catálogo, versiones 1.4.19/1.4.18 y descarga de 1.4.19. Android la reconoce como
+actualización de la APK existente y muestra la confirmación de conservación de
+datos. Se canceló esa instalación: esta tarea prueba la tienda, no cambia la
+versión instalada. La consulta sin cambios devuelve `cambios=false`.
+
+El primer intento falló con EAI_NODATA al resolver el dominio con la VPN activa.
+Con autorización se pausó solo la VPN de las aplicaciones, manteniendo los
+servicios del Gateway; por Wi-Fi el alta y la descarga funcionaron. Después se
+reconectó la VPN y se comprobó su servicio activo. No se cambian DNS, configuración
+ni datos. Play Store permanece solo preparado.
+
+El catálogo incorpora el PNG existente de Headscale Gateway en los metadatos
+localizados. El ensayo real verifica el icono referenciado y su suma en el índice
+firmado; la publicación rechaza iconos ausentes o alterados. No cambia la APK
+ni su firma. La comprobación visual de esta corrección se realiza tras desplegar.
+
 ## 1.4.19: protecciones por plataforma validadas
 
 El portal Linux incorpora restricciones systemd adicionales sin ampliar sus
@@ -162,3 +213,12 @@ dato de prueba), una barrera contra adjuntos de terceros mezclados y una
 comprobación pública que evita volver a preparar o subir un conjunto existente.
 El ensayo no cambia VERSION, crea etiquetas ni publica otra aplicación. Las
 guías vigentes se actualizan en ambas webs sin modificar los instaladores.
+
+## Migración del lector de Gateway al espejo privado
+
+Preparado el selector de origen del controlador público y un diagnóstico sin
+publicación. El modo GitHub exige que la release estable de Forgejo y la
+etiqueta del espejo coincidan antes de descargar y antes de publicar. No
+cambia VERSION ni reconstruye por sí solo la entrega existente. La activación
+requiere el token limitado del espejo y una comprobación pública satisfactoria;
+no debe confundirse la preparación local con la migración ya activada.

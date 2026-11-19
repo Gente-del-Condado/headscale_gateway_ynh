@@ -12,6 +12,45 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
     def redirect_request(self,*args,**kwargs):return None
 
 
+def source_backend():
+    backend=os.environ.get('HGW_SOURCE_BACKEND','forgejo')
+    if backend not in {'forgejo','github-mirror'}:
+        raise ValueError('Origen de fuentes no autorizado')
+    return backend
+
+
+def mirror():
+    # La exportación coloca el lector común junto a este controlador.
+    # En Forgejo se mantiene una única fuente compartida con los publicadores HA.
+    shared=Path(__file__).resolve().parents[2]/'homeassistant-store'
+    if shared.is_dir():sys.path.insert(0,str(shared))
+    from github_mirror import Mirror
+    return Mirror('headscale_gateway')
+
+
+def verify_source_reference(sha,version,candidate_ref=None):
+    """Forgejo autoriza la entrega; el espejo debe contener la misma referencia."""
+    backend=source_backend()
+    if candidate_ref:
+        if not re.fullmatch(r'codex/[a-z0-9-]+',candidate_ref):
+            raise ValueError('La validación requiere una rama de revisión codex/')
+        branches=forgejo_json('/branches?limit=100')
+        branch=next((item for item in branches if item['name']==candidate_ref),None)
+        if not branch or branch['commit']['id']!=sha:
+            raise ValueError('La rama de revisión ha cambiado; se detiene la validación')
+    else:
+        release=forgejo_json('/releases/tags/v'+version);validate_release(release)
+        if release['tag_name']!='v'+version:
+            raise ValueError('La release no corresponde a la versión solicitada')
+        if forgejo_json('/tags/v'+version)['commit']['sha']!=sha:
+            raise ValueError('La etiqueta ha cambiado; se detiene la construcción')
+    if backend=='github-mirror':
+        reader=mirror()
+        mirrored=reader.branch(candidate_ref) if candidate_ref else reader.tag('v'+version)
+        if mirrored!=sha:
+            raise ValueError('El espejo GitHub no coincide con la referencia autorizada de Forgejo')
+
+
 def forgejo(path):
     token=os.environ.get('FORGEJO_RELEASE_READ_TOKEN','')
     if not token:raise ValueError('Falta FORGEJO_RELEASE_READ_TOKEN en el repositorio público')
@@ -80,6 +119,7 @@ def plan():
     previous=github(DESTINATIONS['general']+'/releases?per_page=100')
     stable=[tuple(map(int,r['tag_name'][1:].split('.'))) for r in previous if not r['draft'] and not r['prerelease'] and re.fullmatch(r'v[0-9]+\.[0-9]+\.[0-9]+',r['tag_name'])]
     if stable and tuple(map(int,version.split('.')))<max(stable):return {'build':False,'reason':'No se retrocede a una versión antigua'}
+    verify_source_reference(sha,version)
     done=completed(version,sha)
     return {'build':not done,'version':version,'source_sha':sha,'tag':release['tag_name'],'reason':'Ya publicada y verificada' if done else 'Release estable de Forgejo autorizada'}
 
@@ -127,24 +167,21 @@ def verify_manifest(root):
 
 def fetch(sha,version,destination,candidate_ref=None):
     if not re.fullmatch(r'[0-9a-f]{40}',sha) or not re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+',version):raise ValueError('Referencia no válida')
-    if candidate_ref:
-        if not re.fullmatch(r'codex/[a-z0-9-]+',candidate_ref):raise ValueError('La validación requiere una rama de revisión codex/')
-        branches=forgejo_json('/branches?limit=100')
-        branch=next((item for item in branches if item['name']==candidate_ref),None)
-        if not branch or branch['commit']['id']!=sha:raise ValueError('La rama de revisión ha cambiado; se detiene la validación')
+    verify_source_reference(sha,version,candidate_ref)
+    if source_backend()=='github-mirror':
+        with mirror().archive(sha) as stream:
+            with tarfile.open(fileobj=stream,mode='r:gz') as archive:
+                extract_archive(archive,destination)
     else:
-        release=forgejo_json('/releases/tags/v'+version);validate_release(release)
-        tag=forgejo_json('/tags/v'+version)
-        if tag['commit']['sha']!=sha:raise ValueError('La etiqueta ha cambiado; se detiene la construcción')
-    with tempfile.TemporaryFile() as temporary:
-        with forgejo('/archive/'+sha+'.tar.gz') as response:
-            total=0
-            while chunk:=response.read(1024*1024):
-                total+=len(chunk)
-                if total>2**30:raise ValueError('Archivo comprimido demasiado grande')
-                temporary.write(chunk)
-        temporary.seek(0)
-        with tarfile.open(fileobj=temporary,mode='r:gz') as archive:extract_archive(archive,destination)
+        with tempfile.TemporaryFile() as temporary:
+            with forgejo('/archive/'+sha+'.tar.gz') as response:
+                total=0
+                while chunk:=response.read(1024*1024):
+                    total+=len(chunk)
+                    if total>2**30:raise ValueError('Archivo comprimido demasiado grande')
+                    temporary.write(chunk)
+            temporary.seek(0)
+            with tarfile.open(fileobj=temporary,mode='r:gz') as archive:extract_archive(archive,destination)
     root=Path(destination).resolve()
     if (root/'VERSION').read_text().strip()!=version:raise ValueError('La versión etiquetada no coincide con VERSION')
     # Los publicadores usan git archive; este repositorio efímero tiene un único
@@ -155,7 +192,7 @@ def fetch(sha,version,destination,candidate_ref=None):
     git('init','-b','source');git('config','core.autocrlf','false');git('config','core.eol','lf');git('config','user.name','github-actions[bot]');git('config','user.email','41898282+github-actions[bot]@users.noreply.github.com')
     git('add','--all');git('commit','-m','Fuentes de '+sha)
     verify_manifest(root)
-    print('FUENTES_FORGEJO_VERIFICADOS: '+version+' '+sha+'; sin historial privado')
+    print('FUENTES_VERIFICADOS: '+source_backend()+' '+version+' '+sha+'; sin historial privado')
 
 
 def main():

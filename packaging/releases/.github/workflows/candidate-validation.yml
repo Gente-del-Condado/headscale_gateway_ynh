@@ -17,6 +17,7 @@ name: Validar revisión antes de publicar
 permissions:
   contents: read
 env:
+  HGW_SOURCE_BACKEND: ${{ vars.HGW_SOURCE_BACKEND || 'forgejo' }}
   GOMAXPROCS: '2'
   GOMEMLIMIT: 2GiB
   GOFLAGS: -p=2
@@ -34,6 +35,7 @@ jobs:
       - name: Leer exclusivamente el candidato revisado
         env:
           FORGEJO_RELEASE_READ_TOKEN: ${{ secrets.FORGEJO_RELEASE_READ_TOKEN }}
+          MIRROR_READ_TOKEN: ${{ secrets.MIRROR_READ_TOKEN }}
           CANDIDATE_SHA: ${{ inputs.sha }}
           CANDIDATE_VERSION: ${{ inputs.version }}
           CANDIDATE_BRANCH: ${{ inputs.branch }}
@@ -85,6 +87,7 @@ jobs:
       - name: Leer exclusivamente el candidato revisado
         env:
           FORGEJO_RELEASE_READ_TOKEN: ${{ secrets.FORGEJO_RELEASE_READ_TOKEN }}
+          MIRROR_READ_TOKEN: ${{ secrets.MIRROR_READ_TOKEN }}
           CANDIDATE_SHA: ${{ inputs.sha }}
           CANDIDATE_VERSION: ${{ inputs.version }}
           CANDIDATE_BRANCH: ${{ inputs.branch }}

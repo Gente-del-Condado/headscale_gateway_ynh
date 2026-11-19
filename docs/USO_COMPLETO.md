@@ -242,6 +242,8 @@ En Android, activa **Conectar aplicaciones** cuando el destino lo requiera.
 
 Pausar tsnet conserva la identidad. La interfaz distingue conectar, pausar y reanudar. El servidor impide pausar desde una sesión que depende del propio túnel que se va a cortar; utiliza el acceso local/LAN permitido para esa acción.
 
+En **Acerca de → Donativos** puedes abrir [Ko-fi de Gente del Condado](https://ko-fi.com/gentedelcondado) para apoyar el proyecto de forma voluntaria. El enlace abre la página externa; el panel no carga widgets ni procesa pagos o datos de PayPal.
+
 ## Portal privado y federación
 
 La administración del portal se realiza exclusivamente desde el panel. Permite título, descripción, tema, color, logo y favicon PNG, nombres visibles, grupos, descripción por servicio y búsqueda.

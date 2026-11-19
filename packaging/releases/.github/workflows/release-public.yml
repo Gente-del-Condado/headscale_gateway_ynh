@@ -11,6 +11,7 @@ concurrency:
   group: forgejo-public-release
   cancel-in-progress: false
 env:
+  HGW_SOURCE_BACKEND: ${{ vars.HGW_SOURCE_BACKEND || 'forgejo' }}
   GOMAXPROCS: '2'
   GOMEMLIMIT: 2GiB
   GOFLAGS: -p=2
@@ -31,6 +32,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           FORGEJO_RELEASE_READ_TOKEN: ${{ secrets.FORGEJO_RELEASE_READ_TOKEN }}
+          MIRROR_READ_TOKEN: ${{ secrets.MIRROR_READ_TOKEN }}
         run: python3 automation/forgejo_source.py --plan
   linux:
     name: Seguridad, Linux, Debian y paquetes de plataforma
@@ -49,6 +51,7 @@ jobs:
         name: Leer el commit exacto de la release Forgejo
         env:
           FORGEJO_RELEASE_READ_TOKEN: ${{ secrets.FORGEJO_RELEASE_READ_TOKEN }}
+          MIRROR_READ_TOKEN: ${{ secrets.MIRROR_READ_TOKEN }}
           SOURCE_SHA: ${{ needs.plan.outputs.sha }}
           RELEASE_VERSION: ${{ needs.plan.outputs.version }}
         run: python automation/forgejo_source.py --sha "$SOURCE_SHA" --version "$RELEASE_VERSION" --destination source
@@ -195,6 +198,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.PUBLICATION_TOKEN }}
           FORGEJO_RELEASE_READ_TOKEN: ${{ secrets.FORGEJO_RELEASE_READ_TOKEN }}
+          MIRROR_READ_TOKEN: ${{ secrets.MIRROR_READ_TOKEN }}
           SOURCE_SHA: ${{ needs.plan.outputs.sha }}
         run: python3 automation/publish_public.py --source source --output "$RUNNER_TEMP/public-release" --sha "$SOURCE_SHA"
 
@@ -203,6 +207,7 @@ jobs:
     uses: ./.github/workflows/manual-current.yml
     secrets:
       FORGEJO_RELEASE_READ_TOKEN: ${{ secrets.FORGEJO_RELEASE_READ_TOKEN }}
+      MIRROR_READ_TOKEN: ${{ secrets.MIRROR_READ_TOKEN }}
       PUBLICATION_TOKEN: ${{ secrets.PUBLICATION_TOKEN }}
   retention:
     needs: release

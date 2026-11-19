@@ -2,6 +2,8 @@ name: Actualizar guía de publicación tras la entrega
 'on':
   workflow_call:
     secrets:
+      MIRROR_READ_TOKEN:
+        required: false
       FORGEJO_RELEASE_READ_TOKEN:
         required: true
       PUBLICATION_TOKEN:
@@ -9,6 +11,8 @@ name: Actualizar guía de publicación tras la entrega
   push:
     branches: [main]
     paths: ['automation/manual-*.md', '.github/workflows/manual-current.yml']
+env:
+  HGW_SOURCE_BACKEND: ${{ vars.HGW_SOURCE_BACKEND || 'forgejo' }}
 permissions:
   contents: read
 concurrency:
@@ -27,11 +31,13 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           FORGEJO_RELEASE_READ_TOKEN: ${{ secrets.FORGEJO_RELEASE_READ_TOKEN }}
+          MIRROR_READ_TOKEN: ${{ secrets.MIRROR_READ_TOKEN }}
         run: python3 automation/forgejo_source.py --plan
       - name: Descargar el árbol sin historial de la entrega completada
         if: steps.release.outputs.build == 'false' && steps.release.outputs.source_sha != ''
         env:
           FORGEJO_RELEASE_READ_TOKEN: ${{ secrets.FORGEJO_RELEASE_READ_TOKEN }}
+          MIRROR_READ_TOKEN: ${{ secrets.MIRROR_READ_TOKEN }}
           SOURCE_SHA: ${{ steps.release.outputs.source_sha }}
           RELEASE_VERSION: ${{ steps.release.outputs.version }}
         run: python3 automation/forgejo_source.py --sha "$SOURCE_SHA" --version "$RELEASE_VERSION" --destination source

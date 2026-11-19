@@ -942,6 +942,10 @@ msgstr "Apply profile"
 msgid "Aplicar preferencias locales"
 msgstr "Apply local preferences"
 
+#: src/internal/admin/panel.html
+msgid "Apoyar el proyecto en Ko-fi"
+msgstr "Support the project on Ko-fi"
+
 #: src/internal/platform/firewall/report_darwin.go
 msgid "Application Firewall"
 msgstr "Application Firewall"
@@ -3769,6 +3773,10 @@ msgstr "Search domains"
 #: src/internal/admin/panel.html
 msgid "Dominios de correo permitidos"
 msgstr "Allowed email domains"
+
+#: src/internal/admin/panel.html
+msgid "Donativos"
+msgstr "Donations"
 
 #: src/internal/diagnostics/levels.go
 msgid "duración de depuración inválida (1-60 minutos)"

@@ -1,0 +1,29 @@
+name: Consumir aplicaciones públicas
+'on':
+  schedule:
+  - cron: 43 * * * *
+  workflow_dispatch: null
+permissions:
+  contents: read
+concurrency:
+  group: public-components
+  cancel-in-progress: false
+jobs:
+  stage:
+    if: github.ref == 'refs/heads/main' && vars.PUBLIC_APP_MIGRATIONS != ''
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    outputs:
+      images_changed: ${{ steps.stage.outputs.images_changed }}
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      with:
+        persist-credentials: true
+    - id: stage
+      name: Consumir exportaciones públicas verificadas
+      env:
+        PUBLIC_APP_MIGRATIONS: ${{ vars.PUBLIC_APP_MIGRATIONS }}
+        GH_TOKEN: ${{ github.token }}
+      run: python3 .github/ha-images/public_apps.py --output "$RUNNER_TEMP/public-apps" --catalog

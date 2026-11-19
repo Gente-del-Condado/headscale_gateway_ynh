@@ -1,4 +1,17 @@
-# Solicitud para F-Droid
+# Distribución mediante F-Droid
+
+## Tienda propia de Gente del Condado
+
+La tienda pública [Mis_app_fdroid](https://github.com/Gente-del-Condado/Mis_app_fdroid)
+distribuye las APK directas ya firmadas, sin recompilarlas ni cambiar su identidad.
+Puede utilizarse aunque la aplicación no esté en el catálogo oficial. Sigue las
+[instrucciones para añadirla y comprobar la huella](https://github.com/Gente-del-Condado/Mis_app_fdroid#añadir-la-tienda).
+Los fuentes de su controlador están en `packaging/fdroid-store/` del principal
+de Forgejo; GitHub recoge las releases públicas y publica el índice en Pages.
+La clave del índice es distinta de la clave Android. No se usa la APK sin firmar
+de la receta que se describe a continuación.
+
+## Solicitud al catálogo oficial
 
 La solicitud [!57374](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/57374)
 propuso `1.4.7-android.5` (`10040075`). F-Droid la cerró el 14 de noviembre de

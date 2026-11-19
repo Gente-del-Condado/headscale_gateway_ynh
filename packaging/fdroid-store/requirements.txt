@@ -1,0 +1,2 @@
+# Herramienta oficial validada; la tienda no recompila ni vuelve a firmar APK.
+fdroidserver==2.4.5

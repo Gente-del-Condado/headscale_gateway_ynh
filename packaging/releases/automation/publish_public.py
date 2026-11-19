@@ -60,12 +60,9 @@ def publish(root, output, source_sha):
     sys.path.insert(0, str(root / 'tools'))
     import publish_public_release as public
     import desktop_sources
-    from forgejo_source import forgejo_json, validate_release
+    from forgejo_source import verify_source_reference
     version = (root / 'VERSION').read_text().strip()
-    release = forgejo_json('/releases/tags/v' + version)
-    validate_release(release)
-    if forgejo_json('/tags/v' + version)['commit']['sha'] != source_sha:
-        raise ValueError('La etiqueta ha cambiado desde las pruebas')
+    verify_source_reference(source_sha,version)
     # Los instaladores nuevos solo se publican después de comprobar sus fuentes.
     desktop_sources.publish(output / 'desktop-sources')
     run(['gh', 'auth', 'setup-git'], root)

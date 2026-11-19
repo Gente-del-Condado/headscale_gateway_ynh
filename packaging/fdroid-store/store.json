@@ -1,0 +1,25 @@
+{
+  "format": 1,
+  "name": "Gente del Condado",
+  "repository": "Gente-del-Condado/Mis_app_fdroid",
+  "url": "https://gente-del-condado.github.io/Mis_app_fdroid/fdroid/repo",
+  "description": "Repositorio propio de aplicaciones Android de Gente del Condado. APK originales firmadas por sus autores; independiente del catálogo oficial de F-Droid.",
+  "index_certificate_sha256": "6A108C3A2C7C29CBFCE56C9031E7E4B41644D75D1AB08E95622F840026E2AAD9",
+  "keep_versions": 2,
+  "apps": [
+    {
+      "id": "org.headscalegateway.android",
+      "name": "Headscale Gateway",
+      "summary": "Servicios privados Headscale y VPN opcional para tus aplicaciones",
+      "description": "Nodo Headscale, servicios HTTPS, DNS, certificados y copias cifradas desde el panel compartido. Requiere tu propio servidor Headscale. Sin anuncios ni analítica. La VPN para otras aplicaciones es opcional. Esta tienda distribuye la APK directa original y conserva su firma para actualizar instalaciones existentes.",
+      "license": "AGPL-3.0-only",
+      "source_repository": "Gente-del-Condado/headscale_gateway_releases",
+      "apk_asset": "headscale-gateway-release.apk",
+      "verification_asset": "headscale-gateway-release.apk.verification.json",
+      "certificate_sha256": "5a75142e4dc97345603c812d87d1e69ec7bcb2947e714fbb8e3977c16adf684f",
+      "website": "https://gente-del-condado.github.io/headscale_gateway_ynh/ANDROID_USO.html",
+      "source_code": "https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source",
+      "issue_tracker": "https://github.com/Gente-del-Condado/headscale_gateway_releases/issues"
+    }
+  ]
+}

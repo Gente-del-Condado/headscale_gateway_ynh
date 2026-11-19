@@ -131,5 +131,62 @@ class PortableManifestContracts(unittest.TestCase):
                     source.verify_manifest(root)
 
 
+
+class MirrorMigrationContracts(unittest.TestCase):
+    sha='a'*40
+
+    def forgejo_metadata(self,path):
+        if path.startswith('/releases/tags/'):
+            return {'tag_name':'v1.4.19','draft':False,'prerelease':False}
+        if path.startswith('/tags/'):
+            return {'commit':{'sha':self.sha}}
+        if path.startswith('/branches'):
+            return [{'name':'codex/review','commit':{'id':self.sha}}]
+        raise AssertionError(path)
+
+    def test_requires_same_tag_in_both_origins(self):
+        with patch.dict('os.environ',{'HGW_SOURCE_BACKEND':'github-mirror'}), patch.object(source,'forgejo_json',side_effect=self.forgejo_metadata), patch.object(source,'mirror') as factory:
+            factory.return_value.tag.return_value=self.sha
+            source.verify_source_reference(self.sha,'1.4.19')
+            factory.return_value.tag.assert_called_once_with('v1.4.19')
+            factory.return_value.tag.return_value='b'*40
+            with self.assertRaisesRegex(ValueError,'no coincide'):
+                source.verify_source_reference(self.sha,'1.4.19')
+
+    def test_candidate_requires_both_branches(self):
+        with patch.dict('os.environ',{'HGW_SOURCE_BACKEND':'github-mirror'}), patch.object(source,'forgejo_json',side_effect=self.forgejo_metadata), patch.object(source,'mirror') as factory:
+            factory.return_value.branch.return_value='b'*40
+            with self.assertRaisesRegex(ValueError,'no coincide'):
+                source.verify_source_reference(self.sha,'1.4.19','codex/review')
+            factory.return_value.branch.assert_called_once_with('codex/review')
+
+    def test_missing_mirror_never_falls_back_to_forgejo_archive(self):
+        with patch.dict('os.environ',{'HGW_SOURCE_BACKEND':'github-mirror'}), patch.object(source,'forgejo_json',side_effect=self.forgejo_metadata), patch.object(source,'mirror',side_effect=ValueError('Falta el token')), patch.object(source,'forgejo') as download:
+            with self.assertRaisesRegex(ValueError,'Falta el token'):
+                source.fetch(self.sha,'1.4.19','unused')
+            download.assert_not_called()
+
+    def test_legacy_mode_is_explicit_and_invalid_mode_fails_closed(self):
+        with patch.object(source,'forgejo_json',side_effect=self.forgejo_metadata), patch.object(source,'mirror') as factory:
+            with patch.dict('os.environ',{'HGW_SOURCE_BACKEND':'forgejo'}):
+                source.verify_source_reference(self.sha,'1.4.19')
+                factory.assert_not_called()
+            with patch.dict('os.environ',{'HGW_SOURCE_BACKEND':'wrong'}):
+                with self.assertRaisesRegex(ValueError,'no autorizado'):
+                    source.verify_source_reference(self.sha,'1.4.19')
+
+    def test_mirror_download_checks_version_and_never_reads_forgejo_archive(self):
+        with tempfile.TemporaryDirectory() as folder, patch.dict('os.environ',{'HGW_SOURCE_BACKEND':'github-mirror'}), patch.object(source,'forgejo_json',side_effect=self.forgejo_metadata), patch.object(source,'mirror') as factory, patch.object(source,'forgejo') as legacy:
+            factory.return_value.tag.return_value=self.sha
+            stream=io.BytesIO()
+            with tarfile.open(fileobj=stream,mode='w:gz') as archive:
+                entry=tarfile.TarInfo('source/VERSION');entry.size=5
+                archive.addfile(entry,io.BytesIO(b'9.9.9'))
+            stream.seek(0);factory.return_value.archive.return_value=stream
+            with self.assertRaisesRegex(ValueError,'no coincide con VERSION'):
+                source.fetch(self.sha,'1.4.19',folder)
+            factory.return_value.archive.assert_called_once_with(self.sha)
+            legacy.assert_not_called()
+
 if __name__ == '__main__':
     unittest.main()
