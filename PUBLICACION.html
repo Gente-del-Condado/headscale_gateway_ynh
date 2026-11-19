@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.19</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.20</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -289,7 +289,16 @@ commits y notas; los informes privados se archivan fuera del árbol de desarroll
 nginx/NSS en contenedor son complementarias; no equivalen a repetir package_check
 o la actualización de una instalación real con datos y secretos. No ejecutes
 máquinas virtuales ni compilaciones grandes en el Linux del usuario.</p>
-<h2 id="pivigia-y-jacksignal">PiVigia y JackSignal</h2>
+<h2 id="cierre-de-credenciales-de-la-tienda">Cierre de credenciales de la tienda</h2>
+<p>JackSignal y PiVigia ya se consumen desde sus públicos, con lectura anónima y
+GITHUB_TOKEN del destino. Se retira <code>sync-forgejo.yml</code> de Mis_app_ha y de esta
+plantilla; <code>FORGEJO_APPS_READ_TOKEN</code> y <code>DISTRIBUTION_TOKEN</code> de la tienda dejan de
+ser necesarios. PGM usa también su consumidor público autónomo.</p>
+<p>Gateway conserva <code>PUBLICATION_TOKEN</code>: sus seis destinos y la retención todavía
+lo requieren. No revocar la firma Android, el índice F-Droid ni accesos de copias.
+Las claves SSH de espejos privados y sus tokens exclusivos de lectura siguen
+vigentes. La CI privada permanece desactivada.</p>
+<h2 id="pivigia-y-jacksignal-recorrido-histórico-sustituido">PiVigia y JackSignal (recorrido histórico sustituido)</h2>
 <p>Forgejo conserva los dos principales privados y GitHub sus espejos. La tienda
 pública consulta el SHA de main y ejecuta calidad sin credenciales antes de
 preparar aplicaciones e integraciones. Las distribuciones dedicadas y
@@ -385,7 +394,9 @@ archivos ya publicados. La reversión no habilita Actions privadas.</p></article
         
           <li><a href="#descargas-públicas-y-nuevos-paquetes-linux">Descargas públicas y nuevos paquetes Linux</a></li>
         
-          <li><a href="#pivigia-y-jacksignal">PiVigia y JackSignal</a></li>
+          <li><a href="#cierre-de-credenciales-de-la-tienda">Cierre de credenciales de la tienda</a></li>
+        
+          <li><a href="#pivigia-y-jacksignal-recorrido-histórico-sustituido">PiVigia y JackSignal (recorrido histórico sustituido)</a></li>
         
           <li><a href="#imágenes-precompiladas-de-home-assistant">Imágenes precompiladas de Home Assistant</a></li>
         

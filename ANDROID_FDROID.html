@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.19</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.20</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -159,7 +159,17 @@
     </aside>
     <main id="contenido" tabindex="-1">
       <p class="breadcrumb"><a href="index.html">Manual</a><span aria-hidden="true"> / </span>Publicar en F-Droid</p>
-      <article class="prose"><h1 id="solicitud-para-f-droid">Solicitud para F-Droid</h1>
+      <article class="prose"><h1 id="distribución-mediante-f-droid">Distribución mediante F-Droid</h1>
+<h2 id="tienda-propia-de-gente-del-condado">Tienda propia de Gente del Condado</h2>
+<p>La tienda pública <a href="https://github.com/Gente-del-Condado/Mis_app_fdroid">Mis_app_fdroid</a>
+distribuye las APK directas ya firmadas, sin recompilarlas ni cambiar su identidad.
+Puede utilizarse aunque la aplicación no esté en el catálogo oficial. Sigue las
+<a href="https://github.com/Gente-del-Condado/Mis_app_fdroid#añadir-la-tienda">instrucciones para añadirla y comprobar la huella</a>.
+Los fuentes de su controlador están en <code>packaging/fdroid-store/</code> del principal
+de Forgejo; GitHub recoge las releases públicas y publica el índice en Pages.
+La clave del índice es distinta de la clave Android. No se usa la APK sin firmar
+de la receta que se describe a continuación.</p>
+<h2 id="solicitud-al-catálogo-oficial">Solicitud al catálogo oficial</h2>
 <p>La solicitud <a href="https://gitlab.com/fdroid/fdroiddata/-/merge_requests/57374">!57374</a>
 propuso <code>1.4.7-android.5</code> (<code>10040075</code>). F-Droid la cerró el 14 de noviembre de
 2026 porque exige más de tres meses de mantenimiento. No está aceptada ni
@@ -225,6 +235,10 @@ desactivadas hasta validar su regla. Google Play sigue solo preparado.</p>
     </main>
     <aside class="page-toc">
       <nav aria-label="En esta página"><p>En esta página</p><ul>
+        
+          <li><a href="#tienda-propia-de-gente-del-condado">Tienda propia de Gente del Condado</a></li>
+        
+          <li><a href="#solicitud-al-catálogo-oficial">Solicitud al catálogo oficial</a></li>
         
       </ul></nav>
     </aside>

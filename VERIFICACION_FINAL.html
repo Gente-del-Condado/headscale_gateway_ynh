@@ -13,7 +13,7 @@
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header">
     <a class="brand" href="index.html"><span class="brand-symbol" aria-hidden="true">◇</span> Headscale Gateway</a>
-    <div class="header-links"><span>Manual · 1.4.19</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
+    <div class="header-links"><span>Manual · 1.4.20</span><a href="https://github.com/Gente-del-Condado/headscale_gateway_ynh/tree/upstream-source">Repositorio ↗</a></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -160,6 +160,36 @@
     <main id="contenido" tabindex="-1">
       <p class="breadcrumb"><a href="index.html">Manual</a><span aria-hidden="true"> / </span>Validación y límites</p>
       <article class="prose"><h1 id="validación-y-límites">Validación y límites</h1>
+<h2 id="preparación-de-1419">Preparación de 1.4.19</h2>
+<ul>
+<li>Suite completa: 102 pruebas Python, Go, JavaScript, vet y compilación.</li>
+<li>Tablet física Android 8.1/arm64: rechazo de origen falsificado y capacidad
+  caducada, cancelación de transferencia al navegar, exportación blob y API
+  con nombre y bytes conservados mediante ContentResolver. No utiliza Waydroid.</li>
+<li>Motores Android arm64 y x86_64 compilados; Lint release correcto y APK arm64
+  firmada con la identidad estable existente. No equivale a ejecutar Android x86.</li>
+<li>systemd 252 en YunoHost/Debian 12: comprobaciones negativas de capacidades,
+  namespaces, memoria W^X y escritura; positivas de SQLite WAL, TLS, NSS y red.
+  Doce pruebas Go de certificados, DNS y restauración ejecutadas bajo cada unidad;
+  el laboratorio ACME externo se omite explícitamente.</li>
+<li>Fedora con SELinux activo: mismas pruebas en una unidad temporal de usuario
+  con <code>PrivateUsers</code>, sin instalar un servicio de sistema ni política SELinux.</li>
+<li>Flatpak de laboratorio instalado: permiso efectivo de red únicamente, datos
+  privados conservados, claves SSH del anfitrión inaccesibles y mismas pruebas Go.</li>
+<li>DEB y RPM: construcción, instalación, reinstalación y conservación tras retirar
+  el programa, en contenedores desechables. No equivale a un arranque nativo RPM.</li>
+<li>Actualización real YunoHost 1.4.18 → 1.4.19 con kernel 6.1.0-54: SSO,
+  configuración, servicios, clave maestra, secreto del proxy, copia cifrada,
+  PKI, descubrimiento y exportación conservados. Dependencias previamente
+  instaladas y recursos locales con sumas originales; APT exterior inaccesible.
+  El primer intento bajo 6.1.0-55 se bloqueó en ext4 antes de aplicar la revisión;
+  no se presenta como una prueba completada ni una garantía ante fallos del disco.</li>
+<li>Manual estricto: 51 páginas y 3.296 enlaces locales; privacidad e i18n correctas.</li>
+</ul>
+<p>Los resultados de actualización YunoHost y publicación se anotan en
+<a href="ESTADO_DESARROLLO.html">estado de desarrollo</a>. Estos ensayos no acreditan una
+emisión ACME pública ni una nueva conexión VPN con un proveedor de producción.
+Play Store permanece solo preparado.</p>
 <h2 id="preparación-de-1417">Preparación de 1.4.17</h2>
 <p>Comprobaciones locales completadas: <code>tools/verify.sh</code> (100 pruebas Python,
 Go, JavaScript, vet y compilación), 9 pruebas del controlador, generados y
@@ -266,7 +296,60 @@ solo se consulte y que archivos distintos bloqueen la reutilización.</p>
 los índices, las sumas y los digest de sus diez adjuntos sin credenciales ni
 subidas. La suite general pasa con 100 pruebas Python, además de Go/JS; las
 nueve pruebas del controlador también pasan. No se presenta este ensayo como
-una compilación real o una publicación de Headscale Gateway 1.4.17.</p></article>
+una compilación real o una publicación de Headscale Gateway 1.4.17.</p>
+<h2 id="apparmor-de-home-assistant-18-de-noviembre-de-2026">AppArmor de Home Assistant — 18 de noviembre de 2026</h2>
+<p>Ensayo desechable en Home Assistant OS 18.4, amd64, con la imagen publicada
+1.4.17 y una capa que únicamente añade <code>PYTHONDONTWRITEBYTECODE=1</code>, igual
+que el Dockerfile actualizado. Supervisor instaló el perfil personalizado y
+mostró 7/8, protección activa y proceso en enforce. No se tocaron la aplicación
+existente, sus datos ni los recursos de la VM.</p>
+<p>Comprobador repetible: <code>tools/check_ha_apparmor.py</code>, explicado en la documentación
+del paquete. Pasaron SSO Ingress desde el origen Supervisor, CSRF, rechazo de
+no administradores, panel y recurso JS, PKI, descubrimiento, copia cifrada SQLite
+y descarga y exportación cifrada. Dentro del confinamiento pasaron SQLite WAL,
+temporales, resolver DNS y apertura multicast; se bloquearon lectura de shadow,
+escritura sobre programas y ejecución de shell. El reinicio conservó por suma
+la clave maestra y las opciones de la copia de laboratorio.</p>
+<p>Un binario de pruebas Go, ejecutado como motor en un contenedor temporal con
+el mismo perfil, pasó 14 pruebas principales: TLS local real y renovación,
+propiedad y limpieza DNS, restauración con conservación del directorio de la
+plataforma, perfiles e identidad VPN. Son pruebas con fixtures; no equivalen
+a conectar una Tailnet externa o emitir ACME contra un proveedor real. El ensayo
+aarch64 posterior se recoge a continuación. Las denegaciones auditadas intencionales
+se distinguen de las de arranque, corregidas sin ampliar acceso a programas.</p>
+<p>La verificación general <code>GOMAXPROCS=2 GOFLAGS=-p=2 bash tools/verify.sh</code> pasó:
+101 pruebas Python, suites Go y JavaScript, vet, compilación, privacidad,
+referencia/i18n y manifiesto de instaladores. MkDocs estricto y el comprobador
+HTML pasaron con 50 páginas y 3174 enlaces locales. La copia aislada y su imagen
+de ensayo se retiraron al terminar; la aplicación habitual conserva su versión,
+perfil genérico, datos y estado detenido anteriores. El cambio queda preparado
+en fuentes, sin publicar una revisión de los paquetes ya distribuidos.</p>
+<h2 id="apparmor-aarch64-en-haos-emulado-18-de-noviembre-de-2026">AppArmor aarch64 en HAOS emulado — 18 de noviembre de 2026</h2>
+<p>VM nueva HAOS 18.4 sobre QEMU/TCG, CPU ARM cortex-a72, 2 vCPU y 4 GiB,
+con Supervisor 2026.11.0. El kernel confirmó aarch64 y la imagen del Gateway,
+arm64. Esta es ejecución del sistema ARM64 completo bajo emulación, no una
+prueba sobre hardware ARM físico ni solo una compilación cruzada.</p>
+<p>Supervisor cargó el mismo perfil en enforce con protección activa y puntuación
+7/8. Pasaron las 14 pruebas principales Go del ensayo amd64, ejecutadas dentro
+del perfil: TLS real local y renovación, DNS y propiedad de registros,
+restauración, perfiles e identidad. El comprobador de confinamiento pasó SQLite
+WAL, temporales, resolver y multicast y bloqueó shadow, escritura sobre programas
+y shell. El comprobador del panel pasó Ingress/SSO/CSRF, rechazo no-admin,
+PKI, descubrimiento, copia cifrada SQLite, descarga y exportación cifrada.</p>
+<p>El reinicio del complemento conservó por suma la clave maestra, la clave de
+cifrado de copias y las opciones. Solo aparecieron las tres denegaciones
+intencionales de las pruebas negativas. Los datos ficticios se retiraron y se
+instaló una copia local limpia con el mismo perfil y arranque automático.
+No se modificó ninguna VM existente. La conexión a un Headscale externo y la
+emisión ACME contra un proveedor real siguen fuera de este ensayo.</p>
+<p>El reinicio completo de esa VM también pasó: cambió la identidad de arranque,
+la misma clave SSH siguió permitiendo root sin el disco CONFIG y Gateway arrancó
+automáticamente con enforce, protección activa y 7/8. Las sumas de la clave
+maestra y las opciones se conservaron. El panel limpio respondió por SSO tras
+reiniciar y no aparecieron denegaciones inesperadas. Supervisor quedó sano y
+compatible; Core 2026.11.2 dejó disponible el alta inicial para el propietario.
+La instalación comprobada usa el puerto web 80, consultado con <code>ha core info</code>;
+la guía del paquete explica cómo obtener el puerto real antes de publicar HA.</p></article>
       <footer class="page-footer">
         <p>Headscale Gateway · Gente del Condado · Documentación en español</p>
         <a href="mailto:headscale-gateway@gentedelcondado.es">headscale-gateway@gentedelcondado.es</a>
@@ -275,6 +358,8 @@ una compilación real o una publicación de Headscale Gateway 1.4.17.</p></artic
     </main>
     <aside class="page-toc">
       <nav aria-label="En esta página"><p>En esta página</p><ul>
+        
+          <li><a href="#preparación-de-1419">Preparación de 1.4.19</a></li>
         
           <li><a href="#preparación-de-1417">Preparación de 1.4.17</a></li>
         
@@ -285,6 +370,10 @@ una compilación real o una publicación de Headscale Gateway 1.4.17.</p></artic
           <li><a href="#pruebas-interrumpidas-y-funciones-pendientes">Pruebas interrumpidas y funciones pendientes</a></li>
         
           <li><a href="#ensayo-de-la-siguiente-publicación-sin-crear-una-versión">Ensayo de la siguiente publicación sin crear una versión</a></li>
+        
+          <li><a href="#apparmor-de-home-assistant-18-de-noviembre-de-2026">AppArmor de Home Assistant — 18 de noviembre de 2026</a></li>
+        
+          <li><a href="#apparmor-aarch64-en-haos-emulado-18-de-noviembre-de-2026">AppArmor aarch64 en HAOS emulado — 18 de noviembre de 2026</a></li>
         
       </ul></nav>
     </aside>
